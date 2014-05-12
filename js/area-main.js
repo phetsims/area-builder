@@ -24,7 +24,7 @@ define( function( require ) {
   var gameString = require( 'string!AREA/game' );
 
   // constants
-  var BACKGROUND_COLOR = 'rgb( 255, 245, 236 )';
+  var BACKGROUND_COLOR = 'rgb( 225, 255, 255 )';
 
   var simOptions = {
     credits: {
