@@ -13,15 +13,17 @@ define( function( require ) {
   var AreaExplorationView = require( 'AREA/explore/view/AreaExplorationView' );
   var AreaGameModel = require( 'AREA/game/model/AreaGameModel' );
   var AreaGameView = require( 'AREA/game/view/AreaGameView' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var Screen = require( 'JOIST/Screen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // strings
   var simTitle = require( 'string!AREA/area.name' );
   var exploreString = require( 'string!AREA/explore' );
   var gameString = require( 'string!AREA/game' );
+  var exploreIcon = require( 'image!AREA/explore-icon.png' );
+  var gameIcon = require( 'image!AREA/game-icon.png' );
 
   // constants
   var BACKGROUND_COLOR = 'rgb( 225, 255, 255 )';
@@ -47,12 +49,12 @@ define( function( require ) {
   SimLauncher.launch( function() {
     // create and start the sim
     new Sim( simTitle, [
-      new Screen( exploreString, new Rectangle( 0, 0, 100, 100, 0, 0, { fill: 'pink' } ),
+      new Screen( exploreString, new Image( exploreIcon ),
         function() {return new AreaExplorationModel();},
         function( model ) {return new AreaExplorationView( model );},
         { backgroundColor: BACKGROUND_COLOR }
       ),
-      new Screen( gameString, new Rectangle( 0, 0, 100, 100, 0, 0, { fill: 'green' } ),
+      new Screen( gameString, new Image( gameIcon ),
         function() {return new AreaGameModel();},
         function( model ) {return new AreaExplorationView( model );},
         { backgroundColor: BACKGROUND_COLOR }
