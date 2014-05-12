@@ -56,7 +56,7 @@ define( function( require ) {
       ),
       new Screen( gameString, new Image( gameIcon ),
         function() {return new AreaGameModel();},
-        function( model ) {return new AreaExplorationView( model );},
+        function( model ) {return new AreaGameView( model );},
         { backgroundColor: BACKGROUND_COLOR }
       )
     ], simOptions ).start();
