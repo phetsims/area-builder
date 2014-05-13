@@ -1,0 +1,2 @@
+The model is designed using screen coordinates as the size so that no model-
+view transform is needed.
