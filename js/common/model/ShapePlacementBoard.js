@@ -17,7 +17,7 @@ define( function( require ) {
     this.unitSquareLength = unitSquareLength; // @public
 
     // The size should be an integer number of unit squares for both dimensions.
-    assert && assert( size.width / unitSquareLength === 0 && size.height / unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
+    assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
 
     PropertySet.call( this, {
 

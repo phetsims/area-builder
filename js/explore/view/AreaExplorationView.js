@@ -37,6 +37,7 @@ define( function( require ) {
 
     // Add the shape placement boards
     this.addChild( new ShapePlacementBoardNode( model.leftShapePlacementBoard ) );
+    this.addChild( new ShapePlacementBoardNode( model.rightShapePlacementBoard ) );
 
     // TODO: These icons are temporary until we work some things out.
     var twoRectIcon = new Node();

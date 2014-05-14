@@ -15,8 +15,11 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var UNIT_SQUARE_LENGTH = 20; // In screen coords, which are roughly pixels
-  var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 10, UNIT_SQUARE_LENGTH * 10 );
+  var UNIT_SQUARE_LENGTH = 40; // In screen coords, which are roughly pixels
+  var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 8, UNIT_SQUARE_LENGTH * 8 );
+  var PLAY_AREA_WIDTH = 768; // Based on default size in ScreenView.js
+  var SPACE_BETWEEN_PLACEMENT_BOARDS = 40;
+  var BOARD_Y_POS = 40;
 
   function AreaExplorationModel() {
     var thisModel = this;
@@ -26,13 +29,16 @@ define( function( require ) {
     this.showBothBoards = new Property( true ); // @public
 
     // Create the shape placement boards
-    thisModel.leftShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, Vector2.ZERO ); // @public
+    var leftBoardDefaultLocation = new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - BOARD_SIZE.width, BOARD_Y_POS );
+    thisModel.leftShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, leftBoardDefaultLocation ); // @public
+    var rightBoardDefaultLocation = new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS );
+    thisModel.rightShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, rightBoardDefaultLocation ); // @public
 
     // Control grid visibility
     this.showGrids.link( function( showGrids ) {
       thisModel.leftShapePlacementBoard.gridVisible = showGrids;
+      thisModel.rightShapePlacementBoard.gridVisible = showGrids;
     } );
-
   }
 
   AreaExplorationModel.prototype = {
