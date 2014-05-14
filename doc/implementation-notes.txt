@@ -1,2 +1,4 @@
 The model is designed using screen coordinates as the size so that no model-
 view transform is needed.
+
+PropertySet is used for model objects with two or more properties.
