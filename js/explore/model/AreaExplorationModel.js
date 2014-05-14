@@ -34,6 +34,13 @@ define( function( require ) {
     var rightBoardDefaultLocation = new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS );
     thisModel.rightShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, rightBoardDefaultLocation ); // @public
 
+    // Center the left board if it is the only one visible
+    var leftBoardLocationWhenAlone = new Vector2( PLAY_AREA_WIDTH / 2 - BOARD_SIZE.width / 2, BOARD_Y_POS );
+    thisModel.showBothBoards.link( function( showBothBoards ) {
+        thisModel.leftShapePlacementBoard.position = showBothBoards ? leftBoardDefaultLocation : leftBoardLocationWhenAlone;
+      }
+    );
+
     // Control grid visibility
     this.showGrids.link( function( showGrids ) {
       thisModel.leftShapePlacementBoard.gridVisible = showGrids;
