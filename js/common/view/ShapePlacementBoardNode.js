@@ -9,6 +9,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var Grid = require( 'AREA/common/view/Grid' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Line = require( 'SCENERY/nodes/Line' );
@@ -34,16 +35,8 @@ define( function( require ) {
     } );
 
     // Create and add the grid
-    var grid = new Node();
     var lineOptions = { stroke: '#909090', lineWidth: 1 };
-    for ( var i = shapePlacementBoard.unitSquareLength; i < shapePlacementBoard.size.width; i += shapePlacementBoard.unitSquareLength ) {
-      // Add a vertical line
-      grid.addChild( new Line( i, 0, i, shapePlacementBoard.size.height, lineOptions ) );
-    }
-    for ( i = shapePlacementBoard.unitSquareLength; i < shapePlacementBoard.size.height; i += shapePlacementBoard.unitSquareLength ) {
-      // Add a horizontal line
-      grid.addChild( new Line( 0, i, shapePlacementBoard.size.width, i, lineOptions ) );
-    }
+    var grid = new Grid( shapePlacementBoard.size, shapePlacementBoard.unitSquareLength, lineOptions );
     background.addChild( grid );
 
     // Track and update the grid visibility

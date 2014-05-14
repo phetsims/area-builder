@@ -9,9 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Dimension2 = require( 'DOT/Dimension2' );
+  var Property = require( 'AXON/Property' );
   var ShapePlacementBoard = require( 'AREA/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
-  var Dimension2 = require( 'DOT/Dimension2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = 20; // In screen coords, which are roughly pixels
@@ -19,7 +20,18 @@ define( function( require ) {
 
   function AreaExplorationModel() {
     var thisModel = this;
+
+    // TODO: If a bunch of properties are added, consider making this extend PropertySet
+    this.showGrids = new Property( false ); // @public
+
+    // Create the shape placement boards
     thisModel.leftShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, Vector2.ZERO ); // @public
+
+    // Control grid visibility
+    this.showGrids.link( function( showGrids ) {
+      thisModel.leftShapePlacementBoard.gridVisible = showGrids;
+    } );
+
   }
 
   AreaExplorationModel.prototype = {
