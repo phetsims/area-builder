@@ -13,6 +13,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ShapePlacementBoard = require( 'AREA/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Bucket = require( 'PHETCOMMON/model/Bucket' );
 
   // constants
   var UNIT_SQUARE_LENGTH = 40; // In screen coords, which are roughly pixels
@@ -20,6 +21,8 @@ define( function( require ) {
   var PLAY_AREA_WIDTH = 768; // Based on default size in ScreenView.js
   var SPACE_BETWEEN_PLACEMENT_BOARDS = 40;
   var BOARD_Y_POS = 40;
+  var BUCKET_SIZE = new Dimension2( 100, 50 );
+  var BOARD_TO_BUCKET_Y_SPACING = 70;
 
   function AreaExplorationModel() {
     var thisModel = this;
@@ -33,6 +36,27 @@ define( function( require ) {
     thisModel.leftShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, leftBoardDefaultLocation ); // @public
     var rightBoardDefaultLocation = new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS );
     thisModel.rightShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, rightBoardDefaultLocation ); // @public
+
+    // Create the buckets that will hold the shapes
+    // TODO: The bucket positions are hokey here because the implementation
+    // TODO: assumes an inverted Y direction.  The common code should be made
+    // TODO: to work with this if the buckets are retained in the UI design.
+    var leftBucketDefaultPosition = new Vector2( thisModel.leftShapePlacementBoard.position.x + BOARD_SIZE.width * 0.67,
+      -( thisModel.leftShapePlacementBoard.position.y + BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING ) );
+    this.leftBucket = new Bucket( {
+      position: leftBucketDefaultPosition,
+      baseColor: '#000080',
+      caption: '',
+      size: BUCKET_SIZE
+    } );
+    var rightBucketDefaultPosition = new Vector2( thisModel.rightShapePlacementBoard.position.x + BOARD_SIZE.width * 0.33,
+      -( thisModel.rightShapePlacementBoard.position.y + BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING ) );
+    this.rightBucket = new Bucket( {
+      position: rightBucketDefaultPosition,
+      baseColor: '#000080',
+      caption: '',
+      size: BUCKET_SIZE
+    } );
 
     // Center the left board if it is the only one visible
     var leftBoardLocationWhenAlone = new Vector2( PLAY_AREA_WIDTH / 2 - BOARD_SIZE.width / 2, BOARD_Y_POS );

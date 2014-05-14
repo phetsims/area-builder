@@ -8,8 +8,10 @@
 define( function( require ) {
   'use strict';
 
-  // moduls
+  // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
+  var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
+  var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Checkbox = require( 'SUN/Checkbox' );
   var Dimension2 = require( 'DOT/Dimension2' );
@@ -45,6 +47,14 @@ define( function( require ) {
       rightBoardNode.visible = showBothBoards;
     } );
 
+    // Add the bucket views
+    var invertIdentityTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( Vector2.ZERO, Vector2.ZERO, 1 );
+    this.addChild( new BucketFront( model.leftBucket, invertIdentityTransform ) );
+    this.addChild( new BucketHole( model.leftBucket, invertIdentityTransform ) );
+    this.addChild( new BucketFront( model.rightBucket, invertIdentityTransform ) );
+    this.addChild( new BucketHole( model.rightBucket, invertIdentityTransform ) );
+
+    // Create and add the control panel
     // TODO: These icons are temporary until we work some things out.
     var twoRectIcon = new Node();
     var iconRectOptions = { fill: 'white', stroke: 'black' };
@@ -60,7 +70,6 @@ define( function( require ) {
     oneRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
     oneRectIcon.addChild( new Rectangle( 6, 12, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
 
-    // Create and add the control panel
     var controlPanel = new Panel(
       new VBox( {
         children: [
