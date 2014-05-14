@@ -23,6 +23,7 @@ define( function( require ) {
 
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
     this.showGrids = new Property( false ); // @public
+    this.showBothBoards = new Property( true ); // @public
 
     // Create the shape placement boards
     thisModel.leftShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, Vector2.ZERO ); // @public
