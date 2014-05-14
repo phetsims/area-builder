@@ -25,7 +25,7 @@ define( function( require ) {
       position: initialPosition,
 
       // Boolean property that controls whether or not the placement grid is visible
-      gridVisible: true
+      gridVisible: false
     } );
 
     // Non-dynamic properties that are externally visible

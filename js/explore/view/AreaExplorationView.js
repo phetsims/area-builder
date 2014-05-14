@@ -26,22 +26,6 @@ define( function( require ) {
     ScreenView.call( thisScreen );
 
     this.addChild( new ShapePlacementBoardNode( model.leftShapePlacementBoard ) );
-
-    // TODO: temp - add a couple of rectangles for visual reference.  These will eventually become the 'work areas'.
-//    var leftRect = new Rectangle( 0, 0, this.layoutBounds.width * 0.45, this.layoutBounds.height * 0.6, 0, 0, {
-//      fill: 'white',
-//      stroke: 'black'
-//    } );
-//    this.addChild( leftRect );
-//    var rightRect = new Rectangle( 0, 0, this.layoutBounds.width * 0.45, this.layoutBounds.height * 0.6, 0, 0, {
-//      fill: 'white',
-//      stroke: 'black'
-//    } );
-//    this.addChild( rightRect );
-//    leftRect.top = 40;
-//    leftRect.left = 30;
-//    rightRect.top = leftRect.top;
-//    rightRect.right = this.layoutBounds.width - 30;
   }
 
   return inherit( ScreenView, AreaExplorationView );
