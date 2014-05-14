@@ -9,10 +9,12 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'PropertySet' );
+  var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
 
   function ShapePlacementBoard( size, unitSquareLength, initialPosition ) {
+
+    this.unitSquareLength = unitSquareLength; // @public
 
     // The size should be an integer number of unit squares for both dimensions.
     assert && assert( size.width / unitSquareLength === 0 && size.height / unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
@@ -23,7 +25,7 @@ define( function( require ) {
       position: initialPosition,
 
       // Boolean property that controls whether or not the placement grid is visible
-      gridVisible: false
+      gridVisible: true
     } );
 
     // Non-dynamic properties that are externally visible
