@@ -14,6 +14,8 @@ define( function( require ) {
   var ShapePlacementBoard = require( 'AREA/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
   var Bucket = require( 'PHETCOMMON/model/Bucket' );
+  var AreaSharedConstants = require( 'AREA/common/AreaSharedConstants' );
+  var MovableRectangle = require( 'AREA/common/model/MovableRectangle' );
 
   // constants
   var UNIT_SQUARE_LENGTH = 40; // In screen coords, which are roughly pixels
@@ -23,6 +25,7 @@ define( function( require ) {
   var BOARD_Y_POS = 40;
   var BUCKET_SIZE = new Dimension2( 100, 50 );
   var BOARD_TO_BUCKET_Y_SPACING = 70;
+  var NUM_SQUARES_OF_EACH_COLOR = 1;
 
   function AreaExplorationModel() {
     var thisModel = this;
@@ -30,6 +33,13 @@ define( function( require ) {
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
     this.showGrids = new Property( false ); // @public
     this.showBothBoards = new Property( true ); // @public
+
+    // List of the shapes contained in this model
+    this.movableShapes = [];
+    _.times( NUM_SQUARES_OF_EACH_COLOR, function() {
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.GREENISH_COLOR, Vector2.ZERO ) );
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.PURPLISH_COLOR, Vector2.ZERO ) );
+    } );
 
     // Create the shape placement boards
     var leftBoardDefaultLocation = new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - BOARD_SIZE.width, BOARD_Y_POS );

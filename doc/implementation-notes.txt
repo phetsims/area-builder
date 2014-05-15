@@ -2,3 +2,7 @@ The model is designed using screen coordinates as the size so that no model-
 view transform is needed.
 
 PropertySet is used for model objects with two or more properties.
+
+There is a pervasive concept in the code that is called "Placement Boards".
+These are conceptually like real world poster boards or bulletin boards, where
+items can be stuck on them and removed from them.

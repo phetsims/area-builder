@@ -24,6 +24,7 @@ define( function( require ) {
   var ShapePlacementBoardNode = require( 'AREA/common/view/ShapePlacementBoardNode' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
+  var ShapeView = require( 'AREA/common/view/ShapeView' );
 
   // constants
   var CONTROL_INSET = 20;
@@ -53,6 +54,11 @@ define( function( require ) {
     this.addChild( new BucketHole( model.leftBucket, invertIdentityTransform ) );
     this.addChild( new BucketFront( model.rightBucket, invertIdentityTransform ) );
     this.addChild( new BucketHole( model.rightBucket, invertIdentityTransform ) );
+
+    // Add the movable shapes
+    model.movableShapes.forEach( function( movableShape ) {
+      thisScreen.addChild( new ShapeView( movableShape ) );
+    } );
 
     // Create and add the control panel
     // TODO: These icons are temporary until we work some things out.
