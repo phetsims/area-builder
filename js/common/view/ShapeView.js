@@ -7,6 +7,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -14,7 +15,7 @@ define( function( require ) {
 
   function ShapeView( movableShape ) {
     Node.call( this );
-    var representation = new Path( movableShape.shape, { fill: movableShape.color } );
+    var representation = new Path( movableShape.shape, { fill: movableShape.color, stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.4 ) } );
     this.addChild( representation );
 
     // Move the shape as the model representation moves
