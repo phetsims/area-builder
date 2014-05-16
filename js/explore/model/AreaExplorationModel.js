@@ -19,7 +19,8 @@ define( function( require ) {
 
   // constants
   var UNIT_SQUARE_LENGTH = 40; // In screen coords, which are roughly pixels
-  var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 8, UNIT_SQUARE_LENGTH * 8 );
+  var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 8, UNIT_SQUARE_LENGTH * 8 );
+  var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 16, UNIT_SQUARE_LENGTH * 8 );
   var PLAY_AREA_WIDTH = 768; // Based on default size in ScreenView.js
   var SPACE_BETWEEN_PLACEMENT_BOARDS = 40;
   var BOARD_Y_POS = 40;
@@ -32,7 +33,7 @@ define( function( require ) {
 
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
     this.showGrids = new Property( false ); // @public
-    this.showBothBoards = new Property( true ); // @public
+    this.boardDisplayMode = new Property( 'single' ); // @public, value values are 'single' and 'dual'
 
     // List of the shapes contained in this model
     this.movableShapes = [];
@@ -42,43 +43,48 @@ define( function( require ) {
     } );
 
     // Create the shape placement boards
-    var leftBoardDefaultLocation = new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - BOARD_SIZE.width, BOARD_Y_POS );
-    thisModel.leftShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, leftBoardDefaultLocation ); // @public
-    var rightBoardDefaultLocation = new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS );
-    thisModel.rightShapePlacementBoard = new ShapePlacementBoard( BOARD_SIZE, UNIT_SQUARE_LENGTH, rightBoardDefaultLocation ); // @public
+    thisModel.leftShapePlacementBoard = new ShapePlacementBoard(
+      SMALL_BOARD_SIZE,
+      UNIT_SQUARE_LENGTH,
+      new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - SMALL_BOARD_SIZE.width, BOARD_Y_POS ) ); // @public
+    thisModel.rightShapePlacementBoard = new ShapePlacementBoard(
+      SMALL_BOARD_SIZE,
+      UNIT_SQUARE_LENGTH,
+      new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS ) ); // @public
+    thisModel.centerShapePlacementBoard = new ShapePlacementBoard(
+      LARGE_BOARD_SIZE,
+      UNIT_SQUARE_LENGTH,
+      new Vector2( PLAY_AREA_WIDTH / 2 - LARGE_BOARD_SIZE.width / 2, BOARD_Y_POS ) ); // @public
 
     // Create the buckets that will hold the shapes
     // TODO: The bucket positions are hokey here because the implementation
     // TODO: assumes an inverted Y direction.  The common code should be made
     // TODO: to work with this if the buckets are retained in the UI design.
-    var leftBucketDefaultPosition = new Vector2( thisModel.leftShapePlacementBoard.position.x + BOARD_SIZE.width * 0.67,
-      -( thisModel.leftShapePlacementBoard.position.y + BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING ) );
+    var bucketYPos = -( thisModel.leftShapePlacementBoard.position.y + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING );
     this.leftBucket = new Bucket( {
-      position: leftBucketDefaultPosition,
+      position: new Vector2( thisModel.leftShapePlacementBoard.position.x + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
       baseColor: '#000080',
       caption: '',
       size: BUCKET_SIZE
     } );
-    var rightBucketDefaultPosition = new Vector2( thisModel.rightShapePlacementBoard.position.x + BOARD_SIZE.width * 0.33,
-      -( thisModel.rightShapePlacementBoard.position.y + BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING ) );
     this.rightBucket = new Bucket( {
-      position: rightBucketDefaultPosition,
+      position: new Vector2( thisModel.rightShapePlacementBoard.position.x + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
       baseColor: '#000080',
       caption: '',
       size: BUCKET_SIZE
     } );
-
-    // Center the left board if it is the only one visible
-    var leftBoardLocationWhenAlone = new Vector2( PLAY_AREA_WIDTH / 2 - BOARD_SIZE.width / 2, BOARD_Y_POS );
-    thisModel.showBothBoards.link( function( showBothBoards ) {
-        thisModel.leftShapePlacementBoard.position = showBothBoards ? leftBoardDefaultLocation : leftBoardLocationWhenAlone;
-      }
-    );
+    this.centerBucket = new Bucket( {
+      position: new Vector2( thisModel.centerShapePlacementBoard.position.x + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
+      baseColor: '#000080',
+      caption: '',
+      size: BUCKET_SIZE
+    } );
 
     // Control grid visibility
     this.showGrids.link( function( showGrids ) {
       thisModel.leftShapePlacementBoard.gridVisible = showGrids;
       thisModel.rightShapePlacementBoard.gridVisible = showGrids;
+      thisModel.centerShapePlacementBoard.gridVisible = showGrids;
     } );
   }
 

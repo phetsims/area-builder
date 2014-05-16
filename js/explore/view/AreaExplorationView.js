@@ -38,26 +38,53 @@ define( function( require ) {
     var thisScreen = this;
     ScreenView.call( thisScreen );
 
-    // Add the shape placement boards
-    this.addChild( new ShapePlacementBoardNode( model.leftShapePlacementBoard ) );
-    var rightBoardNode = new ShapePlacementBoardNode( model.rightShapePlacementBoard );
-    this.addChild( rightBoardNode );
+    // Create the nodes needed for the required layering
+    var backLayer = new Node();
+    this.addChild( backLayer );
+    var shapesLayer = new Node();
+    this.addChild( shapesLayer );
+    var bucketFrontLayer = new Node();
+    this.addChild( bucketFrontLayer );
 
-    // Only show the right board if user wants to see both
-    model.showBothBoards.link( function( showBothBoards ) {
-      rightBoardNode.visible = showBothBoards;
-    } );
+    // Add the shape placement boards
+    var leftBoardNode = new ShapePlacementBoardNode( model.leftShapePlacementBoard );
+    backLayer.addChild( leftBoardNode );
+    var rightBoardNode = new ShapePlacementBoardNode( model.rightShapePlacementBoard );
+    backLayer.addChild( rightBoardNode );
+    var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
+    backLayer.addChild( centerBoardNode );
 
     // Add the bucket views
     var invertIdentityTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( Vector2.ZERO, Vector2.ZERO, 1 );
-    this.addChild( new BucketFront( model.leftBucket, invertIdentityTransform ) );
-    this.addChild( new BucketHole( model.leftBucket, invertIdentityTransform ) );
-    this.addChild( new BucketFront( model.rightBucket, invertIdentityTransform ) );
-    this.addChild( new BucketHole( model.rightBucket, invertIdentityTransform ) );
+    var leftBucketFront = new BucketFront( model.leftBucket, invertIdentityTransform );
+    bucketFrontLayer.addChild( leftBucketFront );
+    var leftBucketHole = new BucketHole( model.leftBucket, invertIdentityTransform );
+    backLayer.addChild( leftBucketHole );
+    var rightBucketFront = new BucketFront( model.rightBucket, invertIdentityTransform );
+    bucketFrontLayer.addChild( rightBucketFront );
+    var rightBucketHole = new BucketHole( model.rightBucket, invertIdentityTransform );
+    backLayer.addChild( rightBucketHole );
+    var centerBucketFront = new BucketFront( model.centerBucket, invertIdentityTransform );
+    bucketFrontLayer.addChild( centerBucketFront );
+    var centerBucketHole = new BucketHole( model.centerBucket, invertIdentityTransform );
+    backLayer.addChild( centerBucketHole );
+
+    // Control which board(s), bucket(s), and shapes are visible.
+    model.boardDisplayMode.link( function( boardDisplayMode ) {
+      rightBoardNode.visible = boardDisplayMode === 'dual';
+      leftBoardNode.visible = boardDisplayMode === 'dual';
+      centerBoardNode.visible = boardDisplayMode === 'single';
+      leftBucketFront.visible = boardDisplayMode === 'dual';
+      leftBucketHole.visible = boardDisplayMode === 'dual';
+      rightBucketFront.visible = boardDisplayMode === 'dual';
+      rightBucketHole.visible = boardDisplayMode === 'dual';
+      centerBucketFront.visible = boardDisplayMode === 'single';
+      centerBucketHole.visible = boardDisplayMode === 'single';
+    } );
 
     // Add the movable shapes
     model.movableShapes.forEach( function( movableShape ) {
-      thisScreen.addChild( new ShapeView( movableShape ) );
+      shapesLayer.addChild( new ShapeView( movableShape ) );
     } );
 
     // Create and add the control panel
@@ -79,7 +106,7 @@ define( function( require ) {
     var controlPanel = new Panel(
       new VBox( {
         children: [
-          new ABSwitch( model.showBothBoards, true, twoRectIcon, false, oneRectIcon, { switchSize: new Dimension2( 30, 15 ) } ),
+          new ABSwitch( model.boardDisplayMode, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 30, 15 ) } ),
           new Checkbox( new Grid( new Dimension2( 40, 40 ), 10, { stroke: '#808080', lineDash: [ 2, 3 ] } ), model.showGrids )
         ],
         align: 'left',
