@@ -40,6 +40,7 @@ define( function( require ) {
     _.times( NUM_SQUARES_OF_EACH_COLOR, function() {
       thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.GREENISH_COLOR, Vector2.ZERO ) );
       thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.PURPLISH_COLOR, Vector2.ZERO ) );
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.ORANGISH_COLOR, Vector2.ZERO ) );
     } );
 
     // Create the shape placement boards
