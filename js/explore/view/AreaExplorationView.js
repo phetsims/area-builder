@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
+  var AreaSharedConstants = require( 'AREA/common/AreaSharedConstants' );
   var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
   var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -28,6 +29,12 @@ define( function( require ) {
 
   // constants
   var CONTROL_INSET = 20;
+
+  // Map of colors used for the shapes to the mode where those shapes are visible
+  var MAP_COLORS_TO_MODES = {};
+  MAP_COLORS_TO_MODES[ AreaSharedConstants.GREENISH_COLOR ] = 'dual';
+  MAP_COLORS_TO_MODES[ AreaSharedConstants.PURPLISH_COLOR ] = 'dual';
+  MAP_COLORS_TO_MODES[ AreaSharedConstants.ORANGISH_COLOR ] = 'single';
 
   /**
    * @param {AreaExplorationModel} model
@@ -69,6 +76,11 @@ define( function( require ) {
     var centerBucketHole = new BucketHole( model.centerBucket, invertIdentityTransform );
     backLayer.addChild( centerBucketHole );
 
+    // Add the movable shapes
+    model.movableShapes.forEach( function( movableShape ) {
+      shapesLayer.addChild( new ShapeView( movableShape ) );
+    } );
+
     // Control which board(s), bucket(s), and shapes are visible.
     model.boardDisplayMode.link( function( boardDisplayMode ) {
       rightBoardNode.visible = boardDisplayMode === 'dual';
@@ -80,11 +92,13 @@ define( function( require ) {
       rightBucketHole.visible = boardDisplayMode === 'dual';
       centerBucketFront.visible = boardDisplayMode === 'single';
       centerBucketHole.visible = boardDisplayMode === 'single';
-    } );
-
-    // Add the movable shapes
-    model.movableShapes.forEach( function( movableShape ) {
-      shapesLayer.addChild( new ShapeView( movableShape ) );
+      shapesLayer.children.forEach( function( shapeNode ) {
+        // TODO: This works, but I'm not crazy about the idea of mapping
+        // TODO: color to visibility - it seems indirect and brittle.  Keep
+        // TODO: thinking about this and maybe replace with something better.
+        assert && assert( shapeNode instanceof ShapeView, 'Only shapes should be on the shape layer' );
+        shapeNode.visible = ( boardDisplayMode === MAP_COLORS_TO_MODES[ shapeNode.shapeModel.color ] );
+      } );
     } );
 
     // Create and add the control panel

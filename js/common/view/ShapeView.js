@@ -15,6 +15,7 @@ define( function( require ) {
 
   function ShapeView( movableShape ) {
     Node.call( this );
+    this.shapeModel = movableShape;
     var representation = new Path( movableShape.shape, { fill: movableShape.color, stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.4 ) } );
     this.addChild( representation );
 
