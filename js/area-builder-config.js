@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /*
- * RequireJS configuration file for the 'Area' sim. Paths are relative to
+ * RequireJS configuration file for the 'Area Builder' sim. Paths are relative to
  * the location of this file.
  *
  * @author John Blanco
@@ -9,7 +9,7 @@
 
 require.config( {
 
-  deps: ['area-main'],
+  deps: ['area-builder-main'],
 
   paths: {
 
@@ -36,7 +36,7 @@ require.config( {
     VEGAS: '../../vegas/js',
 
     // this sim
-    AREA: '.'
+    AREA_BUILDER: '.'
   },
 
   urlArgs: new Date().getTime()  // cache buster to make browser refresh load all included scripts

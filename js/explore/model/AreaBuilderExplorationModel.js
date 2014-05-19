@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Main model class for the 'Explore' screen of the Area simulation.
+ * Main model class for the 'Explore' screen of the Area Builder simulation.
  *
  * @author John Blanco
  */
@@ -11,11 +11,11 @@ define( function( require ) {
   // modules
   var Dimension2 = require( 'DOT/Dimension2' );
   var Property = require( 'AXON/Property' );
-  var ShapePlacementBoard = require( 'AREA/common/model/ShapePlacementBoard' );
+  var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
   var Bucket = require( 'PHETCOMMON/model/Bucket' );
-  var AreaSharedConstants = require( 'AREA/common/AreaSharedConstants' );
-  var MovableRectangle = require( 'AREA/common/model/MovableRectangle' );
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
 
   // constants
   var UNIT_SQUARE_LENGTH = 40; // In screen coords, which are roughly pixels
@@ -28,7 +28,7 @@ define( function( require ) {
   var BOARD_TO_BUCKET_Y_SPACING = 70;
   var NUM_SQUARES_OF_EACH_COLOR = 1;
 
-  function AreaExplorationModel() {
+  function AreaBuilderExplorationModel() {
     var thisModel = this;
 
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
@@ -38,9 +38,9 @@ define( function( require ) {
     // List of the shapes contained in this model
     this.movableShapes = [];
     _.times( NUM_SQUARES_OF_EACH_COLOR, function() {
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.GREENISH_COLOR, Vector2.ZERO ) );
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.PURPLISH_COLOR, Vector2.ZERO ) );
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaSharedConstants.ORANGISH_COLOR, Vector2.ZERO ) );
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.GREENISH_COLOR, Vector2.ZERO ) );
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.PURPLISH_COLOR, Vector2.ZERO ) );
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.ORANGISH_COLOR, Vector2.ZERO ) );
     } );
 
     // Create the shape placement boards
@@ -89,7 +89,7 @@ define( function( require ) {
     } );
   }
 
-  AreaExplorationModel.prototype = {
+  AreaBuilderExplorationModel.prototype = {
 
     // Resets all model elements
     reset: function() {
@@ -98,5 +98,5 @@ define( function( require ) {
 
   };
 
-  return AreaExplorationModel;
+  return AreaBuilderExplorationModel;
 } );

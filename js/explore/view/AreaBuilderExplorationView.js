@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * View for the 'Explore' screen of the Area simulation.
+ * View for the 'Explore' screen of the Area Builder simulation.
  *
  * @author John Blanco
  */
@@ -10,37 +10,37 @@ define( function( require ) {
 
   // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
-  var AreaSharedConstants = require( 'AREA/common/AreaSharedConstants' );
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
   var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Checkbox = require( 'SUN/Checkbox' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var Grid = require( 'AREA/common/view/Grid' );
+  var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var ShapePlacementBoardNode = require( 'AREA/common/view/ShapePlacementBoardNode' );
+  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
-  var ShapeView = require( 'AREA/common/view/ShapeView' );
+  var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
 
   // constants
   var CONTROL_INSET = 20;
 
   // Map of colors used for the shapes to the mode where those shapes are visible
   var MAP_COLORS_TO_MODES = {};
-  MAP_COLORS_TO_MODES[ AreaSharedConstants.GREENISH_COLOR ] = 'dual';
-  MAP_COLORS_TO_MODES[ AreaSharedConstants.PURPLISH_COLOR ] = 'dual';
-  MAP_COLORS_TO_MODES[ AreaSharedConstants.ORANGISH_COLOR ] = 'single';
+  MAP_COLORS_TO_MODES[ AreaBuilderSharedConstants.GREENISH_COLOR ] = 'dual';
+  MAP_COLORS_TO_MODES[ AreaBuilderSharedConstants.PURPLISH_COLOR ] = 'dual';
+  MAP_COLORS_TO_MODES[ AreaBuilderSharedConstants.ORANGISH_COLOR ] = 'single';
 
   /**
-   * @param {AreaExplorationModel} model
+   * @param {AreaBuilderExplorationModel} model
    * @constructor
    */
-  function AreaExplorationView( model ) {
+  function AreaBuilderExplorationView( model ) {
 
     var thisScreen = this;
     ScreenView.call( thisScreen );
@@ -134,5 +134,5 @@ define( function( require ) {
     controlPanel.left = CONTROL_INSET;
   }
 
-  return inherit( ScreenView, AreaExplorationView );
+  return inherit( ScreenView, AreaBuilderExplorationView );
 } );

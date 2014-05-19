@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * View for the 'Game' screen of the Area simulation.
+ * View for the 'Game' screen of the Area Builder simulation.
  *
  * @author John Blanco
  */
@@ -16,10 +16,10 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
-   * @param {AreaGameModel} model
+   * @param {AreaBuilderGameModel} model
    * @constructor
    */
-  function AreaGameView( model ) {
+  function AreaBuilderGameView( model ) {
 
     var thisScreen = this;
     ScreenView.call( thisScreen );
@@ -43,5 +43,5 @@ define( function( require ) {
     } ) );
   }
 
-  return inherit( ScreenView, AreaGameView );
+  return inherit( ScreenView, AreaBuilderGameView );
 } );

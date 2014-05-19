@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Model for the 'Game' screen of the Area simulation.
+ * Model for the 'Game' screen of the Area Builder simulation.
  *
  * @author John Blanco
  */
@@ -10,10 +10,10 @@ define( function( require ) {
 
   // modules
 
-  function AreaGameModel() {
+  function AreaBuilderGameModel() {
   }
 
-  AreaGameModel.prototype = {
+  AreaBuilderGameModel.prototype = {
 
     // Resets all model elements
     reset: function() {
@@ -22,5 +22,5 @@ define( function( require ) {
 
   };
 
-  return AreaGameModel;
+  return AreaBuilderGameModel;
 } );
