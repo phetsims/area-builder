@@ -27,7 +27,16 @@ define( function( require ) {
   var BOARD_Y_POS = 40;
   var BUCKET_SIZE = new Dimension2( 100, 50 );
   var BOARD_TO_BUCKET_Y_SPACING = 70;
-  var NUM_SQUARES_OF_EACH_COLOR = 1;
+  var INITIAL_NUM_SQUARES_OF_EACH_COLOR = 5;
+  var INITIAL_OFFSET_POSITIONS = [
+    // Offsets used for initial position of shape, relative to bucket hole center.  Empirically determined.
+    new Vector2( -20 - UNIT_SQUARE_LENGTH / 2, 0 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( -10 - UNIT_SQUARE_LENGTH / 2, -2 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( 9 - UNIT_SQUARE_LENGTH / 2, 1 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( 18 - UNIT_SQUARE_LENGTH / 2, 3 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( 3 - UNIT_SQUARE_LENGTH / 2, 5 - UNIT_SQUARE_LENGTH / 2 )
+  ];
+  assert && assert( INITIAL_OFFSET_POSITIONS.length === INITIAL_NUM_SQUARES_OF_EACH_COLOR, 'Must have initial offsets for all shapes' );
 
   function AreaBuilderExplorationModel() {
     var thisModel = this;
@@ -35,14 +44,6 @@ define( function( require ) {
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
     this.showGrids = new Property( false ); // @public
     this.boardDisplayMode = new Property( 'single' ); // @public, value values are 'single' and 'dual'
-
-    // List of the shapes contained in this model
-    this.movableShapes = new ObservableArray();
-    _.times( NUM_SQUARES_OF_EACH_COLOR, function() {
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.GREENISH_COLOR, Vector2.ZERO ) );
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.PURPLISH_COLOR, Vector2.ZERO ) );
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.ORANGISH_COLOR, Vector2.ZERO ) );
-    } );
 
     // Create the shape placement boards
     thisModel.leftShapePlacementBoard = new ShapePlacementBoard(
@@ -80,6 +81,20 @@ define( function( require ) {
       baseColor: '#000080',
       caption: '',
       size: BUCKET_SIZE
+    } );
+
+    // Create and initialize the array that contains the movable shapes.
+    this.movableShapes = new ObservableArray();
+    var compensatedLeftBucketPos = new Vector2( thisModel.leftBucket.position.x, -thisModel.leftBucket.position.y );
+    var compensatedRightBucketPos = new Vector2( thisModel.rightBucket.position.x, -thisModel.rightBucket.position.y );
+    var compensatedCenterBucketPos = new Vector2( thisModel.centerBucket.position.x, -thisModel.centerBucket.position.y );
+    _.times( INITIAL_NUM_SQUARES_OF_EACH_COLOR, function( index ) {
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ),
+        AreaBuilderSharedConstants.GREENISH_COLOR, compensatedLeftBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ) ) );
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ),
+        AreaBuilderSharedConstants.PURPLISH_COLOR, compensatedRightBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ) ) );
+      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ),
+        AreaBuilderSharedConstants.ORANGISH_COLOR, compensatedCenterBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ) ) );
     } );
 
     // Control the grid visibility in the individual boards
