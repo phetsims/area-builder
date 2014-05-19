@@ -2,6 +2,8 @@
 
 /**
  * Type that represents a movable shape in the view.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';
@@ -14,7 +16,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
 
   function ShapeView( movableShape ) {
-    Node.call( this );
+    Node.call( this, { cursor: 'pointer' } );
     this.shapeModel = movableShape;
     var representation = new Path( movableShape.shape, { fill: movableShape.color, stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.4 ) } );
     this.addChild( representation );

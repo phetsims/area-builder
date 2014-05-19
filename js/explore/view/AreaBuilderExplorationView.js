@@ -48,12 +48,10 @@ define( function( require ) {
     // Create the nodes needed for the required layering
     var backLayer = new Node();
     this.addChild( backLayer );
-    var nonUserControlledShapesLayer = new Node();
-    this.addChild( nonUserControlledShapesLayer );
+    var shapeLayer = new Node();
+    this.addChild( shapeLayer );
     var bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );
-    var userControlledShapesLayer = new Node();
-    this.addChild( userControlledShapesLayer );
 
     // Add the shape placement boards
     var leftBoardNode = new ShapePlacementBoardNode( model.leftShapePlacementBoard );
@@ -83,24 +81,14 @@ define( function( require ) {
 
       // Create and add the view representation for this shape.
       var shapeNode = new ShapeView( addedShape );
-      nonUserControlledShapesLayer.addChild( shapeNode );
+      shapeLayer.addChild( shapeNode );
 
       // Move the shape to the front when grabbed by the user.
-      // TODO: A bit TBD how exactly this will work.
-      /*
-       addedShape.userControlledProperty.link( function( userControlled ) {
-       if ( userControlled ) {
-       nonUserControlledShapesLayer.removeChild( addedShape );
-       userControlledShapesLayer.addChild( addedShape );
-       shapeNode.moveToFront();
-       }
-       else {
-       nonUserControlledShapesLayer.removeChild( addedShape );
-       userControlledShapesLayer.addChild( addedShape );
-       shapeNode.moveToFront();
-       }
-       } );
-       */
+      addedShape.userControlledProperty.link( function( userControlled ) {
+        if ( userControlled ) {
+          shapeNode.moveToFront();
+        }
+      } );
 
       // Add the removal listener for if and when this shape is removed from the model.
       model.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
@@ -128,7 +116,7 @@ define( function( require ) {
       rightBucketHole.visible = boardDisplayMode === 'dual';
       centerBucketFront.visible = boardDisplayMode === 'single';
       centerBucketHole.visible = boardDisplayMode === 'single';
-      nonUserControlledShapesLayer.children.forEach( function( shapeNode ) {
+      shapeLayer.children.forEach( function( shapeNode ) {
         // TODO: This works, but I'm not crazy about the idea of mapping
         // TODO: color to visibility - it seems indirect and brittle.  Keep
         // TODO: thinking about this and maybe replace with something better.
