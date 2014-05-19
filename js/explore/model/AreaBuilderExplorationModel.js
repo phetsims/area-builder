@@ -9,13 +9,14 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Bucket = require( 'PHETCOMMON/model/Bucket' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
-  var Bucket = require( 'PHETCOMMON/model/Bucket' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
 
   // constants
   var UNIT_SQUARE_LENGTH = 40; // In screen coords, which are roughly pixels
@@ -36,7 +37,7 @@ define( function( require ) {
     this.boardDisplayMode = new Property( 'single' ); // @public, value values are 'single' and 'dual'
 
     // List of the shapes contained in this model
-    this.movableShapes = [];
+    this.movableShapes = new ObservableArray();
     _.times( NUM_SQUARES_OF_EACH_COLOR, function() {
       thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.GREENISH_COLOR, Vector2.ZERO ) );
       thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ), AreaBuilderSharedConstants.PURPLISH_COLOR, Vector2.ZERO ) );
@@ -81,7 +82,7 @@ define( function( require ) {
       size: BUCKET_SIZE
     } );
 
-    // Control grid visibility
+    // Control the grid visibility in the individual boards
     this.showGrids.link( function( showGrids ) {
       thisModel.leftShapePlacementBoard.gridVisible = showGrids;
       thisModel.rightShapePlacementBoard.gridVisible = showGrids;
