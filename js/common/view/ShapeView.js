@@ -21,8 +21,8 @@ define( function( require ) {
 
     var representation = new Path( movableShape.shape, {
       fill: movableShape.color,
-      stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.4 ),
-      lineWidth: 1.5
+      stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.5 ),
+      lineWidth: 1
     } );
     this.addChild( representation );
 

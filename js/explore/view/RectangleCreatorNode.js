@@ -27,8 +27,8 @@ define( function( require ) {
     // Create the node that will visually represent this model element in the view.
     var representation = new Rectangle( 0, 0, rectangleCreator.size.width, rectangleCreator.size.height, 0, 0, {
       fill: rectangleCreator.color,
-      stroke: Color.toColor( rectangleCreator.color ).colorUtilsDarker( 0.4 ),
-      lineWidth: 2
+      stroke: Color.toColor( rectangleCreator.color ).colorUtilsDarker( 0.5 ),
+      lineWidth: 1
     } );
     this.addChild( representation );
 
