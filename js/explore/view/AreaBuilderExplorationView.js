@@ -15,6 +15,7 @@ define( function( require ) {
   var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Checkbox = require( 'SUN/Checkbox' );
+  var Color = require( 'SCENERY/util/Color' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -137,15 +138,21 @@ define( function( require ) {
     var iconRectOptions = { fill: 'white', stroke: 'black' };
     twoRectIcon.addChild( new Rectangle( 0, 0, 24, 24, 0, 0, iconRectOptions ) );
     twoRectIcon.addChild( new Rectangle( 26, 0, 24, 24, 0, 0, iconRectOptions ) );
-    twoRectIcon.addChild( new Rectangle( 6, 6, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
-    twoRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
-    twoRectIcon.addChild( new Rectangle( 6, 12, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
-    twoRectIcon.addChild( new Rectangle( 32, 6, 6, 6, 0, 0, { fill: '#E0B7E1', stroke: 'purple' } ) );
-    twoRectIcon.addChild( new Rectangle( 38, 12, 6, 6, 0, 0, { fill: '#E0B7E1', stroke: 'purple' } ) );
+    var greenFill = AreaBuilderSharedConstants.GREENISH_COLOR;
+    var greenStroke = Color.toColor( greenFill ).darkerColor( 0.6 );
+    twoRectIcon.addChild( new Rectangle( 6, 6, 6, 6, 0, 0, { fill: greenFill, stroke: greenStroke } ) );
+    twoRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: greenFill, stroke: greenStroke } ) );
+    twoRectIcon.addChild( new Rectangle( 12, 12, 6, 6, 0, 0, { fill: greenFill, stroke: greenStroke } ) );
+    var purpleFill = AreaBuilderSharedConstants.PURPLISH_COLOR;
+    var purpleStroke = Color.toColor( purpleFill ).darkerColor( 0.6 );
+    twoRectIcon.addChild( new Rectangle( 32, 6, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
+    twoRectIcon.addChild( new Rectangle( 38, 12, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
     var oneRectIcon = new Rectangle( 0, 0, 24, 24, 0, 0, iconRectOptions );
-    oneRectIcon.addChild( new Rectangle( 6, 6, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
-    oneRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
-    oneRectIcon.addChild( new Rectangle( 6, 12, 6, 6, 0, 0, { fill: '#34E16E', stroke: 'green' } ) );
+    var orangeFill = AreaBuilderSharedConstants.ORANGISH_COLOR;
+    var orangeStroke = Color.toColor( orangeFill ).darkerColor( 0.6 );
+    oneRectIcon.addChild( new Rectangle( 6, 6, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
+    oneRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
+    oneRectIcon.addChild( new Rectangle( 6, 12, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
 
     var controlPanel = new Panel(
       new VBox( {
