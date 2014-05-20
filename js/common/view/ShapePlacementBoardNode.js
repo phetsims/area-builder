@@ -28,11 +28,9 @@ define( function( require ) {
     } );
     this.addChild( background );
 
-    // Track and update the position
-    shapePlacementBoard.positionProperty.link( function( position ) {
-      background.left = position.x;
-      background.top = position.y;
-    } );
+    // Set the position
+    background.left = shapePlacementBoard.position.x;
+    background.top = shapePlacementBoard.position.y;
 
     // Create and add the grid
     var lineOptions = { stroke: '#909090', lineWidth: 1 };

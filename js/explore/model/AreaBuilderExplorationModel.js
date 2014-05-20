@@ -52,15 +52,21 @@ define( function( require ) {
     thisModel.leftShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
-      new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - SMALL_BOARD_SIZE.width, BOARD_Y_POS ) ); // @public
+      new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - SMALL_BOARD_SIZE.width, BOARD_Y_POS ),
+      AreaBuilderSharedConstants.GREENISH_COLOR
+    ); // @public
     thisModel.rightShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
-      new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS ) ); // @public
+      new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS ),
+      AreaBuilderSharedConstants.PURPLISH_COLOR
+    ); // @public
     thisModel.centerShapePlacementBoard = new ShapePlacementBoard(
       LARGE_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
-      new Vector2( PLAY_AREA_WIDTH / 2 - LARGE_BOARD_SIZE.width / 2, BOARD_Y_POS ) ); // @public
+      new Vector2( PLAY_AREA_WIDTH / 2 - LARGE_BOARD_SIZE.width / 2, BOARD_Y_POS ),
+      AreaBuilderSharedConstants.ORANGISH_COLOR
+    ); // @public
 
     // Create the buckets that will hold the shapes.
     // TODO: The bucket positions are hokey here because the implementation
@@ -86,9 +92,26 @@ define( function( require ) {
       size: BUCKET_SIZE
     } );
 
+    // Function for placing shapes when released by the user.
+    var placementBoards = [ this.leftShapePlacementBoard, this.rightShapePlacementBoard, this.centerShapePlacementBoard ];
+
+    function placeShape( shape ) {
+      var shapePlaced = false;
+      for ( var i = 0; i < placementBoards.length && !shapePlaced; i++ ) {
+        shapePlaced = placementBoards[i].placeShape( shape );
+      }
+      // TODO: Handle removal of shapes placed outside the boards.
+    }
+
     // Function for adding new movable elements to this model
-    function addModelElement( newElement ) {
-      thisModel.movableShapes.push( newElement );
+    function addModelElement( newShape ) {
+      thisModel.movableShapes.push( newShape );
+      //TODO: Figure out how to unlink this function when the shape is removed from the model.
+      newShape.userControlledProperty.link( function( userControlled ) {
+        if ( !userControlled ) {
+          placeShape( newShape );
+        }
+      } );
     }
 
     // Create the creator elements, which sit in the buckets and listen for
@@ -106,7 +129,7 @@ define( function( require ) {
         AreaBuilderSharedConstants.ORANGISH_COLOR, addModelElement ) );
     } );
 
-    // Control the grid visibility in the individual boards
+    // Control the grid visibility in the placement boards
     this.showGrids.link( function( showGrids ) {
       thisModel.leftShapePlacementBoard.gridVisible = showGrids;
       thisModel.rightShapePlacementBoard.gridVisible = showGrids;

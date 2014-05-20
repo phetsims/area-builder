@@ -44,6 +44,7 @@ define( function( require ) {
     },
 
     releaseModelInstance: function() {
+      this.activeModelInstance.userControlled = false;
       this.activeModelInstance = null;
     }
   };

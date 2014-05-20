@@ -8,22 +8,22 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  function ShapePlacementBoard( size, unitSquareLength, initialPosition ) {
+  function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
 
     this.unitSquareLength = unitSquareLength; // @public
+    this.position = position; // @public
+    this.colorHandled = colorHandled; // @private
+    this.bounds = new Bounds2( position.x, position.y, position.x + size.x, position.y + size.y ); // @private
 
     // The size should be an integer number of unit squares for both dimensions.
     assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
 
     PropertySet.call( this, {
-
-      // Position of the upper left corner of the board
-      position: initialPosition,
-
       // Boolean property that controls whether or not the placement grid is visible
       gridVisible: false
     } );
@@ -33,6 +33,17 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, ShapePlacementBoard, {
-    //TODO prototypes
+
+    /**
+     * Place the provide shape on this board.  Returns false if the color does
+     * not match the handled color or if the shape is not partially over the
+     * board.
+     */
+    placeShape: function( shape ) {
+      if ( shape.color !== this.colorHandled || !this.bounds.intersectsBounds( shape.shape.bounds ) ) {
+        return false;
+      }
+      shape.position = this.position;
+    }
   } );
 } );
