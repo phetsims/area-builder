@@ -17,8 +17,13 @@ define( function( require ) {
 
   function ShapeView( movableShape ) {
     Node.call( this, { cursor: 'pointer' } );
-    this.shapeModel = movableShape;
-    var representation = new Path( movableShape.shape, { fill: movableShape.color, stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.4 ) } );
+    this.color = movableShape.color; // @public
+
+    var representation = new Path( movableShape.shape, {
+      fill: movableShape.color,
+      stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.4 ),
+      lineWidth: 1.5
+    } );
     this.addChild( representation );
 
     // Move the shape as the model representation moves

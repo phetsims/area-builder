@@ -15,11 +15,13 @@ define( function( require ) {
   var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
+  var RectangleCreator = require( 'AREA_BUILDER/explore/model/RectangleCreator' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = 40; // In screen coords, which are roughly pixels
+  var UNIT_SQUARE_SIZE = new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
   var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 8, UNIT_SQUARE_LENGTH * 8 );
   var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 16, UNIT_SQUARE_LENGTH * 8 );
   var PLAY_AREA_WIDTH = 768; // Based on default size in ScreenView.js
@@ -44,8 +46,9 @@ define( function( require ) {
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
     this.showGrids = new Property( false ); // @public
     this.boardDisplayMode = new Property( 'single' ); // @public, value values are 'single' and 'dual'
+    this.movableShapes = new ObservableArray();
 
-    // Create the shape placement boards
+    // Create the shape placement boards.
     thisModel.leftShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
@@ -59,7 +62,7 @@ define( function( require ) {
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 - LARGE_BOARD_SIZE.width / 2, BOARD_Y_POS ) ); // @public
 
-    // Create the buckets that will hold the shapes
+    // Create the buckets that will hold the shapes.
     // TODO: The bucket positions are hokey here because the implementation
     // TODO: assumes an inverted Y direction.  The common code should be made
     // TODO: to work with this if the buckets are retained in the UI design.
@@ -83,18 +86,24 @@ define( function( require ) {
       size: BUCKET_SIZE
     } );
 
-    // Create and initialize the array that contains the movable shapes.
-    this.movableShapes = new ObservableArray();
+    // Function for adding new movable elements to this model
+    function addModelElement( newElement ) {
+      thisModel.movableShapes.push( newElement );
+    }
+
+    // Create the creator elements, which sit in the buckets and listen for
+    // user clicks and subsequently add the movable elements to the model.
+    this.rectangleCreators = [];
     var compensatedLeftBucketPos = new Vector2( thisModel.leftBucket.position.x, -thisModel.leftBucket.position.y );
     var compensatedRightBucketPos = new Vector2( thisModel.rightBucket.position.x, -thisModel.rightBucket.position.y );
     var compensatedCenterBucketPos = new Vector2( thisModel.centerBucket.position.x, -thisModel.centerBucket.position.y );
     _.times( INITIAL_NUM_SQUARES_OF_EACH_COLOR, function( index ) {
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ),
-        AreaBuilderSharedConstants.GREENISH_COLOR, compensatedLeftBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ) ) );
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ),
-        AreaBuilderSharedConstants.PURPLISH_COLOR, compensatedRightBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ) ) );
-      thisModel.movableShapes.push( new MovableRectangle( new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH ),
-        AreaBuilderSharedConstants.ORANGISH_COLOR, compensatedCenterBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ) ) );
+      thisModel.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, compensatedLeftBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
+        AreaBuilderSharedConstants.GREENISH_COLOR, addModelElement ) );
+      thisModel.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, compensatedRightBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
+        AreaBuilderSharedConstants.PURPLISH_COLOR, addModelElement ) );
+      thisModel.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, compensatedCenterBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
+        AreaBuilderSharedConstants.ORANGISH_COLOR, addModelElement ) );
     } );
 
     // Control the grid visibility in the individual boards

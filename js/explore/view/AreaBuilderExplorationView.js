@@ -21,6 +21,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var RectangleCreatorNode = require( 'AREA_BUILDER/explore/view/RectangleCreatorNode' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -48,10 +49,12 @@ define( function( require ) {
     // Create the nodes needed for the required layering
     var backLayer = new Node();
     this.addChild( backLayer );
-    var shapeLayer = new Node();
-    this.addChild( shapeLayer );
+    var creatorLayer = new Node();
+    this.addChild( creatorLayer );
     var bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );
+    var movableShapesLayer = new Node();
+    this.addChild( movableShapesLayer );
 
     // Add the shape placement boards
     var leftBoardNode = new ShapePlacementBoardNode( model.leftShapePlacementBoard );
@@ -76,12 +79,16 @@ define( function( require ) {
     var centerBucketHole = new BucketHole( model.centerBucket, invertIdentityTransform );
     backLayer.addChild( centerBucketHole );
 
-    // Create a function for handling the addition of new shapes to the model
-    function handleShapeAdded( addedShape ) {
+    // Add the creator nodes.
+    model.rectangleCreators.forEach( function( rectangleCreator ) {
+      creatorLayer.addChild( new RectangleCreatorNode( rectangleCreator ) );
+    } );
 
+    // Handle the comings and goings of movable shapes.
+    model.movableShapes.addItemAddedListener( function( addedShape ) {
       // Create and add the view representation for this shape.
       var shapeNode = new ShapeView( addedShape );
-      shapeLayer.addChild( shapeNode );
+      movableShapesLayer.addChild( shapeNode );
 
       // Move the shape to the front when grabbed by the user.
       addedShape.userControlledProperty.link( function( userControlled ) {
@@ -97,13 +104,7 @@ define( function( require ) {
           model.movableShapeList.removeItemRemovedListener( removalListener );
         }
       } );
-    }
-
-    // Add the initial movable shapes.
-    model.movableShapes.forEach( handleShapeAdded );
-
-    // Handle shapes that are added after initialization.
-    model.movableShapes.addItemAddedListener( handleShapeAdded );
+    } );
 
     // Control which board(s), bucket(s), and shapes are visible.
     model.boardDisplayMode.link( function( boardDisplayMode ) {
@@ -116,12 +117,17 @@ define( function( require ) {
       rightBucketHole.visible = boardDisplayMode === 'dual';
       centerBucketFront.visible = boardDisplayMode === 'single';
       centerBucketHole.visible = boardDisplayMode === 'single';
-      shapeLayer.children.forEach( function( shapeNode ) {
+      movableShapesLayer.children.forEach( function( shapeNode ) {
         // TODO: This works, but I'm not crazy about the idea of mapping
         // TODO: color to visibility - it seems indirect and brittle.  Keep
         // TODO: thinking about this and maybe replace with something better.
         assert && assert( shapeNode instanceof ShapeView, 'Only shapes should be on the shape layer' );
-        shapeNode.visible = ( boardDisplayMode === MAP_COLORS_TO_MODES[ shapeNode.shapeModel.color ] );
+        shapeNode.visible = ( boardDisplayMode === MAP_COLORS_TO_MODES[ shapeNode.color ] );
+      } );
+      creatorLayer.children.forEach( function( creatorNode ) {
+        // TODO: Same deal as above vis a vis color.
+        assert && assert( creatorNode instanceof RectangleCreatorNode, 'Only creator nodes should be on the creator node layer' );
+        creatorNode.visible = ( boardDisplayMode === MAP_COLORS_TO_MODES[ creatorNode.color ] );
       } );
     } );
 
