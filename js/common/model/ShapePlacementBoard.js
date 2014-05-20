@@ -13,6 +13,9 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+  var DISTANCE_COMPARE_THRESHOLD = 1E-5;
+
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
 
     this.unitSquareLength = unitSquareLength; // @public
@@ -43,6 +46,7 @@ define( function( require ) {
      */
     placeShape: function( shape ) {
       assert && assert( shape.userControlled === false, 'Shapes can\'t be place when still controlled by user.' );
+      var self = this;
 
       var shapeBounds = new Bounds2( shape.position.x, shape.position.y, shape.position.x + shape.shape.bounds.getWidth(), shape.position.y + shape.shape.bounds.getHeight() );
 
@@ -53,6 +57,7 @@ define( function( require ) {
 
       // Choose a location for the shape
       if ( this.residentShapes.length === 0 ) {
+
         // This is the first shape to be added, so put it anywhere on the grid
         var xPos = Math.round( ( shape.position.x - this.position.x ) / this.unitSquareLength ) * this.unitSquareLength + this.position.x;
         xPos = Math.max( Math.min( xPos, this.bounds.maxX - this.unitSquareLength ), this.bounds.minX );
@@ -60,6 +65,59 @@ define( function( require ) {
         yPos = Math.max( Math.min( yPos, this.bounds.maxY - this.unitSquareLength ), this.bounds.minY );
         shape.position = new Vector2( xPos, yPos );
       }
+      else {
+        // Choose the closest valid location.
+        var closestValidLocation = this.validPlacementLocations[ 0 ];
+        this.validPlacementLocations.forEach( function( candidatePosition ) {
+          if ( shape.position.distance( candidatePosition ) < shape.position.distance( closestValidLocation ) ) {
+            closestValidLocation = candidatePosition;
+          }
+        } );
+        shape.position = closestValidLocation;
+      }
+
+      // Add this shape to the list of shapes that are on this board.
+      this.residentShapes.push( shape );
+
+      // Set up a listener to remove this shape when the user grabs is.
+      shape.userControlledProperty.once( function( userControlled ) {
+        assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
+        self.residentShapes.splice( self.residentShapes.indexOf( shape ), 1 );
+        self.updateValidPlacementLocations();
+      } );
+
+      // Update the valid locations for the next placement.
+      this.updateValidPlacementLocations();
+    },
+
+    updateValidPlacementLocations: function() {
+      var self = this;
+
+      // Create a list of all locations that would share an edge with another square.
+      var adjacentLocations = [];
+      self.residentShapes.forEach( function( residentShape ) {
+        for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
+          var newPosition = residentShape.position.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
+          if ( newPosition.x < self.bounds.maxX && newPosition.x >= self.bounds.minX && newPosition.y < self.bounds.maxY && newPosition.y >= self.bounds.minY ) {
+            adjacentLocations.push( newPosition );
+          }
+        }
+      } );
+
+      self.validPlacementLocations.length = 0;
+
+      adjacentLocations.forEach( function( adjacentLocation ) {
+        var isOccupied = false;
+        for ( var i = 0; i < self.residentShapes.length; i++ ) {
+          if ( self.residentShapes[ i ].position.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
+            isOccupied = true;
+            break;
+          }
+        }
+        if ( !isOccupied ) {
+          self.validPlacementLocations.push( adjacentLocation );
+        }
+      } );
     }
   } );
 } );
