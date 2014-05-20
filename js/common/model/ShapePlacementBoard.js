@@ -18,7 +18,9 @@ define( function( require ) {
     this.unitSquareLength = unitSquareLength; // @public
     this.position = position; // @public
     this.colorHandled = colorHandled; // @private
-    this.bounds = new Bounds2( position.x, position.y, position.x + size.x, position.y + size.y ); // @private
+    this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
+    this.residentShapes = []; // @private
+    this.validPlacementLocations = [ '*' ]; // @private
 
     // The size should be an integer number of unit squares for both dimensions.
     assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
@@ -40,10 +42,24 @@ define( function( require ) {
      * board.
      */
     placeShape: function( shape ) {
-      if ( shape.color !== this.colorHandled || !this.bounds.intersectsBounds( shape.shape.bounds ) ) {
+      assert && assert( shape.userControlled === false, 'Shapes can\'t be place when still controlled by user.' );
+
+      var shapeBounds = new Bounds2( shape.position.x, shape.position.y, shape.position.x + shape.shape.bounds.getWidth(), shape.position.y + shape.shape.bounds.getHeight() );
+
+      // See if shape is of the correct color and overlapping with the board.
+      if ( shape.color !== this.colorHandled || !this.bounds.intersectsBounds( shapeBounds ) || this.validPlacementLocations.length === 0 ) {
         return false;
       }
-      shape.position = this.position;
+
+      // Choose a location for the shape
+      if ( this.residentShapes.length === 0 ) {
+        // This is the first shape to be added, so put it anywhere on the grid
+        var xPos = Math.round( ( shape.position.x - this.position.x ) / this.unitSquareLength ) * this.unitSquareLength + this.position.x;
+        xPos = Math.max( Math.min( xPos, this.bounds.maxX - this.unitSquareLength ), this.bounds.minX );
+        var yPos = Math.round( ( shape.position.y - this.position.y ) / this.unitSquareLength ) * this.unitSquareLength + this.position.y;
+        yPos = Math.max( Math.min( yPos, this.bounds.maxY - this.unitSquareLength ), this.bounds.minY );
+        shape.position = new Vector2( xPos, yPos );
+      }
     }
   } );
 } );
