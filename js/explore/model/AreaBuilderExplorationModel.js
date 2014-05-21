@@ -68,6 +68,9 @@ define( function( require ) {
       AreaBuilderSharedConstants.ORANGISH_COLOR
     ); // @public
 
+    // @private, for convenience.
+    thisModel.shapePlacementBoards = [ thisModel.leftShapePlacementBoard, thisModel.rightShapePlacementBoard, thisModel.centerShapePlacementBoard ];
+
     // Create the buckets that will hold the shapes.
     // TODO: The bucket positions are hokey here because the implementation
     // TODO: assumes an inverted Y direction.  The common code should be made
@@ -92,13 +95,10 @@ define( function( require ) {
       size: BUCKET_SIZE
     } );
 
-    // Function for placing shapes when released by the user.
-    var placementBoards = [ this.leftShapePlacementBoard, this.rightShapePlacementBoard, this.centerShapePlacementBoard ];
-
     function placeShape( shape ) {
       var shapePlaced = false;
-      for ( var i = 0; i < placementBoards.length && !shapePlaced; i++ ) {
-        shapePlaced = placementBoards[i].placeShape( shape );
+      for ( var i = 0; i < thisModel.shapePlacementBoards.length && !shapePlaced; i++ ) {
+        shapePlaced = thisModel.shapePlacementBoards[i].placeShape( shape );
       }
       if ( !shapePlaced ) {
         shape.goHome();
@@ -108,7 +108,6 @@ define( function( require ) {
     // Function for adding new movable elements to this model
     function addModelElement( newShape ) {
       thisModel.movableShapes.push( newShape );
-      //TODO: Figure out how to unlink this function when the shape is removed from the model.
       newShape.userControlledProperty.link( function( userControlled ) {
         if ( !userControlled ) {
           placeShape( newShape );
@@ -137,9 +136,7 @@ define( function( require ) {
 
     // Control the grid visibility in the placement boards
     this.showGrids.link( function( showGrids ) {
-      thisModel.leftShapePlacementBoard.gridVisible = showGrids;
-      thisModel.rightShapePlacementBoard.gridVisible = showGrids;
-      thisModel.centerShapePlacementBoard.gridVisible = showGrids;
+      thisModel.shapePlacementBoards.forEach( function( board ) { board.gridVisible = showGrids } );
     } );
   }
 
@@ -147,9 +144,12 @@ define( function( require ) {
 
     // Resets all model elements
     reset: function() {
-      // TODO
+      this.showGrids.reset();
+      this.boardDisplayMode.reset();
+      this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes() } );
+      this.movableShapes.forEach( function( movableShape ) { movableShape.goHome() } );
+      this.movableShapes.clear();
     }
-
   };
 
   return AreaBuilderExplorationModel;

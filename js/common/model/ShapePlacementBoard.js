@@ -44,6 +44,8 @@ define( function( require ) {
      * Place the provide shape on this board.  Returns false if the color does
      * not match the handled color or if the shape is not partially over the
      * board.
+     * @public
+     * @param {MovableShape} shape A model shape
      */
     placeShape: function( shape ) {
       assert && assert( shape.userControlled === false, 'Shapes can\'t be place when still controlled by user.' );
@@ -81,11 +83,13 @@ define( function( require ) {
       this.residentShapes.push( shape );
 
       // Set up a listener to remove this shape when the user grabs is.
-      shape.userControlledProperty.once( function( userControlled ) {
+      var removalListener = function( userControlled ) {
         assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
         self.residentShapes.splice( self.residentShapes.indexOf( shape ), 1 );
         self.updateValidPlacementLocations();
-      } );
+      };
+      removalListener.placementBoardRemovalListener = true;
+      shape.userControlledProperty.once( removalListener );
 
       // Update the valid locations for the next placement.
       this.updateValidPlacementLocations();
@@ -94,6 +98,29 @@ define( function( require ) {
       return true;
     },
 
+    /**
+     * Release all the shapes that are currently on this board.  This does
+     * not send the shapes anywhere - it is up to some external entity to "put
+     * them away".
+     * @public
+     */
+    releaseAllShapes: function() {
+      this.residentShapes.length = 0;
+      this.updateValidPlacementLocations();
+
+      // NOTE: This operation can leave the user controlled property of this
+      // shape still linked to a listener.  As the sim is designed as of
+      // 5/21/2014, this doesn't matter, since the shapes will be immediately
+      // deleted anyway.  If that behavior changes, better cleanup may be
+      // required to avoid any weird side effects.
+    },
+
+    /**
+     * Update the list of locations where shapes can be placed where they will
+     * be adjacent to the existing shapes, won't overlap, and won't be off the
+     * board.
+     * @private
+     */
     updateValidPlacementLocations: function() {
       var self = this;
 

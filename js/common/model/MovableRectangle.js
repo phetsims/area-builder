@@ -25,6 +25,7 @@ define( function( require ) {
       userControlled: false
     } );
 
+    // Trigger an event whenever this shape returns to its original position.
     this.positionProperty.lazyLink( function( position ) {
       if ( position.equals( initialPosition ) ) {
         self.trigger( 'returnedHome' );

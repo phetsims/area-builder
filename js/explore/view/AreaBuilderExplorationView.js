@@ -23,6 +23,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangleCreatorNode = require( 'AREA_BUILDER/explore/view/RectangleCreatorNode' );
+  var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -165,6 +166,15 @@ define( function( require ) {
       } ), { fill: 'rgb( 255, 242, 234 )'}
     );
     this.addChild( controlPanel );
+
+    // Add the reset button.
+    backLayer.addChild( new ResetAllButton( {
+      radius: 22,
+      right: this.layoutBounds.width - CONTROL_INSET,
+      bottom: this.layoutBounds.height - CONTROL_INSET,
+      lineWidth: 1,
+      listener: function() { model.reset() }
+    } ) );
 
     // Layout
     controlPanel.bottom = this.layoutBounds.height - CONTROL_INSET;
