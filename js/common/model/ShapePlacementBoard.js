@@ -15,6 +15,7 @@ define( function( require ) {
 
   // constants
   var DISTANCE_COMPARE_THRESHOLD = 1E-5;
+  var WILDCARD_PLACEMENT_ARRAY = [ '*' ];
 
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
 
@@ -23,7 +24,7 @@ define( function( require ) {
     this.colorHandled = colorHandled; // @private
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
     this.residentShapes = []; // @private
-    this.validPlacementLocations = [ '*' ]; // @private
+    this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
 
     // The size should be an integer number of unit squares for both dimensions.
     assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
@@ -88,36 +89,44 @@ define( function( require ) {
 
       // Update the valid locations for the next placement.
       this.updateValidPlacementLocations();
+
+      // If we made it to here, placement succeeded.
+      return true;
     },
 
     updateValidPlacementLocations: function() {
       var self = this;
 
-      // Create a list of all locations that would share an edge with another square.
-      var adjacentLocations = [];
-      self.residentShapes.forEach( function( residentShape ) {
-        for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
-          var newPosition = residentShape.position.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
-          if ( newPosition.x < self.bounds.maxX && newPosition.x >= self.bounds.minX && newPosition.y < self.bounds.maxY && newPosition.y >= self.bounds.minY ) {
-            adjacentLocations.push( newPosition );
+      if ( self.residentShapes.length === 0 ) {
+        this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY;
+      }
+      else {
+        // Create a list of all locations that would share an edge with another square.
+        var adjacentLocations = [];
+        self.residentShapes.forEach( function( residentShape ) {
+          for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
+            var newPosition = residentShape.position.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
+            if ( newPosition.x < self.bounds.maxX && newPosition.x >= self.bounds.minX && newPosition.y < self.bounds.maxY && newPosition.y >= self.bounds.minY ) {
+              adjacentLocations.push( newPosition );
+            }
           }
-        }
-      } );
+        } );
 
-      self.validPlacementLocations.length = 0;
+        self.validPlacementLocations.length = 0;
 
-      adjacentLocations.forEach( function( adjacentLocation ) {
-        var isOccupied = false;
-        for ( var i = 0; i < self.residentShapes.length; i++ ) {
-          if ( self.residentShapes[ i ].position.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
-            isOccupied = true;
-            break;
+        adjacentLocations.forEach( function( adjacentLocation ) {
+          var isOccupied = false;
+          for ( var i = 0; i < self.residentShapes.length; i++ ) {
+            if ( self.residentShapes[ i ].position.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
+              isOccupied = true;
+              break;
+            }
           }
-        }
-        if ( !isOccupied ) {
-          self.validPlacementLocations.push( adjacentLocation );
-        }
-      } );
+          if ( !isOccupied ) {
+            self.validPlacementLocations.push( adjacentLocation );
+          }
+        } );
+      }
     }
   } );
 } );

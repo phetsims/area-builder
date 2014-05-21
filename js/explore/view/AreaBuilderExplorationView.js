@@ -101,8 +101,8 @@ define( function( require ) {
       // Add the removal listener for if and when this shape is removed from the model.
       model.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
         if ( removedShape === addedShape ) {
-          shapesLayer.removeChild( shapeNode );
-          model.movableShapeList.removeItemRemovedListener( removalListener );
+          movableShapesLayer.removeChild( shapeNode );
+          model.movableShapes.removeItemRemovedListener( removalListener );
         }
       } );
     } );

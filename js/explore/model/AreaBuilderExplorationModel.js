@@ -100,7 +100,9 @@ define( function( require ) {
       for ( var i = 0; i < placementBoards.length && !shapePlaced; i++ ) {
         shapePlaced = placementBoards[i].placeShape( shape );
       }
-      // TODO: Handle removal of shapes placed outside the boards.
+      if ( !shapePlaced ) {
+        shape.goHome();
+      }
     }
 
     // Function for adding new movable elements to this model
@@ -111,6 +113,10 @@ define( function( require ) {
         if ( !userControlled ) {
           placeShape( newShape );
         }
+      } );
+
+      newShape.on( 'returnedHome', function() {
+        thisModel.movableShapes.remove( newShape );
       } );
     }
 

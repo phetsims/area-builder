@@ -18,9 +18,17 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
 
   function MovableRectangle( size, color, initialPosition ) {
+    var self = this;
+
     PropertySet.call( this, {
       position: initialPosition,
       userControlled: false
+    } );
+
+    this.positionProperty.lazyLink( function( position ) {
+      if ( position.equals( initialPosition ) ) {
+        self.trigger( 'returnedHome' );
+      }
     } );
 
     // Non-dynamic attributes
@@ -30,6 +38,8 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, MovableRectangle, {
-    //TODO prototypes
+    goHome: function() {
+      this.positionProperty.reset();
+    }
   } );
 } );
