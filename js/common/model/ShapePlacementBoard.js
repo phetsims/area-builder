@@ -41,8 +41,8 @@ define( function( require ) {
       // Read-only property that indicates the perimeter of the composite shape
       perimeter: 0,
 
-      // Read-only set of points that define the perimeter of the composite shape
-      perimeterPoints: []
+      // Read-only set of points that define the outer perimeter of the composite shape
+      outerPerimeterPoints: []
     } );
 
     // Non-dynamic properties that are externally visible
@@ -156,7 +156,7 @@ define( function( require ) {
 
       if ( this.residentShapes.length === 0 ) {
         this.perimeter = 0;
-        this.perimeterPointsProperty.reset();
+        this.outerPerimeterPointsProperty.reset();
       }
       else {
 
@@ -231,26 +231,26 @@ define( function( require ) {
         // the perimeter with no redundant points.
         rightEdgePoints.reverse();
         topEdgePoints.reverse();
-        var perimeterPoints = [];
+        var outerPerimeterPoints = [];
         leftEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, perimeterPoints );
+          self.addIfNotRedundant( point, outerPerimeterPoints );
         } );
         bottomEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, perimeterPoints );
+          self.addIfNotRedundant( point, outerPerimeterPoints );
         } );
         rightEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, perimeterPoints );
+          self.addIfNotRedundant( point, outerPerimeterPoints );
         } );
         topEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, perimeterPoints );
+          self.addIfNotRedundant( point, outerPerimeterPoints );
         } );
 
         // Update the properties that are externally visible.
-        this.perimeterPoints = perimeterPoints;
-        this.perimeter = perimeterPoints.length;
+        this.outerPerimeterPoints = outerPerimeterPoints;
+        this.perimeter = outerPerimeterPoints.length;
         console.log( '---------------------' );
         console.log( this.perimeter );
-        console.log( perimeterPoints );
+        console.log( outerPerimeterPoints );
       }
     },
 

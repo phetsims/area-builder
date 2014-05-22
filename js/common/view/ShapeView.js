@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -21,7 +22,7 @@ define( function( require ) {
 
     var representation = new Path( movableShape.shape, {
       fill: movableShape.color,
-      stroke: Color.toColor( movableShape.color ).colorUtilsDarker( 0.5 ),
+      stroke: Color.toColor( movableShape.color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       lineWidth: 1
     } );
     this.addChild( representation );

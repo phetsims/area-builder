@@ -70,17 +70,17 @@ define( function( require ) {
     // Add the area and perimeter displays
     var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.GREENISH_COLOR, model.leftShapePlacementBoard.perimeterProperty,
-      Color.toColor( AreaBuilderSharedConstants.GREENISH_COLOR ).colorUtilsDarker( 0.6 ),
+      Color.toColor( AreaBuilderSharedConstants.GREENISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       { right: leftBoardNode.right, bottom: leftBoardNode.top - 8 } );
     backLayer.addChild( leftAreaAndPerimeterDisplay );
     var rightAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.rightShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.PURPLISH_COLOR, model.rightShapePlacementBoard.perimeterProperty,
-      Color.toColor( AreaBuilderSharedConstants.PURPLISH_COLOR ).colorUtilsDarker( 0.6 ),
+      Color.toColor( AreaBuilderSharedConstants.PURPLISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       { left: rightBoardNode.left, bottom: rightBoardNode.top - 8 } );
     backLayer.addChild( rightAreaAndPerimeterDisplay );
     var centerAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.centerShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.ORANGISH_COLOR, model.centerShapePlacementBoard.perimeterProperty,
-      Color.toColor( AreaBuilderSharedConstants.ORANGISH_COLOR ).colorUtilsDarker( 0.6 ),
+      Color.toColor( AreaBuilderSharedConstants.ORANGISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       { centerX: centerBoardNode.centerX, bottom: centerBoardNode.top - 8 } );
     backLayer.addChild( centerAreaAndPerimeterDisplay );
 
