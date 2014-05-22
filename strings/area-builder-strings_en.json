@@ -1,5 +1,9 @@
 {
   "area.name": "Area Builder",
   "explore": "Explore",
-  "game": "Game"
+  "game": "Game",
+  "area": "Area",
+  "perimeter": "Perimeter",
+  "areaAndPerimeter": "Area and Perimeter"
+
 }

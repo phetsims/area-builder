@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
+  var AreaAndPerimeterDisplay = require( 'AREA_BUILDER/explore/view/AreaAndPerimeterDisplay' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
   var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
@@ -66,6 +67,23 @@ define( function( require ) {
     var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
     backLayer.addChild( centerBoardNode );
 
+    // Add the area and perimeter displays
+    var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,
+      AreaBuilderSharedConstants.GREENISH_COLOR, model.leftShapePlacementBoard.perimeterProperty,
+      Color.toColor( AreaBuilderSharedConstants.GREENISH_COLOR ).colorUtilsDarker( 0.6 ),
+      { right: leftBoardNode.right, bottom: leftBoardNode.top - 8 } );
+    backLayer.addChild( leftAreaAndPerimeterDisplay );
+    var rightAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.rightShapePlacementBoard.areaProperty,
+      AreaBuilderSharedConstants.PURPLISH_COLOR, model.rightShapePlacementBoard.perimeterProperty,
+      Color.toColor( AreaBuilderSharedConstants.PURPLISH_COLOR ).colorUtilsDarker( 0.6 ),
+      { left: rightBoardNode.left, bottom: rightBoardNode.top - 8 } );
+    backLayer.addChild( rightAreaAndPerimeterDisplay );
+    var centerAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.centerShapePlacementBoard.areaProperty,
+      AreaBuilderSharedConstants.ORANGISH_COLOR, model.centerShapePlacementBoard.perimeterProperty,
+      Color.toColor( AreaBuilderSharedConstants.ORANGISH_COLOR ).colorUtilsDarker( 0.6 ),
+      { centerX: centerBoardNode.centerX, bottom: centerBoardNode.top - 8 } );
+    backLayer.addChild( centerAreaAndPerimeterDisplay );
+
     // Add the bucket views
     var invertIdentityTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( Vector2.ZERO, Vector2.ZERO, 1 );
     var leftBucketFront = new BucketFront( model.leftBucket, invertIdentityTransform );
@@ -113,6 +131,9 @@ define( function( require ) {
       rightBoardNode.visible = boardDisplayMode === 'dual';
       leftBoardNode.visible = boardDisplayMode === 'dual';
       centerBoardNode.visible = boardDisplayMode === 'single';
+      leftAreaAndPerimeterDisplay.visible = leftBoardNode.visible;
+      rightAreaAndPerimeterDisplay.visible = rightBoardNode.visible;
+      centerAreaAndPerimeterDisplay.visible = centerBoardNode.visible;
       leftBucketFront.visible = boardDisplayMode === 'dual';
       leftBucketHole.visible = boardDisplayMode === 'dual';
       rightBucketFront.visible = boardDisplayMode === 'dual';
