@@ -28,7 +28,7 @@ define( function( require ) {
   var SPACE_BETWEEN_PLACEMENT_BOARDS = 40;
   var BOARD_Y_POS = 100; // Empirically determined from looking at the layout
   var BUCKET_SIZE = new Dimension2( 100, 50 );
-  var BOARD_TO_BUCKET_Y_SPACING = 70;
+  var BOARD_TO_BUCKET_Y_SPACING = 50;
   var INITIAL_NUM_SQUARES_OF_EACH_COLOR = 5;
   var INITIAL_OFFSET_POSITIONS = [
     // Offsets used for initial position of shape, relative to bucket hole center.  Empirically determined.
@@ -44,7 +44,7 @@ define( function( require ) {
     var thisModel = this;
 
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
-    this.showGrids = new Property( false ); // @public
+    this.showGrids = new Property( true ); // @public
     this.boardDisplayMode = new Property( 'single' ); // @public, value values are 'single' and 'dual'
     this.movableShapes = new ObservableArray();
 
