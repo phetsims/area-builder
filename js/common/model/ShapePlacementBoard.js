@@ -10,6 +10,7 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -19,11 +20,12 @@ define( function( require ) {
 
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
 
+    var self = this;
     this.unitSquareLength = unitSquareLength; // @public
     this.position = position; // @public
     this.colorHandled = colorHandled; // @private
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
-    this.residentShapes = []; // @private
+    this.residentShapes = new ObservableArray(); // @private
     this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
 
     // The size should be an integer number of unit squares for both dimensions.
@@ -31,11 +33,26 @@ define( function( require ) {
 
     PropertySet.call( this, {
       // Boolean property that controls whether or not the placement grid is visible
-      gridVisible: false
+      gridVisible: false,
+
+      // Read-only property that indicates the area of the composite shape
+      area: 0,
+
+      // Read-only property that indicates the perimeter of the composite shape
+      perimeter: 0,
+
+      // Read-only set of points that define the perimeter of the composite shape
+      perimeterPoints: []
     } );
 
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
+
+    // Update the area and perimeter when the list of resident shapes changes.
+    this.residentShapes.addItemAddedListener( function() {
+      self.area = self.residentShapes.length;
+      self.updatePerimeterInfo();
+    } );
   }
 
   return inherit( PropertySet, ShapePlacementBoard, {
@@ -85,7 +102,7 @@ define( function( require ) {
       // Set up a listener to remove this shape when the user grabs is.
       var removalListener = function( userControlled ) {
         assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
-        self.residentShapes.splice( self.residentShapes.indexOf( shape ), 1 );
+        self.residentShapes.remove( shpae );
         self.updateValidPlacementLocations();
       };
       removalListener.placementBoardRemovalListener = true;
@@ -105,7 +122,7 @@ define( function( require ) {
      * @public
      */
     releaseAllShapes: function() {
-      this.residentShapes.length = 0;
+      this.residentShapes.clear();
       this.updateValidPlacementLocations();
 
       // NOTE: This operation can leave the user controlled property of this
@@ -113,6 +130,124 @@ define( function( require ) {
       // 5/21/2014, this doesn't matter, since the shapes will be immediately
       // deleted anyway.  If that behavior changes, better cleanup may be
       // required to avoid any weird side effects.
+    },
+
+    // @private util
+    addIfNotRedundant: function( position, positionList ) {
+      for ( var i = 0; i < positionList.length; i++ ) {
+        if ( positionList[i].equals( position ) ) {
+          return;
+        }
+      }
+      positionList.push( position );
+    },
+
+    /**
+     * Update the total perimeter value as well as the points that define its
+     * shape.
+     */
+    updatePerimeterInfo: function() {
+
+      var self = this;
+
+      if ( this.residentShapes.length === 0 ) {
+        this.perimeter = 0;
+        this.perimeterPoints.reset();
+      }
+      else {
+
+        // Set up some convenience/efficiency variables
+        var oneDown = new Vector2( 0, this.unitSquareLength );
+        var oneRight = new Vector2( this.unitSquareLength, 0 );
+        var leftEdgePoints = [];
+        var rightEdgePoints = [];
+        var topEdgePoints = [];
+        var bottomEdgePoints = [];
+
+        // Scan by row to find the left and right edge points.
+        for ( var row = 0; row <= this.size.height; row += this.unitSquareLength ) {
+          var leftMostShapeInRow = null;
+          var rightMostShapeInRow = null;
+          var yPos = row + this.position.y;
+          this.residentShapes.forEach( function( shape ) {
+            if ( shape.position.y === yPos ) {
+              // This shape is in this row, see if it is more left than previously found shape.
+              if ( leftMostShapeInRow === null || shape.position.x < leftMostShapeInRow.position.x ) {
+                leftMostShapeInRow = shape;
+              }
+              // Now see if it is more right than previously found shape.
+              if ( rightMostShapeInRow === null || shape.position.x > rightMostShapeInRow.position.x ) {
+                rightMostShapeInRow = shape;
+              }
+            }
+          } );
+
+          if ( leftMostShapeInRow !== null ) {
+            this.addIfNotRedundant( leftMostShapeInRow.position, leftEdgePoints );
+            this.addIfNotRedundant( leftMostShapeInRow.position.plus( oneDown ), leftEdgePoints );
+          }
+
+          if ( rightMostShapeInRow !== null ) {
+            this.addIfNotRedundant( rightMostShapeInRow.position.plus( oneRight ), rightEdgePoints );
+            this.addIfNotRedundant( rightMostShapeInRow.position.plus( oneRight ).plus( oneDown ), rightEdgePoints );
+          }
+        }
+
+        // Scan by column to find the top and bottom edge points.
+        for ( var column = 0; column <= this.size.width; column += this.unitSquareLength ) {
+          var topMostShapeInColumn = null;
+          var bottomMostShapeInColumn = null;
+          var xPos = column + this.position.x;
+          this.residentShapes.forEach( function( shape ) {
+            if ( shape.position.x === xPos ) {
+              // This shape is in this column, see if it is higher than previously found shape.
+              if ( topMostShapeInColumn === null || shape.position.y < topMostShapeInColumn.position.y ) {
+                topMostShapeInColumn = shape;
+              }
+              // Now see if it is lower than previously found shape.
+              if ( bottomMostShapeInColumn === null || shape.position.y > bottomMostShapeInColumn.position.y ) {
+                bottomMostShapeInColumn = shape;
+              }
+            }
+          } );
+
+          if ( topMostShapeInColumn !== null ) {
+            this.addIfNotRedundant( topMostShapeInColumn.position, topEdgePoints );
+            this.addIfNotRedundant( topMostShapeInColumn.position.plus( oneRight ), topEdgePoints );
+          }
+
+          if ( bottomMostShapeInColumn !== null ) {
+            this.addIfNotRedundant( bottomMostShapeInColumn.position.plus( oneDown ), bottomEdgePoints );
+            this.addIfNotRedundant( bottomMostShapeInColumn.position.plus( oneRight ).plus( oneDown ), bottomEdgePoints );
+          }
+        }
+
+        // Now assemble all points into a single array of perimeter points
+        // that starts in the upper left and proceeds counter-clockwise around
+        // the perimeter with no redundant points.
+        rightEdgePoints.reverse();
+        topEdgePoints.reverse();
+        var perimeterPoints = [];
+        leftEdgePoints.forEach( function( point ) {
+          self.addIfNotRedundant( point, perimeterPoints );
+        } );
+        bottomEdgePoints.forEach( function( point ) {
+          self.addIfNotRedundant( point, perimeterPoints );
+        } );
+        rightEdgePoints.forEach( function( point ) {
+          self.addIfNotRedundant( point, perimeterPoints );
+        } );
+        topEdgePoints.forEach( function( point ) {
+          self.addIfNotRedundant( point, perimeterPoints );
+        } );
+
+        // Update the properties that are externally visible.
+        this.perimeterPoints = perimeterPoints;
+        this.perimeter = perimeterPoints.length;
+        console.log( '---------------------' );
+        console.log( this.perimeter );
+        console.log( perimeterPoints );
+      }
     },
 
     /**
@@ -144,7 +279,7 @@ define( function( require ) {
         adjacentLocations.forEach( function( adjacentLocation ) {
           var isOccupied = false;
           for ( var i = 0; i < self.residentShapes.length; i++ ) {
-            if ( self.residentShapes[ i ].position.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
+            if ( self.residentShapes.get( i ).position.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
               isOccupied = true;
               break;
             }
@@ -156,4 +291,5 @@ define( function( require ) {
       }
     }
   } );
-} );
+} )
+;
