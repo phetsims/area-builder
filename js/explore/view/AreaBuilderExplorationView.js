@@ -32,7 +32,7 @@ define( function( require ) {
   var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
 
   // constants
-  var CONTROL_INSET = 20;
+  var CONTROL_INSET = 15;
 
   // Map of colors used for the shapes to the mode where those shapes are visible
   var MAP_COLORS_TO_MODES = {};
@@ -181,8 +181,8 @@ define( function( require ) {
     var controlPanel = new Panel(
       new VBox( {
         children: [
-          new ABSwitch( model.boardDisplayMode, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 30, 15 ) } ),
-          new Checkbox( new Grid( new Dimension2( 40, 40 ), 10, { stroke: '#808080', lineDash: [ 2, 3 ] } ), model.showGrids )
+          new ABSwitch( model.boardDisplayMode, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 40, 20 ) } ),
+          new Checkbox( new Grid( new Dimension2( 40, 40 ), 10, { stroke: '#808080', lineDash: [ 2, 3 ] } ), model.showGrids, { spacing: 15 } )
         ],
         align: 'left',
         spacing: 10
