@@ -172,9 +172,9 @@ define( function( require ) {
     var oneRectIcon = new Rectangle( 0, 0, 24, 24, 0, 0, iconRectOptions );
     var orangeFill = AreaBuilderSharedConstants.ORANGISH_COLOR;
     var orangeStroke = Color.toColor( orangeFill ).darkerColor( 0.6 );
-    oneRectIcon.addChild( new Rectangle( 6, 6, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
     oneRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
     oneRectIcon.addChild( new Rectangle( 6, 12, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
+    oneRectIcon.addChild( new Rectangle( 12, 12, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
 
     var controlPanel = new Panel(
       new VBox( {
