@@ -49,14 +49,30 @@ define( function( require ) {
     this.size = size; // @public
 
     // Update the area and perimeter when the list of resident shapes changes.
-    this.residentShapes.addItemAddedListener( function() {
+    this.residentShapes.addItemAddedListener( function( addedShape ) {
       self.area = self.residentShapes.length;
+      self.updateOccupiedAdded( addedShape );
+      self.updatePerimeterInfo();
+
+    } );
+    this.residentShapes.addItemRemovedListener( function( removedShape ) {
+      self.area = self.residentShapes.length;
+      self.updateOccupiedRemoved( removedShape );
       self.updatePerimeterInfo();
     } );
-    this.residentShapes.addItemRemovedListener( function() {
-      self.area = self.residentShapes.length;
-      self.updatePerimeterInfo();
-    } );
+
+    // For efficiency and simplicity in evaluating the perimeter, we need a 2D
+    // array that tracks whether a cell is occupied.  This array has a buffer
+    // of always empty cells around it so that the 'marching squares'
+    // algorithm can be used.
+    this.occupiedSquares = [];
+    for ( var columns = 0; columns < size.width / unitSquareLength + 2; columns++ ) {
+      var currentRow = [];
+      for ( var rows = 0; rows < size.height / unitSquareLength + 2; rows++ ) {
+        currentRow.push( false );
+      }
+      this.occupiedSquares.push( currentRow );
+    }
   }
 
   return inherit( PropertySet, ShapePlacementBoard, {
@@ -100,7 +116,8 @@ define( function( require ) {
         shape.position = closestValidLocation;
       }
 
-      // Add this shape to the list of shapes that are on this board.
+      // Add this shape to the list of shapes that are on this board.  It is
+      // crucial that the shape be placed before adding it to this array.
       this.residentShapes.push( shape );
 
       // Set up a listener to remove this shape when the user grabs is.
@@ -117,6 +134,20 @@ define( function( require ) {
 
       // If we made it to here, placement succeeded.
       return true;
+    },
+
+    updateOccupiedAdded: function( addedShape ) {
+      var xIndex = Math.round( ( addedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
+      var yIndex = Math.round( ( addedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
+      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === false, 'Attempt made to add square to occupied location.' );
+      this.occupiedSquares[ xIndex ][ yIndex ] = true;
+    },
+
+    updateOccupiedRemoved: function( addedShape ) {
+      var xIndex = Math.round( ( addedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
+      var yIndex = Math.round( ( addedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
+      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === true, 'Removed shape was not marked in occupied spaces.' );
+      this.occupiedSquares[ xIndex ][ yIndex ] = false;
     },
 
     /**
