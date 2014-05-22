@@ -53,6 +53,10 @@ define( function( require ) {
       self.area = self.residentShapes.length;
       self.updatePerimeterInfo();
     } );
+    this.residentShapes.addItemRemovedListener( function() {
+      self.area = self.residentShapes.length;
+      self.updatePerimeterInfo();
+    } );
   }
 
   return inherit( PropertySet, ShapePlacementBoard, {
@@ -102,7 +106,7 @@ define( function( require ) {
       // Set up a listener to remove this shape when the user grabs is.
       var removalListener = function( userControlled ) {
         assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
-        self.residentShapes.remove( shpae );
+        self.residentShapes.remove( shape );
         self.updateValidPlacementLocations();
       };
       removalListener.placementBoardRemovalListener = true;
@@ -152,7 +156,7 @@ define( function( require ) {
 
       if ( this.residentShapes.length === 0 ) {
         this.perimeter = 0;
-        this.perimeterPoints.reset();
+        this.perimeterPointsProperty.reset();
       }
       else {
 
