@@ -168,6 +168,8 @@ define( function( require ) {
     var purpleFill = AreaBuilderSharedConstants.PURPLISH_COLOR;
     var purpleStroke = Color.toColor( purpleFill ).darkerColor( 0.6 );
     twoRectIcon.addChild( new Rectangle( 32, 6, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
+    twoRectIcon.addChild( new Rectangle( 38, 6, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
+    twoRectIcon.addChild( new Rectangle( 32, 12, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
     twoRectIcon.addChild( new Rectangle( 38, 12, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
     var oneRectIcon = new Rectangle( 0, 0, 24, 24, 0, 0, iconRectOptions );
     var orangeFill = AreaBuilderSharedConstants.ORANGISH_COLOR;
