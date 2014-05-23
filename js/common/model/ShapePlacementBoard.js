@@ -88,14 +88,14 @@ define( function( require ) {
       self.updatePerimeterInfo();
     } );
 
-    // For efficiency and simplicity in evaluating the perimeter, we need a 2D
-    // array that tracks whether a cell is occupied.  This array has a buffer
-    // of always empty cells around it so that the 'marching squares'
-    // algorithm can be used.
+    // For efficiency and simplicity in evaluating the perimeter, we use a 2D
+    // array that maps integer indexed cells to shapes.  This array has a buffer
+    // of always-empty cells around it so that the 'marching squares'
+    // algorithm can be used even if this placement board is filled up.
     this.occupiedSquares = [];
     for ( var columns = 0; columns < this.numColumns + 2; columns++ ) {
       var currentRow = [];
-      for ( var rows = 0; rows < this.numRows; rows++ ) {
+      for ( var rows = 0; rows < this.numRows + 2; rows++ ) {
         currentRow.push( null );
       }
       this.occupiedSquares.push( currentRow );
