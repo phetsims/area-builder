@@ -17,6 +17,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Checkbox = require( 'SUN/Checkbox' );
   var Color = require( 'SCENERY/util/Color' );
+  var CompositeShapeNode = require( 'AREA_BUILDER/common/view/CompositeShapeNode' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -58,6 +59,8 @@ define( function( require ) {
     this.addChild( bucketFrontLayer );
     var movableShapesLayer = new Node();
     this.addChild( movableShapesLayer );
+    var compositeShapesLayer = new Node();
+    this.addChild( compositeShapesLayer );
 
     // Add the shape placement boards
     var leftBoardNode = new ShapePlacementBoardNode( model.leftShapePlacementBoard );
@@ -66,6 +69,12 @@ define( function( require ) {
     backLayer.addChild( rightBoardNode );
     var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
     backLayer.addChild( centerBoardNode );
+
+    // Add the composite shapes, i.e. the ones that aggregate what the user
+    // has added as individual shapes.
+    var centerCompositeShape = new CompositeShapeNode( model.centerShapePlacementBoard.outerPerimeterPointsProperty, model.unitSquareLength,
+      model.centerShapePlacementBoard.colorHandled );
+    compositeShapesLayer.addChild( centerCompositeShape );
 
     // Add the area and perimeter displays
     var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,

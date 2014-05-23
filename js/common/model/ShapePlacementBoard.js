@@ -63,9 +63,9 @@ define( function( require ) {
     // Non-dynamic public values.
     this.unitSquareLength = unitSquareLength; // @public
     this.position = position; // @public
+    this.colorHandled = colorHandled; // @public
 
     // Private variables
-    this.colorHandled = colorHandled; // @private
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
     this.residentShapes = new ObservableArray(); // @private
     this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
