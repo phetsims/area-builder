@@ -37,7 +37,7 @@ define( function( require ) {
     },
 
     moveActiveModelInstance: function( delta ) {
-      assert && assert( this.activeModelInstance === null, 'Attempted to move an instance that doesn\'t exist or has been released.' );
+      assert && assert( this.activeModelInstance !== null, 'Attempted to move an instance that doesn\'t exist or has been released.' );
       if ( this.activeModelInstance !== null ) {
         this.activeModelInstance.position = this.activeModelInstance.position.plus( delta );
       }

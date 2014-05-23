@@ -18,18 +18,33 @@ define( function( require ) {
   var DISTANCE_COMPARE_THRESHOLD = 1E-5;
   var WILDCARD_PLACEMENT_ARRAY = [ '*' ];
 
-  function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
+  // Array used for moving scan window in 'marching squares' algorithm, see
+  // reference below (where algorithm is implemented).
+  var SCAN_AREA_MOVEMENT_VECTORS = [
+    null,                  // 0
+    new Vector2( 0, -1 ),  // 1
+    new Vector2( 1, 0 ),   // 2
+    new Vector2( 1, 0 ),   // 3
+    new Vector2( -1, 0 ),  // 4
+    new Vector2( 0, -1 ),  // 5
+    new Vector2( -1, 0 ),  // 6
+    new Vector2( 1, 0 ),   // 7
+    new Vector2( 0, 1 ),   // 8
+    new Vector2( 0, -1 ),  // 9
+    new Vector2( 0, 1 ),   // 10
+    new Vector2( 0, 1 ),   // 11
+    new Vector2( -1, 0 ),  // 12
+    new Vector2( 0, -1 ),  // 13
+    new Vector2( -1, 0 ),  // 14
+    null                   // 15
+  ];
 
-    var self = this;
-    this.unitSquareLength = unitSquareLength; // @public
-    this.position = position; // @public
-    this.colorHandled = colorHandled; // @private
-    this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
-    this.residentShapes = new ObservableArray(); // @private
-    this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
+  function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
 
     // The size should be an integer number of unit squares for both dimensions.
     assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
+
+    var self = this;
 
     PropertySet.call( this, {
       // Boolean property that controls whether or not the placement grid is visible
@@ -44,6 +59,18 @@ define( function( require ) {
       // Read-only set of points that define the outer perimeter of the composite shape
       outerPerimeterPoints: []
     } );
+
+    // Non-dynamic public values.
+    this.unitSquareLength = unitSquareLength; // @public
+    this.position = position; // @public
+
+    // Private variables
+    this.colorHandled = colorHandled; // @private
+    this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
+    this.residentShapes = new ObservableArray(); // @private
+    this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
+    this.numRows = size.height / unitSquareLength;
+    this.numColumns = size.width / unitSquareLength;
 
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
@@ -66,10 +93,10 @@ define( function( require ) {
     // of always empty cells around it so that the 'marching squares'
     // algorithm can be used.
     this.occupiedSquares = [];
-    for ( var columns = 0; columns < size.width / unitSquareLength + 2; columns++ ) {
+    for ( var columns = 0; columns < this.numColumns + 2; columns++ ) {
       var currentRow = [];
-      for ( var rows = 0; rows < size.height / unitSquareLength + 2; rows++ ) {
-        currentRow.push( false );
+      for ( var rows = 0; rows < this.numRows; rows++ ) {
+        currentRow.push( null );
       }
       this.occupiedSquares.push( currentRow );
     }
@@ -136,18 +163,26 @@ define( function( require ) {
       return true;
     },
 
+    /**
+     * Update the array of occupied cells with a newly added shape.
+     * @private
+     */
     updateOccupiedAdded: function( addedShape ) {
       var xIndex = Math.round( ( addedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( addedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === false, 'Attempt made to add square to occupied location.' );
-      this.occupiedSquares[ xIndex ][ yIndex ] = true;
+      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === null, 'Attempt made to add square to occupied location.' );
+      this.occupiedSquares[ xIndex ][ yIndex ] = addedShape;
     },
 
-    updateOccupiedRemoved: function( addedShape ) {
-      var xIndex = Math.round( ( addedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
-      var yIndex = Math.round( ( addedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === true, 'Removed shape was not marked in occupied spaces.' );
-      this.occupiedSquares[ xIndex ][ yIndex ] = false;
+    /**
+     * Update the array of occupied cells due to a removed shape.
+     * @private
+     */
+    updateOccupiedRemoved: function( removedShape ) {
+      var xIndex = Math.round( ( removedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
+      var yIndex = Math.round( ( removedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
+      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === removedShape, 'Removed shape was not marked in occupied spaces.' );
+      this.occupiedSquares[ xIndex ][ yIndex ] = null;
     },
 
     /**
@@ -167,7 +202,7 @@ define( function( require ) {
       // required to avoid any weird side effects.
     },
 
-    // @private util
+    // @private util TODO: check if still used, delete if not.
     addIfNotRedundant: function( position, positionList ) {
       for ( var i = 0; i < positionList.length; i++ ) {
         if ( positionList[i].equals( position ) ) {
@@ -177,9 +212,15 @@ define( function( require ) {
       positionList.push( position );
     },
 
+    occupiedArrayToModelCoords: function( x, y ) {
+      return new Vector2( ( x - 1 ) * this.unitSquareLength + this.position.x, ( y - 1 ) * this.unitSquareLength + this.position.y );
+    },
+
     /**
      * Update the total perimeter value as well as the points that define its
-     * shape.
+     * shape.  This implements a 'marching squares' algorithm in order to
+     * detect the perimeter, see:
+     * http://devblog.phillipspiess.com/2010/02/23/better-know-an-algorithm-1-marching-squares/
      */
     updatePerimeterInfo: function() {
 
@@ -191,97 +232,58 @@ define( function( require ) {
       }
       else {
 
-        // Set up some convenience/efficiency variables
-        var oneDown = new Vector2( 0, this.unitSquareLength );
-        var oneRight = new Vector2( this.unitSquareLength, 0 );
-        var leftEdgePoints = [];
-        var rightEdgePoints = [];
-        var topEdgePoints = [];
-        var bottomEdgePoints = [];
-
-        // Scan by row to find the left and right edge points.
-        for ( var row = 0; row <= this.size.height; row += this.unitSquareLength ) {
-          var leftMostShapeInRow = null;
-          var rightMostShapeInRow = null;
-          var yPos = row + this.position.y;
-          this.residentShapes.forEach( function( shape ) {
-            if ( shape.position.y === yPos ) {
-              // This shape is in this row, see if it is more left than previously found shape.
-              if ( leftMostShapeInRow === null || shape.position.x < leftMostShapeInRow.position.x ) {
-                leftMostShapeInRow = shape;
-              }
-              // Now see if it is more right than previously found shape.
-              if ( rightMostShapeInRow === null || shape.position.x > rightMostShapeInRow.position.x ) {
-                rightMostShapeInRow = shape;
-              }
+        // Find the top left occupied square to use as a starting point.
+        var row;
+        var column;
+        var firstOccupiedCell = null;
+        for ( row = 1; row < ( this.numRows + 1 ) && firstOccupiedCell === null; row++ ) {
+          for ( column = 1; column < this.numColumns + 1; column++ ) {
+            if ( this.occupiedSquares[column][row] ) {
+              firstOccupiedCell = new Vector2( column, row );
+              break;
             }
-          } );
-
-          if ( leftMostShapeInRow !== null ) {
-            this.addIfNotRedundant( leftMostShapeInRow.position, leftEdgePoints );
-            this.addIfNotRedundant( leftMostShapeInRow.position.plus( oneDown ), leftEdgePoints );
-          }
-
-          if ( rightMostShapeInRow !== null ) {
-            this.addIfNotRedundant( rightMostShapeInRow.position.plus( oneRight ), rightEdgePoints );
-            this.addIfNotRedundant( rightMostShapeInRow.position.plus( oneRight ).plus( oneDown ), rightEdgePoints );
           }
         }
 
-        // Scan by column to find the top and bottom edge points.
-        for ( var column = 0; column <= this.size.width; column += this.unitSquareLength ) {
-          var topMostShapeInColumn = null;
-          var bottomMostShapeInColumn = null;
-          var xPos = column + this.position.x;
-          this.residentShapes.forEach( function( shape ) {
-            if ( shape.position.x === xPos ) {
-              // This shape is in this column, see if it is higher than previously found shape.
-              if ( topMostShapeInColumn === null || shape.position.y < topMostShapeInColumn.position.y ) {
-                topMostShapeInColumn = shape;
-              }
-              // Now see if it is lower than previously found shape.
-              if ( bottomMostShapeInColumn === null || shape.position.y > bottomMostShapeInColumn.position.y ) {
-                bottomMostShapeInColumn = shape;
-              }
-            }
-          } );
+        // Set initial location of 4-pixel area.
+        var scanWindow = firstOccupiedCell;
+        var startCell = scanWindow.copy();
 
-          if ( topMostShapeInColumn !== null ) {
-            this.addIfNotRedundant( topMostShapeInColumn.position, topEdgePoints );
-            this.addIfNotRedundant( topMostShapeInColumn.position.plus( oneRight ), topEdgePoints );
-          }
-
-          if ( bottomMostShapeInColumn !== null ) {
-            this.addIfNotRedundant( bottomMostShapeInColumn.position.plus( oneDown ), bottomEdgePoints );
-            this.addIfNotRedundant( bottomMostShapeInColumn.position.plus( oneRight ).plus( oneDown ), bottomEdgePoints );
-          }
-        }
-
-        // Now assemble all points into a single array of perimeter points
-        // that starts in the upper left and proceeds counter-clockwise around
-        // the perimeter with no redundant points.
-        rightEdgePoints.reverse();
-        topEdgePoints.reverse();
+        // Create the array where the external perimeter points will be accumulated.
         var outerPerimeterPoints = [];
-        leftEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, outerPerimeterPoints );
-        } );
-        bottomEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, outerPerimeterPoints );
-        } );
-        rightEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, outerPerimeterPoints );
-        } );
-        topEdgePoints.forEach( function( point ) {
-          self.addIfNotRedundant( point, outerPerimeterPoints );
-        } );
+
+        var scanComplete = false;
+        while ( !scanComplete ) {
+
+          // Scan the current four-pixel area.
+          var upLeft = this.occupiedSquares[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
+          var upRight = this.occupiedSquares[ scanWindow.x ][ scanWindow.y - 1 ];
+          var downLeft = this.occupiedSquares[ scanWindow.x - 1 ][ scanWindow.y ];
+          var downRight = this.occupiedSquares[ scanWindow.x ][ scanWindow.y ];
+
+          // Map the scan to the one of 16 possible states.
+          var marchingSquaresState = 0;
+          if ( upLeft !== null ) { marchingSquaresState |= 1 }
+          if ( upRight !== null ) { marchingSquaresState |= 2 }
+          if ( downLeft !== null ) { marchingSquaresState |= 4 }
+          if ( downRight !== null ) { marchingSquaresState |= 8 }
+
+          assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
+
+          // Convert and add this point to the perimeter points.
+          outerPerimeterPoints.push( this.occupiedArrayToModelCoords( scanWindow.x, scanWindow.y ) );
+
+          // Move the scan window to the next location.
+          scanWindow.addXY( SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].x, SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].y );
+
+          if ( scanWindow.equals( startCell ) ) {
+            scanComplete = true;
+          }
+        }
 
         // Update the properties that are externally visible.
         this.outerPerimeterPoints = outerPerimeterPoints;
         this.perimeter = outerPerimeterPoints.length;
-        console.log( '---------------------' );
-        console.log( this.perimeter );
-        console.log( outerPerimeterPoints );
       }
     },
 
