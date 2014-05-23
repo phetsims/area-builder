@@ -3,6 +3,10 @@ view transform is needed.
 
 PropertySet is used for model objects with two or more properties.
 
+In this sim, 'self' is being tried out as the way to make 'this' persistent
+and thus usable in closures, rather than 'thisModel', 'thisScreen' and so
+forth.
+
 There is a pervasive concept in the code that is called "Placement Boards".
 These are conceptually like real world poster boards or bulletin boards, where
 items can be stuck on them and removed from them.
