@@ -92,13 +92,13 @@ define( function( require ) {
     // array that maps integer indexed cells to shapes.  This array has a buffer
     // of always-empty cells around it so that the 'marching squares'
     // algorithm can be used even if this placement board is filled up.
-    this.occupiedSquares = [];
+    this.occupiedCells = [];
     for ( var columns = 0; columns < this.numColumns + 2; columns++ ) {
       var currentRow = [];
       for ( var rows = 0; rows < this.numRows + 2; rows++ ) {
         currentRow.push( null );
       }
-      this.occupiedSquares.push( currentRow );
+      this.occupiedCells.push( currentRow );
     }
   }
 
@@ -170,8 +170,8 @@ define( function( require ) {
     updateOccupiedAdded: function( addedShape ) {
       var xIndex = Math.round( ( addedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( addedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === null, 'Attempt made to add square to occupied location.' );
-      this.occupiedSquares[ xIndex ][ yIndex ] = addedShape;
+      assert && assert( this.occupiedCells[ xIndex ][ yIndex ] === null, 'Attempt made to add square to occupied location.' );
+      this.occupiedCells[ xIndex ][ yIndex ] = addedShape;
     },
 
     /**
@@ -181,8 +181,8 @@ define( function( require ) {
     updateOccupiedRemoved: function( removedShape ) {
       var xIndex = Math.round( ( removedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( removedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.occupiedSquares[ xIndex ][ yIndex ] === removedShape, 'Removed shape was not marked in occupied spaces.' );
-      this.occupiedSquares[ xIndex ][ yIndex ] = null;
+      assert && assert( this.occupiedCells[ xIndex ][ yIndex ] === removedShape, 'Removed shape was not marked in occupied spaces.' );
+      this.occupiedCells[ xIndex ][ yIndex ] = null;
     },
 
     /**
@@ -238,7 +238,7 @@ define( function( require ) {
         var firstOccupiedCell = null;
         for ( row = 1; row < ( this.numRows + 1 ) && firstOccupiedCell === null; row++ ) {
           for ( column = 1; column < this.numColumns + 1; column++ ) {
-            if ( this.occupiedSquares[column][row] ) {
+            if ( this.occupiedCells[column][row] ) {
               firstOccupiedCell = new Vector2( column, row );
               break;
             }
@@ -256,10 +256,10 @@ define( function( require ) {
         while ( !scanComplete ) {
 
           // Scan the current four-pixel area.
-          var upLeft = this.occupiedSquares[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
-          var upRight = this.occupiedSquares[ scanWindow.x ][ scanWindow.y - 1 ];
-          var downLeft = this.occupiedSquares[ scanWindow.x - 1 ][ scanWindow.y ];
-          var downRight = this.occupiedSquares[ scanWindow.x ][ scanWindow.y ];
+          var upLeft = this.occupiedCells[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
+          var upRight = this.occupiedCells[ scanWindow.x ][ scanWindow.y - 1 ];
+          var downLeft = this.occupiedCells[ scanWindow.x - 1 ][ scanWindow.y ];
+          var downRight = this.occupiedCells[ scanWindow.x ][ scanWindow.y ];
 
           // Map the scan to the one of 16 possible states.
           var marchingSquaresState = 0;
@@ -280,9 +280,63 @@ define( function( require ) {
             scanComplete = true;
           }
         }
+        this.outerPerimeterPoints = outerPerimeterPoints;
+
+        // Scan for horizontally enclosed spaces.
+        var horizontallyEnclosedSpaces = [];
+        var potentiallyEnclosed = false;
+        var potentiallyEnclosedSpaces = [];
+        for ( row = 1; row < this.numRows - 1; row++ ) {
+          potentiallyEnclosed = false;
+          potentiallyEnclosedSpaces.length = 0;
+          for ( column = 1; column < this.numColumns - 1; column++ ) {
+            if ( !potentiallyEnclosed && this.occupiedCells[column][row] !== null ) {
+              // Found an edge
+              potentiallyEnclosed = true;
+            }
+            else if ( potentiallyEnclosed && this.occupiedCells[column][row] === null ) {
+              // This space might be enclosed
+              potentiallyEnclosedSpaces.push( new Vector2( column, row ) );
+            }
+            else if ( potentiallyEnclosed && this.occupiedCells[column][row] !== null && potentiallyEnclosedSpaces.length > 0 ) {
+              // Found a closing edge, so the accumulated spaces are horizontally enclosed.
+              potentiallyEnclosedSpaces.forEach( function( p ) { horizontallyEnclosedSpaces.push( p ) } );
+            }
+          }
+        }
+
+        // Scan for vertically enclosed spaces.
+        var verticallyEnclosedSpaces = [];
+        for ( column = 1; column < this.numColumns - 1; column++ ) {
+          potentiallyEnclosed = false;
+          potentiallyEnclosedSpaces.length = 0;
+          for ( row = 1; row < this.numRows - 1; row++ ) {
+            if ( !potentiallyEnclosed && this.occupiedCells[column][row] !== null ) {
+              // Found an edge
+              potentiallyEnclosed = true;
+            }
+            else if ( potentiallyEnclosed && this.occupiedCells[column][row] === null ) {
+              // This space might be enclosed
+              potentiallyEnclosedSpaces.push( new Vector2( column, row ) );
+            }
+            else if ( potentiallyEnclosed && this.occupiedCells[column][row] !== null && potentiallyEnclosedSpaces.length > 0 ) {
+              // Found a closing edge, so the accumulated spaces are horizontally enclosed.
+              potentiallyEnclosedSpaces.forEach( function( p ) { verticallyEnclosedSpaces.push( p ) } );
+            }
+          }
+        }
+
+        // Merge the vertically and horizontally enclosed spaces into one array
+        var enclosedSpaces = [];
+        for ( var i = 0; i < horizontallyEnclosedSpaces.length; i++ ) {
+          for ( var j = 0; j < verticallyEnclosedSpaces.length; j++ ) {
+            if ( horizontallyEnclosedSpaces[i].equals( verticallyEnclosedSpaces[j] ) ) {
+              enclosedSpaces.push( horizontallyEnclosedSpaces[ i ] );
+            }
+          }
+        }
 
         // Update the properties that are externally visible.
-        this.outerPerimeterPoints = outerPerimeterPoints;
         this.perimeter = outerPerimeterPoints.length;
       }
     },
