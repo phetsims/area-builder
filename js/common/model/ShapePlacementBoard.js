@@ -12,6 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PropertySet = require( 'AXON/PropertySet' );
+  var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -57,7 +58,10 @@ define( function( require ) {
       perimeter: 0,
 
       // Read-only set of points that define the outer perimeter of the composite shape
-      outerPerimeterPoints: []
+      outerPerimeterPoints: [],
+
+      // Read-only set of sets of points that define interior perimeters
+      interiorPerimeters: []
     } );
 
     // Non-dynamic public values.
@@ -217,10 +221,48 @@ define( function( require ) {
     },
 
     /**
-     * Update the total perimeter value as well as the points that define its
-     * shape.  This implements a 'marching squares' algorithm in order to
-     * detect the perimeter, see:
+     * Marching squares algorithm for scanning edges, see
      * http://devblog.phillipspiess.com/2010/02/23/better-know-an-algorithm-1-marching-squares/
+     * @private
+     */
+    scanPerimeter: function( cells, windowStart ) {
+
+      var scanWindow = windowStart.copy();
+      var scanComplete = false;
+      var perimeterPoints = [];
+      while ( !scanComplete ) {
+
+        // Scan the current four-pixel area.
+        var upLeft = cells[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
+        var upRight = cells[ scanWindow.x ][ scanWindow.y - 1 ];
+        var downLeft = cells[ scanWindow.x - 1 ][ scanWindow.y ];
+        var downRight = cells[ scanWindow.x ][ scanWindow.y ];
+
+        // Map the scan to the one of 16 possible states.
+        var marchingSquaresState = 0;
+        if ( upLeft !== null ) { marchingSquaresState |= 1 }
+        if ( upRight !== null ) { marchingSquaresState |= 2 }
+        if ( downLeft !== null ) { marchingSquaresState |= 4 }
+        if ( downRight !== null ) { marchingSquaresState |= 8 }
+
+        assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
+
+        // Convert and add this point to the perimeter points.
+        perimeterPoints.push( this.occupiedArrayToModelCoords( scanWindow.x, scanWindow.y ) );
+
+        // Move the scan window to the next location.
+        scanWindow.addXY( SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].x, SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].y );
+
+        if ( scanWindow.equals( windowStart ) ) {
+          scanComplete = true;
+        }
+      }
+      return perimeterPoints;
+    },
+
+    /**
+     * Update the total perimeter value as well as the points that define its
+     * shape.
      */
     updatePerimeterInfo: function() {
 
@@ -245,45 +287,11 @@ define( function( require ) {
           }
         }
 
-        // Set initial location of 4-pixel area.
-        var scanWindow = firstOccupiedCell;
-        var startCell = scanWindow.copy();
+        // Scan the outer perimeter.
+        this.outerPerimeterPoints = this.scanPerimeter( this.occupiedCells, firstOccupiedCell );
 
-        // Create the array where the external perimeter points will be accumulated.
-        var outerPerimeterPoints = [];
-
-        var scanComplete = false;
-        while ( !scanComplete ) {
-
-          // Scan the current four-pixel area.
-          var upLeft = this.occupiedCells[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
-          var upRight = this.occupiedCells[ scanWindow.x ][ scanWindow.y - 1 ];
-          var downLeft = this.occupiedCells[ scanWindow.x - 1 ][ scanWindow.y ];
-          var downRight = this.occupiedCells[ scanWindow.x ][ scanWindow.y ];
-
-          // Map the scan to the one of 16 possible states.
-          var marchingSquaresState = 0;
-          if ( upLeft !== null ) { marchingSquaresState |= 1 }
-          if ( upRight !== null ) { marchingSquaresState |= 2 }
-          if ( downLeft !== null ) { marchingSquaresState |= 4 }
-          if ( downRight !== null ) { marchingSquaresState |= 8 }
-
-          assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
-
-          // Convert and add this point to the perimeter points.
-          outerPerimeterPoints.push( this.occupiedArrayToModelCoords( scanWindow.x, scanWindow.y ) );
-
-          // Move the scan window to the next location.
-          scanWindow.addXY( SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].x, SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].y );
-
-          if ( scanWindow.equals( startCell ) ) {
-            scanComplete = true;
-          }
-        }
-        this.outerPerimeterPoints = outerPerimeterPoints;
-
-        // Scan for horizontally enclosed spaces.
-        var horizontallyEnclosedSpaces = [];
+        // Scan for horizontally enclosed empty spaces.
+        var horizontallyEnclosedEmptySpaces = [];
         var potentiallyEnclosed = false;
         var potentiallyEnclosedSpaces = [];
         for ( row = 1; row < this.numRows - 1; row++ ) {
@@ -300,13 +308,13 @@ define( function( require ) {
             }
             else if ( potentiallyEnclosed && this.occupiedCells[column][row] !== null && potentiallyEnclosedSpaces.length > 0 ) {
               // Found a closing edge, so the accumulated spaces are horizontally enclosed.
-              potentiallyEnclosedSpaces.forEach( function( p ) { horizontallyEnclosedSpaces.push( p ) } );
+              potentiallyEnclosedSpaces.forEach( function( p ) { horizontallyEnclosedEmptySpaces.push( p ) } );
             }
           }
         }
 
-        // Scan for vertically enclosed spaces.
-        var verticallyEnclosedSpaces = [];
+        // Scan for vertically enclosed empty spaces.
+        var verticallyEnclosedEmptySpaces = [];
         for ( column = 1; column < this.numColumns - 1; column++ ) {
           potentiallyEnclosed = false;
           potentiallyEnclosedSpaces.length = 0;
@@ -321,23 +329,65 @@ define( function( require ) {
             }
             else if ( potentiallyEnclosed && this.occupiedCells[column][row] !== null && potentiallyEnclosedSpaces.length > 0 ) {
               // Found a closing edge, so the accumulated spaces are horizontally enclosed.
-              potentiallyEnclosedSpaces.forEach( function( p ) { verticallyEnclosedSpaces.push( p ) } );
+              potentiallyEnclosedSpaces.forEach( function( p ) { verticallyEnclosedEmptySpaces.push( p ) } );
             }
           }
         }
 
         // Merge the vertically and horizontally enclosed spaces into one array
-        var enclosedSpaces = [];
-        for ( var i = 0; i < horizontallyEnclosedSpaces.length; i++ ) {
-          for ( var j = 0; j < verticallyEnclosedSpaces.length; j++ ) {
-            if ( horizontallyEnclosedSpaces[i].equals( verticallyEnclosedSpaces[j] ) ) {
-              enclosedSpaces.push( horizontallyEnclosedSpaces[ i ] );
+        var fullyEnclosedEmptySpaces = [];
+        for ( var i = 0; i < horizontallyEnclosedEmptySpaces.length; i++ ) {
+          for ( var j = 0; j < verticallyEnclosedEmptySpaces.length; j++ ) {
+            if ( horizontallyEnclosedEmptySpaces[i].equals( verticallyEnclosedEmptySpaces[j] ) ) {
+              fullyEnclosedEmptySpaces.push( horizontallyEnclosedEmptySpaces[ i ] );
             }
           }
         }
 
-        // Update the properties that are externally visible.
-        this.perimeter = outerPerimeterPoints.length;
+        // Map all the internal perimeters
+        var interiorPerimeters = [];
+        while ( fullyEnclosedEmptySpaces.length > 0 ) {
+
+          // Locate the top left most space
+          var topLeftSpace = horizontallyEnclosedEmptySpaces[0];
+          fullyEnclosedEmptySpaces.forEach( function( cell ) {
+            if ( cell.y < topLeftSpace.y || ( cell.y === topLeftSpace.y && cell.x < topLeftSpace.x ) ) {
+              topLeftSpace = cell;
+            }
+          } );
+
+          // Map the perimeter using the marching squares algorithm.
+          var enclosedPerimeterPoints = this.scanPerimeter( this.occupiedCells, topLeftSpace );
+          interiorPerimeters.push( enclosedPerimeterPoints );
+
+          // Remove all empty spaces enclosed by this perimeter.
+          var perimeterShape = new Shape();
+          perimeterShape.moveToPoint( enclosedPerimeterPoints[ 0 ] );
+          enclosedPerimeterPoints.forEach( function( perimeterPoint ) {
+            perimeterShape.lineToPoint( perimeterPoint );
+          } );
+          perimeterShape.close(); // Probably not necessary, but best to be sure.
+
+          var leftoverEmptySpaces = [];
+          fullyEnclosedEmptySpaces.forEach( function( enclosedSpace ) {
+            var topLeftPoint = self.occupiedArrayToModelCoords( enclosedSpace.x, enclosedSpace.y );
+            var centerPoint = topLeftPoint.plusXY( self.unitSquareLength / 2, self.unitSquareLength / 2 );
+            if ( !perimeterShape.containsPoint( centerPoint ) ) {
+              // This space is not contained in the perimeter that was just mapped.
+              leftoverEmptySpaces.push( enclosedSpace );
+            }
+          } );
+
+          // Set up for the next time through the loop.
+          fullyEnclosedEmptySpaces = leftoverEmptySpaces;
+        }
+
+        this.interiorPerimeters = interiorPerimeters;
+        var totalPerimeterAccumulator = this.outerPerimeterPoints.length;
+        interiorPerimeters.forEach( function( interiorPerimeter ) {
+          totalPerimeterAccumulator += interiorPerimeter.length;
+        } );
+        this.perimeter = totalPerimeterAccumulator;
       }
     },
 
