@@ -46,6 +46,7 @@ define( function( require ) {
         for ( i = 1; i < interiorPerimeterPoints.length; i++ ) {
           mainShape.lineToPoint( interiorPerimeterPoints[ i ] );
         }
+        mainShape.lineToPoint( interiorPerimeterPoints[ 0 ] );
       } );
 
       compositeShapeNode = new Path( mainShape, {

@@ -40,6 +40,54 @@ define( function( require ) {
     null                   // 15
   ];
 
+  var MOVEMENT_VECTORS = {
+    // This sim is using screen conventions, meaning positive Y indicates down.
+    up: new Vector2( 0, -1 ),
+    down: new Vector2( 0, 1 ),
+    left: new Vector2( -1, 0 ),
+    right: new Vector2( 1, 0 )
+  };
+
+  var SCAN_AREA_MOVEMENT_FUNCTIONS = [
+    null,                                           // 0
+    function() { return MOVEMENT_VECTORS.up },      // 1
+    function() { return MOVEMENT_VECTORS.right },   // 2
+    function() { return MOVEMENT_VECTORS.right },   // 3
+    function() { return MOVEMENT_VECTORS.left },    // 4
+    function() { return MOVEMENT_VECTORS.up },      // 5
+    function( previousStep ) { return previousStep === MOVEMENT_VECTORS.up ? MOVEMENT_VECTORS.left : MOVEMENT_VECTORS.right },  // 6
+    function() { return MOVEMENT_VECTORS.right },   // 7
+    function() { return MOVEMENT_VECTORS.down },    // 8
+    function( previousStep ) { return previousStep === MOVEMENT_VECTORS.right ? MOVEMENT_VECTORS.up : MOVEMENT_VECTORS.down },  // 9
+    function() { return MOVEMENT_VECTORS.down },   // 10
+    function() { return MOVEMENT_VECTORS.down },   // 11
+    function() { return MOVEMENT_VECTORS.left },   // 12
+    function() { return MOVEMENT_VECTORS.up },     // 13
+    function() { return MOVEMENT_VECTORS.left },   // 14
+    null                                           // 15
+  ];
+
+  // Array used for rotating the vector when performing an interior perimeter
+  // walk, see explanation in method header below.
+  var INTERIOR_PERIMETER_VECTOR_ROTATION = [
+    null,          // 0
+      -Math.PI / 2,  // 1
+      -Math.PI / 2,  // 2
+    0,             // 3
+      -Math.PI / 2,   // 4
+    0,             // 5
+      Math.PI / 2,   // 6
+      Math.PI / 2,   // 7
+      -Math.PI / 2,  // 8
+      Math.PI / 2,   // 9
+    0,             // 10
+      Math.PI / 2,   // 11
+    0,             // 12
+      Math.PI / 2,   // 13
+      Math.PI / 2,   // 14
+    null           // 15
+  ];
+
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
 
     // The size should be an integer number of unit squares for both dimensions.
@@ -75,34 +123,37 @@ define( function( require ) {
     this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
     this.numRows = size.height / unitSquareLength;
     this.numColumns = size.width / unitSquareLength;
+    this.releaseAllInProgress = false;
 
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
 
     // Update the area and perimeter when the list of resident shapes changes.
     this.residentShapes.addItemAddedListener( function( addedShape ) {
-      self.area = self.residentShapes.length;
-      self.updateOccupiedAdded( addedShape );
+      self.updateArea();
+      self.updateCellsAdded( addedShape );
       self.updatePerimeterInfo();
 
     } );
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
-      self.area = self.residentShapes.length;
-      self.updateOccupiedRemoved( removedShape );
-      self.updatePerimeterInfo();
+      self.updateArea();
+      self.updateCellsRemoved( removedShape );
+      if ( !self.releaseAllInProgress ) {
+        self.updatePerimeterInfo();
+      }
     } );
 
     // For efficiency and simplicity in evaluating the perimeter, we use a 2D
     // array that maps integer indexed cells to shapes.  This array has a buffer
     // of always-empty cells around it so that the 'marching squares'
     // algorithm can be used even if this placement board is filled up.
-    this.occupiedCells = [];
+    this.cells = [];
     for ( var columns = 0; columns < this.numColumns + 2; columns++ ) {
       var currentRow = [];
       for ( var rows = 0; rows < this.numRows + 2; rows++ ) {
         currentRow.push( null );
       }
-      this.occupiedCells.push( currentRow );
+      this.cells.push( currentRow );
     }
   }
 
@@ -168,25 +219,29 @@ define( function( require ) {
     },
 
     /**
-     * Update the array of occupied cells with a newly added shape.
+     * Update the array of cells with a newly added shape.
      * @private
      */
-    updateOccupiedAdded: function( addedShape ) {
+    updateCellsAdded: function( addedShape ) {
       var xIndex = Math.round( ( addedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( addedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.occupiedCells[ xIndex ][ yIndex ] === null, 'Attempt made to add square to occupied location.' );
-      this.occupiedCells[ xIndex ][ yIndex ] = addedShape;
+      assert && assert( this.cells[ xIndex ][ yIndex ] === null, 'Attempt made to add square to occupied location.' );
+      this.cells[ xIndex ][ yIndex ] = addedShape;
     },
 
     /**
-     * Update the array of occupied cells due to a removed shape.
+     * Update the array of cells due to a removed shape.
      * @private
      */
-    updateOccupiedRemoved: function( removedShape ) {
+    updateCellsRemoved: function( removedShape ) {
       var xIndex = Math.round( ( removedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( removedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.occupiedCells[ xIndex ][ yIndex ] === removedShape, 'Removed shape was not marked in occupied spaces.' );
-      this.occupiedCells[ xIndex ][ yIndex ] = null;
+      assert && assert( this.cells[ xIndex ][ yIndex ] === removedShape, 'Removed shape was not marked in occupied spaces.' );
+      this.cells[ xIndex ][ yIndex ] = null;
+    },
+
+    updateArea: function() {
+      this.area = this.residentShapes.length;
     },
 
     /**
@@ -196,8 +251,11 @@ define( function( require ) {
      * @public
      */
     releaseAllShapes: function() {
+      this.releaseAllInProgress = true;
       this.residentShapes.clear();
       this.updateValidPlacementLocations();
+      this.releaseAllInProgress = false;
+      this.updatePerimeterInfo();
 
       // NOTE: This operation can leave the user controlled property of this
       // shape still linked to a listener.  As the sim is designed as of
@@ -216,27 +274,41 @@ define( function( require ) {
       positionList.push( position );
     },
 
-    occupiedArrayToModelCoords: function( x, y ) {
+    cellToModelCoords: function( x, y ) {
       return new Vector2( ( x - 1 ) * this.unitSquareLength + this.position.x, ( y - 1 ) * this.unitSquareLength + this.position.y );
     },
 
+    roundVector: function( vector ) {
+      vector.setXY( Math.round( vector.x ), Math.round( vector.y ) );
+    },
+
     /**
-     * Marching squares algorithm for scanning edges, see
+     * Marching squares algorithm for scanning the edge of the outer perimeter
+     * of the shape created by the filled-in squares, see
      * http://devblog.phillipspiess.com/2010/02/23/better-know-an-algorithm-1-marching-squares/
      * @private
      */
-    scanPerimeter: function( cells, windowStart ) {
+    scanExteriorPerimeter: function( cells, windowStart ) {
+      console.log( '========= scanExteriorPerimeter ==============' );
 
       var scanWindow = windowStart.copy();
       var scanComplete = false;
       var perimeterPoints = [];
+      var previousMovementVector = null;
+      var count = 0;
       while ( !scanComplete ) {
+        console.log( '-------------- stepping algorithm, iteration + ' + count + ' --------------------' );
+        console.log( 'scanWindow = ' + scanWindow );
 
         // Scan the current four-pixel area.
         var upLeft = cells[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
         var upRight = cells[ scanWindow.x ][ scanWindow.y - 1 ];
         var downLeft = cells[ scanWindow.x - 1 ][ scanWindow.y ];
         var downRight = cells[ scanWindow.x ][ scanWindow.y ];
+
+        console.log( 'Scan results: ' );
+        console.log( ( upLeft === null ? '0' : '1' ) + ( upRight === null ? '0' : '1' ) );
+        console.log( ( downLeft === null ? '0' : '1' ) + ( downRight === null ? '0' : '1' ) );
 
         // Map the scan to the one of 16 possible states.
         var marchingSquaresState = 0;
@@ -247,14 +319,96 @@ define( function( require ) {
 
         assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
 
+        console.log( 'marchingSquaresState = ' + marchingSquaresState );
+
         // Convert and add this point to the perimeter points.
-        perimeterPoints.push( this.occupiedArrayToModelCoords( scanWindow.x, scanWindow.y ) );
+        perimeterPoints.push( this.cellToModelCoords( scanWindow.x, scanWindow.y ) );
 
         // Move the scan window to the next location.
-        scanWindow.addXY( SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].x, SCAN_AREA_MOVEMENT_VECTORS[ marchingSquaresState ].y );
+        var movementVector = SCAN_AREA_MOVEMENT_FUNCTIONS[ marchingSquaresState ]( previousMovementVector );
+        console.log( 'movement vector = ' + movementVector );
+        scanWindow.add( movementVector );
+        previousMovementVector = movementVector;
 
         if ( scanWindow.equals( windowStart ) ) {
           scanComplete = true;
+        }
+        count++;
+        if ( count > 100 ) {
+          debugger;
+        }
+      }
+      return perimeterPoints;
+    },
+
+    /**
+     * Method for mapping an interior perimeter given a fully enclosed empty
+     * square at the top left of the enclosed space.  The marching squares
+     * algorithm didn't work for this purpose, so this is basically a
+     * modified version of that algorithm.
+     *
+     * @param cells
+     * @param windowStart
+     * @returns {Array}
+     * @private
+     */
+    scanInteriorPerimeter: function( cells, windowStart ) {
+      console.log( '========= scanInteriorPerimeter ==============' );
+
+      // Verify that the starting point is correct, otherwise the algorithm won't work.
+      assert && assert( cells[ windowStart.x ][ windowStart.y ] === null &&
+                        cells[ windowStart.x - 1 ][ windowStart.y ] !== null &&
+                        cells[ windowStart.x ][ windowStart.y - 1] !== null,
+        'initial conditions incorrect for algorithm'
+      );
+
+      var scanWindow = windowStart.copy();
+      var scanComplete = false;
+      var perimeterPoints = [];
+      var motionVector = new Vector2( 0, -1 );
+      var count = 0;
+      while ( !scanComplete ) {
+        console.log( '-------------- stepping algorithm, iteration + ' + count + ' --------------------' );
+        console.log( 'scanWindow = ' + scanWindow );
+
+        // Convert and add this point to the perimeter points.
+        perimeterPoints.push( this.cellToModelCoords( scanWindow.x, scanWindow.y ) );
+
+        // Scan the current four-pixel area.
+        var upLeft = cells[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
+        var upRight = cells[ scanWindow.x ][ scanWindow.y - 1 ];
+        var downLeft = cells[ scanWindow.x - 1 ][ scanWindow.y ];
+        var downRight = cells[ scanWindow.x ][ scanWindow.y ];
+
+        console.log( 'Scan results: ' );
+        console.log( ( upLeft === null ? '0' : '1' ) + ( upRight === null ? '0' : '1' ) );
+        console.log( ( downLeft === null ? '0' : '1' ) + ( downRight === null ? '0' : '1' ) );
+
+        // Map the scan to the one of 16 possible states.
+        var interiorScanState = 0;
+        if ( upLeft !== null ) { interiorScanState |= 1 }
+        if ( upRight !== null ) { interiorScanState |= 2 }
+        if ( downLeft !== null ) { interiorScanState |= 4 }
+        if ( downRight !== null ) { interiorScanState |= 8 }
+
+        console.log( 'interiorScanState = ' + interiorScanState );
+        assert && assert( interiorScanState !== 0 && interiorScanState !== 15, 'Interior perimeter scan algorithm reached invalid state.' );
+
+        // Rotate the motion vector based on the scan state.
+        // TODO: Use mutable version in future if available.
+        this.roundVector( motionVector.rotate( INTERIOR_PERIMETER_VECTOR_ROTATION[ interiorScanState ] ) );
+
+        console.log( 'motionVector = ' + motionVector );
+
+        // Move the scan window to the next location.
+        scanWindow.addXY( motionVector.x, motionVector.y );
+
+        if ( scanWindow.equals( windowStart ) ) {
+          scanComplete = true;
+        }
+        count++;
+        if ( count > 100 ) {
+          debugger;
         }
       }
       return perimeterPoints;
@@ -270,6 +424,7 @@ define( function( require ) {
 
       if ( this.residentShapes.length === 0 ) {
         this.perimeter = 0;
+        this.interiorPerimetersProperty.reset();
         this.outerPerimeterPointsProperty.reset();
       }
       else {
@@ -280,84 +435,53 @@ define( function( require ) {
         var firstOccupiedCell = null;
         for ( row = 1; row < ( this.numRows + 1 ) && firstOccupiedCell === null; row++ ) {
           for ( column = 1; column < this.numColumns + 1; column++ ) {
-            if ( this.occupiedCells[column][row] ) {
+            if ( this.cells[column][row] ) {
               firstOccupiedCell = new Vector2( column, row );
               break;
             }
           }
         }
+        console.log( 'firstOccupiedCell: ' + firstOccupiedCell );
 
         // Scan the outer perimeter.
-        this.outerPerimeterPoints = this.scanPerimeter( this.occupiedCells, firstOccupiedCell );
+        this.outerPerimeterPoints = this.scanExteriorPerimeter( this.cells, firstOccupiedCell );
 
-        // Scan for horizontally enclosed empty spaces.
-        var horizontallyEnclosedEmptySpaces = [];
-        var potentiallyEnclosed = false;
-        var potentiallyEnclosedSpaces = [];
+        // Scan for empty spaces enclosed within the perimeter.
+        var outlineShape = new Shape();
+        var enclosedSpaces = [];
+        outlineShape.moveToPoint( this.outerPerimeterPoints[ 0 ] );
+        for ( var i = 1; i < this.outerPerimeterPoints.length; i++ ) {
+          outlineShape.lineToPoint( this.outerPerimeterPoints[i] );
+        }
+        outlineShape.close();
         for ( row = 1; row < this.numRows - 1; row++ ) {
-          potentiallyEnclosed = false;
-          potentiallyEnclosedSpaces.length = 0;
           for ( column = 1; column < this.numColumns - 1; column++ ) {
-            if ( !potentiallyEnclosed && this.occupiedCells[column][row] !== null ) {
-              // Found an edge
-              potentiallyEnclosed = true;
-            }
-            else if ( potentiallyEnclosed && this.occupiedCells[column][row] === null ) {
-              // This space might be enclosed
-              potentiallyEnclosedSpaces.push( new Vector2( column, row ) );
-            }
-            else if ( potentiallyEnclosed && this.occupiedCells[column][row] !== null && potentiallyEnclosedSpaces.length > 0 ) {
-              // Found a closing edge, so the accumulated spaces are horizontally enclosed.
-              potentiallyEnclosedSpaces.forEach( function( p ) { horizontallyEnclosedEmptySpaces.push( p ) } );
+            if ( this.cells[ column ][ row ] === null ) {
+              // This cell is empty.  Test if it is within the outline perimeter.
+              var cellCenterInModel = this.cellToModelCoords( column, row ).addXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
+              if ( outlineShape.containsPoint( cellCenterInModel ) ) {
+                enclosedSpaces.push( new Vector2( column, row ) );
+              }
             }
           }
         }
 
-        // Scan for vertically enclosed empty spaces.
-        var verticallyEnclosedEmptySpaces = [];
-        for ( column = 1; column < this.numColumns - 1; column++ ) {
-          potentiallyEnclosed = false;
-          potentiallyEnclosedSpaces.length = 0;
-          for ( row = 1; row < this.numRows - 1; row++ ) {
-            if ( !potentiallyEnclosed && this.occupiedCells[column][row] !== null ) {
-              // Found an edge
-              potentiallyEnclosed = true;
-            }
-            else if ( potentiallyEnclosed && this.occupiedCells[column][row] === null ) {
-              // This space might be enclosed
-              potentiallyEnclosedSpaces.push( new Vector2( column, row ) );
-            }
-            else if ( potentiallyEnclosed && this.occupiedCells[column][row] !== null && potentiallyEnclosedSpaces.length > 0 ) {
-              // Found a closing edge, so the accumulated spaces are horizontally enclosed.
-              potentiallyEnclosedSpaces.forEach( function( p ) { verticallyEnclosedEmptySpaces.push( p ) } );
-            }
-          }
-        }
-
-        // Merge the vertically and horizontally enclosed spaces into one array
-        var fullyEnclosedEmptySpaces = [];
-        for ( var i = 0; i < horizontallyEnclosedEmptySpaces.length; i++ ) {
-          for ( var j = 0; j < verticallyEnclosedEmptySpaces.length; j++ ) {
-            if ( horizontallyEnclosedEmptySpaces[i].equals( verticallyEnclosedEmptySpaces[j] ) ) {
-              fullyEnclosedEmptySpaces.push( horizontallyEnclosedEmptySpaces[ i ] );
-            }
-          }
-        }
+        console.log( 'enclosedSpaces.length = ' + enclosedSpaces.length );
 
         // Map all the internal perimeters
         var interiorPerimeters = [];
-        while ( fullyEnclosedEmptySpaces.length > 0 ) {
+        while ( enclosedSpaces.length > 0 ) {
 
           // Locate the top left most space
-          var topLeftSpace = horizontallyEnclosedEmptySpaces[0];
-          fullyEnclosedEmptySpaces.forEach( function( cell ) {
+          var topLeftSpace = enclosedSpaces[ 0 ];
+          enclosedSpaces.forEach( function( cell ) {
             if ( cell.y < topLeftSpace.y || ( cell.y === topLeftSpace.y && cell.x < topLeftSpace.x ) ) {
               topLeftSpace = cell;
             }
           } );
 
-          // Map the perimeter using the marching squares algorithm.
-          var enclosedPerimeterPoints = this.scanPerimeter( this.occupiedCells, topLeftSpace );
+          // Map the interior perimeter.
+          var enclosedPerimeterPoints = this.scanInteriorPerimeter( this.cells, topLeftSpace );
           interiorPerimeters.push( enclosedPerimeterPoints );
 
           // Remove all empty spaces enclosed by this perimeter.
@@ -369,8 +493,8 @@ define( function( require ) {
           perimeterShape.close(); // Probably not necessary, but best to be sure.
 
           var leftoverEmptySpaces = [];
-          fullyEnclosedEmptySpaces.forEach( function( enclosedSpace ) {
-            var topLeftPoint = self.occupiedArrayToModelCoords( enclosedSpace.x, enclosedSpace.y );
+          enclosedSpaces.forEach( function( enclosedSpace ) {
+            var topLeftPoint = self.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
             var centerPoint = topLeftPoint.plusXY( self.unitSquareLength / 2, self.unitSquareLength / 2 );
             if ( !perimeterShape.containsPoint( centerPoint ) ) {
               // This space is not contained in the perimeter that was just mapped.
@@ -379,7 +503,7 @@ define( function( require ) {
           } );
 
           // Set up for the next time through the loop.
-          fullyEnclosedEmptySpaces = leftoverEmptySpaces;
+          enclosedSpaces = leftoverEmptySpaces;
         }
 
         this.interiorPerimeters = interiorPerimeters;
