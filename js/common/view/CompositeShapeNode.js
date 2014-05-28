@@ -32,9 +32,11 @@ define( function( require ) {
 
       if ( compositeShapeNode ) {
         self.removeChild( compositeShapeNode );
+        compositeShapeNode = null;
       }
       if ( gridNode ) {
         self.removeChild( gridNode );
+        gridNode = null;
       }
 
       // Define the shape of the outer perimeter.
