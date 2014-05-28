@@ -353,10 +353,10 @@ define( function( require ) {
         }
 
         // Scan the outer perimeter.
-        this.outerPerimeterPoints = this.scanPerimeter( this.cells, firstOccupiedCell );
+        var currentOuterPerimeter = this.scanPerimeter( this.cells, firstOccupiedCell );
 
         // Scan for empty spaces enclosed within the outer perimeter.
-        var outlineShape = this.createShapeFromPerimeterPoints( this.outerPerimeterPoints );
+        var outlineShape = this.createShapeFromPerimeterPoints( currentOuterPerimeter );
         var enclosedSpaces = [];
         for ( row = 1; row < this.numRows; row++ ) {
           for ( column = 1; column < this.numColumns; column++ ) {
@@ -403,14 +403,46 @@ define( function( require ) {
           enclosedSpaces = leftoverEmptySpaces;
         }
 
-        // Update externally visible properties.
-        this.interiorPerimeters = interiorPerimeters;
+        // Update externally visible properties.  Only update the perimeters
+        // if they have in order to minimize work done in the view.
+        if ( !this.perimeterPointsEqual( currentOuterPerimeter, this.outerPerimeterPoints ) ) {
+          this.outerPerimeterPoints = this.scanPerimeter( this.cells, firstOccupiedCell );
+        }
+        if ( !this.perimeterListsEqual( interiorPerimeters, this.interiorPerimeters ) ) {
+          this.interiorPerimeters = interiorPerimeters;
+        }
         var totalPerimeterAccumulator = this.outerPerimeterPoints.length;
         interiorPerimeters.forEach( function( interiorPerimeter ) {
           totalPerimeterAccumulator += interiorPerimeter.length;
         } );
         this.perimeter = totalPerimeterAccumulator;
       }
+    },
+
+    perimeterPointsEqual: function( perimeter1, perimeter2 ) {
+      assert && assert( perimeter1 instanceof Array && perimeter2 instanceof Array, 'Invalid parameters for perimeterPointsEqual' );
+      if ( perimeter1.length !== perimeter2.length ) {
+        return false;
+      }
+      perimeter1.every( function( point, index ) {
+        if ( !perimeter2[ index ].equals( point ) ) {
+          return false;
+        }
+      } );
+      return true;
+    },
+
+    perimeterListsEqual: function( perimeterList1, perimeterList2 ) {
+      assert && assert( perimeterList1 instanceof Array && perimeterList2 instanceof Array, 'Invalid parameters for perimeterListsEqual' );
+      if ( perimeterList1.length !== perimeterList2.length ) {
+        return false;
+      }
+      perimeterList1.every( function( perimeterPoints, index ) {
+        if ( !perimeterList2[ index ].equals( point ) ) {
+          return false;
+        }
+      } );
+      return true;
     },
 
     /**
