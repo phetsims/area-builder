@@ -282,6 +282,16 @@ define( function( require ) {
       vector.setXY( Math.round( vector.x ), Math.round( vector.y ) );
     },
 
+    createShapeFromPerimeterPoints: function( perimeterPoints ) {
+      var perimeterShape = new Shape();
+      perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
+      for ( var i = 1; i < perimeterPoints.length; i++ ) {
+        perimeterShape.lineToPoint( perimeterPoints[i] );
+      }
+      perimeterShape.close(); // Shouldn't be needed, but best to be sure.
+      return perimeterShape;
+    },
+
     /**
      * Marching squares algorithm for scanning the edge of the outer perimeter
      * of the shape created by the filled-in squares, see
@@ -447,15 +457,10 @@ define( function( require ) {
         this.outerPerimeterPoints = this.scanExteriorPerimeter( this.cells, firstOccupiedCell );
 
         // Scan for empty spaces enclosed within the perimeter.
-        var outlineShape = new Shape();
+        var outlineShape = this.createShapeFromPerimeterPoints( this.outerPerimeterPoints );
         var enclosedSpaces = [];
-        outlineShape.moveToPoint( this.outerPerimeterPoints[ 0 ] );
-        for ( var i = 1; i < this.outerPerimeterPoints.length; i++ ) {
-          outlineShape.lineToPoint( this.outerPerimeterPoints[i] );
-        }
-        outlineShape.close();
-        for ( row = 1; row < this.numRows - 1; row++ ) {
-          for ( column = 1; column < this.numColumns - 1; column++ ) {
+        for ( row = 1; row < this.numRows; row++ ) {
+          for ( column = 1; column < this.numColumns; column++ ) {
             if ( this.cells[ column ][ row ] === null ) {
               // This cell is empty.  Test if it is within the outline perimeter.
               var cellCenterInModel = this.cellToModelCoords( column, row ).addXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
@@ -484,18 +489,12 @@ define( function( require ) {
           var enclosedPerimeterPoints = this.scanInteriorPerimeter( this.cells, topLeftSpace );
           interiorPerimeters.push( enclosedPerimeterPoints );
 
-          // Remove all empty spaces enclosed by this perimeter.
-          var perimeterShape = new Shape();
-          perimeterShape.moveToPoint( enclosedPerimeterPoints[ 0 ] );
-          enclosedPerimeterPoints.forEach( function( perimeterPoint ) {
-            perimeterShape.lineToPoint( perimeterPoint );
-          } );
-          perimeterShape.close(); // Probably not necessary, but best to be sure.
-
+          // Identify and save all spaces not enclosed by this perimeter.
+          var perimeterShape = this.createShapeFromPerimeterPoints( enclosedPerimeterPoints );
           var leftoverEmptySpaces = [];
           enclosedSpaces.forEach( function( enclosedSpace ) {
-            var topLeftPoint = self.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
-            var centerPoint = topLeftPoint.plusXY( self.unitSquareLength / 2, self.unitSquareLength / 2 );
+            var positionPoint = self.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
+            var centerPoint = positionPoint.plusXY( self.unitSquareLength / 2, self.unitSquareLength / 2 );
             if ( !perimeterShape.containsPoint( centerPoint ) ) {
               // This space is not contained in the perimeter that was just mapped.
               leftoverEmptySpaces.push( enclosedSpace );
