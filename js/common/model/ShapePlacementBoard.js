@@ -19,27 +19,6 @@ define( function( require ) {
   var DISTANCE_COMPARE_THRESHOLD = 1E-5;
   var WILDCARD_PLACEMENT_ARRAY = [ '*' ];
 
-  // Array used for moving scan window in 'marching squares' algorithm, see
-  // reference below (where algorithm is implemented).
-  var SCAN_AREA_MOVEMENT_VECTORS = [
-    null,                  // 0
-    new Vector2( 0, -1 ),  // 1
-    new Vector2( 1, 0 ),   // 2
-    new Vector2( 1, 0 ),   // 3
-    new Vector2( -1, 0 ),  // 4
-    new Vector2( 0, -1 ),  // 5
-    new Vector2( -1, 0 ),  // 6
-    new Vector2( 1, 0 ),   // 7
-    new Vector2( 0, 1 ),   // 8
-    new Vector2( 0, -1 ),  // 9
-    new Vector2( 0, 1 ),   // 10
-    new Vector2( 0, 1 ),   // 11
-    new Vector2( -1, 0 ),  // 12
-    new Vector2( 0, -1 ),  // 13
-    new Vector2( -1, 0 ),  // 14
-    null                   // 15
-  ];
-
   var MOVEMENT_VECTORS = {
     // This sim is using screen conventions, meaning positive Y indicates down.
     up: new Vector2( 0, -1 ),
