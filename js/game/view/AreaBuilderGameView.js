@@ -12,7 +12,9 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -35,12 +37,21 @@ define( function( require ) {
       105 );
 
     // TODO: temp - add a rectangle for visual reference.  This will eventually become the 'work area'.
-    this.addChild( new Rectangle( 0, 0, this.layoutBounds.width * 0.7, this.layoutBounds.height * 0.7, 0, 0, {
+    var tempWorkArea = new Rectangle( 0, 0, this.layoutBounds.width * 0.7, this.layoutBounds.height * 0.7, 0, 0, {
       fill: 'white',
       stroke: 'black',
       centerX: this.layoutBounds.width / 2,
       top: 50
+    } );
+    this.addChild( tempWorkArea );
+    this.addChild( new Text( 'Game not yet implemented.', {
+      font: new PhetFont( 40 ),
+      fill: 'rgba( 220, 220, 220, 0.8 ',
+      centerX: tempWorkArea.centerX,
+      top: tempWorkArea.top + 100
     } ) );
+
+
   }
 
   return inherit( ScreenView, AreaBuilderGameView );
