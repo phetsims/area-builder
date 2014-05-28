@@ -57,10 +57,10 @@ define( function( require ) {
     this.addChild( creatorLayer );
     var bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );
-    var movableShapesLayer = new Node();
-    this.addChild( movableShapesLayer );
     var compositeShapesLayer = new Node();
     this.addChild( compositeShapesLayer );
+    var movableShapesLayer = new Node();
+    this.addChild( movableShapesLayer );
 
     // Add the shape placement boards
     var leftBoardNode = new ShapePlacementBoardNode( model.leftShapePlacementBoard );
