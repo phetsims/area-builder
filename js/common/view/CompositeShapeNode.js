@@ -50,7 +50,7 @@ define( function( require ) {
       } );
 
       compositeShapeNode = new Path( mainShape, {
-        fill: color,
+//        fill: color,
         stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
         lineWidth: 2
       } );
