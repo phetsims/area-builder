@@ -406,7 +406,7 @@ define( function( require ) {
         // Update externally visible properties.  Only update the perimeters
         // if they have in order to minimize work done in the view.
         if ( !this.perimeterPointsEqual( currentOuterPerimeter, this.outerPerimeterPoints ) ) {
-          this.outerPerimeterPoints = this.scanPerimeter( this.cells, firstOccupiedCell );
+          this.outerPerimeterPoints = currentOuterPerimeter;
         }
         if ( !this.perimeterListsEqual( interiorPerimeters, this.interiorPerimeters ) ) {
           this.interiorPerimeters = interiorPerimeters;
@@ -424,12 +424,9 @@ define( function( require ) {
       if ( perimeter1.length !== perimeter2.length ) {
         return false;
       }
-      perimeter1.every( function( point, index ) {
-        if ( !perimeter2[ index ].equals( point ) ) {
-          return false;
-        }
+      return perimeter1.every( function( point, index ) {
+        return( point.equals( !perimeter2[ index ] ) );
       } );
-      return true;
     },
 
     perimeterListsEqual: function( perimeterList1, perimeterList2 ) {
@@ -437,12 +434,10 @@ define( function( require ) {
       if ( perimeterList1.length !== perimeterList2.length ) {
         return false;
       }
+      var self = this;
       perimeterList1.every( function( perimeterPoints, index ) {
-        if ( !perimeterList2[ index ].equals( point ) ) {
-          return false;
-        }
+        return self.perimeterPointsEqual( perimeterPoints, perimeterList2[ index ] );
       } );
-      return true;
     },
 
     /**
