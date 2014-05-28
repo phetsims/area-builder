@@ -12,7 +12,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var areaAndPerimeterString = require( 'string!AREA_BUILDER/areaAndPerimeter' );
+  var valuesString = require( 'string!AREA_BUILDER/values' );
   var areaString = require( 'string!AREA_BUILDER/area' );
   var perimeterString = require( 'string!AREA_BUILDER/perimeter' );
 
@@ -48,7 +48,7 @@ define( function( require ) {
       perimeterReadout.right = readoutsRightEdge;
     } );
 
-    this.addChild( new AccordionBox( contentNode, { title: areaAndPerimeterString, fill: 'white' } ) );
+    this.addChild( new AccordionBox( contentNode, { title: valuesString, fill: 'white' } ) );
 
     this.mutate( options );
   }
