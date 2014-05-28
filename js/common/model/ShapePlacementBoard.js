@@ -404,7 +404,7 @@ define( function( require ) {
         }
 
         // Update externally visible properties.  Only update the perimeters
-        // if they have in order to minimize work done in the view.
+        // if they have changed in order to minimize work done in the view.
         if ( !this.perimeterPointsEqual( currentOuterPerimeter, this.outerPerimeterPoints ) ) {
           this.outerPerimeterPoints = currentOuterPerimeter;
         }
@@ -435,7 +435,7 @@ define( function( require ) {
         return false;
       }
       var self = this;
-      perimeterList1.every( function( perimeterPoints, index ) {
+      return perimeterList1.every( function( perimeterPoints, index ) {
         return self.perimeterPointsEqual( perimeterPoints, perimeterList2[ index ] );
       } );
     },

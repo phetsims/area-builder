@@ -23,8 +23,7 @@ define( function( require ) {
     var representation = new Path( movableShape.shape, {
       fill: movableShape.color,
       stroke: Color.toColor( movableShape.color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      lineWidth: 1,
-      lineDash: [ 4 ]
+      lineWidth: 1
     } );
     this.addChild( representation );
 
@@ -34,7 +33,7 @@ define( function( require ) {
     } );
 
     movableShape.userControlledProperty.link( function( userControlled ) {
-      representation.lineDash = userControlled ? null : [ 4 ];
+      representation.opacity = userControlled ? 1 : 0;
     } );
 
     // Add the listener that will allow the user to drag the shape around.

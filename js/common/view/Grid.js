@@ -13,28 +13,35 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
 
   /**
-   * @param {Dimension2} size
-   * @param {Number} spacing Space between the lines that comprise the grid, used for both x and y directions
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} width
+   * @param {Number} height
+   * @param {Number} spacing
    * @param {Object} lineOptions
+   * @param {Object} nodeOptions
    * @constructor
    */
-  function Grid( size, spacing, lineOptions ) {
+  function Grid( x, y, width, height, spacing, lineOptions, nodeOptions ) {
     Node.call( this );
 
-    _.extend( {
+    lineOptions = _.extend( {
       // defaults
+      lineWidth: 1,
       stroke: 'gray'
     }, lineOptions );
 
     // Add the lines
-    for ( var i = spacing; i < size.width; i += spacing ) {
+    for ( var i = x + spacing; i < x + width; i += spacing ) {
       // Add a vertical line
-      this.addChild( new Line( i, 0, i, size.height, lineOptions ) );
+      this.addChild( new Line( i, y, i, y + height, lineOptions ) );
     }
-    for ( i = spacing; i < size.height; i += spacing ) {
+    for ( i = y + spacing; i < y + height; i += spacing ) {
       // Add a horizontal line
-      this.addChild( new Line( 0, i, size.width, i, lineOptions ) );
+      this.addChild( new Line( x, i, x + width, i, lineOptions ) );
     }
+
+    this.mutate( nodeOptions );
   }
 
   return inherit( Node, Grid );

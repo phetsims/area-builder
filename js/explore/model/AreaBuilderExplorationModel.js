@@ -46,7 +46,8 @@ define( function( require ) {
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
     this.showGrids = new Property( true ); // @public
     this.boardDisplayMode = new Property( 'single' ); // @public, value values are 'single' and 'dual'
-    this.movableShapes = new ObservableArray();
+    this.movableShapes = new ObservableArray(); // @public
+    this.unitSquareLength = UNIT_SQUARE_LENGTH; // @public, @final
 
     // Create the shape placement boards.
     thisModel.leftShapePlacementBoard = new ShapePlacementBoard(

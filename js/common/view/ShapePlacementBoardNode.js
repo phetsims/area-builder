@@ -33,8 +33,8 @@ define( function( require ) {
     background.top = shapePlacementBoard.position.y;
 
     // Create and add the grid
-    var lineOptions = { stroke: '#909090', lineWidth: 1 };
-    var grid = new Grid( shapePlacementBoard.size, shapePlacementBoard.unitSquareLength, lineOptions );
+    var lineOptions = { stroke: '#909090' };
+    var grid = new Grid( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height, shapePlacementBoard.unitSquareLength, lineOptions );
     background.addChild( grid );
 
     // Track and update the grid visibility
