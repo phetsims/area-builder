@@ -21,21 +21,19 @@ define( function( require ) {
 
     Node.call( this );
     var self = this;
-    var compositeShapeNode = new Path( null, {
-      fill: color,
+
+    var compositeShapeNode = new Path( null, { fill: color } );
+    this.addChild( compositeShapeNode );
+    var gridLayer = new Node();
+    this.addChild( gridLayer );
+    var perimeterNode = new Path( null, {
       stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       lineWidth: 2
     } );
-    this.addChild( compositeShapeNode );
-    var gridNode = null;
+    this.addChild( perimeterNode );
 
     function update() {
       var i;
-
-      if ( gridNode ) {
-        self.removeChild( gridNode );
-        gridNode = null;
-      }
 
       // Define the shape of the outer perimeter.
       var outerPerimeterPoints = outerPerimeterPointsProperty.value;
@@ -48,8 +46,10 @@ define( function( require ) {
         mainShape.close();
       }
 
+      gridLayer.removeAllChildren();
+
+      // Add in the shape of any interior spaces and the grid.
       if ( !mainShape.bounds.isEmpty() ) {
-        // Add in the shape of any interior spaces.
         var interiorPerimeters = interiorPerimetersProperty.value;
         interiorPerimeters.forEach( function( interiorPerimeterPoints ) {
           mainShape.moveToPoint( interiorPerimeterPoints[ 0 ] );
@@ -57,21 +57,27 @@ define( function( require ) {
             mainShape.lineToPoint( interiorPerimeterPoints[ i ] );
           }
           mainShape.lineToPoint( interiorPerimeterPoints[ 0 ] );
+          mainShape.close();
         } );
 
         compositeShapeNode.setShape( mainShape );
+        perimeterNode.setShape( mainShape );
 
         // TODO: Consider optimization where grid is only redrawn if bounds of shape changes.
         if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
           // Add the grid
-          gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
+          var gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
               lineDash: [ 1, 4 ],
               stroke: 'black'
             }
           );
           gridNode.clipArea = mainShape;
-          self.addChild( gridNode );
+          gridLayer.addChild( gridNode );
         }
+      }
+      else {
+        compositeShapeNode.setShape( null );
+        perimeterNode.setShape( null );
       }
     }
 
