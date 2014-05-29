@@ -209,7 +209,7 @@ define( function( require ) {
       new VBox( {
         children: [
           new ABSwitch( model.boardDisplayMode, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 40, 20 ) } ),
-          new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 2, 3 ] } ), model.showGrids, { spacing: 15 } )
+          new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGrids, { spacing: 15 } )
         ],
         align: 'left',
         spacing: 10
@@ -223,7 +223,7 @@ define( function( require ) {
       right: this.layoutBounds.width - CONTROL_INSET,
       bottom: this.layoutBounds.height - CONTROL_INSET,
       lineWidth: 1,
-      listener: function() { model.reset() }
+      listener: function() { model.reset(); }
     } ) );
 
     // Layout

@@ -29,42 +29,21 @@ define( function( require ) {
 
   var SCAN_AREA_MOVEMENT_FUNCTIONS = [
     null,                                           // 0
-    function() { return MOVEMENT_VECTORS.up },      // 1
-    function() { return MOVEMENT_VECTORS.right },   // 2
-    function() { return MOVEMENT_VECTORS.right },   // 3
-    function() { return MOVEMENT_VECTORS.left },    // 4
-    function() { return MOVEMENT_VECTORS.up },      // 5
-    function( previousStep ) { return previousStep === MOVEMENT_VECTORS.up ? MOVEMENT_VECTORS.left : MOVEMENT_VECTORS.right },  // 6
-    function() { return MOVEMENT_VECTORS.right },   // 7
-    function() { return MOVEMENT_VECTORS.down },    // 8
-    function( previousStep ) { return previousStep === MOVEMENT_VECTORS.right ? MOVEMENT_VECTORS.up : MOVEMENT_VECTORS.down },  // 9
-    function() { return MOVEMENT_VECTORS.down },   // 10
-    function() { return MOVEMENT_VECTORS.down },   // 11
-    function() { return MOVEMENT_VECTORS.left },   // 12
-    function() { return MOVEMENT_VECTORS.up },     // 13
-    function() { return MOVEMENT_VECTORS.left },   // 14
+    function() { return MOVEMENT_VECTORS.up; },      // 1
+    function() { return MOVEMENT_VECTORS.right; },   // 2
+    function() { return MOVEMENT_VECTORS.right; },   // 3
+    function() { return MOVEMENT_VECTORS.left; },    // 4
+    function() { return MOVEMENT_VECTORS.up; },      // 5
+    function( previousStep ) { return previousStep === MOVEMENT_VECTORS.up ? MOVEMENT_VECTORS.left : MOVEMENT_VECTORS.right; },  // 6
+    function() { return MOVEMENT_VECTORS.right; },   // 7
+    function() { return MOVEMENT_VECTORS.down; },    // 8
+    function( previousStep ) { return previousStep === MOVEMENT_VECTORS.right ? MOVEMENT_VECTORS.up : MOVEMENT_VECTORS.down; },  // 9
+    function() { return MOVEMENT_VECTORS.down; },   // 10
+    function() { return MOVEMENT_VECTORS.down; },   // 11
+    function() { return MOVEMENT_VECTORS.left; },   // 12
+    function() { return MOVEMENT_VECTORS.up; },     // 13
+    function() { return MOVEMENT_VECTORS.left; },   // 14
     null                                           // 15
-  ];
-
-  // Array used for rotating the vector when performing an interior perimeter
-  // walk, see explanation in method header below.
-  var INTERIOR_PERIMETER_VECTOR_ROTATION = [
-    null,          // 0
-      -Math.PI / 2,  // 1
-      -Math.PI / 2,  // 2
-    0,             // 3
-      -Math.PI / 2,   // 4
-    0,             // 5
-      Math.PI / 2,   // 6
-      Math.PI / 2,   // 7
-      -Math.PI / 2,  // 8
-      Math.PI / 2,   // 9
-    0,             // 10
-      Math.PI / 2,   // 11
-    0,             // 12
-      Math.PI / 2,   // 13
-      Math.PI / 2,   // 14
-    null           // 15
   ];
 
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
@@ -311,10 +290,10 @@ define( function( require ) {
 
         // Map the scan to the one of 16 possible states.
         var marchingSquaresState = 0;
-        if ( upLeft !== null ) { marchingSquaresState |= 1 }
-        if ( upRight !== null ) { marchingSquaresState |= 2 }
-        if ( downLeft !== null ) { marchingSquaresState |= 4 }
-        if ( downRight !== null ) { marchingSquaresState |= 8 }
+        if ( upLeft !== null ) { marchingSquaresState |= 1; }
+        if ( upRight !== null ) { marchingSquaresState |= 2; }
+        if ( downLeft !== null ) { marchingSquaresState |= 4; }
+        if ( downRight !== null ) { marchingSquaresState |= 8; }
 
         assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
 

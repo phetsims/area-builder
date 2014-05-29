@@ -12,7 +12,6 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bucket = require( 'PHETCOMMON/model/Bucket' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var RectangleCreator = require( 'AREA_BUILDER/explore/model/RectangleCreator' );
@@ -137,7 +136,7 @@ define( function( require ) {
 
     // Control the grid visibility in the placement boards
     this.showGrids.link( function( showGrids ) {
-      self.shapePlacementBoards.forEach( function( board ) { board.gridVisible = showGrids } );
+      self.shapePlacementBoards.forEach( function( board ) { board.gridVisible = showGrids; } );
     } );
   }
 
@@ -151,8 +150,8 @@ define( function( require ) {
     reset: function() {
       this.showGrids.reset();
       this.boardDisplayMode.reset();
-      this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes() } );
-      this.movableShapes.forEach( function( movableShape ) { movableShape.goHome( false ) } );
+      this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes(); } );
+      this.movableShapes.forEach( function( movableShape ) { movableShape.goHome( false ); } );
       this.movableShapes.clear();
     }
   };

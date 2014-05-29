@@ -9,5 +9,5 @@ define( function( require ) {
     ORANGISH_COLOR: '#FE8E5C',
     PERIMETER_DARKEN_FACTOR: 0.6, // The amount that the perimeter colors are darkened from the main shape color
     ANIMATION_VELOCITY: 200 // In screen coordinates per second
-  }
+  };
 } );

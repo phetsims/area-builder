@@ -12,7 +12,6 @@ define( function( require ) {
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Line = require( 'SCENERY/nodes/Line' );
 
   /**
    * @param shapePlacementBoard

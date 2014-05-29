@@ -11,8 +11,6 @@ define( function( require ) {
   // modules
   var AreaBuilderExploreScreen = require( 'AREA_BUILDER/explore/AreaBuilderExploreScreen' );
   var AreaBuilderGameScreen = require( 'AREA_BUILDER/game/AreaBuilderGameScreen' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var Screen = require( 'JOIST/Screen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
 
