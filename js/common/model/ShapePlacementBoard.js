@@ -143,16 +143,16 @@ define( function( require ) {
      * not match the handled color or if the shape is not partially over the
      * board.
      * @public
-     * @param {MovableShape} shape A model shape
+     * @param {MovableShape} movableShape A model shape
      */
-    placeShape: function( shape ) {
-      assert && assert( shape.userControlled === false, 'Shapes can\'t be place when still controlled by user.' );
+    placeShape: function( movableShape ) {
+      assert && assert( movableShape.userControlled === false, 'Shapes can\'t be place when still controlled by user.' );
       var self = this;
 
-      var shapeBounds = new Bounds2( shape.position.x, shape.position.y, shape.position.x + shape.shape.bounds.getWidth(), shape.position.y + shape.shape.bounds.getHeight() );
+      var shapeBounds = new Bounds2( movableShape.position.x, movableShape.position.y, movableShape.position.x + movableShape.shape.bounds.getWidth(), movableShape.position.y + movableShape.shape.bounds.getHeight() );
 
       // See if shape is of the correct color and overlapping with the board.
-      if ( shape.color !== this.colorHandled || !this.bounds.intersectsBounds( shapeBounds ) || this.validPlacementLocations.length === 0 ) {
+      if ( movableShape.color !== this.colorHandled || !this.bounds.intersectsBounds( shapeBounds ) || this.validPlacementLocations.length === 0 ) {
         return false;
       }
 
@@ -160,35 +160,44 @@ define( function( require ) {
       if ( this.residentShapes.length === 0 ) {
 
         // This is the first shape to be added, so put it anywhere on the grid
-        var xPos = Math.round( ( shape.position.x - this.position.x ) / this.unitSquareLength ) * this.unitSquareLength + this.position.x;
+        var xPos = Math.round( ( movableShape.position.x - this.position.x ) / this.unitSquareLength ) * this.unitSquareLength + this.position.x;
         xPos = Math.max( Math.min( xPos, this.bounds.maxX - this.unitSquareLength ), this.bounds.minX );
-        var yPos = Math.round( ( shape.position.y - this.position.y ) / this.unitSquareLength ) * this.unitSquareLength + this.position.y;
+        var yPos = Math.round( ( movableShape.position.y - this.position.y ) / this.unitSquareLength ) * this.unitSquareLength + this.position.y;
         yPos = Math.max( Math.min( yPos, this.bounds.maxY - this.unitSquareLength ), this.bounds.minY );
-        shape.position = new Vector2( xPos, yPos );
+        movableShape.setDestination( new Vector2( xPos, yPos ), true );
       }
       else {
         // Choose the closest valid location.
         var closestValidLocation = this.validPlacementLocations[ 0 ];
         this.validPlacementLocations.forEach( function( candidatePosition ) {
-          if ( shape.position.distance( candidatePosition ) < shape.position.distance( closestValidLocation ) ) {
+          if ( movableShape.position.distance( candidatePosition ) < movableShape.position.distance( closestValidLocation ) ) {
             closestValidLocation = candidatePosition;
           }
         } );
-        shape.position = closestValidLocation;
+        movableShape.setDestination( closestValidLocation, true );
       }
 
-      // Add this shape to the list of shapes that are on this board.  It is
-      // crucial that the shape be placed before adding it to this array.
-      this.residentShapes.push( shape );
+      // Add this shape to the list of shapes that are on this board once it
+      // has completed any animation.
+//      movableShape.animatingProperty.once( function( animating ){
+//        if ( !animating ){
+//          self.residentShapes.push( movableShape );
+//        }
+//        else{
+//          // TODO: Remove this warning once this approach is proven.
+//          console.log( 'ERROR: animating property changed to true when expected to change to false' );
+//        }
+//      });
+      self.residentShapes.push( movableShape );
 
       // Set up a listener to remove this shape when the user grabs is.
       var removalListener = function( userControlled ) {
         assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
-        self.residentShapes.remove( shape );
+        self.residentShapes.remove( movableShape );
         self.updateValidPlacementLocations();
       };
       removalListener.placementBoardRemovalListener = true;
-      shape.userControlledProperty.once( removalListener );
+      movableShape.userControlledProperty.once( removalListener );
 
       // Update the valid locations for the next placement.
       this.updateValidPlacementLocations();
@@ -202,8 +211,8 @@ define( function( require ) {
      * @private
      */
     updateCellsAdded: function( addedShape ) {
-      var xIndex = Math.round( ( addedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
-      var yIndex = Math.round( ( addedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
+      var xIndex = Math.round( ( addedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
+      var yIndex = Math.round( ( addedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
       assert && assert( this.cells[ xIndex ][ yIndex ] === null, 'Attempt made to add square to occupied location.' );
       this.cells[ xIndex ][ yIndex ] = addedShape;
     },
@@ -213,8 +222,8 @@ define( function( require ) {
      * @private
      */
     updateCellsRemoved: function( removedShape ) {
-      var xIndex = Math.round( ( removedShape.position.x - this.position.x ) / this.unitSquareLength ) + 1;
-      var yIndex = Math.round( ( removedShape.position.y - this.position.y ) / this.unitSquareLength ) + 1;
+      var xIndex = Math.round( ( removedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
+      var yIndex = Math.round( ( removedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
       assert && assert( this.cells[ xIndex ][ yIndex ] === removedShape, 'Removed shape was not marked in occupied spaces.' );
       this.cells[ xIndex ][ yIndex ] = null;
     },
@@ -461,9 +470,8 @@ define( function( require ) {
         var adjacentLocations = [];
         self.residentShapes.forEach( function( residentShape ) {
           for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
-            var newPosition = residentShape.position.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
+            var newPosition = residentShape.destination.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
             if ( newPosition.x < self.bounds.maxX && newPosition.x >= self.bounds.minX && newPosition.y < self.bounds.maxY && newPosition.y >= self.bounds.minY ) {
-              console.log( 'newPosition = ' + newPosition );
               adjacentLocations.push( newPosition );
             }
           }
@@ -472,7 +480,7 @@ define( function( require ) {
         adjacentLocations.forEach( function( adjacentLocation ) {
           var isOccupied = false;
           for ( var i = 0; i < self.residentShapes.length; i++ ) {
-            if ( self.residentShapes.get( i ).position.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
+            if ( self.residentShapes.get( i ).destination.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
               isOccupied = true;
               break;
             }

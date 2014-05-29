@@ -25,7 +25,6 @@ define( function( require ) {
     var self = this;
     var compositeShapeNode = null;
     var gridNode = null;
-    var bounds = new Bounds2( 0, 0, 0, 0 );
 
     function update() {
       var i;
