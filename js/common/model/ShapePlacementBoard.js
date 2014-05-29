@@ -179,16 +179,22 @@ define( function( require ) {
 
       // Add this shape to the list of shapes that are on this board once it
       // has completed any animation.
-//      movableShape.animatingProperty.once( function( animating ){
-//        if ( !animating ){
-//          self.residentShapes.push( movableShape );
-//        }
-//        else{
-//          // TODO: Remove this warning once this approach is proven.
-//          console.log( 'ERROR: animating property changed to true when expected to change to false' );
-//        }
-//      });
-      self.residentShapes.push( movableShape );
+      movableShape.animatingProperty.once( function( animating ) {
+        // TODO: There is a fundamental problem with the following that must
+        // TODO: be fixed.  In order to work in a multi-touch environment, the
+        // TODO: valid placement locations must be updated based on destination,
+        // TODO: but the shape only when animation complete.
+        if ( !animating ) {
+          self.residentShapes.push( movableShape );
+          // Update the valid locations for the next placement.
+          self.updateValidPlacementLocations();
+
+        }
+        else {
+          // TODO: Remove this warning once this approach is proven.
+          console.log( 'ERROR: animating property changed to true when expected to change to false' );
+        }
+      } );
 
       // Set up a listener to remove this shape when the user grabs is.
       var removalListener = function( userControlled ) {
@@ -198,9 +204,6 @@ define( function( require ) {
       };
       removalListener.placementBoardRemovalListener = true;
       movableShape.userControlledProperty.once( removalListener );
-
-      // Update the valid locations for the next placement.
-      this.updateValidPlacementLocations();
 
       // If we made it to here, placement succeeded.
       return true;
