@@ -21,16 +21,17 @@ define( function( require ) {
 
     Node.call( this );
     var self = this;
-    var compositeShapeNode = null;
+    var compositeShapeNode = new Path( null, {
+      fill: color,
+      stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
+      lineWidth: 2
+    } );
+    this.addChild( compositeShapeNode );
     var gridNode = null;
 
     function update() {
       var i;
 
-      if ( compositeShapeNode ) {
-        self.removeChild( compositeShapeNode );
-        compositeShapeNode = null;
-      }
       if ( gridNode ) {
         self.removeChild( gridNode );
         gridNode = null;
@@ -58,12 +59,7 @@ define( function( require ) {
           mainShape.lineToPoint( interiorPerimeterPoints[ 0 ] );
         } );
 
-        compositeShapeNode = new Path( mainShape, {
-          fill: color,
-          stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-          lineWidth: 2
-        } );
-        self.addChild( compositeShapeNode );
+        compositeShapeNode.setShape( mainShape );
 
         // TODO: Consider optimization where grid is only redrawn if bounds of shape changes.
         if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
