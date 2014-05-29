@@ -78,6 +78,18 @@ define( function( require ) {
       model.unitSquareLength,
       model.centerShapePlacementBoard.colorHandled );
     compositeShapesLayer.addChild( centerCompositeShape );
+    var leftCompositeShape = new CompositeShapeNode(
+      model.leftShapePlacementBoard.outerPerimeterPointsProperty,
+      model.leftShapePlacementBoard.interiorPerimetersProperty,
+      model.unitSquareLength,
+      model.leftShapePlacementBoard.colorHandled );
+    compositeShapesLayer.addChild( leftCompositeShape );
+    var rightCompositeShape = new CompositeShapeNode(
+      model.rightShapePlacementBoard.outerPerimeterPointsProperty,
+      model.rightShapePlacementBoard.interiorPerimetersProperty,
+      model.unitSquareLength,
+      model.rightShapePlacementBoard.colorHandled );
+    compositeShapesLayer.addChild( rightCompositeShape );
 
     // Add the area and perimeter displays
     var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,
@@ -152,6 +164,9 @@ define( function( require ) {
       rightBucketHole.visible = boardDisplayMode === 'dual';
       centerBucketFront.visible = boardDisplayMode === 'single';
       centerBucketHole.visible = boardDisplayMode === 'single';
+      leftCompositeShape.visible = boardDisplayMode === 'dual';
+      rightCompositeShape.visible = boardDisplayMode === 'dual';
+      centerCompositeShape.visible = boardDisplayMode === 'single';
       movableShapesLayer.children.forEach( function( shapeNode ) {
         // TODO: This works, but I'm not crazy about the idea of mapping
         // TODO: color to visibility - it seems indirect and brittle.  Keep

@@ -453,18 +453,21 @@ define( function( require ) {
         this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY;
       }
       else {
+
+        // Clear previous list.
+        self.validPlacementLocations = [];
+
         // Create a list of all locations that would share an edge with another square.
         var adjacentLocations = [];
         self.residentShapes.forEach( function( residentShape ) {
           for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
             var newPosition = residentShape.position.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
             if ( newPosition.x < self.bounds.maxX && newPosition.x >= self.bounds.minX && newPosition.y < self.bounds.maxY && newPosition.y >= self.bounds.minY ) {
+              console.log( 'newPosition = ' + newPosition );
               adjacentLocations.push( newPosition );
             }
           }
         } );
-
-        self.validPlacementLocations.length = 0;
 
         adjacentLocations.forEach( function( adjacentLocation ) {
           var isOccupied = false;
