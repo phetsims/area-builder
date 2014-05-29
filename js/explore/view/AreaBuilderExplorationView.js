@@ -95,12 +95,12 @@ define( function( require ) {
     var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.GREENISH_COLOR, model.leftShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.GREENISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      { right: leftBoardNode.right, bottom: leftBoardNode.top - 8 } );
+      { centerX: leftBoardNode.centerX, bottom: leftBoardNode.top - 8 } );
     backLayer.addChild( leftAreaAndPerimeterDisplay );
     var rightAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.rightShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.PURPLISH_COLOR, model.rightShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.PURPLISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      { left: rightBoardNode.left, bottom: rightBoardNode.top - 8 } );
+      { centerX: rightBoardNode.centerX, bottom: rightBoardNode.top - 8 } );
     backLayer.addChild( rightAreaAndPerimeterDisplay );
     var centerAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.centerShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.ORANGISH_COLOR, model.centerShapePlacementBoard.perimeterProperty,

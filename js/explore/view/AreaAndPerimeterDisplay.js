@@ -21,9 +21,9 @@ define( function( require ) {
   function AreaAndPerimeterDisplay( areaProperty, areaTextColor, perimeterProperty, perimeterTextColor, options ) {
     Node.call( this );
     var contentNode = new Node();
-    var areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
-    var perimeterCaption = new Text( perimeterString, { font: DISPLAY_FONT } );
-    var tempTwoDigitString = new Text( '99', { font: DISPLAY_FONT } );
+    var areaCaption = new Text( areaString + ':', { font: DISPLAY_FONT } );
+    var perimeterCaption = new Text( perimeterString + ':', { font: DISPLAY_FONT } );
+    var tempTwoDigitString = new Text( '999', { font: DISPLAY_FONT } );
     var areaReadout = new Text( '', { font: DISPLAY_FONT, fill: areaTextColor } );
     var perimeterReadout = new Text( '', { font: DISPLAY_FONT, fill: perimeterTextColor } );
 
@@ -33,7 +33,7 @@ define( function( require ) {
     contentNode.addChild( perimeterCaption );
     contentNode.addChild( areaReadout );
     contentNode.addChild( perimeterReadout );
-    var readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 4 + tempTwoDigitString.width;
+    var readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 8 + tempTwoDigitString.width;
 
     areaProperty.link( function( area ) {
       areaReadout.text = area;
