@@ -46,6 +46,13 @@ define( function( require ) {
     null                                           // 15
   ];
 
+  /**
+   * @param {Dimension2} size
+   * @param {Number} unitSquareLength
+   * @param {Vector2} position
+   * @param {String || Color} colorHandled
+   * @constructor
+   */
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
 
     // The size should be an integer number of unit squares for both dimensions.
@@ -79,9 +86,10 @@ define( function( require ) {
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
     this.residentShapes = new ObservableArray(); // @private
     this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
-    this.numRows = size.height / unitSquareLength;
-    this.numColumns = size.width / unitSquareLength;
-    this.releaseAllInProgress = false;
+    this.numRows = size.height / unitSquareLength; // @private
+    this.numColumns = size.width / unitSquareLength; // @private
+    this.releaseAllInProgress = false; // @private
+    this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
 
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
@@ -96,6 +104,9 @@ define( function( require ) {
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
       self.updateArea();
       self.updateCellsRemoved( removedShape );
+
+      // The following guard prevents having a zillion updates when the board
+      // is cleared.
       if ( !self.releaseAllInProgress ) {
         self.updatePerimeterInfo();
       }
@@ -136,7 +147,7 @@ define( function( require ) {
       }
 
       // Choose a location for the shape
-      if ( this.residentShapes.length === 0 ) {
+      if ( this.validPlacementLocations === WILDCARD_PLACEMENT_ARRAY ) {
 
         // This is the first shape to be added, so put it anywhere on the grid
         var xPos = Math.round( ( movableShape.position.x - this.position.x ) / this.unitSquareLength ) * this.unitSquareLength + this.position.x;
@@ -156,36 +167,80 @@ define( function( require ) {
         movableShape.setDestination( closestValidLocation, true );
       }
 
-      // Add this shape to the list of shapes that are on this board once it
-      // has completed any animation.
-      movableShape.animatingProperty.once( function( animating ) {
-        // TODO: There is a fundamental problem with the following that must
-        // TODO: be fixed.  In order to work in a multi-touch environment, the
-        // TODO: valid placement locations must be updated based on destination,
-        // TODO: but the shape only when animation complete.
+      // The remaining code in this function assumes that the shape is
+      // animating to the new location, and will cause odd results if it
+      // isn't, so we check it here.
+      assert && assert( movableShape.animating, 'Shape is not animating after being placed.' );
+
+      // The shape is moving to a spot on the board.  We don't want to add it
+      // to the list of resident shapes yet, or we may trigger a change to the
+      // exterior and interior perimeters, but we need to keep a reference to
+      // it so that the valid placement locations can be updated, especially
+      // in multi-touch environments.  So, basically, there is an intermediate
+      // 'holding place' for incoming shapes.
+      this.incomingShapes.push( movableShape );
+
+      // Create a listener that will move this shape from the incoming shape
+      // list to the resident list when the animation completes.
+      var animationCompleteListener = function( animating ) {
         if ( !animating ) {
+          self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.residentShapes.push( movableShape );
           // Update the valid locations for the next placement.
           self.updateValidPlacementLocations();
-
         }
         else {
           // TODO: Remove this warning once this approach is proven.
           console.log( 'ERROR: animating property changed to true when expected to change to false' );
         }
-      } );
 
-      // Set up a listener to remove this shape when the user grabs is.
-      var removalListener = function( userControlled ) {
-        assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
-        self.residentShapes.remove( movableShape );
-        self.updateValidPlacementLocations();
+        // Set up a listener to remove this shape when the user grabs is.
+        var removalListener = function( userControlled ) {
+          assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
+          self.residentShapes.remove( movableShape );
+          self.updateValidPlacementLocations();
+        };
+        self.tagListener( removalListener );
+        removalListener.placementBoardRemovalListener = true;
+        movableShape.userControlledProperty.once( removalListener );
       };
-      removalListener.placementBoardRemovalListener = true;
-      movableShape.userControlledProperty.once( removalListener );
+
+      // Tag the listener so that it can be removed without firing if needed,
+      // such as when the board is cleared due to reset.
+      this.tagListener( animationCompleteListener );
+
+      // Hook up the listener.
+      movableShape.animatingProperty.once( animationCompleteListener );
 
       // If we made it to here, placement succeeded.
       return true;
+    },
+
+    // @private, tag a listener for removal
+    tagListener: function( listener ) {
+      listener.shapePlacementBoard = this;
+    },
+
+    // @private, check if listener function was tagged by this instance
+    listenerTagMatches: function( listener ) {
+      return ( listener.shapePlacementBoard && listener.shapePlacementBoard === this );
+    },
+
+    // TODO: This is rather ugly.  Work with SR to improve or find
+    // TODO: alternative, or to bake into Axon.
+    // @private, remove all observers from a property that have been tagged
+    // by this shape placement board.
+    removeTaggedObservers: function( property ) {
+      var self = this;
+      var taggedObservers = [];
+      property._observers.forEach( function( observer ) {
+        if ( self.listenerTagMatches( observer ) ) {
+          taggedObservers.push( observer );
+        }
+      } );
+      taggedObservers.forEach( function( taggedObserver ) {
+        property.unlink( taggedObserver );
+      } );
     },
 
     /**
@@ -221,17 +276,25 @@ define( function( require ) {
      * @public
      */
     releaseAllShapes: function() {
+      var self = this;
       this.releaseAllInProgress = true;
+
+      // Remove all listeners added to the shapes by this placement board.
+      this.residentShapes.forEach( function( shape ) {
+        self.removeTaggedObservers( shape.userControlledProperty );
+      } );
+      this.incomingShapes.forEach( function( shape ) {
+        self.removeTaggedObservers( shape.animatingProperty );
+      } );
+
+      // Clear out all references to shapes placed on this board.
       this.residentShapes.clear();
+      this.incomingShapes.length = 0;
+
+      // Update state.
       this.updateValidPlacementLocations();
       this.releaseAllInProgress = false;
       this.updatePerimeterInfo();
-
-      // NOTE: This operation can leave the user controlled property of this
-      // shape still linked to a listener.  As the sim is designed as of
-      // 5/21/2014, this doesn't matter, since the shapes will be immediately
-      // deleted anyway.  If that behavior changes, better cleanup may be
-      // required to avoid any weird side effects.
     },
 
     // @private util TODO: check if still used, delete if not.
@@ -440,7 +503,7 @@ define( function( require ) {
     updateValidPlacementLocations: function() {
       var self = this;
 
-      if ( self.residentShapes.length === 0 ) {
+      if ( self.residentShapes.length + self.incomingShapes.length === 0 ) {
         this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY;
       }
       else {
@@ -450,15 +513,19 @@ define( function( require ) {
 
         // Create a list of all locations that would share an edge with another square.
         var adjacentLocations = [];
-        self.residentShapes.forEach( function( residentShape ) {
+        var residentAndIncomingShapes = [];
+        self.residentShapes.forEach( function( shape ) { residentAndIncomingShapes.push( shape ); } );
+        self.incomingShapes.forEach( function( shape ) { residentAndIncomingShapes.push( shape ); } );
+        residentAndIncomingShapes.forEach( function( shape ) {
           for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
-            var newPosition = residentShape.destination.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
+            var newPosition = shape.destination.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
             if ( newPosition.x < self.bounds.maxX && newPosition.x >= self.bounds.minX && newPosition.y < self.bounds.maxY && newPosition.y >= self.bounds.minY ) {
               adjacentLocations.push( newPosition );
             }
           }
         } );
 
+        // Any location that is adjacent to another square and unoccupied is a valid placement location.
         adjacentLocations.forEach( function( adjacentLocation ) {
           var isOccupied = false;
           for ( var i = 0; i < self.residentShapes.length; i++ ) {
