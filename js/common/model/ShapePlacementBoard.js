@@ -112,15 +112,21 @@ define( function( require ) {
       }
     } );
 
-    // For efficiency and simplicity in evaluating the perimeter, we use a 2D
-    // array that maps integer indexed cells to shapes.  This array has a buffer
-    // of always-empty cells around it so that the 'marching squares'
+    // For efficiency and simplicity in evaluating the interior and exterior
+    // perimeter, locating orphans, and so forth, a 2D array is used to track
+    // various state information about the 'cells' that correspond to the
+    // locations on this board where shapes may be placed.  This array has a
+    // buffer of always-empty cells around it so that the 'marching squares'
     // algorithm can be used even if this placement board is filled up.
     this.cells = [];
     for ( var columns = 0; columns < this.numColumns + 2; columns++ ) {
       var currentRow = [];
       for ( var rows = 0; rows < this.numRows + 2; rows++ ) {
-        currentRow.push( null );
+        currentRow.push( {
+          occupiedBy: null,   // the shape occupying this cell, null of none
+          cataloged: false,   // used by group identification algorithm
+          catalogedBy: null   // used by group identification algorithm
+        } );
       }
       this.cells.push( currentRow );
     }
@@ -250,8 +256,8 @@ define( function( require ) {
     updateCellsAdded: function( addedShape ) {
       var xIndex = Math.round( ( addedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( addedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.cells[ xIndex ][ yIndex ] === null, 'Attempt made to add square to occupied location.' );
-      this.cells[ xIndex ][ yIndex ] = addedShape;
+      assert && assert( this.cells[ xIndex ][ yIndex ].occupiedBy === null, 'Attempt made to add square to occupied location.' );
+      this.cells[ xIndex ][ yIndex ].occupiedBy = addedShape;
     },
 
     /**
@@ -261,8 +267,8 @@ define( function( require ) {
     updateCellsRemoved: function( removedShape ) {
       var xIndex = Math.round( ( removedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( removedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.cells[ xIndex ][ yIndex ] === removedShape, 'Removed shape was not marked in occupied spaces.' );
-      this.cells[ xIndex ][ yIndex ] = null;
+      assert && assert( this.cells[ xIndex ][ yIndex ].occupiedBy === removedShape, 'Removed shape was not marked in occupied spaces.' );
+      this.cells[ xIndex ][ yIndex ].occupiedBy = null;
     },
 
     updateArea: function() {
@@ -342,10 +348,10 @@ define( function( require ) {
         console.log( 'scanWindow = ' + scanWindow );
 
         // Scan the current four-pixel area.
-        var upLeft = cells[ scanWindow.x - 1 ][ scanWindow.y - 1 ];
-        var upRight = cells[ scanWindow.x ][ scanWindow.y - 1 ];
-        var downLeft = cells[ scanWindow.x - 1 ][ scanWindow.y ];
-        var downRight = cells[ scanWindow.x ][ scanWindow.y ];
+        var upLeft = cells[ scanWindow.x - 1 ][ scanWindow.y - 1 ].occupiedBy;
+        var upRight = cells[ scanWindow.x ][ scanWindow.y - 1 ].occupiedBy;
+        var downLeft = cells[ scanWindow.x - 1 ][ scanWindow.y ].occupiedBy;
+        var downRight = cells[ scanWindow.x ][ scanWindow.y ].occupiedBy;
 
         console.log( 'Scan results: ' );
         console.log( ( upLeft === null ? '0' : '1' ) + ( upRight === null ? '0' : '1' ) );
@@ -399,7 +405,7 @@ define( function( require ) {
         var firstOccupiedCell = null;
         for ( row = 1; row < ( this.numRows + 1 ) && firstOccupiedCell === null; row++ ) {
           for ( column = 1; column < this.numColumns + 1; column++ ) {
-            if ( this.cells[column][row] ) {
+            if ( this.cells[column][row].occupiedBy ) {
               firstOccupiedCell = new Vector2( column, row );
               break;
             }
@@ -414,7 +420,7 @@ define( function( require ) {
         var enclosedSpaces = [];
         for ( row = 1; row < this.numRows; row++ ) {
           for ( column = 1; column < this.numColumns; column++ ) {
-            if ( this.cells[ column ][ row ] === null ) {
+            if ( this.cells[ column ][ row ].occupiedBy === null ) {
               // This cell is empty.  Test if it is within the outline perimeter.
               var cellCenterInModel = this.cellToModelCoords( column, row ).addXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
               if ( outlineShape.containsPoint( cellCenterInModel ) ) {
