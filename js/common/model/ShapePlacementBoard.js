@@ -105,10 +105,11 @@ define( function( require ) {
       self.updateArea();
       self.updateCellsRemoved( removedShape );
 
-      // The following guard prevents having a zillion updates when the board
-      // is cleared.
+      // The following guard prevents having a zillion computationally
+      // intensive updates when the board is cleared.
       if ( !self.releaseAllInProgress ) {
         self.updatePerimeterInfo();
+        self.releaseAnyOrphans();
       }
     } );
 
@@ -119,11 +120,13 @@ define( function( require ) {
     // buffer of always-empty cells around it so that the 'marching squares'
     // algorithm can be used even if this placement board is filled up.
     this.cells = [];
-    for ( var columns = 0; columns < this.numColumns + 2; columns++ ) {
+    for ( var column = 0; column < this.numColumns + 2; column++ ) {
       var currentRow = [];
-      for ( var rows = 0; rows < this.numRows + 2; rows++ ) {
+      for ( var row = 0; row < this.numRows + 2; row++ ) {
         currentRow.push( {
-          occupiedBy: null,   // the shape occupying this cell, null of none
+          column: column,
+          row: row,
+          occupiedBy: null,   // the shape occupying this cell, null if none
           cataloged: false,   // used by group identification algorithm
           catalogedBy: null   // used by group identification algorithm
         } );
@@ -498,6 +501,73 @@ define( function( require ) {
       return perimeterList1.every( function( perimeterPoints, index ) {
         return self.perimeterPointsEqual( perimeterPoints, perimeterList2[ index ] );
       } );
+    },
+
+    /**
+     * Identify all cells that are adjacent to the provided cell, intended
+     * to be used recursively.
+     *
+     * @private
+     * @param startCell
+     * @param cellGroup
+     */
+    identifyAdjacentCells: function( startCell, cellGroup ) {
+      assert && assert( startCell.occupiedBy !== null, 'Usage error: Unoccupied cell passed to group identification.' )
+      assert && assert( !startCell.cataloged, 'Usage error: Cataloged cell passed to group identification algorithm.' )
+      var self = this;
+
+      // Catalog this cell.
+      cellGroup.push( startCell );
+      startCell.cataloged = true;
+
+      // Kick off cataloging of adjacent cells.
+      Object.keys( MOVEMENT_VECTORS ).forEach( function( key ) {
+        var movementVector = MOVEMENT_VECTORS[ key ];
+        var adjacentCell = self.cells[ startCell.column + movementVector.x ][ startCell.row + movementVector.y ];
+        if ( adjacentCell.occupiedBy !== null && !adjacentCell.cataloged ) {
+          self.identifyAdjacentCells( adjacentCell, cellGroup );
+        }
+      } );
+    },
+
+    identifyContiguousCellGroups: function() {
+
+      // Make a list of locations for all occupied cells.
+      var ungroupedOccupiedCells = [];
+      for ( var column = 1; column <= this.numColumns; column++ ) {
+        for ( var row = 1; row <= this.numRows; row++ ) {
+          var cell = this.cells[ column ][ row ];
+          if ( cell.occupiedBy !== null ) {
+            ungroupedOccupiedCells.push( this.cells[ column ][ row ] );
+            // Clear the flag used by the search algorithm.
+            cell.cataloged = false;
+          }
+        }
+      }
+
+      // Identify the interconnected groups of cells.
+      var contiguousCellGroups = [];
+      while ( ungroupedOccupiedCells.length > 0 ) {
+        var cellGroup = [];
+        this.identifyAdjacentCells( ungroupedOccupiedCells[ 0 ], cellGroup );
+        contiguousCellGroups.push( cellGroup );
+        ungroupedOccupiedCells = _.difference( ungroupedOccupiedCells, cellGroup );
+      }
+
+      console.log( '++++++++++++++++++++++++++++++++++++' );
+      console.log( 'num contiguous cell groups: ' + contiguousCellGroups.length );
+      contiguousCellGroups.forEach( function( contiguousCellGroup, index ) {
+        console.log( '--- Cell group index = ' + index );
+        contiguousCellGroup.forEach( function( cell ) {
+          console.log( 'cell column: ' + cell.column + ', cell row: ' + cell.row );
+        } );
+      } );
+
+      return contiguousCellGroups;
+    },
+
+    releaseAnyOrphans: function() {
+      var contiguousCellGroups = this.identifyContiguousCellGroups();
     },
 
     /**
