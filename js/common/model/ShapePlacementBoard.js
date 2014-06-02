@@ -109,6 +109,7 @@ define( function( require ) {
       // intensive updates when the board is cleared.
       if ( !self.releaseAllInProgress ) {
         self.updatePerimeterInfo();
+        self.updateValidPlacementLocations();
         self.releaseAnyOrphans();
       }
     } );
@@ -189,25 +190,22 @@ define( function( require ) {
       // 'holding place' for incoming shapes.
       this.incomingShapes.push( movableShape );
 
+      // Update the valid locations for the next placement.
+      self.updateValidPlacementLocations();
+
       // Create a listener that will move this shape from the incoming shape
-      // list to the resident list when the animation completes.
+      // list to the resident list once the animation completes.
       var animationCompleteListener = function( animating ) {
+        assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
         if ( !animating ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.residentShapes.push( movableShape );
-          // Update the valid locations for the next placement.
-          self.updateValidPlacementLocations();
-        }
-        else {
-          // TODO: Remove this warning once this approach is proven.
-          console.log( 'ERROR: animating property changed to true when expected to change to false' );
         }
 
         // Set up a listener to remove this shape when the user grabs is.
         var removalListener = function( userControlled ) {
           assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
           self.residentShapes.remove( movableShape );
-          self.updateValidPlacementLocations();
         };
         self.tagListener( removalListener );
         removalListener.placementBoardRemovalListener = true;
@@ -316,8 +314,12 @@ define( function( require ) {
       positionList.push( position );
     },
 
-    cellToModelCoords: function( x, y ) {
-      return new Vector2( ( x - 1 ) * this.unitSquareLength + this.position.x, ( y - 1 ) * this.unitSquareLength + this.position.y );
+    cellToModelCoords: function( column, row ) {
+      return new Vector2( ( column - 1 ) * this.unitSquareLength + this.position.x, ( row - 1 ) * this.unitSquareLength + this.position.y );
+    },
+
+    modelToCellCoords: function( x, y ) {
+      return new Vector2( ( x - this.position.x ) / this.unitSquareLength + 1, ( y - this.position.y ) / this.unitSquareLength + 1 );
     },
 
     roundVector: function( vector ) {
@@ -568,6 +570,18 @@ define( function( require ) {
 
     releaseAnyOrphans: function() {
       var contiguousCellGroups = this.identifyContiguousCellGroups();
+
+      if ( contiguousCellGroups.length > 1 ) {
+        // There are orphans that should be released.  Determine which ones.
+        var indexOfLargestGroup = 0;
+        contiguousCellGroups.forEach( function( group, index ) {
+          if ( group.length > contiguousCellGroups[ indexOfLargestGroup ].length ) {
+            indexOfLargestGroup = index;
+          }
+        } );
+
+        console.log( 'Releasing all but group index ' + indexOfLargestGroup );
+      }
     },
 
     /**
@@ -587,7 +601,7 @@ define( function( require ) {
         // Clear previous list.
         self.validPlacementLocations = [];
 
-        // Create a list of all locations that would share an edge with another square.
+        // Create a list of all locations that share an edge with a resident or incoming shape.
         var adjacentLocations = [];
         var residentAndIncomingShapes = [];
         self.residentShapes.forEach( function( shape ) { residentAndIncomingShapes.push( shape ); } );
@@ -601,11 +615,11 @@ define( function( require ) {
           }
         } );
 
-        // Any location that is adjacent to another square and unoccupied is a valid placement location.
+        // Eliminate locations that are occupied.
         adjacentLocations.forEach( function( adjacentLocation ) {
           var isOccupied = false;
-          for ( var i = 0; i < self.residentShapes.length; i++ ) {
-            if ( self.residentShapes.get( i ).destination.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
+          for ( var i = 0; i < residentAndIncomingShapes.length; i++ ) {
+            if ( residentAndIncomingShapes[ i ].destination.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
               isOccupied = true;
               break;
             }
@@ -615,6 +629,10 @@ define( function( require ) {
           }
         } );
       }
+      console.log( '============== validPlacementLocations ========================' );
+      self.validPlacementLocations.forEach( function( location ) {
+        console.log( 'cell location = ' + self.modelToCellCoords( location.x, location.y ) );
+      } )
     }
   } );
 } );
