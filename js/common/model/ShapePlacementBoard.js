@@ -359,25 +359,17 @@ define( function( require ) {
      * @private
      */
     scanPerimeter: function( cells, windowStart ) {
-      console.log( '========= scanPerimeter ==============' );
-
       var scanWindow = windowStart.copy();
       var scanComplete = false;
       var perimeterPoints = [];
       var previousMovementVector = MOVEMENT_VECTORS.up; // Init this way allows algorithm to work for interior perimeters.
       while ( !scanComplete ) {
-        console.log( '-------------- stepping algorithm --------------------' );
-        console.log( 'scanWindow = ' + scanWindow );
 
         // Scan the current four-pixel area.
         var upLeft = cells[ scanWindow.x - 1 ][ scanWindow.y - 1 ].occupiedBy;
         var upRight = cells[ scanWindow.x ][ scanWindow.y - 1 ].occupiedBy;
         var downLeft = cells[ scanWindow.x - 1 ][ scanWindow.y ].occupiedBy;
         var downRight = cells[ scanWindow.x ][ scanWindow.y ].occupiedBy;
-
-        console.log( 'Scan results: ' );
-        console.log( ( upLeft === null ? '0' : '1' ) + ( upRight === null ? '0' : '1' ) );
-        console.log( ( downLeft === null ? '0' : '1' ) + ( downRight === null ? '0' : '1' ) );
 
         // Map the scan to the one of 16 possible states.
         var marchingSquaresState = 0;
@@ -388,14 +380,11 @@ define( function( require ) {
 
         assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
 
-        console.log( 'marchingSquaresState = ' + marchingSquaresState );
-
         // Convert and add this point to the perimeter points.
         perimeterPoints.push( this.cellToModelCoords( scanWindow.x, scanWindow.y ) );
 
         // Move the scan window to the next location.
         var movementVector = SCAN_AREA_MOVEMENT_FUNCTIONS[ marchingSquaresState ]( previousMovementVector );
-        console.log( 'movement vector = ' + movementVector );
         scanWindow.add( movementVector );
         previousMovementVector = movementVector;
 
@@ -465,7 +454,6 @@ define( function( require ) {
           } );
 
           // Map the interior perimeter.
-          console.log( '+++++++++++++++ Starting interior scan +++++++++++++++++++++++++++' );
           var enclosedPerimeterPoints = this.scanPerimeter( this.cells, topLeftSpace );
           interiorPerimeters.push( enclosedPerimeterPoints );
 
@@ -572,15 +560,6 @@ define( function( require ) {
         contiguousCellGroups.push( cellGroup );
         ungroupedOccupiedCells = _.difference( ungroupedOccupiedCells, cellGroup );
       }
-
-      console.log( '++++++++++++++++++++++++++++++++++++' );
-      console.log( 'num contiguous cell groups: ' + contiguousCellGroups.length );
-      contiguousCellGroups.forEach( function( contiguousCellGroup, index ) {
-        console.log( '--- Cell group index = ' + index );
-        contiguousCellGroup.forEach( function( cell ) {
-          console.log( 'cell column: ' + cell.column + ', cell row: ' + cell.row );
-        } );
-      } );
 
       return contiguousCellGroups;
     },
