@@ -89,6 +89,7 @@ define( function( require ) {
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
     this.releaseAllInProgress = false; // @private
+    this.orphanReleaseInProgress = false; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
 
     // Non-dynamic properties that are externally visible
@@ -99,15 +100,15 @@ define( function( require ) {
       self.updateArea();
       self.updateCellsAdded( addedShape );
       self.updatePerimeterInfo();
-
     } );
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
       self.updateArea();
       self.updateCellsRemoved( removedShape );
 
       // The following guard prevents having a zillion computationally
-      // intensive updates when the board is cleared.
-      if ( !self.releaseAllInProgress ) {
+      // intensive updates when the board is cleared, and all prevents
+      // undesireable recursion in some situations.
+      if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
         self.updatePerimeterInfo();
         self.updateValidPlacementLocations();
         self.releaseAnyOrphans();
@@ -302,6 +303,22 @@ define( function( require ) {
       this.updateValidPlacementLocations();
       this.releaseAllInProgress = false;
       this.updatePerimeterInfo();
+    },
+
+    // @private
+    releaseShape: function( shape ) {
+      if ( this.residentShapes.contains( shape ) ) {
+        this.removeTaggedObservers( shape.userControlledProperty );
+        this.residentShapes.remove( shape );
+      }
+      else if ( this.incomingShapes.indexOf( shape ) >= 0 ) {
+        this.removeTaggedObservers( shape.animatingProperty );
+        this.incomingShapes.splice( this.incomingShapes.indexOf( shape ), 1 );
+      }
+      else {
+        //TODO: Remove this clause and warning once this method and its usage is fully tested.
+        console.log( 'Error: An attempt was made to release a shape that is not present.' );
+      }
     },
 
     // @private util TODO: check if still used, delete if not.
@@ -569,19 +586,32 @@ define( function( require ) {
     },
 
     releaseAnyOrphans: function() {
+      var self = this;
+      this.orphanReleaseInProgress = true;
       var contiguousCellGroups = this.identifyContiguousCellGroups();
 
       if ( contiguousCellGroups.length > 1 ) {
         // There are orphans that should be released.  Determine which ones.
-        var indexOfLargestGroup = 0;
+        var indexOfRetainedGroup = 0;
         contiguousCellGroups.forEach( function( group, index ) {
-          if ( group.length > contiguousCellGroups[ indexOfLargestGroup ].length ) {
-            indexOfLargestGroup = index;
+          if ( group.length > contiguousCellGroups[ indexOfRetainedGroup ].length ) {
+            indexOfRetainedGroup = index;
           }
         } );
 
-        console.log( 'Releasing all but group index ' + indexOfLargestGroup );
+        contiguousCellGroups.forEach( function( group, groupIndex ) {
+          if ( groupIndex !== indexOfRetainedGroup ) {
+            group.forEach( function( cell ) {
+              var movableShape = cell.occupiedBy;
+              self.releaseShape( movableShape );
+              movableShape.goHome( true );
+            } );
+          }
+        } );
       }
+      this.orphanReleaseInProgress = false;
+      self.updatePerimeterInfo();
+      self.updateValidPlacementLocations();
     },
 
     /**
@@ -629,10 +659,6 @@ define( function( require ) {
           }
         } );
       }
-      console.log( '============== validPlacementLocations ========================' );
-      self.validPlacementLocations.forEach( function( location ) {
-        console.log( 'cell location = ' + self.modelToCellCoords( location.x, location.y ) );
-      } )
     }
   } );
 } );
