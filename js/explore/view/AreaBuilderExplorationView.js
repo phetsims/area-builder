@@ -80,19 +80,19 @@ define( function( require ) {
     var leftBoardClearButton = new EraserButton( {
       left: leftBoardNode.left + 3,
       bottom: leftBoardNode.bottom - 5,
-      listener: function() { model.leftShapePlacementBoard.releaseAllShapes( true ); }
+      listener: function() { model.leftShapePlacementBoard.releaseAllShapes( false ); }
     } );
     topControlsLayer.addChild( leftBoardClearButton );
     var rightBoardClearButton = new EraserButton( {
       right: rightBoardNode.right - 3,
       bottom: rightBoardNode.bottom - 5,
-      listener: function() { model.rightShapePlacementBoard.releaseAllShapes( true ); }
+      listener: function() { model.rightShapePlacementBoard.releaseAllShapes( false ); }
     } );
     topControlsLayer.addChild( rightBoardClearButton );
     var centerBoardClearButton = new EraserButton( {
       left: centerBoardNode.left + 3,
       bottom: centerBoardNode.bottom - 5,
-      listener: function() { model.centerShapePlacementBoard.releaseAllShapes( true ); }
+      listener: function() { model.centerShapePlacementBoard.releaseAllShapes( false ); }
     } );
     topControlsLayer.addChild( centerBoardClearButton );
 
