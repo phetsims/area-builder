@@ -117,10 +117,12 @@ define( function( require ) {
     var leftBucketHole = new BucketHole( model.leftBucket, invertIdentityTransform );
     backLayer.addChild( leftBucketHole );
     var rightBucketFront = new BucketFront( model.rightBucket, invertIdentityTransform );
+    rightBucketFront.addChild( new PaperAirplaneNode( { right: rightBucketFront.width * 0.35, top: rightBucketFront.height * 0.3 } ) );
     bucketFrontLayer.addChild( rightBucketFront );
     var rightBucketHole = new BucketHole( model.rightBucket, invertIdentityTransform );
     backLayer.addChild( rightBucketHole );
     var centerBucketFront = new BucketFront( model.centerBucket, invertIdentityTransform );
+    centerBucketFront.addChild( new PaperAirplaneNode( { right: centerBucketFront.width * 0.35, top: centerBucketFront.height * 0.3 } ) );
     bucketFrontLayer.addChild( centerBucketFront );
     var centerBucketHole = new BucketHole( model.centerBucket, invertIdentityTransform );
     backLayer.addChild( centerBucketHole );
