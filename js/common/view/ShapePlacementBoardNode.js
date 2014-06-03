@@ -42,7 +42,5 @@ define( function( require ) {
     } );
   }
 
-  return inherit( Node, ShapePlacementBoardNode, {
-    //TODO prototypes
-  } );
+  return inherit( Node, ShapePlacementBoardNode );
 } );

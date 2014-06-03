@@ -278,28 +278,34 @@ define( function( require ) {
     },
 
     /**
-     * Release all the shapes that are currently on this board.  This does
-     * not send the shapes anywhere - it is up to some external entity to "put
-     * them away".
+     * Release all the shapes that are currently on this board and send them
+     * to their home location.
      * @public
      */
-    releaseAllShapes: function() {
+    releaseAllShapes: function( animate ) {
       var self = this;
       this.releaseAllInProgress = true;
+
+      var shapesToSendHome = [];
 
       // Remove all listeners added to the shapes by this placement board.
       this.residentShapes.forEach( function( shape ) {
         self.removeTaggedObservers( shape.userControlledProperty );
+        shapesToSendHome.push( shape );
       } );
       this.incomingShapes.forEach( function( shape ) {
         self.removeTaggedObservers( shape.animatingProperty );
+        shapesToSendHome.push( shape );
       } );
 
       // Clear out all references to shapes placed on this board.
       this.residentShapes.clear();
       this.incomingShapes.length = 0;
 
-      // Update state.
+      // Send the shapes to their origin.
+      shapesToSendHome.forEach( function( shape ) { shape.goHome( animate ); } );
+
+      // Update board state.
       this.updateValidPlacementLocations();
       this.releaseAllInProgress = false;
       this.updatePerimeterInfo();

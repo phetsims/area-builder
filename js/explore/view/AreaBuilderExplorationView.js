@@ -19,6 +19,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var CompositeShapeNode = require( 'AREA_BUILDER/common/view/CompositeShapeNode' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -51,6 +52,8 @@ define( function( require ) {
     var thisScreen = this;
     ScreenView.call( thisScreen );
 
+    // TODO: There is a lot of opportunity for consolidation below.
+
     // Create the nodes needed for the required layering
     var backLayer = new Node();
     this.addChild( backLayer );
@@ -62,6 +65,8 @@ define( function( require ) {
     this.addChild( compositeShapesLayer );
     var movableShapesLayer = new Node();
     this.addChild( movableShapesLayer );
+    var topControlsLayer = new Node();
+    this.addChild( topControlsLayer );
 
     // Add the shape placement boards
     var leftBoardNode = new ShapePlacementBoardNode( model.leftShapePlacementBoard );
@@ -70,6 +75,26 @@ define( function( require ) {
     backLayer.addChild( rightBoardNode );
     var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
     backLayer.addChild( centerBoardNode );
+
+    // Add the clear buttons TODO: add undo button.
+    var leftBoardClearButton = new EraserButton( {
+      left: leftBoardNode.left + 3,
+      bottom: leftBoardNode.bottom - 5,
+      listener: function() { model.leftShapePlacementBoard.releaseAllShapes( true ); }
+    } );
+    topControlsLayer.addChild( leftBoardClearButton );
+    var rightBoardClearButton = new EraserButton( {
+      right: rightBoardNode.right - 3,
+      bottom: rightBoardNode.bottom - 5,
+      listener: function() { model.rightShapePlacementBoard.releaseAllShapes( true ); }
+    } );
+    topControlsLayer.addChild( rightBoardClearButton );
+    var centerBoardClearButton = new EraserButton( {
+      left: centerBoardNode.left + 3,
+      bottom: centerBoardNode.bottom - 5,
+      listener: function() { model.centerShapePlacementBoard.releaseAllShapes( true ); }
+    } );
+    topControlsLayer.addChild( centerBoardClearButton );
 
     // Add the composite shapes, i.e. the ones that aggregate what the user
     // has added as individual shapes.
@@ -156,20 +181,23 @@ define( function( require ) {
 
     // Control which board(s), bucket(s), and shapes are visible.
     model.boardDisplayMode.link( function( boardDisplayMode ) {
-      rightBoardNode.visible = boardDisplayMode === 'dual';
       leftBoardNode.visible = boardDisplayMode === 'dual';
-      centerBoardNode.visible = boardDisplayMode === 'single';
+      leftBoardClearButton.visible = boardDisplayMode === 'dual';
       leftAreaAndPerimeterDisplay.visible = leftBoardNode.visible;
-      rightAreaAndPerimeterDisplay.visible = rightBoardNode.visible;
-      centerAreaAndPerimeterDisplay.visible = centerBoardNode.visible;
       leftBucketFront.visible = boardDisplayMode === 'dual';
       leftBucketHole.visible = boardDisplayMode === 'dual';
+      leftCompositeShape.visible = boardDisplayMode === 'dual';
+      rightBoardNode.visible = boardDisplayMode === 'dual';
+      rightBoardClearButton.visible = boardDisplayMode === 'dual';
+      rightAreaAndPerimeterDisplay.visible = rightBoardNode.visible;
       rightBucketFront.visible = boardDisplayMode === 'dual';
       rightBucketHole.visible = boardDisplayMode === 'dual';
+      rightCompositeShape.visible = boardDisplayMode === 'dual';
+      centerBoardNode.visible = boardDisplayMode === 'single';
+      centerBoardClearButton.visible = boardDisplayMode === 'single';
+      centerAreaAndPerimeterDisplay.visible = centerBoardNode.visible;
       centerBucketFront.visible = boardDisplayMode === 'single';
       centerBucketHole.visible = boardDisplayMode === 'single';
-      leftCompositeShape.visible = boardDisplayMode === 'dual';
-      rightCompositeShape.visible = boardDisplayMode === 'dual';
       centerCompositeShape.visible = boardDisplayMode === 'single';
       movableShapesLayer.children.forEach( function( shapeNode ) {
         // TODO: This works, but I'm not crazy about the idea of mapping

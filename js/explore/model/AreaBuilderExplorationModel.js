@@ -151,7 +151,6 @@ define( function( require ) {
       this.showGrids.reset();
       this.boardDisplayMode.reset();
       this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes(); } );
-      this.movableShapes.forEach( function( movableShape ) { movableShape.goHome( false ); } );
       this.movableShapes.clear();
     }
   };
