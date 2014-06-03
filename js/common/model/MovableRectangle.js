@@ -58,7 +58,7 @@ define( function( require ) {
           var stepVector = Vector2.createPolar( AreaBuilderSharedConstants.ANIMATION_VELOCITY * dt, stepAngle );
           this.position = this.position.plus( stepVector );
         }
-        else if ( distanceToDestination > 0 ) {
+        else if ( this.animating ) {
           // Less than one time step away, so just go to the destination.
           this.position = this.destination;
           this.animating = false;

@@ -159,7 +159,6 @@ define( function( require ) {
 
       // Choose a location for the shape
       if ( this.validPlacementLocations === WILDCARD_PLACEMENT_ARRAY ) {
-
         // This is the first shape to be added, so put it anywhere on the grid
         var xPos = Math.round( ( movableShape.position.x - this.position.x ) / this.unitSquareLength ) * this.unitSquareLength + this.position.x;
         xPos = Math.max( Math.min( xPos, this.bounds.maxX - this.unitSquareLength ), this.bounds.minX );

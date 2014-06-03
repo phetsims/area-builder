@@ -106,16 +106,16 @@ define( function( require ) {
     }
 
     // Function for adding new movable elements to this model
-    function addModelElement( newShape ) {
-      self.movableShapes.push( newShape );
-      newShape.userControlledProperty.link( function( userControlled ) {
+    function addModelElement( shape ) {
+      self.movableShapes.push( shape );
+      shape.userControlledProperty.link( function( userControlled ) {
         if ( !userControlled ) {
-          placeShape( newShape );
+          placeShape( shape );
         }
       } );
 
-      newShape.on( 'returnedHome', function() {
-        self.movableShapes.remove( newShape );
+      shape.on( 'returnedHome', function() {
+        self.movableShapes.remove( shape );
       } );
     }
 
