@@ -23,6 +23,7 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
+  var PaperAirplaneNode = require( 'AREA_BUILDER/common/view/PaperAirplaneNode' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangleCreatorNode = require( 'AREA_BUILDER/explore/view/RectangleCreatorNode' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
@@ -111,6 +112,7 @@ define( function( require ) {
     // Add the bucket views
     var invertIdentityTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( Vector2.ZERO, Vector2.ZERO, 1 );
     var leftBucketFront = new BucketFront( model.leftBucket, invertIdentityTransform );
+    leftBucketFront.addChild( new PaperAirplaneNode( { right: leftBucketFront.width * 0.35, top: leftBucketFront.height * 0.3 } ) );
     bucketFrontLayer.addChild( leftBucketFront );
     var leftBucketHole = new BucketHole( model.leftBucket, invertIdentityTransform );
     backLayer.addChild( leftBucketHole );
