@@ -1,8 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Model of a rectangular board (like a white board or bulletin board) upon
- * which various smaller shapes can be placed.
+ * Model of a rectangular board (like a white board or bulletin board) upon which various smaller shapes can be placed.
  */
 define( function( require ) {
   'use strict';
@@ -115,12 +114,10 @@ define( function( require ) {
       }
     } );
 
-    // For efficiency and simplicity in evaluating the interior and exterior
-    // perimeter, locating orphans, and so forth, a 2D array is used to track
-    // various state information about the 'cells' that correspond to the
-    // locations on this board where shapes may be placed.  This array has a
-    // buffer of always-empty cells around it so that the 'marching squares'
-    // algorithm can be used even if this placement board is filled up.
+    // For efficiency and simplicity in evaluating the interior and exterior perimeter, locating orphans, and so forth,
+    // a 2D array is used to track various state information about the 'cells' that correspond to the locations on this
+    // board where shapes may be placed.  This array has a buffer of always-empty cells around it so that the 'marching
+    // squares' algorithm can be used even if this placement board is filled up.
     this.cells = [];
     for ( var column = 0; column < this.numColumns + 2; column++ ) {
       var currentRow = [];
@@ -140,9 +137,8 @@ define( function( require ) {
   return inherit( PropertySet, ShapePlacementBoard, {
 
     /**
-     * Place the provide shape on this board.  Returns false if the color does
-     * not match the handled color or if the shape is not partially over the
-     * board.
+     * Place the provide shape on this board.  Returns false if the color does not match the handled color or if the
+     * shape is not partially over the board.
      * @public
      * @param {MovableShape} movableShape A model shape
      */
@@ -177,24 +173,21 @@ define( function( require ) {
         movableShape.setDestination( closestValidLocation, true );
       }
 
-      // The remaining code in this function assumes that the shape is
-      // animating to the new location, and will cause odd results if it
-      // isn't, so we check it here.
+      // The remaining code in this function assumes that the shape is animating to the new location, and will cause
+      // odd results if it isn't, so we check it here.
       assert && assert( movableShape.animating, 'Shape is not animating after being placed.' );
 
-      // The shape is moving to a spot on the board.  We don't want to add it
-      // to the list of resident shapes yet, or we may trigger a change to the
-      // exterior and interior perimeters, but we need to keep a reference to
-      // it so that the valid placement locations can be updated, especially
-      // in multi-touch environments.  So, basically, there is an intermediate
-      // 'holding place' for incoming shapes.
+      // The shape is moving to a spot on the board.  We don't want to add it to the list of resident shapes yet, or we
+      // may trigger a change to the exterior and interior perimeters, but we need to keep a reference to it so that
+      // the valid placement locations can be updated, especially in multi-touch environments.  So, basically, there is
+      // an intermediate 'holding place' for incoming shapes.
       this.incomingShapes.push( movableShape );
 
       // Update the valid locations for the next placement.
       self.updateValidPlacementLocations();
 
-      // Create a listener that will move this shape from the incoming shape
-      // list to the resident list once the animation completes.
+      // Create a listener that will move this shape from the incoming shape list to the resident list once the
+      // animation completes.
       var animationCompleteListener = function( animating ) {
         assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
         if ( !animating ) {
@@ -233,10 +226,8 @@ define( function( require ) {
       return ( listener.shapePlacementBoard && listener.shapePlacementBoard === this );
     },
 
-    // TODO: This is rather ugly.  Work with SR to improve or find
-    // TODO: alternative, or to bake into Axon.
-    // @private, remove all observers from a property that have been tagged
-    // by this shape placement board.
+    // TODO: This is rather ugly.  Work with SR to improve or find alternative, or to bake into Axon.  Maybe a map.
+    // @private, remove all observers from a property that have been tagged by this shape placement board.
     removeTaggedObservers: function( property ) {
       var self = this;
       var taggedObservers = [];
@@ -277,24 +268,23 @@ define( function( require ) {
     },
 
     /**
-     * Release all the shapes that are currently on this board and send them
-     * to their home location.
+     * Release all the shapes that are currently on this board and send them to their home location.
      * @public
      */
-    releaseAllShapes: function( animate ) {
+    releaseAllShapes: function( fade ) {
       var self = this;
       this.releaseAllInProgress = true;
 
-      var shapesToSendHome = [];
+      var shapesToRelease = [];
 
       // Remove all listeners added to the shapes by this placement board.
       this.residentShapes.forEach( function( shape ) {
         self.removeTaggedObservers( shape.userControlledProperty );
-        shapesToSendHome.push( shape );
+        shapesToRelease.push( shape );
       } );
       this.incomingShapes.forEach( function( shape ) {
         self.removeTaggedObservers( shape.animatingProperty );
-        shapesToSendHome.push( shape );
+        shapesToRelease.push( shape );
       } );
 
       // Clear out all references to shapes placed on this board.
@@ -302,7 +292,12 @@ define( function( require ) {
       this.incomingShapes.length = 0;
 
       // Send the shapes to their origin.
-      shapesToSendHome.forEach( function( shape ) { shape.goHome( animate ); } );
+      if ( fade ) {
+        shapesToRelease.forEach( function( shape ) { shape.fadeAway(); } );
+      }
+      else {
+        shapesToRelease.forEach( function( shape ) { shape.goHome( false ); } );
+      }
 
       // Update board state.
       this.updateValidPlacementLocations();

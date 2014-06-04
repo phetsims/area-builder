@@ -34,20 +34,35 @@ define( function( require ) {
       representation.leftTop = position;
     } );
 
-    var visibleProperty = new DerivedProperty(
-      [ movableShape.userControlledProperty, movableShape.animatingProperty],
-      function( userControlled, animating ) {
-        return userControlled || animating;
+    // Derive the opacity of the shape from multiple properties on the model element.  Because the composite shape is
+    // used to depict the overall shape when a shape is on the placement board, this element is invisible (opacity set
+    // to zero) unless it is user controlled, animating, or fading.
+    var opacityProperty = new DerivedProperty(
+      [ movableShape.userControlledProperty, movableShape.animatingProperty, movableShape.fadeProportionProperty ],
+      function( userControlled, animating, fadeProportion ) {
+        if ( userControlled || animating ) {
+          return 1;
+        }
+        else if ( fadeProportion > 0 ) {
+          return 1 - fadeProportion;
+        }
+        else {
+          return 0;
+        }
       } );
 
-    visibleProperty.link( function( visible ) {
-      representation.opacity = visible ? 1 : 0;
+    opacityProperty.link( function( opacity ) {
+      representation.opacity = opacity;
     } );
 
     movableShape.animatingProperty.link( function( animating ) {
-      // To avoid certain complications, make it so that users can't grab
-      // this when it is moving.
+      // To avoid certain complications, make it so that users can't grab this when it is moving.
       self.pickable = !animating;
+    } );
+
+    movableShape.fadeProportionProperty.link( function( fadeProportion ) {
+      // To avoid certain complications, make it so that users can't grab this when it is fading.
+      self.pickable = fadeProportion === 0;
     } );
 
     // Add the listener that will allow the user to drag the shape around.

@@ -19,17 +19,39 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+  var FADE_RATE = 2; // proportion per second
+
+  /**
+   * @param {Dimension2} size
+   * @param {Color || String} color
+   * @param {Vector2} initialPosition
+   * @constructor
+   */
   function MovableRectangle( size, color, initialPosition ) {
     var self = this;
 
     PropertySet.call( this, {
 
-      // Position property.  In general, this should not be set directly, and
-      // should only be manipulated through the methods below.
+      // Property that indicates where in model space the upper left corner
+      // of this shape is.  In general, this should not be set directly
+      // outside of this type, and should only be manipulated through the
+      // methods defined below.
       position: initialPosition,
 
+      // Flag that tracks whether the user is dragging this shape around.  Can
+      // should be set externally, generally by the a view node.
       userControlled: false,
-      animating: false // Read only, do not set externally.
+
+      // Flag that indicates whether this element is animating from one
+      // location to another, should not be set externally.
+      animating: false,
+
+      // Value that indicates how faded out this shape is.  This is used as
+      // part of a feature where shapes can fade out.  Once fade has started,
+      // it doesn't stop until it is fully faded, i.e. the value is 1.  This
+      // should not be set externally.
+      fadeProportion: 0
     } );
 
     // Destination is used for animation, and should be set through accessor methods only.
@@ -45,12 +67,17 @@ define( function( require ) {
     // Non-dynamic attributes
     this.shape = Shape.rect( 0, 0, size.width, size.height ); // @public
     this.color = color; // @public
+
+    // Internal vars
+    this.fading = false; // @private
   }
 
   return inherit( PropertySet, MovableRectangle, {
 
     step: function( dt ) {
       if ( !this.userControlled ) {
+
+        // perform any animation
         var distanceToDestination = this.position.distance( this.destination );
         if ( distanceToDestination > dt * AreaBuilderSharedConstants.ANIMATION_VELOCITY ) {
           // Move a step toward the destination.
@@ -62,6 +89,19 @@ define( function( require ) {
           // Less than one time step away, so just go to the destination.
           this.position = this.destination;
           this.animating = false;
+        }
+
+        // perform any fading
+        if ( this.fading ) {
+          this.fadeProportion = Math.min( 1, this.fadeProportion + ( dt * FADE_RATE ) );
+          if ( this.fadeProportion >= 1 ) {
+            // Return to origin when fully faded.
+            //TODO: This is a bit inelegant, since I am basically relying on the idea that the model will delete this
+            //TODO: when it goes home, which isn't obvious.  As noted elsewhere, I should consider a better scheme for
+            //TODO: signalling that a shape should be discarded.
+            this.goHome( false );
+            this.fading = false;
+          }
         }
       }
     },
@@ -78,6 +118,10 @@ define( function( require ) {
 
     goHome: function( animate ) {
       this.setDestination( this.positionProperty.initialValue, animate );
+    },
+
+    fadeAway: function() {
+      this.fading = true;
     }
   } );
 } );
