@@ -12,8 +12,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
 
   /**
    * @param {AreaBuilderGameModel} model
@@ -24,20 +26,30 @@ define( function( require ) {
     var thisScreen = this;
     ScreenView.call( thisScreen );
 
-    // TODO: temp - add a rectangle for visual reference.  This will eventually become the 'work area'.
-    var tempWorkArea = new Rectangle( 0, 0, this.layoutBounds.width * 0.7, this.layoutBounds.height * 0.7, 0, 0, {
-      fill: 'white',
-      stroke: 'black',
-      centerX: this.layoutBounds.width / 2,
-      top: 50
-    } );
-    this.addChild( tempWorkArea );
-    this.addChild( new Text( 'Game not yet implemented.', {
-      font: new PhetFont( 40 ),
-      fill: 'rgba( 220, 220, 220, 0.8 ',
-      centerX: tempWorkArea.centerX,
-      top: tempWorkArea.top + 100
-    } ) );
+    var iconFont = new PhetFont( { size: 24, weight: 'bold' } );
+    this.addChild( new StartGameLevelNode(
+      function() { console.log( 'start game function called in StartGameLevelNode' ) },
+      function() { console.log( 'reset function called in StartGameLevelNode' ) },
+      new Property( true ),
+      new Property( true ),
+      [
+        new Text( '1', { font: iconFont } ),
+        new Text( '2', { font: iconFont } ),
+        new Text( '3', { font: iconFont } ),
+        new Text( '4', { font: iconFont } ),
+        new Text( '5', { font: iconFont } )
+      ],
+      [ new Property( 0 ),
+        new Property( 0 ),
+        new Property( 0 ),
+        new Property( 0 ),
+        new Property( 0 )
+      ],
+      {
+        numLevels: 5,
+        numStarsOnButtons: 6
+      }
+    ) );
   }
 
   return inherit( ScreenView, AreaBuilderGameView );
