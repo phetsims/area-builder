@@ -524,8 +524,8 @@ define( function( require ) {
      * @param cellGroup
      */
     identifyAdjacentCells: function( startCell, cellGroup ) {
-      assert && assert( startCell.occupiedBy !== null, 'Usage error: Unoccupied cell passed to group identification.' )
-      assert && assert( !startCell.cataloged, 'Usage error: Cataloged cell passed to group identification algorithm.' )
+      assert && assert( startCell.occupiedBy !== null, 'Usage error: Unoccupied cell passed to group identification.' );
+      assert && assert( !startCell.cataloged, 'Usage error: Cataloged cell passed to group identification algorithm.' );
       var self = this;
 
       // Catalog this cell.

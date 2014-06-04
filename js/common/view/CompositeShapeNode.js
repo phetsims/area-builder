@@ -20,7 +20,6 @@ define( function( require ) {
   function CompositeShapeNode( outerPerimeterPointsProperty, interiorPerimetersProperty, unitSquareLength, color ) {
 
     Node.call( this );
-    var self = this;
 
     var compositeShapeNode = new Path( null, { fill: color } );
     this.addChild( compositeShapeNode );
