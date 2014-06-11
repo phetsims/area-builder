@@ -47,7 +47,16 @@ define( function( require ) {
       perimeterReadout.right = readoutsRightEdge;
     } );
 
-    this.addChild( new AccordionBox( contentNode, { title: valuesString, fill: 'white' } ) );
+    this.addChild( new AccordionBox( contentNode, {
+      title: valuesString,
+      titlePosition: 'left',
+      font: DISPLAY_FONT,
+      contentPosition: 'left',
+      fill: 'white',
+      showTitleWhenOpen: false,
+      contentXMargin: 8,
+      contentYMargin: 4
+    } ) );
 
     this.mutate( options );
   }
