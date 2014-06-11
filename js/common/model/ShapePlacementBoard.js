@@ -17,7 +17,7 @@ define( function( require ) {
   // constants
   var DISTANCE_COMPARE_THRESHOLD = 1E-5;
   var WILDCARD_PLACEMENT_ARRAY = [ '*' ];
-
+  var INVALID_VALUE_STRING = '--';
   var MOVEMENT_VECTORS = {
     // This sim is using screen conventions, meaning positive Y indicates down.
     up: new Vector2( 0, -1 ),
@@ -25,7 +25,6 @@ define( function( require ) {
     left: new Vector2( -1, 0 ),
     right: new Vector2( 1, 0 )
   };
-
   var SCAN_AREA_MOVEMENT_FUNCTIONS = [
     null,                                           // 0
     function() { return MOVEMENT_VECTORS.up; },      // 1
@@ -60,19 +59,22 @@ define( function( require ) {
     var self = this;
 
     PropertySet.call( this, {
-      // Boolean property that controls whether or not the placement grid is visible
+      // @public Boolean property that controls whether or not the placement grid is visible
       gridVisible: false,
 
-      // Read-only property that indicates the area of the composite shape
-      area: 0,
+      // @public Read-only property that indicates the area of the composite shape
+      area: INVALID_VALUE_STRING,
 
-      // Read-only property that indicates the perimeter of the composite shape
-      perimeter: 0,
+      // @public Read-only property that indicates the perimeter of the composite shape
+      perimeter: INVALID_VALUE_STRING,
 
-      // Read-only set of points that define the outer perimeter of the composite shape
+      // @public Flag that indicates whether the area and perimeter values are legit.
+      areaAndPerimeterValid: true,
+
+      // @public Read-only set of points that define the outer perimeter(s) of the composite shape
       exteriorPerimeters: [],
 
-      // Read-only set of sets of points that define interior perimeters
+      // @public Read-only set of sets of points that define interior perimeters
       interiorPerimeters: []
     } );
 
@@ -90,6 +92,7 @@ define( function( require ) {
     this.releaseAllInProgress = false; // @private
     this.orphanReleaseInProgress = false; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
+    this.numShapesBeingMoved = 0; // @private A count of the number of shapes being moved by the user
 
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
@@ -98,23 +101,30 @@ define( function( require ) {
     this.residentShapes.addItemAddedListener( function( addedShape ) {
       self.updateCellsShapeAdded( addedShape );
       self.releaseAnyOrphans();
+      self.updatePerimeters();
       self.updateArea();
-      self.updatePerimeterInfo();
     } );
 
     // Handle the removal of a shape.
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
-      self.updateArea();
       self.updateCellsShapeRemoved( removedShape );
 
       if ( removedShape.userControlled ) {
-        // The shape was removed by the user.  Watch it so that we can do needed updates when the user releases it.
+        // The shape was removed by the user.  They can either return it to the board or release it, i.e. put it back
+        // in the bucket.
+        self.numShapesBeingMoved += 1;
+
+        // Watch it so that we can do needed updates when the user releases it.
         removedShape.userControlledProperty.once( function( userControlled ) {
           assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
+          self.numShapesBeingMoved -= 1;
           if ( !self.shapeOverlapsBoard( removedShape ) ) {
             // This shape isn't coming back, so we need to trigger an orphan release.
             self.releaseAnyOrphans();
+            self.updateArea();
+            self.updateTotalPerimeter();
           }
+          assert && assert( self.numShapesBeingMoved >= 0, 'Negative value for number of shapes being moved.' );
         } );
       }
 
@@ -122,8 +132,9 @@ define( function( require ) {
       // intensive updates when the board is cleared, and also prevents
       // undesirable recursion in some situations.
       if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
-        self.updatePerimeterInfo();
+        self.updatePerimeters();
         self.updateValidPlacementLocations();
+        self.updateArea();
       }
     } );
 
@@ -280,7 +291,30 @@ define( function( require ) {
     },
 
     updateArea: function() {
-      this.area = this.residentShapes.length;
+      if ( this.exteriorPerimeters.length === 1 && this.numShapesBeingMoved === 0 ) {
+        this.area = this.residentShapes.length;
+      }
+      else {
+        // Area reading is currently invalid.
+        this.area = INVALID_VALUE_STRING;
+      }
+    },
+
+    updateTotalPerimeter: function() {
+      if ( this.exteriorPerimeters.length === 1 && this.numShapesBeingMoved === 0 ) {
+        var totalPerimeterAccumulator = 0;
+        this.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
+          totalPerimeterAccumulator += exteriorPerimeter.length;
+        } );
+        this.interiorPerimeters.forEach( function( interiorPerimeter ) {
+          totalPerimeterAccumulator += interiorPerimeter.length;
+        } );
+        this.perimeter = totalPerimeterAccumulator;
+      }
+      else {
+        // Perimeter value is currently invalid.
+        this.perimeter = INVALID_VALUE_STRING;
+      }
     },
 
     /**
@@ -318,7 +352,9 @@ define( function( require ) {
       // Update board state.
       this.updateValidPlacementLocations();
       this.releaseAllInProgress = false;
-      this.updatePerimeterInfo();
+      this.updatePerimeters();
+      this.updateTotalPerimeter();
+      this.updateArea();
     },
 
     // @private
@@ -425,10 +461,9 @@ define( function( require ) {
     },
 
     /**
-     * Update the total perimeter value as well as the points that define its
-     * shape.
+     * Update the exterior and interior perimeters.
      */
-    updatePerimeterInfo: function() {
+    updatePerimeters: function() {
 
       var self = this;
 
@@ -517,15 +552,8 @@ define( function( require ) {
         if ( !this.perimeterListsEqual( interiorPerimeters, this.interiorPerimeters ) ) {
           this.interiorPerimeters = interiorPerimeters;
         }
-        var totalPerimeterAccumulator = 0;
-        exteriorPerimeters.forEach( function( exteriorPerimeter ) {
-          totalPerimeterAccumulator += exteriorPerimeter.length;
-        } );
-        interiorPerimeters.forEach( function( interiorPerimeter ) {
-          totalPerimeterAccumulator += interiorPerimeter.length;
-        } );
-        this.perimeter = totalPerimeterAccumulator;
       }
+      this.updateTotalPerimeter();
     },
 
     perimeterPointsEqual: function( perimeter1, perimeter2 ) {
@@ -580,8 +608,8 @@ define( function( require ) {
 
       // Make a list of locations for all occupied cells.
       var ungroupedOccupiedCells = [];
-      for ( var column = 1; column <= this.numColumns; column++ ) {
-        for ( var row = 1; row <= this.numRows; row++ ) {
+      for ( var row = 1; row <= this.numRows; row++ ) {
+        for ( var column = 1; column <= this.numColumns; column++ ) {
           var cell = this.cells[ column ][ row ];
           if ( cell.occupiedBy !== null ) {
             ungroupedOccupiedCells.push( this.cells[ column ][ row ] );
@@ -628,7 +656,7 @@ define( function( require ) {
         } );
       }
       this.orphanReleaseInProgress = false;
-      self.updatePerimeterInfo();
+      self.updatePerimeters();
       self.updateValidPlacementLocations();
     },
 
