@@ -99,19 +99,19 @@ define( function( require ) {
     // Add the composite shapes, i.e. the ones that aggregate what the user
     // has added as individual shapes.
     var centerCompositeShape = new CompositeShapeNode(
-      model.centerShapePlacementBoard.outerPerimeterPointsProperty,
+      model.centerShapePlacementBoard.exteriorPerimetersProperty,
       model.centerShapePlacementBoard.interiorPerimetersProperty,
       model.unitSquareLength,
       model.centerShapePlacementBoard.colorHandled );
     compositeShapesLayer.addChild( centerCompositeShape );
     var leftCompositeShape = new CompositeShapeNode(
-      model.leftShapePlacementBoard.outerPerimeterPointsProperty,
+      model.leftShapePlacementBoard.exteriorPerimetersProperty,
       model.leftShapePlacementBoard.interiorPerimetersProperty,
       model.unitSquareLength,
       model.leftShapePlacementBoard.colorHandled );
     compositeShapesLayer.addChild( leftCompositeShape );
     var rightCompositeShape = new CompositeShapeNode(
-      model.rightShapePlacementBoard.outerPerimeterPointsProperty,
+      model.rightShapePlacementBoard.exteriorPerimetersProperty,
       model.rightShapePlacementBoard.interiorPerimetersProperty,
       model.unitSquareLength,
       model.rightShapePlacementBoard.colorHandled );

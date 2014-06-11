@@ -17,7 +17,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
 
-  function CompositeShapeNode( outerPerimeterPointsProperty, interiorPerimetersProperty, unitSquareLength, color ) {
+  function CompositeShapeNode( exteriorPerimetersProperty, interiorPerimetersProperty, unitSquareLength, color ) {
 
     Node.call( this );
 
@@ -33,24 +33,23 @@ define( function( require ) {
 
     function update() {
       var i;
+      var mainShape = new Shape();
 
       // Define the shape of the outer perimeter.
-      var outerPerimeterPoints = outerPerimeterPointsProperty.value;
-      var mainShape = new Shape();
-      if ( outerPerimeterPoints.length > 0 ) {
-        mainShape.moveToPoint( outerPerimeterPoints[ 0 ] );
-        for ( i = 1; i < outerPerimeterPoints.length; i++ ) {
-          mainShape.lineToPoint( outerPerimeterPoints[i] );
+      exteriorPerimetersProperty.value.forEach( function( exteriorPerimeterPoints ) {
+        mainShape.moveToPoint( exteriorPerimeterPoints[ 0 ] );
+        for ( i = 1; i < exteriorPerimeterPoints.length; i++ ) {
+          mainShape.lineToPoint( exteriorPerimeterPoints[ i ] );
         }
+        mainShape.lineToPoint( exteriorPerimeterPoints[ 0 ] );
         mainShape.close();
-      }
+      } );
 
       gridLayer.removeAllChildren();
 
       // Add in the shape of any interior spaces and the grid.
       if ( !mainShape.bounds.isEmpty() ) {
-        var interiorPerimeters = interiorPerimetersProperty.value;
-        interiorPerimeters.forEach( function( interiorPerimeterPoints ) {
+        interiorPerimetersProperty.value.forEach( function( interiorPerimeterPoints ) {
           mainShape.moveToPoint( interiorPerimeterPoints[ 0 ] );
           for ( i = 1; i < interiorPerimeterPoints.length; i++ ) {
             mainShape.lineToPoint( interiorPerimeterPoints[ i ] );
@@ -80,7 +79,7 @@ define( function( require ) {
       }
     }
 
-    outerPerimeterPointsProperty.link( function() {
+    exteriorPerimetersProperty.link( function() {
       update();
     } );
 

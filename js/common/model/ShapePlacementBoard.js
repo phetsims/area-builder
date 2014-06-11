@@ -70,7 +70,7 @@ define( function( require ) {
       perimeter: 0,
 
       // Read-only set of points that define the outer perimeter of the composite shape
-      outerPerimeterPoints: [],
+      exteriorPerimeters: [],
 
       // Read-only set of sets of points that define interior perimeters
       interiorPerimeters: []
@@ -94,19 +94,29 @@ define( function( require ) {
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
 
-    // Update the area and perimeter when the list of resident shapes changes.
+    // Handle the addition of new shapes.
     this.residentShapes.addItemAddedListener( function( addedShape ) {
-      self.updateCellsAdded( addedShape );
+      self.updateCellsShapeAdded( addedShape );
       self.releaseAnyOrphans();
       self.updateArea();
       self.updatePerimeterInfo();
     } );
+
+    // Handle the removal of a shape.
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
       self.updateArea();
-      self.updateCellsRemoved( removedShape );
+      self.updateCellsShapeRemoved( removedShape );
+
+//      if ( removedShape.userControlled ){
+//        // The shape was removed by the user.  Watch it so that we can do needed updates when the user releases it.
+//        removedShape.userControlled.once( function( userControlled ){
+//          assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
+//          console.log( 'removed shape userControlled = ' + userControlled );
+//        } );
+//      }
 
       // The following guard prevents having a zillion computationally
-      // intensive updates when the board is cleared, and all prevents
+      // intensive updates when the board is cleared, and also prevents
       // undesirable recursion in some situations.
       if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
         self.updatePerimeterInfo();
@@ -136,6 +146,11 @@ define( function( require ) {
 
   return inherit( PropertySet, ShapePlacementBoard, {
 
+    shapeOverlapsBoard: function( shape ) {
+      var shapeBounds = new Bounds2( shape.position.x, shape.position.y, shape.position.x + shape.shape.bounds.getWidth(), shape.position.y + shape.shape.bounds.getHeight() );
+      return this.bounds.intersectsBounds( shapeBounds );
+    },
+
     /**
      * Place the provide shape on this board.  Returns false if the color does not match the handled color or if the
      * shape is not partially over the board.
@@ -146,10 +161,8 @@ define( function( require ) {
       assert && assert( movableShape.userControlled === false, 'Shapes can\'t be place when still controlled by user.' );
       var self = this;
 
-      var shapeBounds = new Bounds2( movableShape.position.x, movableShape.position.y, movableShape.position.x + movableShape.shape.bounds.getWidth(), movableShape.position.y + movableShape.shape.bounds.getHeight() );
-
       // See if shape is of the correct color and overlapping with the board.
-      if ( movableShape.color !== this.colorHandled || !this.bounds.intersectsBounds( shapeBounds ) || this.validPlacementLocations.length === 0 ) {
+      if ( movableShape.color !== this.colorHandled || !this.shapeOverlapsBoard( movableShape ) || this.validPlacementLocations.length === 0 ) {
         return false;
       }
 
@@ -245,7 +258,7 @@ define( function( require ) {
      * Update the array of cells with a newly added shape.
      * @private
      */
-    updateCellsAdded: function( addedShape ) {
+    updateCellsShapeAdded: function( addedShape ) {
       var xIndex = Math.round( ( addedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( addedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
       assert && assert( this.cells[ xIndex ][ yIndex ].occupiedBy === null, 'Attempt made to add square to occupied location.' );
@@ -256,7 +269,7 @@ define( function( require ) {
      * Update the array of cells due to a removed shape.
      * @private
      */
-    updateCellsRemoved: function( removedShape ) {
+    updateCellsShapeRemoved: function( removedShape ) {
       var xIndex = Math.round( ( removedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
       var yIndex = Math.round( ( removedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
       assert && assert( this.cells[ xIndex ][ yIndex ].occupiedBy === removedShape, 'Removed shape was not marked in occupied spaces.' );
@@ -343,6 +356,7 @@ define( function( require ) {
       vector.setXY( Math.round( vector.x ), Math.round( vector.y ) );
     },
 
+    //TODO: May be unused, remove if so.
     createShapeFromPerimeterPoints: function( perimeterPoints ) {
       var perimeterShape = new Shape();
       perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
@@ -350,6 +364,18 @@ define( function( require ) {
         perimeterShape.lineToPoint( perimeterPoints[i] );
       }
       perimeterShape.close(); // Shouldn't be needed, but best to be sure.
+      return perimeterShape;
+    },
+
+    createShapeFromPerimeterList: function( perimeters ) {
+      var perimeterShape = new Shape();
+      perimeters.forEach( function( perimeterPoints ) {
+        perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
+        for ( var i = 1; i < perimeterPoints.length; i++ ) {
+          perimeterShape.lineToPoint( perimeterPoints[i] );
+        }
+        perimeterShape.close(); //TODO: Check with JO that multiple close operations are reasonable on the same shape.
+      } );
       return perimeterShape;
     },
 
@@ -405,29 +431,36 @@ define( function( require ) {
 
       if ( this.residentShapes.length === 0 ) {
         this.perimeter = 0;
+        this.exteriorPerimetersProperty.reset();
         this.interiorPerimetersProperty.reset();
-        this.outerPerimeterPointsProperty.reset();
       }
       else {
 
-        // Find the top left occupied square to use as a starting point.
         var row;
         var column;
-        var firstOccupiedCell = null;
-        for ( row = 1; row < ( this.numRows + 1 ) && firstOccupiedCell === null; row++ ) {
-          for ( column = 1; column < this.numColumns + 1; column++ ) {
-            if ( this.cells[column][row].occupiedBy ) {
-              firstOccupiedCell = new Vector2( column, row );
-              break;
+        var exteriorPerimeters = [];
+        var mutableVector = new Vector2();
+
+        // Identify each outer perimeter.  There may be more than one if the user is moving a shape that was previously
+        // on this board, since any orphaned shapes are not released until the move is complete.
+        var contiguousCellGroups = this.identifyContiguousCellGroups();
+        contiguousCellGroups.forEach( function( cellGroup ) {
+
+          // Find the top left square of this group to use as a starting point.
+          var topLeftCell = null;
+          cellGroup.forEach( function( cell ) {
+            if ( topLeftCell === null || cell.row < topLeftCell.row || ( cell.row === topLeftCell.row && cell.column < topLeftCell.column ) ) {
+              topLeftCell = cell;
             }
-          }
-        }
+          } );
 
-        // Scan the outer perimeter.
-        var currentOuterPerimeter = this.scanPerimeter( this.cells, firstOccupiedCell );
+          // Scan the outer perimeter and add to list.
+          mutableVector.setXY( topLeftCell.column, topLeftCell.row );
+          exteriorPerimeters.push( self.scanPerimeter( self.cells, mutableVector ) );
+        } );
 
-        // Scan for empty spaces enclosed within the outer perimeter.
-        var outlineShape = this.createShapeFromPerimeterPoints( currentOuterPerimeter );
+        // Scan for empty spaces enclosed within the outer perimeter(s).
+        var outlineShape = this.createShapeFromPerimeterList( exteriorPerimeters );
         var enclosedSpaces = [];
         for ( row = 1; row < this.numRows; row++ ) {
           for ( column = 1; column < this.numColumns; column++ ) {
@@ -475,13 +508,16 @@ define( function( require ) {
 
         // Update externally visible properties.  Only update the perimeters
         // if they have changed in order to minimize work done in the view.
-        if ( !this.perimeterPointsEqual( currentOuterPerimeter, this.outerPerimeterPoints ) ) {
-          this.outerPerimeterPoints = currentOuterPerimeter;
+        if ( !this.perimeterListsEqual( exteriorPerimeters, this.exteriorPerimeters ) ) {
+          this.exteriorPerimeters = exteriorPerimeters;
         }
         if ( !this.perimeterListsEqual( interiorPerimeters, this.interiorPerimeters ) ) {
           this.interiorPerimeters = interiorPerimeters;
         }
-        var totalPerimeterAccumulator = this.outerPerimeterPoints.length;
+        var totalPerimeterAccumulator = 0;
+        exteriorPerimeters.forEach( function( exteriorPerimeter ) {
+          totalPerimeterAccumulator += exteriorPerimeter.length;
+        } );
         interiorPerimeters.forEach( function( interiorPerimeter ) {
           totalPerimeterAccumulator += interiorPerimeter.length;
         } );
