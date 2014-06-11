@@ -96,8 +96,9 @@ define( function( require ) {
 
     // Update the area and perimeter when the list of resident shapes changes.
     this.residentShapes.addItemAddedListener( function( addedShape ) {
-      self.updateArea();
       self.updateCellsAdded( addedShape );
+      self.releaseAnyOrphans();
+      self.updateArea();
       self.updatePerimeterInfo();
     } );
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
@@ -106,11 +107,10 @@ define( function( require ) {
 
       // The following guard prevents having a zillion computationally
       // intensive updates when the board is cleared, and all prevents
-      // undesireable recursion in some situations.
+      // undesirable recursion in some situations.
       if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
         self.updatePerimeterInfo();
         self.updateValidPlacementLocations();
-        self.releaseAnyOrphans();
       }
     } );
 
