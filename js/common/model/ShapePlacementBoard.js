@@ -107,13 +107,16 @@ define( function( require ) {
       self.updateArea();
       self.updateCellsShapeRemoved( removedShape );
 
-//      if ( removedShape.userControlled ){
-//        // The shape was removed by the user.  Watch it so that we can do needed updates when the user releases it.
-//        removedShape.userControlled.once( function( userControlled ){
-//          assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
-//          console.log( 'removed shape userControlled = ' + userControlled );
-//        } );
-//      }
+      if ( removedShape.userControlled ) {
+        // The shape was removed by the user.  Watch it so that we can do needed updates when the user releases it.
+        removedShape.userControlledProperty.once( function( userControlled ) {
+          assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
+          if ( !self.shapeOverlapsBoard( removedShape ) ) {
+            // This shape isn't coming back, so we need to trigger an orphan release.
+            self.releaseAnyOrphans();
+          }
+        } );
+      }
 
       // The following guard prevents having a zillion computationally
       // intensive updates when the board is cleared, and also prevents
