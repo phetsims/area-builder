@@ -59,12 +59,12 @@ define( function( require ) {
     this.addChild( backLayer );
     var creatorLayer = new Node();
     this.addChild( creatorLayer );
-    var bucketFrontLayer = new Node();
-    this.addChild( bucketFrontLayer );
     var compositeShapesLayer = new Node();
     this.addChild( compositeShapesLayer );
     var movableShapesLayer = new Node();
     this.addChild( movableShapesLayer );
+    var bucketFrontLayer = new Node();
+    this.addChild( bucketFrontLayer );
     var topControlsLayer = new Node();
     this.addChild( topControlsLayer );
 
