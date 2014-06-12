@@ -45,9 +45,8 @@ define( function( require ) {
     var startGameLevelNode = new StartGameLevelNode(
       function() {
         showLevelSelectionScreen.toggle();
-        debugger;
       },
-      function() { console.log( 'reset function called in StartGameLevelNode' ) },
+      function() { console.log( 'reset function called in StartGameLevelNode' ); },
       new Property( true ),
       new Property( true ),
       [
@@ -76,7 +75,7 @@ define( function( require ) {
 
     var returnButton = new ReturnToLevelSelectButton(
       {
-        listener: function() { showLevelSelectionScreen.reset() },
+        listener: function() { showLevelSelectionScreen.reset(); },
         top: 13,
         left: 15
       } );
