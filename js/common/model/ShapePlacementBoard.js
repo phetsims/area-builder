@@ -102,7 +102,7 @@ define( function( require ) {
       self.updateCellsShapeAdded( addedShape );
       self.releaseAnyOrphans();
       self.updatePerimeters();
-      self.updateArea();
+      self.updateAreaAndTotalPerimeter();
     } );
 
     // Handle the removal of a shape.
@@ -121,8 +121,7 @@ define( function( require ) {
           if ( !self.shapeOverlapsBoard( removedShape ) ) {
             // This shape isn't coming back, so we need to trigger an orphan release.
             self.releaseAnyOrphans();
-            self.updateArea();
-            self.updateTotalPerimeter();
+            self.updateAreaAndTotalPerimeter();
           }
           assert && assert( self.numShapesBeingMoved >= 0, 'Negative value for number of shapes being moved.' );
         } );
@@ -134,7 +133,7 @@ define( function( require ) {
       if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
         self.updatePerimeters();
         self.updateValidPlacementLocations();
-        self.updateArea();
+        self.updateAreaAndTotalPerimeter();
       }
     } );
 
@@ -290,18 +289,9 @@ define( function( require ) {
       this.cells[ xIndex ][ yIndex ].occupiedBy = null;
     },
 
-    updateArea: function() {
+    updateAreaAndTotalPerimeter: function() {
       if ( this.exteriorPerimeters.length === 1 && this.numShapesBeingMoved === 0 ) {
         this.area = this.residentShapes.length;
-      }
-      else {
-        // Area reading is currently invalid.
-        this.area = INVALID_VALUE_STRING;
-      }
-    },
-
-    updateTotalPerimeter: function() {
-      if ( this.exteriorPerimeters.length === 1 && this.numShapesBeingMoved === 0 ) {
         var totalPerimeterAccumulator = 0;
         this.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
           totalPerimeterAccumulator += exteriorPerimeter.length;
@@ -312,7 +302,8 @@ define( function( require ) {
         this.perimeter = totalPerimeterAccumulator;
       }
       else {
-        // Perimeter value is currently invalid.
+        // Area and perimeter readings are currently invalid.
+        this.area = INVALID_VALUE_STRING;
         this.perimeter = INVALID_VALUE_STRING;
       }
     },
@@ -353,8 +344,7 @@ define( function( require ) {
       this.updateValidPlacementLocations();
       this.releaseAllInProgress = false;
       this.updatePerimeters();
-      this.updateTotalPerimeter();
-      this.updateArea();
+      this.updateAreaAndTotalPerimeter();
     },
 
     // @private
@@ -553,7 +543,6 @@ define( function( require ) {
           this.interiorPerimeters = interiorPerimeters;
         }
       }
-      this.updateTotalPerimeter();
     },
 
     perimeterPointsEqual: function( perimeter1, perimeter2 ) {
