@@ -26,7 +26,7 @@ define( function( require ) {
     right: new Vector2( 1, 0 )
   };
   var SCAN_AREA_MOVEMENT_FUNCTIONS = [
-    null,                                           // 0
+    null,                                            // 0
     function() { return MOVEMENT_VECTORS.up; },      // 1
     function() { return MOVEMENT_VECTORS.right; },   // 2
     function() { return MOVEMENT_VECTORS.right; },   // 3
@@ -41,7 +41,7 @@ define( function( require ) {
     function() { return MOVEMENT_VECTORS.left; },   // 12
     function() { return MOVEMENT_VECTORS.up; },     // 13
     function() { return MOVEMENT_VECTORS.left; },   // 14
-    null                                           // 15
+    null                                            // 15
   ];
 
   /**
@@ -63,13 +63,10 @@ define( function( require ) {
       gridVisible: false,
 
       // @public Read-only property that indicates the area of the composite shape
-      area: INVALID_VALUE_STRING,
+      area: 0,
 
       // @public Read-only property that indicates the perimeter of the composite shape
-      perimeter: INVALID_VALUE_STRING,
-
-      // @public Flag that indicates whether the area and perimeter values are legit.
-      areaAndPerimeterValid: true,
+      perimeter: 0,
 
       // @public Read-only set of points that define the outer perimeter(s) of the composite shape
       exteriorPerimeters: [],
@@ -92,7 +89,6 @@ define( function( require ) {
     this.releaseAllInProgress = false; // @private
     this.orphanReleaseInProgress = false; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
-    this.numShapesBeingMoved = 0; // @private A count of the number of shapes being moved by the user
 
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
@@ -110,26 +106,20 @@ define( function( require ) {
       self.updateCellsShapeRemoved( removedShape );
 
       if ( removedShape.userControlled ) {
-        // The shape was removed by the user.  They can either return it to the board or release it, i.e. put it back
-        // in the bucket.
-        self.numShapesBeingMoved += 1;
 
-        // Watch it so that we can do needed updates when the user releases it.
+        // Watch the shape so that we can do needed updates when the user releases it.
         removedShape.userControlledProperty.once( function( userControlled ) {
           assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
-          self.numShapesBeingMoved -= 1;
           if ( !self.shapeOverlapsBoard( removedShape ) ) {
             // This shape isn't coming back, so we need to trigger an orphan release.
             self.releaseAnyOrphans();
             self.updateAreaAndTotalPerimeter();
           }
-          assert && assert( self.numShapesBeingMoved >= 0, 'Negative value for number of shapes being moved.' );
         } );
       }
 
-      // The following guard prevents having a zillion computationally
-      // intensive updates when the board is cleared, and also prevents
-      // undesirable recursion in some situations.
+      // The following guard prevents having a zillion computationally intensive updates when the board is cleared, and
+      // also prevents undesirable recursion in some situations.
       if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
         self.updatePerimeters();
         self.updateValidPlacementLocations();
@@ -290,7 +280,7 @@ define( function( require ) {
     },
 
     updateAreaAndTotalPerimeter: function() {
-      if ( this.exteriorPerimeters.length === 1 && this.numShapesBeingMoved === 0 ) {
+      if ( this.exteriorPerimeters.length <= 1 ) {
         this.area = this.residentShapes.length;
         var totalPerimeterAccumulator = 0;
         this.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
