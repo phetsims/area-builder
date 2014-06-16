@@ -16,22 +16,32 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+  var SHADOW_COLOR = 'rgba( 50, 50, 50, 0.5 )';
+  var SHADOW_OFFSET = new Vector2( 5, 5 );
 
   function ShapeView( movableShape ) {
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
     this.color = movableShape.color; // @public
 
+    var shadow = new Path( movableShape.shape, {
+      fill: SHADOW_COLOR
+    } );
     var representation = new Path( movableShape.shape, {
       fill: movableShape.color,
       stroke: Color.toColor( movableShape.color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       lineWidth: 1
     } );
+    this.addChild( shadow );
     this.addChild( representation );
 
     // Move the shape as the model representation moves
     movableShape.positionProperty.link( function( position ) {
       representation.leftTop = position;
+      shadow.leftTop = position.plus( SHADOW_OFFSET );
     } );
 
     // Derive the opacity of the shape from multiple properties on the model element.  Because the composite shape is
@@ -52,7 +62,7 @@ define( function( require ) {
       } );
 
     opacityProperty.link( function( opacity ) {
-      representation.opacity = opacity;
+      self.opacity = opacity;
     } );
 
     movableShape.animatingProperty.link( function( animating ) {
@@ -63,6 +73,8 @@ define( function( require ) {
     movableShape.fadeProportionProperty.link( function( fadeProportion ) {
       // To avoid certain complications, make it so that users can't grab this when it is fading.
       self.pickable = fadeProportion === 0;
+      // Don't show the shadow when fading out.
+      shadow.visible = fadeProportion === 0;
     } );
 
     // Add the listener that will allow the user to drag the shape around.
