@@ -2,8 +2,8 @@
   "area.name": "Area Builder",
   "explore": "Explore",
   "game": "Game",
-  "area": "Area",
-  "perimeter": "Perimeter",
+  "area": "Area:",
+  "perimeter": "Perimeter:",
   "values": "Values"
 
 }
