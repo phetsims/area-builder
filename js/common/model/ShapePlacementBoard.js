@@ -221,8 +221,8 @@ define( function( require ) {
         movableShape.userControlledProperty.once( removalListener );
       };
 
-      // Tag the listener so that it can be removed without firing if needed,
-      // such as when the board is cleared due to reset.
+      // Tag the listener so that it can be removed without firing if needed, such as when the board is cleared due to
+      // reset.
       this.tagListener( animationCompleteListener );
 
       // Hook up the listener.
