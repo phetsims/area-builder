@@ -28,9 +28,10 @@ define( function( require ) {
   var timeString = require( 'string!VEGAS/label.time' );
 
   // constants
-  var BACKGROUND_COLOR = AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR;
   var LABEL_FONT = new PhetFont( 20 );
   var MIN_WIDTH = 150; // in screen coords, empirically determined
+  var BACKGROUND_COLOR = AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR;
+  var PANEL_OPTIONS = { fill: BACKGROUND_COLOR, yMargin: 10 };
 
   /**
    * @param levelProperty
@@ -62,22 +63,30 @@ define( function( require ) {
     } );
     var spacer = new HStrut( MIN_WIDTH );
 
-    // Create the panel that includes the time.
-    var panelWithTimerContents = new VBox( {
+    // Create the panel.
+    var vBox = new VBox( {
       children: [
-        spacer,
         levelIndicator,
         scoreIndicator,
-        elapsedTimeIndicator,
+        spacer,
         gridCheckbox,
         dimensionsCheckbox
       ],
       spacing: 20
     } );
+    this.addChild( new Panel( vBox, PANEL_OPTIONS ) );
 
-    this.addChild( new Panel( panelWithTimerContents, { fill: BACKGROUND_COLOR } ) );
+    // Add or remove the time indicator.
+    timeVisibleProperty.link( function( timeVisible ) {
+      if ( timeVisible ) {
+        vBox.insertChild( 2, elapsedTimeIndicator );
+      }
+      else if ( vBox.isChild( elapsedTimeIndicator ) ) {
+        vBox.removeChild( elapsedTimeIndicator );
+      }
+      vBox.updateLayout();
+    } );
 
-    // Pass options through to parent class.
     this.mutate( options );
   }
 
