@@ -134,28 +134,6 @@ define( function( require ) {
       checkAnswer: function( answer ) {
         //TODO: Check user's answer.  The following is temporary.
         this.handleProposedAnswer( this.challengeList[ this.challengeIndex ].correctAnswerProperty.value );
-//        if ( this.getCurrentChallenge() instanceof BalanceMassesChallenge ) {
-//          // Turn off the column(s) so that the plank can move.
-//          this.columnState = 'noColumns';
-//
-//          this.handleProposedAnswer( this.plank.isBalanced() );
-//        }
-//        else if ( this.getCurrentChallenge() instanceof TiltPredictionChallenge ) {
-//
-//          var isAnswerCorrect = ( tiltPrediction === 'tiltDownOnLeftSide' && this.plank.getTorqueDueToMasses() > 0 ) ||
-//                                ( tiltPrediction === 'tiltDownOnRightSide' && this.plank.getTorqueDueToMasses() < 0 ) ||
-//                                ( tiltPrediction === 'stayBalanced' && this.plank.getTorqueDueToMasses() === 0 );
-//
-//          if ( isAnswerCorrect ) {
-//            // Turn off the column(s) so that the plank can move.
-//            this.columnState = 'noColumns';
-//          }
-//
-//          this.handleProposedAnswer( isAnswerCorrect );
-//        }
-//        else if ( this.getCurrentChallenge() instanceof MassDeductionChallenge ) {
-//          this.handleProposedAnswer( mass === this.getTotalFixedMassValue() );
-//        }
       },
 
       handleProposedAnswer: function( answerIsCorrect ) {

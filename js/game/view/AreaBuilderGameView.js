@@ -36,8 +36,8 @@ define( function( require ) {
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
 
   // constants
-  var BUTTON_FONT = new PhetFont( 24 );
-  var BUTTON_FILL = new Color( 0, 255, 153 );
+  var BUTTON_FONT = new PhetFont( 18 );
+  var BUTTON_FILL = '#F2E916';
 
   /**
    * @param {AreaBuilderGameModel} gameModel
@@ -105,9 +105,9 @@ define( function( require ) {
         gameModel.scoreProperty,
         gameModel.elapsedTimeProperty,
         gameModel.timerEnabledProperty,
-        new Property( false ), // TODO: wire up to the show grid property
+      gameModel.additionalModel.shapePlacementBoard.gridVisibleProperty,
         new Property( false ), // TODO: wire up to the show dimensions property
-      { top: 40, left: 20 }
+      { top: 100, left: 20 }
     );
     thisScreen.controlLayer.addChild( this.scoreboard );
 
@@ -123,6 +123,13 @@ define( function( require ) {
         centerY: this.layoutBounds.centerY
       } );
     thisScreen.addChild( thisScreen.faceWithPointsNode );
+
+    // Set up the constant portions of the challenge view
+    var shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
+    this.challengeLayer.addChild( shapeBoard );
+    // TODO: Temp - node containing the challenge presentation (a check box for now)
+    this.challengeView = new Node();
+    this.challengeLayer.addChild( this.challengeView );
 
     // Add and lay out the buttons.
     thisScreen.buttons = [];
@@ -161,17 +168,12 @@ define( function( require ) {
     thisScreen.rootNode.addChild( thisScreen.displayCorrectAnswerButton );
     thisScreen.buttons.push( thisScreen.displayCorrectAnswerButton );
 
-    var buttonCenter = new Vector2( this.layoutBounds.width - 50, this.layoutBounds.height * 0.67 ); // TODO: Harcoded until layout is worked out in more detail.
+    var buttonCenterX = ( this.layoutBounds.width + shapeBoard.right ) / 2;
+    var buttonBottom = shapeBoard.bottom;
     thisScreen.buttons.forEach( function( button ) {
-      button.center = buttonCenter;
+      button.centerX = buttonCenterX;
+      button.bottom = buttonBottom;
     } );
-
-    // Set up the constant portions of the challenge view
-    this.shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
-    this.challengeLayer.addChild( this.shapeBoard );
-    // TODO: Temp - node containing the challenge presentation (a check box for now)
-    this.challengeView = new Node();
-    this.challengeLayer.addChild( this.challengeView );
 
     // Register for changes to the game state and update accordingly.
     gameModel.gameStateProperty.link( thisScreen.handleGameStateChange.bind( thisScreen ) );
@@ -197,9 +199,10 @@ define( function( require ) {
           this.challengeLayer.pickable = null; // Pass through, prunes subtree, see Scenery documentation for details.
           // TODO: Temporary challenge representation
           this.challengeView.removeAllChildren();
-          this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ), this.model.challengeList[ this.model.challengeIndex ].correctAnswerProperty, { left: 200, top: 200 } ) );
-          this.challengeView.addChild( new Rectangle( 0, 0, 40, 20, 0, 0, { fill: this.model.challengeList[ this.model.challengeIndex ].color, stroke: 'black', left: 200, top: 150 } ) );
-          this.challengeView.addChild( new Text( this.model.challengeList[ this.model.challengeIndex ].id, { font: new PhetFont( 14 ), left: 250, top: 150 } ) );
+          this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ), this.model.challengeList[ this.model.challengeIndex ].correctAnswerProperty, { left: 300, top: 200 } ) );
+          var coloredRectangle = new Rectangle( 0, 0, 40, 20, 0, 0, { fill: this.model.challengeList[ this.model.challengeIndex ].color, stroke: 'black', left: 300, top: 150 } );
+          this.challengeView.addChild( coloredRectangle );
+          this.challengeView.addChild( new Text( this.model.challengeList[ this.model.challengeIndex ].id, { font: new PhetFont( 14 ), left: coloredRectangle.right + 50, centerY: coloredRectangle.centerY } ) );
           //TODO: End of temporary stuff
 
           this.show( [ this.scoreboard, this.challengeTitleNode, this.checkAnswerButton, this.challengeView ] );
@@ -270,7 +273,7 @@ define( function( require ) {
           break;
 
         case 'showingLevelResults':
-          if ( this.model.score === AreaBuilderGameModel.MAX_POSSIBLE_SCORE ) {
+          if ( this.model.score === this.model.maxPossibleScore ) {
             this.gameAudioPlayer.gameOverPerfectScore();
           }
           else if ( this.model.score === 0 ) {
@@ -326,8 +329,8 @@ define( function( require ) {
       thisScreen.levelCompletedNode = new LevelCompletedNode(
         this.model.level,
         this.model.score,
-        AreaBuilderGameModel.MAX_POSSIBLE_SCORE,
-        AreaBuilderGameModel.PROBLEMS_PER_LEVEL,
+        this.model.maxPossibleScore,
+        this.model.challengesPerProblemSet,
         this.model.timerEnabled,
         this.model.elapsedTime,
         this.model.bestTimes[ this.model.level ],

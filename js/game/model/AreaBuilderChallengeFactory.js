@@ -9,17 +9,18 @@ define( function( require ) {
     var r = Math.round( Math.random() * 255 );
     var g = Math.round( Math.random() * 255 );
     var b = Math.round( Math.random() * 255 );
-    return 'rgb( ' + r + ', ' + g + ', ' + b + ')';
+    return '#' + ( r * 256 * 256 + g * 256 + b ).toString( 16 );
   }
 
   return  {
     // @private
     generateChallenge: function( level ) {
+      var color = generateRandomColor();
       return {
         correctAnswerProperty: new Property( false ),
         maxAttemptsAllowed: 2,
-        color: generateRandomColor(),
-        id: Math.round( Math.random() * 1000 ),
+        color: color,
+        id: color,
         showCorrectAnswer: function() {
           this.correctAnswerProperty.value = true;
         }
