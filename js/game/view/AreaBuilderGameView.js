@@ -10,9 +10,9 @@ define( function( require ) {
 
   // modules
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var CheckBox = require( 'SUN/CheckBox' );
   var Color = require( 'SCENERY/util/Color' );
-  var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -101,7 +101,15 @@ define( function( require ) {
     // Add the scoreboard.
     this.scoreboard = new Node(); // TODO: Scoreboard stubbed for now.
     thisScreen.controlLayer.addChild( this.scoreboard );
-    this.scoreboard.addChild( new DimensionsIcon( { centerX: 40 } ) );
+    this.scoreboard.addChild( new AreaBuilderScoreboard(
+        gameModel.levelProperty,
+        gameModel.scoreProperty,
+        gameModel.elapsedTimeProperty,
+        gameModel.timerEnabledProperty,
+        new Property( false ), // TODO: wire up to the show grid property
+        new Property( false ), // TODO: wire up to the show dimensions property
+        { top: 40, left: 20 } )
+    );
 
     // Create the 'feedback node' that is used to visually indicate correct and incorrect answers.
     thisScreen.faceWithPointsNode = new FaceWithPointsNode(
