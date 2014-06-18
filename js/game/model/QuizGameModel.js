@@ -11,7 +11,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderGameChallengeFactory = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallengeFactory' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
@@ -19,14 +18,21 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Constants
-  var NUM_LEVELS = 5;
-  var MAX_POINTS_PER_PROBLEM = 2;
-  var CHALLENGES_PER_PROBLEM_SET = 6;
-  var MAX_SCORE_PER_GAME = MAX_POINTS_PER_PROBLEM * CHALLENGES_PER_PROBLEM_SET;
-
-  function AreaBuilderGameModel() {
+  function QuizGameModel( challengeFactory, additionalModel, options ) {
     var thisModel = this;
+    this.challengeFactory = challengeFactory; // @private
+    this.additionalModel = additionalModel; // @public
+
+    options = _.extend( {
+      numberOfLevels: 5,
+      challengesPerProblemSet: 6,
+      maxPointsPerProblem: 2
+    } );
+
+    this.numberOfLevels = options.numberOfLevels; // @public
+    this.challengesPerProblemSet = options.challengesPerProblemSet; // @public
+    this.maxPointsPerProblem = options.maxPointsPerProblem; // @public
+    this.maxPossibleScore = options.challengesPerProblemSet * options.maxPointsPerProblem; // @public
 
     PropertySet.call( this,
       {
@@ -40,15 +46,16 @@ define( function( require ) {
         // 'showingCorrectAnswerFeedback', 'showingIncorrectAnswerFeedbackTryAgain',
         // 'showingIncorrectAnswerFeedbackMoveOn', 'displayingCorrectAnswer', 'showingLevelResults'
         gameState: 'choosingLevel'
-      } );
+      }
+    );
 
-    // Wall time at which current level was started.
+    // @private Wall time at which current level was started.
     thisModel.gameStartTime = 0;
 
     // Best times and scores.
     thisModel.bestTimes = [];
     thisModel.bestScores = [];
-    _.times( NUM_LEVELS, function() {
+    _.times( options.numberOfLevels, function() {
       thisModel.bestTimes.push( null );
       thisModel.bestScores.push( new Property( 0 ) );
     } );
@@ -61,12 +68,7 @@ define( function( require ) {
     thisModel.challengeList = null;
   }
 
-  // static constants
-  AreaBuilderGameModel.PROBLEMS_PER_LEVEL = CHALLENGES_PER_PROBLEM_SET;
-  AreaBuilderGameModel.MAX_POSSIBLE_SCORE = MAX_POINTS_PER_PROBLEM * CHALLENGES_PER_PROBLEM_SET;
-  AreaBuilderGameModel.NUM_LEVELS = NUM_LEVELS;
-
-  return inherit( PropertySet, AreaBuilderGameModel,
+  return inherit( PropertySet, QuizGameModel,
     {
       step: function( dt ) {
         //TODO: Not sure yet if step is needed for area builder challenges, might need for animation.
@@ -89,7 +91,7 @@ define( function( require ) {
         this.restartGameTimer();
 
         // Set up the challenges.
-        this.challengeList = AreaBuilderGameChallengeFactory.generateChallengeSet( level, CHALLENGES_PER_PROBLEM_SET );
+        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet );
 
         // Set up the model for the next challenge
         this.setChallenge( this.challengeList[ 0 ], this.challengeList[ 0 ].initialColumnState );
@@ -125,7 +127,7 @@ define( function( require ) {
       },
 
       getChallengeCurrentPointValue: function() {
-        return MAX_POINTS_PER_PROBLEM - this.incorrectGuessesOnCurrentChallenge;
+        return this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge;
       },
 
       // Check the user's proposed answer.
@@ -163,11 +165,11 @@ define( function( require ) {
           this.gameState = 'showingCorrectAnswerFeedback';
           if ( this.incorrectGuessesOnCurrentChallenge === 0 ) {
             // User got it right the first time.
-            pointsEarned = MAX_POINTS_PER_PROBLEM;
+            pointsEarned = this.maxPointsPerProblem;
           }
           else {
             // User got it wrong at first, but got it right now.
-            pointsEarned = MAX_POINTS_PER_PROBLEM - this.incorrectGuessesOnCurrentChallenge;
+            pointsEarned = this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge;
           }
           this.score = this.score + pointsEarned;
         }
@@ -199,7 +201,7 @@ define( function( require ) {
         }
         else {
           // All challenges completed for this level.  See if this is a new best time and, if so, record it.
-          if ( this.score === MAX_SCORE_PER_GAME ) {
+          if ( this.score === this.maxPossibleScore ) {
             // Perfect game.  See if new best time.
             if ( this.bestTimes[ this.level ] === null || this.elapsedTime < this.bestTimes[ this.level ] ) {
               this.newBestTime = this.bestTimes[ this.level ] !== null; // Don't set this flag for the first 'best time', only when the time improves.

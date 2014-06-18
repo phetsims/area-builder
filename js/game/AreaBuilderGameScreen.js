@@ -10,7 +10,9 @@ define( function( require ) {
   'use strict';
 
   // imports
-  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  var QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
+  var AreaBuilderAdditionalGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderAdditionalGameModel' );
+  var AreaBuilderChallengeFactory = require( 'AREA_BUILDER/game/model/AreaBuilderChallengeFactory' );
   var AreaBuilderGameView = require( 'AREA_BUILDER/game/view/AreaBuilderGameView' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -30,7 +32,7 @@ define( function( require ) {
     Screen.call( this,
       gameString,
       new Image( gameIcon ),
-      function() { return new AreaBuilderGameModel(); },
+      function() { return new QuizGameModel( AreaBuilderChallengeFactory, new AreaBuilderAdditionalGameModel() ); },
       function( model ) { return new AreaBuilderGameView( model ); },
       { backgroundColor: BACKGROUND_COLOR }
     );

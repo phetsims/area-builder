@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  var AreaBuilderAdditionalGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderAdditionalGameModel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var CheckBox = require( 'SUN/CheckBox' );
   var Color = require( 'SCENERY/util/Color' );
@@ -23,6 +23,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -73,9 +74,9 @@ define( function( require ) {
       ],
       gameModel.bestScores,
       {
-        numStarsOnButtons: AreaBuilderGameModel.PROBLEMS_PER_LEVEL,
-        perfectScore: AreaBuilderGameModel.MAX_POSSIBLE_SCORE,
-        numLevels: AreaBuilderGameModel.NUM_LEVELS
+        numStarsOnButtons: gameModel.challengesPerProblemSet,
+        perfectScore: gameModel.maxPossibleScore,
+        numLevels: gameModel.numberOfLevels
       }
     );
     thisScreen.rootNode.addChild( thisScreen.startGameLevelNode );
@@ -99,17 +100,16 @@ define( function( require ) {
     thisScreen.challengeLayer.addChild( thisScreen.challengeTitleNode );
 
     // Add the scoreboard.
-    this.scoreboard = new Node(); // TODO: Scoreboard stubbed for now.
-    thisScreen.controlLayer.addChild( this.scoreboard );
-    this.scoreboard.addChild( new AreaBuilderScoreboard(
+    this.scoreboard = new AreaBuilderScoreboard(
         gameModel.levelProperty,
         gameModel.scoreProperty,
         gameModel.elapsedTimeProperty,
         gameModel.timerEnabledProperty,
         new Property( false ), // TODO: wire up to the show grid property
         new Property( false ), // TODO: wire up to the show dimensions property
-        { top: 40, left: 20 } )
+      { top: 40, left: 20 }
     );
+    thisScreen.controlLayer.addChild( this.scoreboard );
 
     // Create the 'feedback node' that is used to visually indicate correct and incorrect answers.
     thisScreen.faceWithPointsNode = new FaceWithPointsNode(
@@ -166,6 +166,9 @@ define( function( require ) {
       button.center = buttonCenter;
     } );
 
+    // Set up the constant portions of the challenge view
+    this.shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
+    this.challengeLayer.addChild( this.shapeBoard );
     // TODO: Temp - node containing the challenge presentation (a check box for now)
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );

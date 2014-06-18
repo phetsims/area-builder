@@ -25,8 +25,10 @@ define( function( require ) {
   // constants
   var BACKGROUND_COLOR = 'rgb( 225, 255, 255 )';
 
+  /**
+   * @constructor
+   */
   function AreaBuilderExploreScreen() {
-
     Screen.call( this,
       exploreString,
       new Image( exploreIcon ),
