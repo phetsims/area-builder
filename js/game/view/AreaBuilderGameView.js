@@ -22,6 +22,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var ReturnToLevelSelectButton = require( 'SCENERY_PHET/ReturnToLevelSelectButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
@@ -111,6 +112,13 @@ define( function( require ) {
     );
     thisScreen.controlLayer.addChild( this.scoreboard );
 
+    // Add the button for returning to the level selection screen.
+    thisScreen.controlLayer.addChild( new ReturnToLevelSelectButton( {
+      listener: function() { gameModel.setChoosingLevelState() },
+      left: this.scoreboard.left,
+      top: 20
+    } ) );
+
     // Create the 'feedback node' that is used to visually indicate correct and incorrect answers.
     thisScreen.faceWithPointsNode = new FaceWithPointsNode(
       {
@@ -131,8 +139,8 @@ define( function( require ) {
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
 
-    // Add and lay out the buttons.
-    thisScreen.buttons = [];
+    // Add and lay out the game control buttons.
+    thisScreen.gameControlButtons = [];
     var buttonOptions = {
       font: BUTTON_FONT,
       baseColor: BUTTON_FILL,
@@ -142,37 +150,29 @@ define( function( require ) {
       listener: function() {
         gameModel.checkAnswer();
       } }, buttonOptions ) );
-    thisScreen.rootNode.addChild( thisScreen.checkAnswerButton );
-    thisScreen.buttons.push( thisScreen.checkAnswerButton );
+    thisScreen.gameControlButtons.push( thisScreen.checkAnswerButton );
 
     thisScreen.nextButton = new TextPushButton( nextString, _.extend( {
       listener: function() { gameModel.nextChallenge(); }
     }, buttonOptions ) );
-    thisScreen.rootNode.addChild( thisScreen.nextButton );
-    thisScreen.buttons.push( thisScreen.nextButton );
+    thisScreen.gameControlButtons.push( thisScreen.nextButton );
 
-    thisScreen.tryAgainButton = new TextPushButton( tryAgainString, {
-      listener: function() { gameModel.tryAgain(); },
-      font: BUTTON_FONT,
-      baseColor: BUTTON_FILL
-    } );
     thisScreen.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
       listener: function() { gameModel.tryAgain(); }
     }, buttonOptions ) );
-    thisScreen.rootNode.addChild( thisScreen.tryAgainButton );
-    thisScreen.buttons.push( thisScreen.tryAgainButton );
+    thisScreen.gameControlButtons.push( thisScreen.tryAgainButton );
 
     thisScreen.displayCorrectAnswerButton = new TextPushButton( showAnswerString, _.extend( {
       listener: function() { gameModel.displayCorrectAnswer(); }
     }, buttonOptions ) );
-    thisScreen.rootNode.addChild( thisScreen.displayCorrectAnswerButton );
-    thisScreen.buttons.push( thisScreen.displayCorrectAnswerButton );
+    thisScreen.gameControlButtons.push( thisScreen.displayCorrectAnswerButton );
 
     var buttonCenterX = ( this.layoutBounds.width + shapeBoard.right ) / 2;
     var buttonBottom = shapeBoard.bottom;
-    thisScreen.buttons.forEach( function( button ) {
+    thisScreen.gameControlButtons.forEach( function( button ) {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
+      thisScreen.rootNode.addChild( button );
     } );
 
     // Register for changes to the game state and update accordingly.
@@ -299,7 +299,7 @@ define( function( require ) {
     // Utility method for hiding all of the game nodes whose visibility changes
     // during the course of a challenge.
     hideAllGameNodes: function() {
-      this.buttons.forEach( function( button ) { button.visible = false; } );
+      this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
       this.setNodeVisibility( false, [ this.startGameLevelNode, this.challengeTitleNode, this.faceWithPointsNode, this.scoreboard ] );
     },
 

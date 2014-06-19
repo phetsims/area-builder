@@ -79,7 +79,7 @@ define( function( require ) {
         this.bestScores.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
         this.bestTimes = [];
         var thisModel = this;
-        _.times( NUM_LEVELS, function() {
+        _.times( this.numberOfLevels, function() {
           thisModel.bestTimes.push( null );
         } );
       },
