@@ -10,7 +10,7 @@
 define( function( require ) {
   'use strict';
 
-  // Imports
+  // modules
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LevelStartButton = require( 'VEGAS/LevelStartButton' );
@@ -22,7 +22,7 @@ define( function( require ) {
   var TimerToggleButton = require( 'SCENERY_PHET/TimerToggleButton' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // Strings
+  // strings
   var defaultTitleString = require( 'string!VEGAS/selectLevel' );
 
   /**

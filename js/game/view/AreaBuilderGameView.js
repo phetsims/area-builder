@@ -15,6 +15,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -35,6 +36,14 @@ define( function( require ) {
   var nextString = require( 'string!VEGAS/next' );
   var showAnswerString = require( 'string!VEGAS/showAnswer' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
+
+  // images
+  var icon1a = require( 'image!AREA_BUILDER/icon-1-a.jpg' );
+  var icon2a = require( 'image!AREA_BUILDER/icon-2-a.jpg' );
+  var icon3a = require( 'image!AREA_BUILDER/icon-3-a.jpg' );
+  var icon1b = require( 'image!AREA_BUILDER/icon-1-b.jpg' );
+  var icon2b = require( 'image!AREA_BUILDER/icon-2-b.jpg' );
+  var icon3b = require( 'image!AREA_BUILDER/icon-3-b.jpg' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
@@ -67,9 +76,12 @@ define( function( require ) {
       gameModel.timerEnabledProperty,
       gameModel.soundEnabledProperty,
       [
-        new Rectangle( 0, 0, 30, 20, 0, 0, { fill: 'pink' } ),
-        new Rectangle( 0, 0, 30, 20, 0, 0, { fill: 'blue' } ),
-        new Rectangle( 0, 0, 30, 20, 0, 0, { fill: 'red' } ),
+        new Image( icon1a ),
+        new Image( icon2a ),
+        new Image( icon3a ),
+//        new Image( icon1b ),
+//        new Image( icon2b ),
+//        new Image( icon3b ),
         new Rectangle( 0, 0, 30, 20, 0, 0, { fill: 'green' } ),
         new Rectangle( 0, 0, 30, 20, 0, 0, { fill: 'magenta' } )
       ],
@@ -102,14 +114,14 @@ define( function( require ) {
 
     // Add the scoreboard.
     this.scoreboard = new AreaBuilderScoreboard(
-        gameModel.levelProperty,
+      gameModel.levelProperty,
       gameModel.challengeIndexProperty,
       gameModel.challengesPerProblemSet,
-        gameModel.scoreProperty,
-        gameModel.elapsedTimeProperty,
-        gameModel.timerEnabledProperty,
+      gameModel.scoreProperty,
+      gameModel.elapsedTimeProperty,
+      gameModel.timerEnabledProperty,
       gameModel.additionalModel.shapePlacementBoard.gridVisibleProperty,
-        new Property( false ), // TODO: wire up to the show dimensions property
+      new Property( false ), // TODO: wire up to the show dimensions property
       { top: 100, left: 20 }
     );
     thisScreen.controlLayer.addChild( this.scoreboard );
