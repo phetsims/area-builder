@@ -32,11 +32,14 @@ define( function( require ) {
     this.addChild( new Rectangle( SQUARE_LENGTH, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: FILL_COLOR, stroke: STROKE_COLOR } ) );
     this.addChild( new Rectangle( SQUARE_LENGTH * 2, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: FILL_COLOR, stroke: STROKE_COLOR } ) );
     this.addChild( new Rectangle( 0, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: FILL_COLOR, stroke: STROKE_COLOR } ) );
+    this.addChild( new Rectangle( SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: FILL_COLOR, stroke: STROKE_COLOR } ) );
+    this.addChild( new Rectangle( SQUARE_LENGTH * 2, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: FILL_COLOR, stroke: STROKE_COLOR } ) );
 
     // Label some of the sides.
-    this.addChild( new Text( '1', { font: LABEL_FONT, centerX: SQUARE_LENGTH / 2, top: SQUARE_LENGTH * 2 } ) );
     this.addChild( new Text( '2', { font: LABEL_FONT, right: -2, centerY: SQUARE_LENGTH } ) );
+    this.addChild( new Text( '2', { font: LABEL_FONT, left: SQUARE_LENGTH * 3 + 2, centerY: SQUARE_LENGTH } ) );
     this.addChild( new Text( '3', { font: LABEL_FONT, centerX: SQUARE_LENGTH * 1.5, bottom: 0 } ) );
+    this.addChild( new Text( '3', { font: LABEL_FONT, centerX: SQUARE_LENGTH * 1.5, top: SQUARE_LENGTH * 2 } ) );
 
     // Pass through any options.
     this.mutate( options );
