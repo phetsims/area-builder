@@ -103,6 +103,8 @@ define( function( require ) {
     // Add the scoreboard.
     this.scoreboard = new AreaBuilderScoreboard(
         gameModel.levelProperty,
+      gameModel.challengeIndexProperty,
+      gameModel.challengesPerProblemSet,
         gameModel.scoreProperty,
         gameModel.elapsedTimeProperty,
         gameModel.timerEnabledProperty,

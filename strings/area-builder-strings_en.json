@@ -5,5 +5,6 @@
   "area": "Area:",
   "perimeter": "Perimeter:",
   "values": "Values",
-  "level": "Level {0}"
+  "level": "Level {0}",
+  "pattern.0challenge.1max": "{0} of {1}"
 }

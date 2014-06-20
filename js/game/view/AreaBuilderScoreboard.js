@@ -26,6 +26,7 @@ define( function( require ) {
   var levelString = require( 'string!AREA_BUILDER/level' );
   var scoreString = require( 'string!VEGAS/label.score' );
   var timeString = require( 'string!VEGAS/label.time' );
+  var currentChallengeString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
 
   // constants
   var MIN_WIDTH = 150; // in screen coords, empirically determined
@@ -34,6 +35,8 @@ define( function( require ) {
 
   /**
    * @param levelProperty
+   * @param problemNumberProperty
+   * @param problemsPerLevel
    * @param scoreProperty
    * @param elapsedTimeProperty
    * @param timeVisibleProperty
@@ -42,7 +45,7 @@ define( function( require ) {
    * @param options
    * @constructor
    */
-  function AreaBuilderScoreboard( levelProperty, scoreProperty, elapsedTimeProperty, timeVisibleProperty, showGridProperty, showDimensionsProperty, options ) {
+  function AreaBuilderScoreboard( levelProperty, problemNumberProperty, problemsPerLevel, scoreProperty, elapsedTimeProperty, timeVisibleProperty, showGridProperty, showDimensionsProperty, options ) {
     Node.call( this );
 
     // Create the controls and labels, which will appear on both panels.
@@ -51,6 +54,10 @@ define( function( require ) {
     var levelIndicator = new Text( '', { font: new PhetFont( { size: 20, weight: 'bold' } )  } );
     levelProperty.link( function( level ) {
       levelIndicator.text = StringUtils.format( levelString, level + 1 );
+    } );
+    var currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } )  } );
+    problemNumberProperty.link( function( currentChallenge ) {
+      currentChallengeIndicator.text = StringUtils.format( currentChallengeString, currentChallenge + 1, problemsPerLevel );
     } );
     var scoreIndicator = new Text( '', { font: new PhetFont( 20 ) } );
     scoreProperty.link( function( score ) {
@@ -66,19 +73,20 @@ define( function( require ) {
     var vBox = new VBox( {
       children: [
         levelIndicator,
+        currentChallengeIndicator,
         scoreIndicator,
         spacer,
         gridCheckbox,
         dimensionsCheckbox
       ],
-      spacing: 20
+      spacing: 12
     } );
     this.addChild( new Panel( vBox, PANEL_OPTIONS ) );
 
     // Add or remove the time indicator.
     timeVisibleProperty.link( function( timeVisible ) {
       if ( timeVisible ) {
-        vBox.insertChild( 2, elapsedTimeIndicator );
+        vBox.insertChild( 3, elapsedTimeIndicator );
       }
       else if ( vBox.isChild( elapsedTimeIndicator ) ) {
         vBox.removeChild( elapsedTimeIndicator );

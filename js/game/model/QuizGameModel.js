@@ -29,11 +29,6 @@ define( function( require ) {
       maxPointsPerProblem: 2
     } );
 
-    this.numberOfLevels = options.numberOfLevels; // @public
-    this.challengesPerProblemSet = options.challengesPerProblemSet; // @public
-    this.maxPointsPerProblem = options.maxPointsPerProblem; // @public
-    this.maxPossibleScore = options.challengesPerProblemSet * options.maxPointsPerProblem; // @public
-
     PropertySet.call( this,
       {
         soundEnabled: true,
@@ -48,6 +43,11 @@ define( function( require ) {
         gameState: 'choosingLevel'
       }
     );
+
+    this.numberOfLevels = options.numberOfLevels; // @public
+    this.challengesPerProblemSet = options.challengesPerProblemSet; // @public
+    this.maxPointsPerProblem = options.maxPointsPerProblem; // @public
+    this.maxPossibleScore = options.challengesPerProblemSet * options.maxPointsPerProblem; // @public
 
     // @private Wall time at which current level was started.
     thisModel.gameStartTime = 0;
