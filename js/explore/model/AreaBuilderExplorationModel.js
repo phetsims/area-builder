@@ -21,8 +21,8 @@ define( function( require ) {
   // constants
   var UNIT_SQUARE_LENGTH = 35; // In screen coords, which are roughly pixels
   var UNIT_SQUARE_SIZE = new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
-  var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 10, UNIT_SQUARE_LENGTH * 9 );
-  var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 20, UNIT_SQUARE_LENGTH * 9 );
+  var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 10, UNIT_SQUARE_LENGTH * 8 );
+  var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 20, UNIT_SQUARE_LENGTH * 8 );
   var PLAY_AREA_WIDTH = 768; // Based on default size in ScreenView.js
   var SPACE_BETWEEN_PLACEMENT_BOARDS = 35;
   var BOARD_Y_POS = 100; // Empirically determined from looking at the layout

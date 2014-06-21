@@ -46,6 +46,8 @@ define( function( require ) {
   var icon1b = require( 'image!AREA_BUILDER/icon-1-b.jpg' );
   var icon2b = require( 'image!AREA_BUILDER/icon-2-b.jpg' );
   var icon3b = require( 'image!AREA_BUILDER/icon-3-b.jpg' );
+  var icon4b = require( 'image!AREA_BUILDER/icon-4-b.jpg' );
+  var icon5b = require( 'image!AREA_BUILDER/icon-5-b.jpg' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
@@ -82,12 +84,12 @@ define( function( require ) {
         new Image( icon2a ),
         new Image( icon3a ),
         new Image( icon4a ),
-        new Image( icon5a ),
+        new Image( icon5a )
 //        new Image( icon1b ),
 //        new Image( icon2b ),
 //        new Image( icon3b ),
-//        new Rectangle( 0, 0, 30, 20, 0, 0, { fill: 'green' } ),
-//        new Rectangle( 0, 0, 30, 20, 0, 0, { fill: 'magenta' } )
+//        new Image( icon4b ),
+//        new Image( icon5b )
       ],
       gameModel.bestScores,
       {
