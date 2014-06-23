@@ -79,7 +79,8 @@ define( function( require ) {
         options.perfectScore,
         {
           backgroundColor: options.buttonBackgroundColor,
-          highlightedBackgroundColor: options.highlightedButtonBackgroundColor
+          highlightedBackgroundColor: options.highlightedButtonBackgroundColor,
+          shadowOffset: 4
         }
       );
       buttons[ i ].scale( 0.80 );
