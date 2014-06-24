@@ -12,7 +12,6 @@ define( function( require ) {
 
   // constants
   var SIZE = new Dimension2( 20, 16 ); // Proportions taken from screen shot of logo on main site
-//  var SIZE = new Dimension2( 32, 24 ); // Proportions taken from screen shot of logo on main site
 
   function PaperAirplaneNode( options ) {
     Node.call( this );
