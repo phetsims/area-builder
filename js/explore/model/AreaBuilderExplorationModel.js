@@ -141,9 +141,9 @@ define( function( require ) {
         AreaBuilderSharedConstants.ORANGISH_COLOR, addModelElement ) );
     } );
 
-    // Control the grid visibility in the placement boards
+    // Control the grid visibility in the placement boards TODO Use multilink or something here?
     this.showGrids.link( function( showGrids ) {
-      self.shapePlacementBoards.forEach( function( board ) { board.gridVisible = showGrids; } );
+      self.shapePlacementBoards.forEach( function( board ) { board.showGrid = showGrids; } );
     } );
   }
 

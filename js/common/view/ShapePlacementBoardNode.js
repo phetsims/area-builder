@@ -37,9 +37,7 @@ define( function( require ) {
     background.addChild( grid );
 
     // Track and update the grid visibility
-    shapePlacementBoard.gridVisibleProperty.link( function( gridVisible ) {
-      grid.visible = gridVisible;
-    } );
+    shapePlacementBoard.showGridProperty.linkAttribute( grid, 'visible' );
   }
 
   return inherit( Node, ShapePlacementBoardNode );

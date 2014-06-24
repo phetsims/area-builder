@@ -60,7 +60,10 @@ define( function( require ) {
 
     PropertySet.call( this, {
       // @public Boolean property that controls whether or not the placement grid is visible
-      gridVisible: false,
+      showGrid: false,
+
+      // @public Boolean property that controls whether or not the dimensions of a created shape are visible
+      showDimensions: false,
 
       // @public Read-only property that indicates the area of the composite shape
       area: 0,

@@ -51,8 +51,9 @@ define( function( require ) {
    */
   function AreaBuilderExplorationView( model ) {
 
+    ScreenView.call( this );
     var thisScreen = this;
-    ScreenView.call( thisScreen );
+    var showDimensionsProperty = new Property( false );
 
     // TODO: There is a lot of opportunity for consolidation below.
 
@@ -98,25 +99,30 @@ define( function( require ) {
     } );
     topControlsLayer.addChild( centerBoardClearButton );
 
-    // Add the composite shapes, i.e. the ones that aggregate what the user
-    // has added as individual shapes.
+    // Add the composite shapes, i.e. the ones that aggregate what the user has added as individual shapes.
     var centerCompositeShape = new CompositeShapeNode(
       model.centerShapePlacementBoard.exteriorPerimetersProperty,
       model.centerShapePlacementBoard.interiorPerimetersProperty,
       model.unitSquareLength,
-      model.centerShapePlacementBoard.colorHandled );
+      model.centerShapePlacementBoard.colorHandled,
+      showDimensionsProperty
+    );
     compositeShapesLayer.addChild( centerCompositeShape );
     var leftCompositeShape = new CompositeShapeNode(
       model.leftShapePlacementBoard.exteriorPerimetersProperty,
       model.leftShapePlacementBoard.interiorPerimetersProperty,
       model.unitSquareLength,
-      model.leftShapePlacementBoard.colorHandled );
+      model.leftShapePlacementBoard.colorHandled,
+      showDimensionsProperty
+    );
     compositeShapesLayer.addChild( leftCompositeShape );
     var rightCompositeShape = new CompositeShapeNode(
       model.rightShapePlacementBoard.exteriorPerimetersProperty,
       model.rightShapePlacementBoard.interiorPerimetersProperty,
       model.unitSquareLength,
-      model.rightShapePlacementBoard.colorHandled );
+      model.rightShapePlacementBoard.colorHandled,
+      showDimensionsProperty
+    );
     compositeShapesLayer.addChild( rightCompositeShape );
 
     // Add the area and perimeter displays
@@ -250,7 +256,6 @@ define( function( require ) {
     );
     this.addChild( switchPanel );
 
-    var showDimensionsProperty = new Property( false );
     var controlPanel = new Panel(
       new VBox( {
         children: [

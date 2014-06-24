@@ -60,9 +60,11 @@ define( function( require ) {
      * @param interiorPerimetersProperty
      * @param unitSquareLength
      * @param color
+     * @param showDimensionsProperty
+     * @param options
      * @constructor
      */
-    function CompositeShapeNode( exteriorPerimetersProperty, interiorPerimetersProperty, unitSquareLength, color ) {
+    function CompositeShapeNode( exteriorPerimetersProperty, interiorPerimetersProperty, unitSquareLength, color, showDimensionsProperty, options ) {
 
       Node.call( this );
 
@@ -78,7 +80,10 @@ define( function( require ) {
       var dimensionsLayer = new Node();
       this.addChild( dimensionsLayer );
 
-      // Main function for updating the appearance of the composite shape.
+      // Control visibility of the dimension indicators.
+      showDimensionsProperty.linkAttribute( dimensionsLayer, 'visible' );
+
+      // Define function for updating the appearance of the composite shape.
       function update() {
         var i;
         var mainShape = new Shape();
@@ -182,9 +187,11 @@ define( function( require ) {
       interiorPerimetersProperty.link( function( innerPerimeter ) {
         update();
       } );
+
+      // Pass options through to parent class.
+      this.mutate( options );
     }
 
     return inherit( Node, CompositeShapeNode );
   }
-)
-;
+);
