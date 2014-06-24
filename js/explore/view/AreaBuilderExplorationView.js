@@ -19,12 +19,14 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var CompositeShapeNode = require( 'AREA_BUILDER/common/view/CompositeShapeNode' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PaperAirplaneNode = require( 'AREA_BUILDER/common/view/PaperAirplaneNode' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangleCreatorNode = require( 'AREA_BUILDER/explore/view/RectangleCreatorNode' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
@@ -237,15 +239,27 @@ define( function( require ) {
     oneRectIcon.addChild( new Rectangle( 6, 12, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
     oneRectIcon.addChild( new Rectangle( 12, 12, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
 
+    // Create and add the panel that contains the ABSwitch.
+    var switchPanel = new Panel(
+      new VBox( {
+        children: [
+          new ABSwitch( model.boardDisplayMode, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 40, 20 ) } )
+        ],
+        spacing: 10
+      } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
+    );
+    this.addChild( switchPanel );
+
+    var showDimensionsProperty = new Property( false );
     var controlPanel = new Panel(
       new VBox( {
         children: [
-          new ABSwitch( model.boardDisplayMode, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 40, 20 ) } ),
-          new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGrids, { spacing: 15 } )
+          new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGrids, { spacing: 15 } ),
+          new Checkbox( new DimensionsIcon, showDimensionsProperty, { spacing: 15 } )
         ],
         align: 'left',
         spacing: 10
-      } ), { fill: 'rgb( 255, 242, 234 )'}
+      } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
     );
     this.addChild( controlPanel );
 
@@ -259,8 +273,10 @@ define( function( require ) {
     } ) );
 
     // Layout
-    controlPanel.bottom = this.layoutBounds.height - CONTROL_INSET;
-    controlPanel.left = CONTROL_INSET;
+    controlPanel.top = centerBoardNode.bottom + 10;
+    controlPanel.left = centerBoardNode.left;
+    switchPanel.top = centerBoardNode.bottom + 10;
+    switchPanel.right = centerBoardNode.right;
   }
 
   return inherit( ScreenView, AreaBuilderExplorationView );
