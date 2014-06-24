@@ -126,7 +126,7 @@ define( function( require ) {
             gridLayer.addChild( gridNode );
           }
 
-          // Add the dimension labels for the exterior perimeter, but only if there is only 1 perimeter
+          // Add the dimension labels for the exterior perimeter, but only if there is only 1 perimeter.
           if ( exteriorPerimetersProperty.value.length === 1 ) {
 
             var segment = { startIndex: 0, endIndex: 0 };
@@ -140,59 +140,31 @@ define( function( require ) {
                 length: perimeterPoints[ segment.startIndex ].distance( perimeterPoints[ segment.endIndex ] ) / unitSquareLength,
                 position: new Vector2( ( perimeterPoints[ segment.startIndex ].x + perimeterPoints[ segment.endIndex ].x ) / 2,
                     ( perimeterPoints[ segment.startIndex ].y + perimeterPoints[ segment.endIndex ].y ) / 2 ),
-                edgeAngle: Math.atan2( perimeterPoints[ segment.endIndex ].y + perimeterPoints[ segment.startIndex ].y,
-                    perimeterPoints[ segment.endIndex ].x + perimeterPoints[ segment.startIndex ].x
+                edgeAngle: Math.atan2( perimeterPoints[ segment.endIndex ].y - perimeterPoints[ segment.startIndex ].y,
+                    perimeterPoints[ segment.endIndex ].x - perimeterPoints[ segment.startIndex ].x
                 )
               } );
             } while ( segment.endIndex !== 0 );
 
             segmentLabelsInfo.forEach( function( segmentLabelInfo ) {
-              dimensionsLayer.addChild( new Text( segmentLabelInfo.length, {
-                font: new PhetFont( 16 ),
-                centerX: segmentLabelInfo.position.x,
-                centerY: segmentLabelInfo.position.y
-              } ) )
+              var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 16 ) } );
+              var labelPositionOffset = new Vector2;
+              if ( segmentLabelInfo.edgeAngle === 0 || segmentLabelInfo.edgeAngle === Math.PI ) {
+                // Label is on horizontal edge, so use height to determine offset.
+                labelPositionOffset.setXY( 0, dimensionLabel.height / 2 );
+              }
+              else { // TODO: Do we need to handle 45 degree edges?  If so, yikes!
+                // Label is on a vertical edge
+                labelPositionOffset.setXY( dimensionLabel.width * 0.8, 0 );
+              }
+              if ( mainShape.containsPoint( segmentLabelInfo.position.plus( labelPositionOffset ) ) ) {
+                // Flip the offset vector to keep the label outside of the shape.
+                labelPositionOffset.rotate( Math.PI );
+              }
+              dimensionLabel.center = segmentLabelInfo.position.plus( labelPositionOffset );
+              dimensionsLayer.addChild( dimensionLabel );
             } );
 
-            /*
-             var exteriorPerimeter = exteriorPerimetersProperty.value[ 0 ];
-
-             // Load up the initial two points of the first segment
-             var segmentStart = exteriorPerimeter[ 0 ];
-             var segmentEnd = exteriorPerimeter[ 1 ];
-             var previousAngle = Math.atan2( segmentEnd.y - segmentStart.y, segmentEnd.x - segmentStart.x );
-             var exteriorPerimeterLabels = [];
-
-             // Loop through all remaining points identifying perimeter segments and adding labels.  Note that we have
-             // to loop back to the original point to close off the last segment.
-             for ( i = 2; i <= exteriorPerimeter.length; i++ ) {
-             console.log( '---------------------' );
-             console.log( 'i = ' + i );
-             console.log( '(i % exteriorPerimeter.length) = ' + (i % exteriorPerimeter.length) );
-             var currentPoint = exteriorPerimeter[ i % exteriorPerimeter.length ];
-             var angleToCurrentPoint = Math.atan2( currentPoint.y - segmentEnd.y, currentPoint.x - segmentEnd.x );
-             console.log( 'angleToCandidatePoint = ' + angleToCurrentPoint );
-             console.log( 'angleToCandidatePoint = ' + angleToCurrentPoint / Math.PI + ' * PI' );
-             if ( previousAngle === angleToCurrentPoint ) {
-             // This point is an extension of the current segment.
-             console.log( 'Extension of current segment' );
-             segmentEnd = currentPoint;
-             }
-             else {
-             // This point is the start of a new segment, so record the previous one.
-             exteriorPerimeterLabels.push( {
-             length: segmentEnd.distance( segmentStart ) / unitSquareLength,
-             position: new Vector2( ( segmentStart.x + currentPoint.x ) / 2, ( segmentStart.y + currentPoint.y ) / 2 )
-             }
-             );
-             console.log( 'Reached end of segment, length = ' + segmentEnd.distance( segmentStart ) / unitSquareLength );
-             // Start a new segment.
-             segmentStart = segmentEnd;
-             segmentEnd = currentPoint;
-             previousAngle = angleToCurrentPoint;
-             }
-             }
-             */
           }
         }
         else {
