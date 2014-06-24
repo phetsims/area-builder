@@ -79,26 +79,6 @@ define( function( require ) {
     var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
     backLayer.addChild( centerBoardNode );
 
-    // Add the clear buttons TODO: add undo button.
-    var leftBoardClearButton = new EraserButton( {
-      left: leftBoardNode.left + 3,
-      bottom: leftBoardNode.bottom - 5,
-      listener: function() { model.leftShapePlacementBoard.releaseAllShapes( true ); }
-    } );
-    topControlsLayer.addChild( leftBoardClearButton );
-    var rightBoardClearButton = new EraserButton( {
-      right: rightBoardNode.right - 3,
-      bottom: rightBoardNode.bottom - 5,
-      listener: function() { model.rightShapePlacementBoard.releaseAllShapes( true ); }
-    } );
-    topControlsLayer.addChild( rightBoardClearButton );
-    var centerBoardClearButton = new EraserButton( {
-      left: centerBoardNode.left + 3,
-      bottom: centerBoardNode.bottom - 5,
-      listener: function() { model.centerShapePlacementBoard.releaseAllShapes( true ); }
-    } );
-    topControlsLayer.addChild( centerBoardClearButton );
-
     // Add the composite shapes, i.e. the ones that aggregate what the user has added as individual shapes.
     var centerCompositeShape = new CompositeShapeNode(
       model.centerShapePlacementBoard.exteriorPerimetersProperty,
@@ -164,6 +144,26 @@ define( function( require ) {
     model.rectangleCreators.forEach( function( rectangleCreator ) {
       creatorLayer.addChild( new RectangleCreatorNode( rectangleCreator ) );
     } );
+
+    // Add the clear buttons TODO: add undo button.
+    var leftBoardClearButton = new EraserButton( {
+      right: leftBucketFront.right - 3,
+      top: leftBucketFront.bottom + 5,
+      listener: function() { model.leftShapePlacementBoard.releaseAllShapes( true ); }
+    } );
+    topControlsLayer.addChild( leftBoardClearButton );
+    var rightBoardClearButton = new EraserButton( {
+      right: rightBucketFront.right - 3,
+      top: rightBucketFront.bottom + 5,
+      listener: function() { model.rightShapePlacementBoard.releaseAllShapes( true ); }
+    } );
+    topControlsLayer.addChild( rightBoardClearButton );
+    var centerBoardClearButton = new EraserButton( {
+      right: centerBucketFront.right - 3,
+      top: centerBucketFront.bottom + 5,
+      listener: function() { model.centerShapePlacementBoard.releaseAllShapes( true ); }
+    } );
+    topControlsLayer.addChild( centerBoardClearButton );
 
     // Handle the comings and goings of movable shapes.
     model.movableShapes.addItemAddedListener( function( addedShape ) {

@@ -25,7 +25,7 @@ define( function( require ) {
   var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 19, UNIT_SQUARE_LENGTH * 8 );
   var PLAY_AREA_WIDTH = 768; // Based on default size in ScreenView.js
   var SPACE_BETWEEN_PLACEMENT_BOARDS = 35;
-  var BOARD_Y_POS = 100; // Empirically determined from looking at the layout
+  var BOARD_Y_POS = 75; // Empirically determined from looking at the layout
   var BUCKET_SIZE = new Dimension2( 100, 50 );
   var BOARD_TO_BUCKET_Y_SPACING = 50;
   var INITIAL_NUM_SQUARES_OF_EACH_COLOR = 5;
