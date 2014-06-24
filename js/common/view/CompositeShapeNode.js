@@ -36,14 +36,10 @@ define( function( require ) {
       var segmentComplete = false;
 
       while ( !segmentComplete && endIndex !== 0 ) {
-        console.log( '---------- identifySegment main loop -----------' );
         var candidatePoint = perimeterPoints[ ( endIndex + 1 ) % perimeterPoints.length ];
         var angleToCandidatePoint = Math.atan2( candidatePoint.y - segmentEndPoint.y, candidatePoint.x - segmentEndPoint.x );
-        console.log( 'angleToCandidatePoint = ' + angleToCandidatePoint );
-        console.log( 'angleToCandidatePoint = ' + angleToCandidatePoint / Math.PI + ' * PI' );
         if ( previousAngle === angleToCandidatePoint ) {
           // This point is an extension of the current segment.
-          console.log( 'Extension of current segment' );
           segmentEndPoint = candidatePoint;
           endIndex = ( endIndex + 1 ) % perimeterPoints.length;
         }
@@ -127,15 +123,14 @@ define( function( require ) {
           }
 
           // Add the dimension labels for the exterior perimeter, but only if there is only 1 perimeter.
-          if ( exteriorPerimetersProperty.value.length === 1 ) {
+          if ( exteriorPerimetersProperty.value.length !== 1 ) {}
+          else {
 
             var segment = { startIndex: 0, endIndex: 0 };
             var segmentLabelsInfo = [];
             var perimeterPoints = exteriorPerimetersProperty.value[ 0 ];
             do {
               segment = identifySegment( perimeterPoints, segment.endIndex );
-              console.log( 'segment.startIndex = ' + segment.startIndex );
-              console.log( 'segment.endIndex = ' + segment.endIndex );
               segmentLabelsInfo.push( {
                 length: perimeterPoints[ segment.startIndex ].distance( perimeterPoints[ segment.endIndex ] ) / unitSquareLength,
                 position: new Vector2( ( perimeterPoints[ segment.startIndex ].x + perimeterPoints[ segment.endIndex ].x ) / 2,
@@ -146,18 +141,28 @@ define( function( require ) {
               } );
             } while ( segment.endIndex !== 0 );
 
-            segmentLabelsInfo.forEach( function( segmentLabelInfo ) {
+            segmentLabelsInfo.forEach( function( segmentLabelInfo, index ) {
               var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 16 ) } );
               var labelPositionOffset = new Vector2;
+              // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
+              // containment testing unreliable if there is an edge on the same line as the containment test.  As a
+              // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the
+              // label offset itself can be used for the test.  See https://github.com/phetsims/kite/issues/3.
+              var containmentTestOffset;
+              if ( index === 0 ) {
+                debugger;
+              }
               if ( segmentLabelInfo.edgeAngle === 0 || segmentLabelInfo.edgeAngle === Math.PI ) {
                 // Label is on horizontal edge, so use height to determine offset.
                 labelPositionOffset.setXY( 0, dimensionLabel.height / 2 );
+                containmentTestOffset = labelPositionOffset.plusXY( 1, 0 );
               }
               else { // TODO: Do we need to handle 45 degree edges?  If so, yikes!
                 // Label is on a vertical edge
                 labelPositionOffset.setXY( dimensionLabel.width * 0.8, 0 );
+                containmentTestOffset = labelPositionOffset.plusXY( 0, 1 );
               }
-              if ( mainShape.containsPoint( segmentLabelInfo.position.plus( labelPositionOffset ) ) ) {
+              if ( mainShape.containsPoint( segmentLabelInfo.position.plus( containmentTestOffset ) ) ) {
                 // Flip the offset vector to keep the label outside of the shape.
                 labelPositionOffset.rotate( Math.PI );
               }
