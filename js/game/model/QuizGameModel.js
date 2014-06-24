@@ -11,12 +11,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   function QuizGameModel( challengeFactory, additionalModel, options ) {
     var thisModel = this;
@@ -105,14 +102,11 @@ define( function( require ) {
 
       setChallenge: function( challenge, columnState ) {
 
-        var thisModel = this;
-
         // Clear out the previous challenge (if there was one).
         //TODO: Clear out previous challenge.
 
         // Set up the new challenge.
         //TODO: Set up the next challenge.
-
       },
 
       setChoosingLevelState: function() {

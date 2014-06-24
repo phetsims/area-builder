@@ -50,7 +50,7 @@ define( function( require ) {
 
     // Create the controls and labels, which will appear on both panels.
     var gridCheckbox = new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), showGridProperty, { spacing: 15 } );
-    var dimensionsCheckbox = new Checkbox( new DimensionsIcon, showDimensionsProperty, { spacing: 15 } );
+    var dimensionsCheckbox = new Checkbox( new DimensionsIcon(), showDimensionsProperty, { spacing: 15 } );
     var levelIndicator = new Text( '', { font: new PhetFont( { size: 20, weight: 'bold' } )  } );
     levelProperty.link( function( level ) {
       levelIndicator.text = StringUtils.format( levelString, level + 1 );

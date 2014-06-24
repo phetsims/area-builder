@@ -9,16 +9,13 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderAdditionalGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderAdditionalGameModel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var CheckBox = require( 'SUN/CheckBox' );
-  var Color = require( 'SCENERY/util/Color' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
@@ -29,7 +26,6 @@ define( function( require ) {
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var checkString = require( 'string!VEGAS/check' );
@@ -43,11 +39,11 @@ define( function( require ) {
   var icon3a = require( 'image!AREA_BUILDER/icon-3-a.jpg' );
   var icon4a = require( 'image!AREA_BUILDER/icon-4-a.jpg' );
   var icon5a = require( 'image!AREA_BUILDER/icon-5-a.jpg' );
-  var icon1b = require( 'image!AREA_BUILDER/icon-1-b.jpg' );
-  var icon2b = require( 'image!AREA_BUILDER/icon-2-b.jpg' );
-  var icon3b = require( 'image!AREA_BUILDER/icon-3-b.jpg' );
-  var icon4b = require( 'image!AREA_BUILDER/icon-4-b.jpg' );
-  var icon5b = require( 'image!AREA_BUILDER/icon-5-b.jpg' );
+//  var icon1b = require( 'image!AREA_BUILDER/icon-1-b.jpg' );
+//  var icon2b = require( 'image!AREA_BUILDER/icon-2-b.jpg' );
+//  var icon3b = require( 'image!AREA_BUILDER/icon-3-b.jpg' );
+//  var icon4b = require( 'image!AREA_BUILDER/icon-4-b.jpg' );
+//  var icon5b = require( 'image!AREA_BUILDER/icon-5-b.jpg' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
@@ -134,7 +130,7 @@ define( function( require ) {
 
     // Add the button for returning to the level selection screen.
     thisScreen.controlLayer.addChild( new ReturnToLevelSelectButton( {
-      listener: function() { gameModel.setChoosingLevelState() },
+      listener: function() { gameModel.setChoosingLevelState(); },
       left: this.scoreboard.left,
       top: 20
     } ) );
