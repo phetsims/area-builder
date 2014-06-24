@@ -21,6 +21,7 @@ define( function( require ) {
     var bodyShape = new Shape();
     var width = options.size.width;
     var height = options.size.height;
+
     // main body
     bodyShape.moveTo( width, 0 ); // front tip
     bodyShape.lineTo( width * 0.8, height * 0.9 ); // right wing tip
@@ -29,6 +30,7 @@ define( function( require ) {
     bodyShape.lineTo( width * 0.35, height * 0.675 );
     bodyShape.lineTo( 0, height * 0.5 ); // left wing tip
     bodyShape.close();
+
     // underneath part
     bodyShape.moveTo( width * 0.45, height * 0.8 );
     bodyShape.lineTo( width * 0.45, height );
@@ -38,7 +40,5 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Node, PaperAirplaneNode, {
-    //TODO prototypes
-  } );
+  return inherit( Node, PaperAirplaneNode );
 } );
