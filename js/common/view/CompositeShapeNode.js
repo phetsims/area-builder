@@ -149,9 +149,6 @@ define( function( require ) {
               // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the
               // label offset itself can be used for the test.  See https://github.com/phetsims/kite/issues/3.
               var containmentTestOffset;
-              if ( index === 0 ) {
-                debugger;
-              }
               if ( segmentLabelInfo.edgeAngle === 0 || segmentLabelInfo.edgeAngle === Math.PI ) {
                 // Label is on horizontal edge, so use height to determine offset.
                 labelPositionOffset.setXY( 0, dimensionLabel.height / 2 );
