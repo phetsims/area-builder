@@ -22,7 +22,7 @@ define( function( require ) {
       UNIT_SQUARE_LENGTH,
       new Vector2( 200, 100 ),
       'blue'
-    )
+    );
   }
 
   return AreaBuilderAdditionalGameModel;

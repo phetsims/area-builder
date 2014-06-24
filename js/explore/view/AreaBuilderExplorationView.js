@@ -52,7 +52,6 @@ define( function( require ) {
   function AreaBuilderExplorationView( model ) {
 
     ScreenView.call( this );
-    var thisScreen = this;
     var showDimensionsProperty = new Property( false );
 
     // TODO: There is a lot of opportunity for consolidation below.
@@ -260,7 +259,7 @@ define( function( require ) {
       new VBox( {
         children: [
           new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGrids, { spacing: 15 } ),
-          new Checkbox( new DimensionsIcon, showDimensionsProperty, { spacing: 15 } )
+          new Checkbox( new DimensionsIcon(), showDimensionsProperty, { spacing: 15 } )
         ],
         align: 'left',
         spacing: 10

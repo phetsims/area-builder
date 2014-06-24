@@ -25,7 +25,7 @@ define( function( require ) {
 
       // Parameter checking.
       if ( startIndex >= perimeterPoints.length ) {
-        throw new Error( 'Illegal use of function for identifying perimeter segments.' )
+        throw new Error( 'Illegal use of function for identifying perimeter segments.' );
       }
 
       // Set up initial portion of segment.
@@ -52,7 +52,7 @@ define( function( require ) {
       return {
         startIndex: startIndex,
         endIndex: endIndex
-      }
+      };
     }
 
     /**
@@ -148,7 +148,7 @@ define( function( require ) {
 
             segmentLabelsInfo.forEach( function( segmentLabelInfo, index ) {
               var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 16 ) } );
-              var labelPositionOffset = new Vector2;
+              var labelPositionOffset = new Vector2();
               // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
               // containment testing unreliable if there is an edge on the same line as the containment test.  As a
               // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the

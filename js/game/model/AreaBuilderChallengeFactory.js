@@ -24,7 +24,7 @@ define( function( require ) {
         showCorrectAnswer: function() {
           this.correctAnswerProperty.value = true;
         }
-      }
+      };
     },
 
     // @public
@@ -36,5 +36,5 @@ define( function( require ) {
       } );
       return challengeSet;
     }
-  }
+  };
 } );
