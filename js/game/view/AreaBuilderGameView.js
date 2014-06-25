@@ -63,9 +63,7 @@ define( function( require ) {
     var b = Math.round( Math.random() * 255 );
     return '#' + ( r * 256 * 256 + g * 256 + b ).toString( 16 );
   }
-
   // ---------- End of temp stuff for fake challenges ---------------
-
 
   /**
    * @param {AreaBuilderGameModel} gameModel
@@ -343,7 +341,8 @@ define( function( require ) {
           this.buildSpecNode.text = promptText;
           this.buildSpecNode.centerX = this.shapeBoard.centerX;
           this.buildPromptNode.text = yourGoalString + '\n\n' + promptText + '\n\n' + buildItString;
-          this.buildPromptNode.center = this.shapeBoard.center;
+          this.buildPromptNode.centerX = this.shapeBoard.centerX;
+          this.buildPromptNode.top = this.shapeBoard.top + 40;
         }
         else {
           this.buildSpecNode.text = '';
