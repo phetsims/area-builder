@@ -49,28 +49,40 @@ define( function( require ) {
   var BUTTON_FONT = new PhetFont( 18 );
   var BUTTON_FILL = '#F2E916';
 
+  // TODO - Temporary stuff for supporting 'fake' challenges, remove when all challenges working.
+  // Utility function
+  function generateRandomColor() {
+    var r = Math.round( Math.random() * 255 );
+    var g = Math.round( Math.random() * 255 );
+    var b = Math.round( Math.random() * 255 );
+    return '#' + ( r * 256 * 256 + g * 256 + b ).toString( 16 );
+  }
+
+  // ---------- End of temp stuff for fake challenges ---------------
+
+
   /**
    * @param {AreaBuilderGameModel} gameModel
    * @constructor
    */
   function AreaBuilderGameView( gameModel ) {
     ScreenView.call( this, { renderer: 'svg' } );
-    var thisScreen = this;
-    thisScreen.model = gameModel;
+    var self = this;
+    self.model = gameModel;
 
     // Create a root node and send to back so that the layout bounds box can be made visible if needed.
-    thisScreen.rootNode = new Node();
-    thisScreen.addChild( thisScreen.rootNode );
-    thisScreen.rootNode.moveToBack();
+    self.rootNode = new Node();
+    self.addChild( self.rootNode );
+    self.rootNode.moveToBack();
 
     // Add layers used to control game appearance.
-    thisScreen.controlLayer = new Node();
-    thisScreen.rootNode.addChild( thisScreen.controlLayer );
-    thisScreen.challengeLayer = new Node();
-    thisScreen.rootNode.addChild( thisScreen.challengeLayer );
+    self.controlLayer = new Node();
+    self.rootNode.addChild( self.controlLayer );
+    self.challengeLayer = new Node();
+    self.rootNode.addChild( self.challengeLayer );
 
     // Add the node that allows the user to choose a game level to play.
-    thisScreen.startGameLevelNode = new StartGameLevelNode(
+    self.startGameLevelNode = new StartGameLevelNode(
       function( level ) { gameModel.startLevel( level ); },
       function() { gameModel.reset(); },
       gameModel.timerEnabledProperty,
@@ -94,17 +106,13 @@ define( function( require ) {
         numLevels: gameModel.numberOfLevels
       }
     );
-    thisScreen.rootNode.addChild( thisScreen.startGameLevelNode );
-
-    // Initialize a reference to the 'level completed' node.
-    thisScreen.levelCompletedNode = null;
+    self.rootNode.addChild( self.startGameLevelNode );
 
     // Hook up the audio player to the sound settings.
-    thisScreen.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
+    self.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
 
     // Add the title.  It is blank to start with, and is updated later at the appropriate state change.
-    // TODO: Not sure if needed (leftover from BA), delete later if not.
-    thisScreen.challengeTitleNode = new Text( '',
+    self.challengeTitleNode = new Text( '',
       {
         font: new PhetFont( { size: 60, weight: 'bold' } ),
         fill: 'white',
@@ -112,7 +120,7 @@ define( function( require ) {
         lineWidth: 1.5,
         top: 5 // Empirically determined based on appearance
       } );
-    thisScreen.challengeLayer.addChild( thisScreen.challengeTitleNode );
+    self.challengeLayer.addChild( self.challengeTitleNode );
 
     // Add the scoreboard.
     this.scoreboard = new AreaBuilderScoreboard(
@@ -126,27 +134,27 @@ define( function( require ) {
       new Property( false ), // TODO: wire up to the show dimensions property
       { top: 100, left: 20 }
     );
-    thisScreen.controlLayer.addChild( this.scoreboard );
+    self.controlLayer.addChild( this.scoreboard );
 
     // Add the button for returning to the level selection screen.
-    thisScreen.controlLayer.addChild( new ReturnToLevelSelectButton( {
+    self.controlLayer.addChild( new ReturnToLevelSelectButton( {
       listener: function() { gameModel.setChoosingLevelState(); },
       left: this.scoreboard.left,
       top: 20
     } ) );
 
     // Create the 'feedback node' that is used to visually indicate correct and incorrect answers.
-    thisScreen.faceWithPointsNode = new FaceWithPointsNode(
+    self.faceWithPointsNode = new FaceWithPointsNode(
       {
         faceOpacity: 0.6,
-        faceDiameter: thisScreen.layoutBounds.width * 0.31,
+        faceDiameter: self.layoutBounds.width * 0.31,
         pointsFill: 'yellow',
         pointsStroke: 'black',
         pointsAlignment: 'rightCenter',
         centerX: this.layoutBounds.centerX,
         centerY: this.layoutBounds.centerY
       } );
-    thisScreen.addChild( thisScreen.faceWithPointsNode );
+    self.addChild( self.faceWithPointsNode );
 
     // Set up the constant portions of the challenge view
     var shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
@@ -156,43 +164,46 @@ define( function( require ) {
     this.challengeLayer.addChild( this.challengeView );
 
     // Add and lay out the game control buttons.
-    thisScreen.gameControlButtons = [];
+    self.gameControlButtons = [];
     var buttonOptions = {
       font: BUTTON_FONT,
       baseColor: BUTTON_FILL,
       cornerRadius: 4
     };
-    thisScreen.checkAnswerButton = new TextPushButton( checkString, _.extend( {
+    self.checkAnswerButton = new TextPushButton( checkString, _.extend( {
       listener: function() {
         gameModel.checkAnswer();
       } }, buttonOptions ) );
-    thisScreen.gameControlButtons.push( thisScreen.checkAnswerButton );
+    self.gameControlButtons.push( self.checkAnswerButton );
 
-    thisScreen.nextButton = new TextPushButton( nextString, _.extend( {
+    self.nextButton = new TextPushButton( nextString, _.extend( {
       listener: function() { gameModel.nextChallenge(); }
     }, buttonOptions ) );
-    thisScreen.gameControlButtons.push( thisScreen.nextButton );
+    self.gameControlButtons.push( self.nextButton );
 
-    thisScreen.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
+    self.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
       listener: function() { gameModel.tryAgain(); }
     }, buttonOptions ) );
-    thisScreen.gameControlButtons.push( thisScreen.tryAgainButton );
+    self.gameControlButtons.push( self.tryAgainButton );
 
-    thisScreen.displayCorrectAnswerButton = new TextPushButton( showAnswerString, _.extend( {
+    self.displayCorrectAnswerButton = new TextPushButton( showAnswerString, _.extend( {
       listener: function() { gameModel.displayCorrectAnswer(); }
     }, buttonOptions ) );
-    thisScreen.gameControlButtons.push( thisScreen.displayCorrectAnswerButton );
+    self.gameControlButtons.push( self.displayCorrectAnswerButton );
 
     var buttonCenterX = ( this.layoutBounds.width + shapeBoard.right ) / 2;
     var buttonBottom = shapeBoard.bottom;
-    thisScreen.gameControlButtons.forEach( function( button ) {
+    self.gameControlButtons.forEach( function( button ) {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
-      thisScreen.rootNode.addChild( button );
+      self.rootNode.addChild( button );
     } );
 
-    // Register for changes to the game state and update accordingly.
-    gameModel.gameStateProperty.link( thisScreen.handleGameStateChange.bind( thisScreen ) );
+    // Various other initialization
+    self.levelCompletedNode = null;
+
+    // Hook up the update function for handling changes to game state.
+    gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
   }
 
   return inherit( ScreenView, AreaBuilderGameView, {
@@ -211,16 +222,8 @@ define( function( require ) {
           break;
 
         case 'presentingInteractiveChallenge':
-          this.updateTitle();
           this.challengeLayer.pickable = null; // Pass through, prunes subtree, see Scenery documentation for details.
-          // TODO: Temporary challenge representation
-          this.challengeView.removeAllChildren();
-          this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ), this.model.challengeList[ this.model.challengeIndex ].correctAnswerProperty, { left: 300, top: 200 } ) );
-          var coloredRectangle = new Rectangle( 0, 0, 40, 20, 0, 0, { fill: this.model.challengeList[ this.model.challengeIndex ].color, stroke: 'black', left: 300, top: 150 } );
-          this.challengeView.addChild( coloredRectangle );
-          this.challengeView.addChild( new Text( this.model.challengeList[ this.model.challengeIndex ].id, { font: new PhetFont( 14 ), left: coloredRectangle.right + 50, centerY: coloredRectangle.centerY } ) );
-          //TODO: End of temporary stuff
-
+          this.presentChallenge();
           this.show( [ this.scoreboard, this.challengeTitleNode, this.checkAnswerButton, this.challengeView ] );
           this.showChallengeGraphics();
           break;
@@ -280,7 +283,7 @@ define( function( require ) {
 
           // Display the correct answer
           // TODO: Display the correct answer.
-          this.model.challengeList[ this.model.challengeIndex ].correctAnswerProperty.value = true;
+          this.model.displayCorrectAnswer();
           this.showChallengeGraphics();
 
           // Disable interaction with the challenge elements.
@@ -308,8 +311,20 @@ define( function( require ) {
       }
     },
 
-    updateTitle: function() {
-      //TODO: stubbed for now, not sure if needed
+    presentChallenge: function() {
+      // TODO: Temporary challenge representation
+      if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
+        this.challengeView.removeAllChildren();
+        this.model.additionalModel.fakeCorrectAnswerProperty.reset();
+        this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ),
+          this.model.additionalModel.fakeCorrectAnswerProperty, { left: 300, top: 200 } ) );
+        var color = generateRandomColor();
+        var coloredRectangle = new Rectangle( 0, 0, 40, 20, 0, 0, {
+          fill: color, stroke: 'black', left: 300, top: 150 } );
+        this.challengeView.addChild( coloredRectangle );
+        this.challengeView.addChild( new Text( color, { font: new PhetFont( 14 ), left: coloredRectangle.right + 50, centerY: coloredRectangle.centerY } ) );
+      }
+      //TODO: End of temporary stuff
     },
 
     // Utility method for hiding all of the game nodes whose visibility changes

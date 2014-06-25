@@ -15,6 +15,13 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
 
+  /**
+   * TODO: doc this once it's stable
+   * @param challengeFactory
+   * @param additionalModel
+   * @param options
+   * @constructor
+   */
   function QuizGameModel( challengeFactory, additionalModel, options ) {
     var thisModel = this;
     this.challengeFactory = challengeFactory; // @private
@@ -32,6 +39,7 @@ define( function( require ) {
         timerEnabled: true,
         level: 0, // Zero-based in the model, though levels appear to the user to start at 1.
         challengeIndex: 0,
+        currentChallenge: null,
         score: 0,
         elapsedTime: 0,
         // Game state, valid values are 'choosingLevel', 'presentingInteractiveChallenge',
@@ -60,8 +68,7 @@ define( function( require ) {
     // Counter used to track number of incorrect answers.
     this.incorrectGuessesOnCurrentChallenge = 0;
 
-    // Current set of challenges, which collectively comprise a single level, on
-    // which the user is currently working.
+    // Current set of challenges, which collectively comprise a single level, on which the user is currently working.
     thisModel.challengeList = null;
   }
 
@@ -87,11 +94,11 @@ define( function( require ) {
         this.challengeIndex = 0;
         this.restartGameTimer();
 
-        // Set up the challenges.
+        // Create the list of challenges.
         this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet );
 
         // Set up the model for the next challenge
-        this.setChallenge( this.challengeList[ 0 ], this.challengeList[ 0 ].initialColumnState );
+        this.currentChallenge = this.challengeList[ this.challengeIndex ];
 
         // Change to new game state.
         this.gameState = 'presentingInteractiveChallenge';
@@ -100,24 +107,8 @@ define( function( require ) {
         this.newBestTime = false;
       },
 
-      setChallenge: function( challenge, columnState ) {
-
-        // Clear out the previous challenge (if there was one).
-        //TODO: Clear out previous challenge.
-
-        // Set up the new challenge.
-        //TODO: Set up the next challenge.
-      },
-
       setChoosingLevelState: function() {
         this.gameState = 'choosingLevel';
-      },
-
-      getCurrentChallenge: function() {
-        if ( this.challengeList === null || this.challengeList.size <= this.challengeIndex ) {
-          return null;
-        }
-        return this.challengeList[ this.challengeIndex ];
       },
 
       getChallengeCurrentPointValue: function() {
@@ -126,8 +117,7 @@ define( function( require ) {
 
       // Check the user's proposed answer.
       checkAnswer: function( answer ) {
-        //TODO: Check user's answer.  The following is temporary.
-        this.handleProposedAnswer( this.challengeList[ this.challengeIndex ].correctAnswerProperty.value );
+        this.handleProposedAnswer( this.additionalModel.checkAnswer( this.currentChallenge ) );
       },
 
       handleProposedAnswer: function( answerIsCorrect ) {
@@ -148,7 +138,7 @@ define( function( require ) {
         else {
           // The user got it wrong.
           this.incorrectGuessesOnCurrentChallenge++;
-          if ( this.incorrectGuessesOnCurrentChallenge < this.getCurrentChallenge().maxAttemptsAllowed ) {
+          if ( this.incorrectGuessesOnCurrentChallenge < this.currentChallenge.maxAttemptsAllowed ) {
             this.gameState = 'showingIncorrectAnswerFeedbackTryAgain';
           }
           else {
@@ -164,11 +154,10 @@ define( function( require ) {
       },
 
       nextChallenge: function() {
-        this.challengeIndex++;
         this.incorrectGuessesOnCurrentChallenge = 0;
-        if ( this.challengeIndex < this.challengeList.length ) {
+        if ( this.challengeIndex + 1 < this.challengeList.length ) {
           // Move to the next challenge.
-          this.setChallenge( this.getCurrentChallenge(), this.getCurrentChallenge().initialColumnState );
+          this.challengeIndex++;
           this.gameState = 'presentingInteractiveChallenge';
         }
         else {
@@ -188,16 +177,14 @@ define( function( require ) {
       },
 
       tryAgain: function() {
-        // Restore the challenge to the original state.
-        //TODO: Restore challenge to original state.
-//        this.columnState = this.getCurrentChallenge().initialColumnState;
+        // TODO: May need hooks for restoring to original state, if that is necessary.
         this.gameState = 'presentingInteractiveChallenge';
       },
 
       displayCorrectAnswer: function() {
 
         // Set the challenge to display the correct answer.
-        this.getCurrentChallenge().showCorrectAnswer();
+        this.additionalModel.displayCorrectAnswer( this.currentChallenge );
 
         // Update the game state.
         this.gameState = 'displayingCorrectAnswer';

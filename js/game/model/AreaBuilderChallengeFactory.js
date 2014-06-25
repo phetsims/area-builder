@@ -3,28 +3,77 @@
 define( function( require ) {
   'use strict';
 
+  // modules
+  var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
   var Property = require( 'AXON/Property' );
+  var Shape = require( 'KITE/Shape' );
+  var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
 
-  function generateRandomColor() {
-    var r = Math.round( Math.random() * 255 );
-    var g = Math.round( Math.random() * 255 );
-    var b = Math.round( Math.random() * 255 );
-    return '#' + ( r * 256 * 256 + g * 256 + b ).toString( 16 );
-  }
+  // constants
+  var UNIT_SQUARE_LENGTH = 35; // In screen coords TODO consolidate with others if they all end up the same in the end.
+  var SQUARE_SHAPE = new Shape()
+    .moveTo( 0, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
+    .lineTo( 0, UNIT_SQUARE_LENGTH )
+    .close();
 
+  // No constructor - this is a static type with a set of functions.
   return  {
     // @private
     generateChallenge: function( level ) {
-      var color = generateRandomColor();
-      return {
-        correctAnswerProperty: new Property( false ),
-        maxAttemptsAllowed: 2,
-        color: color,
-        id: color,
-        showCorrectAnswer: function() {
-          this.correctAnswerProperty.value = true;
-        }
-      };
+      if ( level === 0 ) {
+        return new AreaBuilderGameChallenge(
+          // Title of challenge
+          "Build it!",
+
+          // Tool control
+          {
+            gridControl: true,
+            dimensionsControl: true,
+            decompositionToolControl: true
+          },
+
+          // Keypad visibility flag
+          false,
+
+          // Kit contents
+          [
+            new ShapeCreatorNode( SQUARE_SHAPE, 'red', function() {} )
+          ],
+
+          // Build spec, i.e. what the user should try to build, if anything.
+          { area: 12 },
+
+          // Color prompts
+          null,
+          null,
+
+          // Background shape
+          null,
+
+          // Check specification, i.e. what gets checked with the user submits their attempt.
+          'areaConstructed',
+
+          // Flag for whether or not this is a fake challenge TODO remove once game is working
+          false
+        );
+      }
+      else {
+        // Create a fake challenge for the other levels.
+        return new AreaBuilderGameChallenge(
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          true
+        );
+      }
     },
 
     // @public
