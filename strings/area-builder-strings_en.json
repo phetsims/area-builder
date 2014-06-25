@@ -6,5 +6,11 @@
   "perimeter": "Perimeter:",
   "values": "Values",
   "level": "Level {0}",
-  "pattern.0challenge.1max": "{0} of {1}"
+  "pattern.0challenge.1max": "{0} of {1}",
+  "buildIt": "Build it!",
+  "findTheArea": "Find the area",
+  "areaQuestion": "Area?",
+  "yourGoal": "Your goal:",
+  "areaEquals": "Area = {0}",
+  "perimeterEquals": "Perimeter = {0}"
 }

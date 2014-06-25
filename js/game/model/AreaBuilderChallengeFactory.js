@@ -9,6 +9,9 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
 
+  // strings
+  var buildItString = require( 'string!AREA_BUILDER/buildIt' );
+
   // constants
   var UNIT_SQUARE_LENGTH = 35; // In screen coords TODO consolidate with others if they all end up the same in the end.
   var SQUARE_SHAPE = new Shape()
@@ -25,7 +28,7 @@ define( function( require ) {
       if ( level === 0 ) {
         return new AreaBuilderGameChallenge(
           // Title of challenge
-          "Build it!",
+          buildItString,
 
           // Tool control
           {
@@ -43,7 +46,7 @@ define( function( require ) {
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.
-          { area: 12 },
+          { area: 12, perimeter: 4 },
 
           // Color prompts
           null,
@@ -62,7 +65,7 @@ define( function( require ) {
       else {
         // Create a fake challenge for the other levels.
         return new AreaBuilderGameChallenge(
-          null,
+          'Fake Challenge',
           null,
           null,
           null,

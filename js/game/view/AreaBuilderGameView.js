@@ -16,6 +16,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
+  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
@@ -24,14 +25,19 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
+  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
   // strings
+  var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
+  var buildItString = require( 'string!AREA_BUILDER/buildIt' );
   var checkString = require( 'string!VEGAS/check' );
   var nextString = require( 'string!VEGAS/next' );
+  var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
   var showAnswerString = require( 'string!VEGAS/showAnswer' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
+  var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
 
   // images
   var icon1a = require( 'image!AREA_BUILDER/icon-1-a.jpg' );
@@ -111,17 +117,6 @@ define( function( require ) {
     // Hook up the audio player to the sound settings.
     self.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
 
-    // Add the title.  It is blank to start with, and is updated later at the appropriate state change.
-    self.challengeTitleNode = new Text( '',
-      {
-        font: new PhetFont( { size: 60, weight: 'bold' } ),
-        fill: 'white',
-        stroke: 'black',
-        lineWidth: 1.5,
-        top: 5 // Empirically determined based on appearance
-      } );
-    self.challengeLayer.addChild( self.challengeTitleNode );
-
     // Add the scoreboard.
     this.scoreboard = new AreaBuilderScoreboard(
       gameModel.levelProperty,
@@ -157,11 +152,35 @@ define( function( require ) {
     self.addChild( self.faceWithPointsNode );
 
     // Set up the constant portions of the challenge view
-    var shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
-    this.challengeLayer.addChild( shapeBoard );
-    // TODO: Temp - node containing the challenge presentation (a check box for now)
+    this.shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
+    this.challengeLayer.addChild( this.shapeBoard );
+    // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
+
+    // Add the title.  It is blank to start with, and is updated later at the appropriate state change.
+    self.challengeTitleNode = new Text( '',
+      {
+        font: new PhetFont( { size: 20, weight: 'bold' } ),
+        left: this.shapeBoard.left,
+        bottom: this.shapeBoard.top - 20
+      } );
+    self.challengeLayer.addChild( self.challengeTitleNode );
+
+    // Add the 'Build Spec' text, which is shown on some challenges to instruct the user on what to build.
+    self.buildSpecNode = new Text( '',
+      {
+        font: new PhetFont( { size: 20 } ),
+        top: 10
+      } );
+    self.challengeLayer.addChild( self.buildSpecNode );
+
+    // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
+    self.buildPromptNode = new MultiLineText( '',
+      {
+        font: new PhetFont( { size: 20, weight: 'bold' } )
+      } );
+    self.challengeLayer.addChild( self.buildPromptNode );
 
     // Add and lay out the game control buttons.
     self.gameControlButtons = [];
@@ -191,8 +210,8 @@ define( function( require ) {
     }, buttonOptions ) );
     self.gameControlButtons.push( self.displayCorrectAnswerButton );
 
-    var buttonCenterX = ( this.layoutBounds.width + shapeBoard.right ) / 2;
-    var buttonBottom = shapeBoard.bottom;
+    var buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
+    var buttonBottom = this.shapeBoard.bottom;
     self.gameControlButtons.forEach( function( button ) {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
@@ -312,19 +331,37 @@ define( function( require ) {
     },
 
     presentChallenge: function() {
-      // TODO: Temporary challenge representation
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
+        var challenge = this.model.currentChallenge; // Convenience var
+        this.challengeTitleNode.text = challenge.challengeTitle;
         this.challengeView.removeAllChildren();
-        this.model.additionalModel.fakeCorrectAnswerProperty.reset();
-        this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ),
-          this.model.additionalModel.fakeCorrectAnswerProperty, { left: 300, top: 200 } ) );
-        var color = generateRandomColor();
-        var coloredRectangle = new Rectangle( 0, 0, 40, 20, 0, 0, {
-          fill: color, stroke: 'black', left: 300, top: 150 } );
-        this.challengeView.addChild( coloredRectangle );
-        this.challengeView.addChild( new Text( color, { font: new PhetFont( 14 ), left: coloredRectangle.right + 50, centerY: coloredRectangle.centerY } ) );
+        if ( challenge.buildSpec ) {
+          var promptText = StringUtils.format( areaEqualsString, challenge.buildSpec.area );
+          if ( challenge.buildSpec.perimeter ) {
+            promptText += '   ' + StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter );
+          }
+          this.buildSpecNode.text = promptText;
+          this.buildSpecNode.centerX = this.shapeBoard.centerX;
+          this.buildPromptNode.text = yourGoalString + '\n\n' + promptText + '\n\n' + buildItString;
+          this.buildPromptNode.center = this.shapeBoard.center;
+        }
+        else {
+          this.buildSpecNode.text = '';
+          this.buildPromptNode.text = '';
+        }
+
+        // TODO: Remove once fake challenges no longer exist.
+        if ( this.model.currentChallenge.fakeChallenge ) {
+          this.model.additionalModel.fakeCorrectAnswerProperty.reset();
+          this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ),
+            this.model.additionalModel.fakeCorrectAnswerProperty, { left: 300, top: 200 } ) );
+          var color = generateRandomColor();
+          var coloredRectangle = new Rectangle( 0, 0, 40, 20, 0, 0, {
+            fill: color, stroke: 'black', left: 300, top: 150 } );
+          this.challengeView.addChild( coloredRectangle );
+          this.challengeView.addChild( new Text( color, { font: new PhetFont( 14 ), left: coloredRectangle.right + 50, centerY: coloredRectangle.centerY } ) );
+        }
       }
-      //TODO: End of temporary stuff
     },
 
     // Utility method for hiding all of the game nodes whose visibility changes

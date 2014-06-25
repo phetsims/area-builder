@@ -8,7 +8,8 @@ define( function( require ) {
   'use strict';
 
   /**
-   * @param {string} challengeTitle Title for this challenge, shown at the top of the view.
+   * @param {string} challengeTitle Title for this challenge, shown at the top of the view.  Must be specified for all
+   * challenges.
    * @param {object} toolSpec An object that specifies which tools are available to the user.  It should have three
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether
    * the user is allowed to control these things for this challenge.
