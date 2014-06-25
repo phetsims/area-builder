@@ -25,7 +25,7 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
-  var PaperAirplaneNode = require( 'AREA_BUILDER/common/view/PaperAirplaneNode' );
+  var PaperAirplaneNode = require( 'SCENERY_PHET/PaperAirplaneNode' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangleCreatorNode = require( 'AREA_BUILDER/explore/view/RectangleCreatorNode' );
