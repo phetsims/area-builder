@@ -10,14 +10,17 @@ define( function( require ) {
 
   // modules
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var CheckBox = require( 'SUN/CheckBox' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var KitSelectionNode = require( 'SCENERY_PHET/KitSelectionNode' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -28,6 +31,7 @@ define( function( require ) {
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
@@ -63,6 +67,7 @@ define( function( require ) {
     var b = Math.round( Math.random() * 255 );
     return '#' + ( r * 256 * 256 + g * 256 + b ).toString( 16 );
   }
+
   // ---------- End of temp stuff for fake challenges ---------------
 
   /**
@@ -75,18 +80,18 @@ define( function( require ) {
     self.model = gameModel;
 
     // Create a root node and send to back so that the layout bounds box can be made visible if needed.
-    self.rootNode = new Node();
-    self.addChild( self.rootNode );
-    self.rootNode.moveToBack();
+    this.rootNode = new Node();
+    this.addChild( self.rootNode );
+    this.rootNode.moveToBack();
 
     // Add layers used to control game appearance.
-    self.controlLayer = new Node();
-    self.rootNode.addChild( self.controlLayer );
-    self.challengeLayer = new Node();
-    self.rootNode.addChild( self.challengeLayer );
+    this.controlLayer = new Node();
+    this.rootNode.addChild( this.controlLayer );
+    this.challengeLayer = new Node();
+    this.rootNode.addChild( this.challengeLayer );
 
     // Add the node that allows the user to choose a game level to play.
-    self.startGameLevelNode = new StartGameLevelNode(
+    this.startGameLevelNode = new StartGameLevelNode(
       function( level ) { gameModel.startLevel( level ); },
       function() { gameModel.reset(); },
       gameModel.timerEnabledProperty,
@@ -110,10 +115,10 @@ define( function( require ) {
         numLevels: gameModel.numberOfLevels
       }
     );
-    self.rootNode.addChild( self.startGameLevelNode );
+    this.rootNode.addChild( this.startGameLevelNode );
 
     // Hook up the audio player to the sound settings.
-    self.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
+    this.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
 
     // Add the scoreboard.
     this.scoreboard = new AreaBuilderScoreboard(
@@ -127,27 +132,27 @@ define( function( require ) {
       new Property( false ), // TODO: wire up to the show dimensions property
       { top: 100, left: 20 }
     );
-    self.controlLayer.addChild( this.scoreboard );
+    this.controlLayer.addChild( this.scoreboard );
 
     // Add the button for returning to the level selection screen.
-    self.controlLayer.addChild( new ReturnToLevelSelectButton( {
+    this.controlLayer.addChild( new ReturnToLevelSelectButton( {
       listener: function() { gameModel.setChoosingLevelState(); },
       left: this.scoreboard.left,
       top: 20
     } ) );
 
     // Create the 'feedback node' that is used to visually indicate correct and incorrect answers.
-    self.faceWithPointsNode = new FaceWithPointsNode(
+    this.faceWithPointsNode = new FaceWithPointsNode(
       {
         faceOpacity: 0.6,
-        faceDiameter: self.layoutBounds.width * 0.31,
+        faceDiameter: this.layoutBounds.width * 0.31,
         pointsFill: 'yellow',
         pointsStroke: 'black',
         pointsAlignment: 'rightCenter',
         centerX: this.layoutBounds.centerX,
         centerY: this.layoutBounds.centerY
       } );
-    self.addChild( self.faceWithPointsNode );
+    this.addChild( this.faceWithPointsNode );
 
     // Set up the constant portions of the challenge view
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
@@ -157,67 +162,68 @@ define( function( require ) {
     this.challengeLayer.addChild( this.challengeView );
 
     // Add the title.  It is blank to start with, and is updated later at the appropriate state change.
-    self.challengeTitleNode = new Text( '',
+    this.challengeTitleNode = new Text( '',
       {
         font: new PhetFont( { size: 20, weight: 'bold' } ),
         left: this.shapeBoard.left,
         bottom: this.shapeBoard.top - 20
       } );
-    self.challengeLayer.addChild( self.challengeTitleNode );
+    this.challengeLayer.addChild( this.challengeTitleNode );
 
     // Add the 'Build Spec' text, which is shown on some challenges to instruct the user on what to build.
-    self.buildSpecNode = new Text( '',
+    this.buildSpecNode = new Text( '',
       {
         font: new PhetFont( { size: 20 } ),
         top: 10
       } );
-    self.challengeLayer.addChild( self.buildSpecNode );
+    this.challengeLayer.addChild( this.buildSpecNode );
 
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
-    self.buildPromptNode = new MultiLineText( '',
+    this.buildPromptNode = new MultiLineText( '',
       {
         font: new PhetFont( { size: 20, weight: 'bold' } )
       } );
-    self.challengeLayer.addChild( self.buildPromptNode );
+    this.challengeLayer.addChild( this.buildPromptNode );
 
     // Add and lay out the game control buttons.
-    self.gameControlButtons = [];
+    this.gameControlButtons = [];
     var buttonOptions = {
       font: BUTTON_FONT,
       baseColor: BUTTON_FILL,
       cornerRadius: 4
     };
-    self.checkAnswerButton = new TextPushButton( checkString, _.extend( {
+    this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
       listener: function() {
         gameModel.checkAnswer();
       } }, buttonOptions ) );
-    self.gameControlButtons.push( self.checkAnswerButton );
+    this.gameControlButtons.push( this.checkAnswerButton );
 
-    self.nextButton = new TextPushButton( nextString, _.extend( {
+    this.nextButton = new TextPushButton( nextString, _.extend( {
       listener: function() { gameModel.nextChallenge(); }
     }, buttonOptions ) );
-    self.gameControlButtons.push( self.nextButton );
+    this.gameControlButtons.push( this.nextButton );
 
-    self.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
+    this.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
       listener: function() { gameModel.tryAgain(); }
     }, buttonOptions ) );
-    self.gameControlButtons.push( self.tryAgainButton );
+    this.gameControlButtons.push( this.tryAgainButton );
 
-    self.displayCorrectAnswerButton = new TextPushButton( showAnswerString, _.extend( {
+    this.displayCorrectAnswerButton = new TextPushButton( showAnswerString, _.extend( {
       listener: function() { gameModel.displayCorrectAnswer(); }
     }, buttonOptions ) );
-    self.gameControlButtons.push( self.displayCorrectAnswerButton );
+    this.gameControlButtons.push( this.displayCorrectAnswerButton );
 
     var buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
     var buttonBottom = this.shapeBoard.bottom;
-    self.gameControlButtons.forEach( function( button ) {
+    this.gameControlButtons.forEach( function( button ) {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
       self.rootNode.addChild( button );
     } );
 
     // Various other initialization
-    self.levelCompletedNode = null;
+    this.levelCompletedNode = null;
+    this.shapeCarousel = null;
 
     // Hook up the update function for handling changes to game state.
     gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
@@ -330,6 +336,13 @@ define( function( require ) {
 
     presentChallenge: function() {
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
+
+        // Clean up previous challenge.
+        if ( this.shapeCarousel !== null ) {
+          this.challengeLayer.removeChild( this.shapeCarousel );
+        }
+
+        // Set up the titles and prompts
         var challenge = this.model.currentChallenge; // Convenience var
         this.challengeTitleNode.text = challenge.challengeTitle;
         this.challengeView.removeAllChildren();
@@ -349,7 +362,20 @@ define( function( require ) {
           this.buildPromptNode.text = '';
         }
 
-        // TODO: Remove once fake challenges no longer exist.
+        // Create the carousel if present
+        if ( challenge.carouselContents !== null ) {
+          var creatorNodeVBox = new HBox( { children: challenge.carouselContents, spacing: 10 } );
+          this.shapeCarousel = new Panel( creatorNodeVBox, {
+            centerX: this.shapeBoard.centerX,
+            top: this.shapeBoard.bottom + 10,
+            xMargin: 50,
+            yMargin: 15,
+            fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
+          } );
+          this.challengeLayer.addChild( this.shapeCarousel );
+        }
+
+        // Preset the fake challenge if specified. TODO: Remove once fake challenges no longer exist.
         if ( this.model.currentChallenge.fakeChallenge ) {
           this.model.additionalModel.fakeCorrectAnswerProperty.reset();
           this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ),

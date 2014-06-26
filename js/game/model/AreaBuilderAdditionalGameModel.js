@@ -11,7 +11,7 @@ define( function( require ) {
 
   // constants
   var UNIT_SQUARE_LENGTH = 35; // In screen coords, which are roughly pixels
-  var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 12, UNIT_SQUARE_LENGTH * 9 );
+  var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 12, UNIT_SQUARE_LENGTH * 8 );
 
   /**
    *

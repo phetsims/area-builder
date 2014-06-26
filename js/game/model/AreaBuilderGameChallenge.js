@@ -14,8 +14,8 @@ define( function( require ) {
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether
    * the user is allowed to control these things for this challenge.
    * @param {boolean} showNumberEntryPad Flag that controls whether key pad is present in this challenge.
-   * @param {array} kitContents An array of creator nodes that should be included in the kit.  Can be null to signify
-   * no kit.
+   * @param {array} carouselContents An array of creator nodes that should be placed in the carousel so that the user
+   * can use them to drag out shapes for placement on the board.  Can be null to signify no kit, should never be empty.
    * @param {object} buildSpec Object that specifies what the user should build.  This is only used if this is a 'build
    * it' type of challenge, otherwise it should be null.  It should always have an 'area' field with a number, and can
    * optionally have a 'perimeter' field with a number as well.
@@ -30,12 +30,12 @@ define( function( require ) {
    * challenge, i.e. one with just a check box to get the right answer.  TODO Remove this once game is working.
    * @constructor
    */
-  function AreaBuilderGameChallenge( challengeTitle, toolSpec, showNumberEntryPad, kitContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, fakeChallenge ) {
+  function AreaBuilderGameChallenge( challengeTitle, toolSpec, showNumberEntryPad, carouselContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, fakeChallenge ) {
     // TODO: Maybe add some verification.
     this.challengeTitle = challengeTitle;
     this.toolSpec = toolSpec;
     this.showNumberEntryPad = showNumberEntryPad;
-    this.kitContents = kitContents;
+    this.carouselContents = carouselContents;
     this.buildSpec = buildSpec;
     this.colorPrompt1 = colorPrompt1;
     this.colorPrompt2 = colorPrompt2;

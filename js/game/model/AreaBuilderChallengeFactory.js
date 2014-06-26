@@ -4,7 +4,11 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
+  var Line = require( 'SCENERY/nodes/Line' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
 
@@ -19,6 +23,12 @@ define( function( require ) {
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
     .close();
+
+  // TODO: temp stuff for demo
+  var longRectangle = new Rectangle( 0, 0, 70, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
+  longRectangle.addChild( new Line( 35, 0, 35, 35, { stroke: 'black', lineDash: [2] } ) );
+  var triangleShape = new Shape().moveTo( 35, 0 ).lineTo( 35, 35 ).lineTo( 0, 35 ).close();
+  var triangle = new Path( triangleShape, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
 
   // No constructor - this is a static type with a set of functions.
   return  {
@@ -41,7 +51,10 @@ define( function( require ) {
 
           // Kit contents
           [
-            new ShapeCreatorNode( SQUARE_SHAPE, 'red', function() {} )
+            new ShapeCreatorNode( SQUARE_SHAPE, AreaBuilderSharedConstants.GREENISH_COLOR, function() {} ),
+            // The ones below are fake, basically for demo purposes
+            longRectangle,
+            triangle
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.
