@@ -147,7 +147,7 @@ define( function( require ) {
             } while ( segment.endIndex !== 0 );
 
             segmentLabelsInfo.forEach( function( segmentLabelInfo, index ) {
-              var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 16 ) } );
+              var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 14 ) } );
               var labelPositionOffset = new Vector2();
               // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
               // containment testing unreliable if there is an edge on the same line as the containment test.  As a
