@@ -146,7 +146,7 @@ define( function( require ) {
               } );
             } while ( segment.endIndex !== 0 );
 
-            segmentLabelsInfo.forEach( function( segmentLabelInfo, index ) {
+            segmentLabelsInfo.forEach( function( segmentLabelInfo ) {
               var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 14 ) } );
               var labelPositionOffset = new Vector2();
               // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
