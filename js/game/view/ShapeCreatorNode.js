@@ -38,7 +38,7 @@ define( function( require ) {
     this.addChild( representation );
 
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
-    var modelElement = null
+    var modelElement = null;
     this.addInputListener( new SimpleDragHandler( {
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,
