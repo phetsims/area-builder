@@ -16,7 +16,6 @@ define( function( require ) {
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var KitSelectionNode = require( 'SCENERY_PHET/KitSelectionNode' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );

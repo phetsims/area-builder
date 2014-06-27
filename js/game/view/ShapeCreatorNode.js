@@ -65,7 +65,6 @@ define( function( require ) {
           testNode = testNode.parents[0]; // Move up the scene graph by one level
         }
 
-        debugger;
         modelElement = new MovableRectangle( rectangleSize, AreaBuilderSharedConstants.GREENISH_COLOR, parentScreen.localToGlobalPoint( self.center ) );
         model.addModelElement( modelElement );
       },

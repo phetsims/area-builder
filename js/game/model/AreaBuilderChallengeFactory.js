@@ -18,7 +18,6 @@ define( function( require ) {
 
   // constants
   var UNIT_SQUARE_LENGTH = 35; // In screen coords TODO consolidate with others if they all end up the same in the end.
-  var UNIT_SQUARE_SIZE = new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
   var SQUARE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
