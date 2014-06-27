@@ -27,6 +27,7 @@ define( function( require ) {
   var ReturnToLevelSelectButton = require( 'SCENERY_PHET/ReturnToLevelSelectButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
+  var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -219,6 +220,29 @@ define( function( require ) {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
       self.rootNode.addChild( button );
+    } );
+
+    // Handle comings and goings of model shapes.
+    gameModel.additionalModel.movableShapes.addItemAddedListener( function( addedShape ) {
+
+      // Create and add the view representation for this shape.
+      var shapeView = new ShapeView( addedShape );
+      self.challengeLayer.addChild( shapeView );
+
+      // Move the shape to the front when grabbed by the user.
+      addedShape.userControlledProperty.link( function( userControlled ) {
+        if ( userControlled ) {
+          shapeView.moveToFront();
+        }
+      } );
+
+      // Add the removal listener for if and when this shape is removed from the model.
+      gameModel.additionalModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
+        if ( removedShape === addedShape ) {
+          self.challengeLayer.removeChild( shapeView );
+          gameModel.additionalModel.movableShapes.removeItemRemovedListener( removalListener );
+        }
+      } );
     } );
 
     // Various other initialization

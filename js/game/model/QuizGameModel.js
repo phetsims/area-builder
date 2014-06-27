@@ -75,7 +75,7 @@ define( function( require ) {
   return inherit( PropertySet, QuizGameModel,
     {
       step: function( dt ) {
-        //TODO: Not sure yet if step is needed for area builder challenges, might need for animation.
+        this.additionalModel.step( dt );
       },
 
       reset: function() {
@@ -95,7 +95,7 @@ define( function( require ) {
         this.restartGameTimer();
 
         // Create the list of challenges.
-        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet );
+        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet, this.additionalModel );
 
         // Set up the model for the next challenge
         this.currentChallenge = this.challengeList[ this.challengeIndex ];

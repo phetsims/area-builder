@@ -6,6 +6,7 @@ define( function( require ) {
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -17,6 +18,7 @@ define( function( require ) {
 
   // constants
   var UNIT_SQUARE_LENGTH = 35; // In screen coords TODO consolidate with others if they all end up the same in the end.
+  var UNIT_SQUARE_SIZE = new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
   var SQUARE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
@@ -33,7 +35,7 @@ define( function( require ) {
   // No constructor - this is a static type with a set of functions.
   return  {
     // @private
-    generateChallenge: function( level ) {
+    generateChallenge: function( level, model ) {
       if ( level === 0 ) {
         return new AreaBuilderGameChallenge(
           // Title of challenge
@@ -51,7 +53,11 @@ define( function( require ) {
 
           // Kit contents
           [
-            new ShapeCreatorNode( SQUARE_SHAPE, AreaBuilderSharedConstants.GREENISH_COLOR, function() {} ),
+            new ShapeCreatorNode(
+              SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model
+            ),
             // The ones below are fake, basically for demo purposes
             longRectangle,
             triangle
@@ -92,11 +98,11 @@ define( function( require ) {
     },
 
     // @public
-    generateChallengeSet: function( level, numChallenges ) {
+    generateChallengeSet: function( level, numChallenges, model ) {
       var self = this;
       var challengeSet = [];
       _.times( numChallenges, function() {
-        challengeSet.push( self.generateChallenge( level ) );
+        challengeSet.push( self.generateChallenge( level, model ) );
       } );
       return challengeSet;
     }

@@ -44,7 +44,8 @@ define( function( require ) {
       shadow.leftTop = position.plus( SHADOW_OFFSET );
     } );
 
-    // Derive the opacity of the shape from multiple properties on the model element.  Because the composite shape is
+    /*
+     // Derive the opacity of the shape from multiple properties on the model element.  Because the composite shape is
     // used to depict the overall shape when a shape is on the placement board, this element is invisible (opacity set
     // to zero) unless it is user controlled, animating, or fading.
     var opacityProperty = new DerivedProperty(
@@ -94,6 +95,7 @@ define( function( require ) {
         movableShape.userControlled = false;
       }
     } ) );
+     */
   }
 
   return inherit( Node, ShapeView );
