@@ -175,6 +175,13 @@ define( function( require ) {
       } );
     this.challengeLayer.addChild( this.buildPromptNode );
 
+    // Made the build prompt node invisible when the user adds anything to the board.
+    gameModel.additionalModel.shapePlacementBoard.areaProperty.link( function( area ) {
+      if ( area !== 0 ) {
+        self.buildPromptNode.visible = false;
+      }
+    } );
+
     // Add and lay out the game control buttons.
     this.gameControlButtons = [];
     var buttonOptions = {
@@ -369,6 +376,7 @@ define( function( require ) {
           this.buildPromptNode.text = yourGoalString + '\n\n' + promptText + '\n\n' + buildItString;
           this.buildPromptNode.centerX = this.shapeBoard.centerX;
           this.buildPromptNode.top = this.shapeBoard.top + 40;
+          this.buildPromptNode.visible = true;
         }
         else {
           this.buildSpecNode.text = '';
