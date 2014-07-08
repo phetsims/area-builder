@@ -27,6 +27,7 @@ define( function( require ) {
     var self = this;
     this.color = movableShape.color; // @public
 
+    // Create the shadow that will be
     var shadow = new Path( movableShape.shape, {
       fill: SHADOW_COLOR
     } );

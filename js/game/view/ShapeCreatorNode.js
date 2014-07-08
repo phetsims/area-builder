@@ -23,6 +23,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param shape
@@ -55,7 +56,8 @@ define( function( require ) {
       allowTouchSnag: true,
 
       start: function( event, trail ) {
-        // Move up the scene graph until the parent screen is found.
+
+        // Find the parent screen by moving up the scene graph.
         var testNode = self;
         while ( testNode !== null ) {
           if ( testNode instanceof ScreenView ) {
@@ -65,13 +67,21 @@ define( function( require ) {
           testNode = testNode.parents[0]; // Move up the scene graph by one level
         }
 
-        modelElement = new MovableRectangle( rectangleSize, AreaBuilderSharedConstants.GREENISH_COLOR, parentScreen.localToGlobalPoint( self.center ) );
+        // Determine the initial position of the new element as a function of the event position and this node's bounds.
+        var upperLeftCornerGlobal = self.localToGlobalPoint( new Vector2( self.bounds.minX, self.bounds.minY ) );
+        var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
+        var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point ).plus( initialPositionOffset );
+
+        // Create and add the new model element.
+        modelElement = new MovableRectangle( rectangleSize, AreaBuilderSharedConstants.GREENISH_COLOR, initialPosition );
         modelElement.userControlled = true;
         model.addModelElement( modelElement );
       },
+
       translate: function( translationParams ) {
         modelElement.setDestination( modelElement.position.plus( translationParams.delta ) );
       },
+
       end: function( event, trail ) {
         modelElement.userControlled = false;
         modelElement = null;
