@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var CompositeShapeNode = require( 'AREA_BUILDER/common/view/CompositeShapeNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -38,6 +39,15 @@ define( function( require ) {
 
     // Track and update the grid visibility
     shapePlacementBoard.showGridProperty.linkAttribute( grid, 'visible' );
+
+    // Add the composite shape, which depicts the collection of all shapes added to the board.
+    this.addChild( new CompositeShapeNode(
+      shapePlacementBoard.exteriorPerimetersProperty,
+      shapePlacementBoard.interiorPerimetersProperty,
+      shapePlacementBoard.unitSquareLength,
+      shapePlacementBoard.colorHandled,
+      shapePlacementBoard.showDimensionsProperty
+    ) );
   }
 
   return inherit( Node, ShapePlacementBoardNode );

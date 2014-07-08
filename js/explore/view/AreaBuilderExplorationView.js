@@ -78,32 +78,6 @@ define( function( require ) {
     var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
     backLayer.addChild( centerBoardNode );
 
-    // Add the composite shapes, i.e. the ones that aggregate what the user has added as individual shapes.
-    var centerCompositeShape = new CompositeShapeNode(
-      model.centerShapePlacementBoard.exteriorPerimetersProperty,
-      model.centerShapePlacementBoard.interiorPerimetersProperty,
-      model.unitSquareLength,
-      model.centerShapePlacementBoard.colorHandled,
-      showDimensionsProperty
-    );
-    compositeShapesLayer.addChild( centerCompositeShape );
-    var leftCompositeShape = new CompositeShapeNode(
-      model.leftShapePlacementBoard.exteriorPerimetersProperty,
-      model.leftShapePlacementBoard.interiorPerimetersProperty,
-      model.unitSquareLength,
-      model.leftShapePlacementBoard.colorHandled,
-      showDimensionsProperty
-    );
-    compositeShapesLayer.addChild( leftCompositeShape );
-    var rightCompositeShape = new CompositeShapeNode(
-      model.rightShapePlacementBoard.exteriorPerimetersProperty,
-      model.rightShapePlacementBoard.interiorPerimetersProperty,
-      model.unitSquareLength,
-      model.rightShapePlacementBoard.colorHandled,
-      showDimensionsProperty
-    );
-    compositeShapesLayer.addChild( rightCompositeShape );
-
     // Add the area and perimeter displays
     var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.GREENISH_COLOR, model.leftShapePlacementBoard.perimeterProperty,
@@ -193,19 +167,16 @@ define( function( require ) {
       leftAreaAndPerimeterDisplay.visible = leftBoardNode.visible;
       leftBucketFront.visible = boardDisplayMode === 'dual';
       leftBucketHole.visible = boardDisplayMode === 'dual';
-      leftCompositeShape.visible = boardDisplayMode === 'dual';
       rightBoardNode.visible = boardDisplayMode === 'dual';
       rightBoardClearButton.visible = boardDisplayMode === 'dual';
       rightAreaAndPerimeterDisplay.visible = rightBoardNode.visible;
       rightBucketFront.visible = boardDisplayMode === 'dual';
       rightBucketHole.visible = boardDisplayMode === 'dual';
-      rightCompositeShape.visible = boardDisplayMode === 'dual';
       centerBoardNode.visible = boardDisplayMode === 'single';
       centerBoardClearButton.visible = boardDisplayMode === 'single';
       centerAreaAndPerimeterDisplay.visible = centerBoardNode.visible;
       centerBucketFront.visible = boardDisplayMode === 'single';
       centerBucketHole.visible = boardDisplayMode === 'single';
-      centerCompositeShape.visible = boardDisplayMode === 'single';
       movableShapesLayer.children.forEach( function( shapeNode ) {
         // TODO: This works, but I'm not crazy about the idea of mapping
         // TODO: color to visibility - it seems indirect and brittle.  Keep
