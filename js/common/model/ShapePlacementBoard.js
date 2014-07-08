@@ -60,7 +60,7 @@ define( function( require ) {
 
     PropertySet.call( this, {
       // @public Boolean property that controls whether or not the placement grid is visible
-      showGrid: false,
+      showGrid: true,
 
       // @public Boolean property that controls whether or not the dimensions of a created shape are visible
       showDimensions: false,

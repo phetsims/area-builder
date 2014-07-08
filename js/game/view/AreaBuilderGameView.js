@@ -169,16 +169,21 @@ define( function( require ) {
     this.challengeLayer.addChild( this.buildSpecNode );
 
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
-    this.buildPromptNode = new MultiLineText( '',
+    this.buildPromptText = new MultiLineText( '',
       {
         font: new PhetFont( { size: 20, weight: 'bold' } )
       } );
-    this.challengeLayer.addChild( this.buildPromptNode );
+    this.buildPromptPanel = new Panel( this.buildPromptText, {
+      stroke: null,
+      xMargin: 10,
+      yMargin: 10
+    } );
+    this.challengeLayer.addChild( this.buildPromptPanel );
 
     // Made the build prompt node invisible when the user adds anything to the board.
     gameModel.additionalModel.shapePlacementBoard.areaProperty.link( function( area ) {
       if ( area !== 0 ) {
-        self.buildPromptNode.visible = false;
+        self.buildPromptPanel.visible = false;
       }
     } );
 
@@ -373,14 +378,15 @@ define( function( require ) {
           }
           this.buildSpecNode.text = promptText;
           this.buildSpecNode.centerX = this.shapeBoard.centerX;
-          this.buildPromptNode.text = yourGoalString + '\n\n' + promptText + '\n\n' + buildItString;
-          this.buildPromptNode.centerX = this.shapeBoard.centerX;
-          this.buildPromptNode.top = this.shapeBoard.top + 40;
-          this.buildPromptNode.visible = true;
+          this.buildPromptText.text = yourGoalString + '\n\n' + promptText + '\n\n' + buildItString;
+          this.buildPromptPanel.centerX = this.shapeBoard.centerX;
+          this.buildPromptPanel.centerY = this.shapeBoard.centerY;
+          this.buildPromptPanel.visible = true;
         }
         else {
           this.buildSpecNode.text = '';
-          this.buildPromptNode.text = '';
+          this.buildPromptText.text = '';
+          this.buildPromptPanel.visible = false;
         }
 
         // Create the carousel if present
