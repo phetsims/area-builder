@@ -103,6 +103,8 @@ define( function( require ) {
 
         // Add in the shape of any interior spaces and the grid.
         if ( !mainShape.bounds.isEmpty() ) {
+          compositeShapeNode.visible = true;
+          perimeterNode.visible = true;
           interiorPerimetersProperty.value.forEach( function( interiorPerimeterPoints ) {
             mainShape.moveToPoint( interiorPerimeterPoints[ 0 ] );
             for ( i = 1; i < interiorPerimeterPoints.length; i++ ) {
@@ -171,16 +173,17 @@ define( function( require ) {
               dimensionLabel.center = segmentLabelInfo.position.plus( labelPositionOffset );
               dimensionsLayer.addChild( dimensionLabel );
             } );
-
           }
         }
         else {
           compositeShapeNode.setShape( null );
+          compositeShapeNode.visible = false;
           perimeterNode.setShape( null );
+          perimeterNode.visible = false;
         }
       }
 
-      exteriorPerimetersProperty.link( function() {
+      exteriorPerimetersProperty.link( function( perims ) {
         update();
       } );
 
