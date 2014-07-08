@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -33,7 +34,7 @@ define( function( require ) {
       BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( 200, 100 ),
-      'red'
+      AreaBuilderSharedConstants.GREENISH_COLOR
     );
 
     // Array where shapes that are added by the user are tracked.
@@ -50,7 +51,7 @@ define( function( require ) {
           if ( !userControlled ) {
             if ( !self.shapePlacementBoard.placeShape( shape ) ) {
               // Shape did not go onto board, possibly because it's not over the board or the board is fill.  Send it home.
-              shape.goHome();
+              shape.goHome( true );
             }
           }
         } );
