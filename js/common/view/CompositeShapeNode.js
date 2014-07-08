@@ -176,9 +176,7 @@ define( function( require ) {
           }
         }
         else {
-          compositeShapeNode.setShape( null );
           compositeShapeNode.visible = false;
-          perimeterNode.setShape( null );
           perimeterNode.visible = false;
         }
       }
