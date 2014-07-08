@@ -35,6 +35,7 @@ define( function( require ) {
       stroke: Color.toColor( movableShape.color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       lineWidth: 1
     } );
+    var Rectangle = require( 'SCENERY/nodes/Rectangle' );
     this.addChild( shadow );
     this.addChild( representation );
 

@@ -66,6 +66,7 @@ define( function( require ) {
         }
 
         modelElement = new MovableRectangle( rectangleSize, AreaBuilderSharedConstants.GREENISH_COLOR, parentScreen.localToGlobalPoint( self.center ) );
+        modelElement.userControlled = true;
         model.addModelElement( modelElement );
       },
       translate: function( translationParams ) {
