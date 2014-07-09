@@ -13,6 +13,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var CheckBox = require( 'SUN/CheckBox' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
+  var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -39,7 +40,7 @@ define( function( require ) {
   var checkString = require( 'string!VEGAS/check' );
   var nextString = require( 'string!VEGAS/next' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
-  var showAnswerString = require( 'string!VEGAS/showAnswer' );
+  var showSolutionString = require( 'string!AREA_BUILDER/showSolution' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
 
@@ -137,6 +138,8 @@ define( function( require ) {
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
+    this.answerFeedback = new Node();
+    this.challengeLayer.addChild( this.answerFeedback );
 
     // Add the title.  It is blank to start with, and is updated later at the appropriate state change.
     this.challengeTitleNode = new Text( '',
@@ -197,7 +200,7 @@ define( function( require ) {
     }, buttonOptions ) );
     this.gameControlButtons.push( this.tryAgainButton );
 
-    this.displayCorrectAnswerButton = new TextPushButton( showAnswerString, _.extend( {
+    this.displayCorrectAnswerButton = new TextPushButton( showSolutionString, _.extend( {
       listener: function() { gameModel.displayCorrectAnswer(); }
     }, buttonOptions ) );
     this.gameControlButtons.push( this.displayCorrectAnswerButton );
@@ -323,8 +326,19 @@ define( function( require ) {
 
         case 'displayingCorrectAnswer':
 
+          // Update the answer.
+          // TODO: This only handles "build it" type challenges now, will need to be extended to other challenge types.
+          this.answerFeedback.removeAllChildren();
+          this.answerFeedback.addChild( new FeedbackWindow(
+            this.model.currentChallenge.buildSpec.area,
+            this.model.currentChallenge.buildSpec.perimeter,
+            this.model.additionalModel.shapePlacementBoard.area,
+            this.model.additionalModel.shapePlacementBoard.perimeter,
+            { minWidth: this.shapeBoard.width, minHeight: this.shapeBoard.height, center: this.shapeBoard.center }
+          ) );
+
           // Show the appropriate nodes for this state.
-          this.show( [ this.scoreboard, this.nextButton, this.challengeView ] );
+          this.show( [ this.scoreboard, this.nextButton, this.challengeView, this.answerFeedback ] );
 
           // Display the correct answer
           // TODO: Display the correct answer.
@@ -418,7 +432,13 @@ define( function( require ) {
     // during the course of a challenge.
     hideAllGameNodes: function() {
       this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
-      this.setNodeVisibility( false, [ this.startGameLevelNode, this.challengeTitleNode, this.faceWithPointsNode, this.scoreboard ] );
+      this.setNodeVisibility( false, [
+        this.startGameLevelNode,
+        this.challengeTitleNode,
+        this.faceWithPointsNode,
+        this.scoreboard,
+        this.answerFeedback
+      ] );
     },
 
     show: function( nodesToShow ) {

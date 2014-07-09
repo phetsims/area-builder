@@ -11,7 +11,9 @@
   "findTheArea": "Find the area!",
   "areaQuestion": "Area?",
   "yourGoal": "Your goal:",
+  "yourSolution": "Your solution:",
   "areaEquals": "Area = {0}",
   "perimeterEquals": "Perimeter = {0}",
-  "chooseYourLevel": "Choose Your Level!"
+  "chooseYourLevel": "Choose Your Level!",
+  "showSolution": "Show Solution"
 }
