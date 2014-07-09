@@ -82,8 +82,19 @@ define( function( require ) {
       },
 
       checkAnswer: function( challenge ) {
-        // TODO: Temp
-        return this.fakeCorrectAnswerProperty.value;
+        var answerIsCorrect = false;
+        // TODO: Get rid of the following if clause when fake challenges are removed.
+        if ( challenge.fakeChallenge ) {
+          answerIsCorrect = this.fakeCorrectAnswerProperty.value;
+        }
+        else if ( challenge.buildSpec ) {
+          answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area;
+          if ( answerIsCorrect && challenge.buildSpec.perimeter ) {
+            answerIsCorrect = challenge.buildSpec.perimeter === this.shapePlacementBoard.exteriorPerimeters[0].length;
+          }
+        }
+
+        return answerIsCorrect;
       },
 
       step: function( dt ) {

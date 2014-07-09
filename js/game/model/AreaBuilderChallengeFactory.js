@@ -62,7 +62,7 @@ define( function( require ) {
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.
-          { area: 12, perimeter: 4 },
+          { area: 2, perimeter: 6 },
 
           // Color prompts
           null,
