@@ -162,7 +162,7 @@ define( function( require ) {
 
     // Resets all model elements
     reset: function() {
-      this.reset();
+      PropertySet.prototype.reset.call( this );
       this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes(); } );
       this.movableShapes.clear();
     }

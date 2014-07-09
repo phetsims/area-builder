@@ -94,12 +94,11 @@ define( function( require ) {
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
 
-    // Handle the addition of new shapes.
+    // Handle the addition of a shape.
     this.residentShapes.addItemAddedListener( function( addedShape ) {
       self.updateCellsShapeAdded( addedShape );
       self.releaseAnyOrphans();
-      self.updatePerimeters();
-      self.updateAreaAndTotalPerimeter();
+      self.updateAll();
     } );
 
     // Handle the removal of a shape.
@@ -114,17 +113,15 @@ define( function( require ) {
           if ( !self.shapeOverlapsBoard( removedShape ) ) {
             // This shape isn't coming back, so we need to trigger an orphan release.
             self.releaseAnyOrphans();
-            self.updateAreaAndTotalPerimeter();
+            self.updateAll();
           }
         } );
       }
 
       // The following guard prevents having a zillion computationally intensive updates when the board is cleared, and
-      // also prevents undesirable recursion in some situations.
+      // also prevents undesirable recursion which could arise in some situations.
       if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
-        self.updatePerimeters();
-        self.updateValidPlacementLocations();
-        self.updateAreaAndTotalPerimeter();
+        self.updateAll();
       }
     } );
 
@@ -445,7 +442,6 @@ define( function( require ) {
      * Update the exterior and interior perimeters.
      */
     updatePerimeters: function() {
-
       var self = this;
 
       if ( this.residentShapes.length === 0 ) {
@@ -454,7 +450,6 @@ define( function( require ) {
         this.interiorPerimetersProperty.reset();
       }
       else {
-
         var row;
         var column;
         var exteriorPerimeters = [];
@@ -636,8 +631,6 @@ define( function( require ) {
         } );
       }
       this.orphanReleaseInProgress = false;
-      self.updatePerimeters();
-      self.updateValidPlacementLocations();
     },
 
     /**
@@ -685,6 +678,13 @@ define( function( require ) {
           }
         } );
       }
+    },
+
+    // Update perimeter points, placement locations, total area, and total perimeter.
+    updateAll: function() {
+      this.updatePerimeters();
+      this.updateAreaAndTotalPerimeter();
+      this.updateValidPlacementLocations();
     }
   } );
 } );
