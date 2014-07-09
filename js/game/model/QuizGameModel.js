@@ -158,6 +158,7 @@ define( function( require ) {
         if ( this.challengeIndex + 1 < this.challengeList.length ) {
           // Move to the next challenge.
           this.challengeIndex++;
+          this.currentChallenge = this.challengeList[ this.challengeIndex ];
           this.gameState = 'presentingInteractiveChallenge';
         }
         else {

@@ -211,14 +211,13 @@ define( function( require ) {
     } );
 
     // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
-    this.faceWithPointsNode = new FaceWithPointsNode(
-      {
-        faceDiameter: 85,
-        pointsAlignment: 'rightBottom',
-        centerX: buttonCenterX,
-        top: buttonBottom + 20,
-        pointsFont: new PhetFont( { size: 20, weight: 'bold' } )
-      } );
+    this.faceWithPointsNode = new FaceWithPointsNode( {
+      faceDiameter: 85,
+      pointsAlignment: 'rightBottom',
+      centerX: buttonCenterX,
+      top: buttonBottom + 20,
+      pointsFont: new PhetFont( { size: 20, weight: 'bold' } )
+    } );
     this.addChild( this.faceWithPointsNode );
 
     // Handle comings and goings of model shapes.
@@ -361,6 +360,7 @@ define( function( require ) {
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
 
         // Clean up previous challenge.
+        this.model.additionalModel.clearUserPlacedShapes();
         if ( this.shapeCarousel !== null ) {
           this.challengeLayer.removeChild( this.shapeCarousel );
         }
@@ -389,8 +389,8 @@ define( function( require ) {
 
         // Create the carousel if present
         if ( challenge.carouselContents !== null ) {
-          var creatorNodeVBox = new HBox( { children: challenge.carouselContents, spacing: 10 } );
-          this.shapeCarousel = new Panel( creatorNodeVBox, {
+          var creatorNodeHBox = new HBox( { children: challenge.carouselContents, spacing: 10 } );
+          this.shapeCarousel = new Panel( creatorNodeHBox, {
             centerX: this.shapeBoard.centerX,
             top: this.shapeBoard.bottom + 10,
             xMargin: 50,

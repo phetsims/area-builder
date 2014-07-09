@@ -76,6 +76,11 @@ define( function( require ) {
         } );
       },
 
+      // Clear the placement board of all shapes placed on it by the user
+      clearUserPlacedShapes: function() {
+        this.shapePlacementBoard.releaseAllShapes( false );
+      },
+
       displayCorrectAnswer: function( challenge ) {
         // TODO - stubbed for now
         this.fakeCorrectAnswerProperty.value = true;
@@ -103,8 +108,7 @@ define( function( require ) {
 
       // Resets all model elements
       reset: function() {
-        this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes(); } );
-        this.shapePlacementBoards.reset();
+        this.shapePlacementBoard.releaseAllShapes( false );
         this.movableShapes.clear();
       }
     }
