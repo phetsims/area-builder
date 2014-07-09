@@ -131,19 +131,6 @@ define( function( require ) {
       top: 20
     } ) );
 
-    // Create the 'feedback node' that is used to visually indicate correct and incorrect answers.
-    this.faceWithPointsNode = new FaceWithPointsNode(
-      {
-        faceOpacity: 0.6,
-        faceDiameter: this.layoutBounds.width * 0.31,
-        pointsFill: 'yellow',
-        pointsStroke: 'black',
-        pointsAlignment: 'rightCenter',
-        centerX: this.layoutBounds.centerX,
-        centerY: this.layoutBounds.centerY
-      } );
-    this.addChild( this.faceWithPointsNode );
-
     // Set up the constant portions of the challenge view
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
     this.challengeLayer.addChild( this.shapeBoard );
@@ -223,6 +210,17 @@ define( function( require ) {
       self.rootNode.addChild( button );
     } );
 
+    // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
+    this.faceWithPointsNode = new FaceWithPointsNode(
+      {
+        faceDiameter: 85,
+        pointsAlignment: 'rightBottom',
+        centerX: buttonCenterX,
+        top: buttonBottom + 20,
+        pointsFont: new PhetFont( { size: 20, weight: 'bold' } )
+      } );
+    this.addChild( this.faceWithPointsNode );
+
     // Handle comings and goings of model shapes.
     gameModel.additionalModel.movableShapes.addItemAddedListener( function( addedShape ) {
 
@@ -299,7 +297,7 @@ define( function( require ) {
 
           // Give the user the appropriate feedback
           this.gameAudioPlayer.wrongAnswer();
-          this.faceWithPointsNode.frown();
+          this.faceWithPointsNode.grimace();
           this.faceWithPointsNode.setPoints( this.model.score );
           this.faceWithPointsNode.visible = true;
 
@@ -315,7 +313,7 @@ define( function( require ) {
 
           // Give the user the appropriate feedback
           this.gameAudioPlayer.wrongAnswer();
-          this.faceWithPointsNode.frown();
+          this.faceWithPointsNode.grimace();
           this.faceWithPointsNode.setPoints( this.model.score );
           this.faceWithPointsNode.visible = true;
 
