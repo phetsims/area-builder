@@ -118,8 +118,8 @@ define( function( require ) {
       gameModel.scoreProperty,
       gameModel.elapsedTimeProperty,
       gameModel.timerEnabledProperty,
-      gameModel.additionalModel.shapePlacementBoard.showGridProperty,
-      new Property( false ), // TODO: wire up to the show dimensions property
+      gameModel.additionalModel.showGridProperty,
+      gameModel.additionalModel.showDimensionsProperty,
       { top: 100, left: 20 }
     );
     this.controlLayer.addChild( this.scoreboard );

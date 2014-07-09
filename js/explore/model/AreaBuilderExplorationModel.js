@@ -12,8 +12,10 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bucket = require( 'PHETCOMMON/model/Bucket' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
+  var PropertySet = require( 'AXON/PropertySet' );
   var RectangleCreator = require( 'AREA_BUILDER/explore/model/RectangleCreator' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -43,8 +45,12 @@ define( function( require ) {
     var self = this;
 
     // TODO: If a bunch of properties are added, consider making this extend PropertySet
-    this.showGrids = new Property( true ); // @public
-    this.boardDisplayMode = new Property( 'single' ); // @public, value values are 'single' and 'dual'
+    PropertySet.call( this, {
+      showGrids: true, // @public
+      showDimensions: false, // @public
+      boardDisplayMode: 'single' // @public, value values are 'single' and 'dual'
+    } );
+
     this.movableShapes = new ObservableArray(); // @public
     this.unitSquareLength = UNIT_SQUARE_LENGTH; // @public, @final
 
@@ -53,19 +59,25 @@ define( function( require ) {
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - SMALL_BOARD_SIZE.width, BOARD_Y_POS ),
-      AreaBuilderSharedConstants.GREENISH_COLOR
+      AreaBuilderSharedConstants.GREENISH_COLOR,
+      this.showGridsProperty,
+      this.showDimensionsProperty
     ); // @public
     self.rightShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS ),
-      AreaBuilderSharedConstants.PURPLISH_COLOR
+      AreaBuilderSharedConstants.PURPLISH_COLOR,
+      this.showGridsProperty,
+      this.showDimensionsProperty
     ); // @public
     self.centerShapePlacementBoard = new ShapePlacementBoard(
       LARGE_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 - LARGE_BOARD_SIZE.width / 2, BOARD_Y_POS ),
-      AreaBuilderSharedConstants.ORANGISH_COLOR
+      AreaBuilderSharedConstants.ORANGISH_COLOR,
+      this.showGridsProperty,
+      this.showDimensionsProperty
     ); // @public
 
     // @private, for convenience.
@@ -140,14 +152,9 @@ define( function( require ) {
       self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, compensatedCenterBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
         AreaBuilderSharedConstants.ORANGISH_COLOR, addModelElement ) );
     } );
-
-    // Control the grid visibility in the placement boards TODO Use multilink or something here?
-    this.showGrids.link( function( showGrids ) {
-      self.shapePlacementBoards.forEach( function( board ) { board.showGrid = showGrids; } );
-    } );
   }
 
-  AreaBuilderExplorationModel.prototype = {
+  return inherit( PropertySet, AreaBuilderExplorationModel, {
 
     step: function( dt ) {
       this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );
@@ -155,12 +162,9 @@ define( function( require ) {
 
     // Resets all model elements
     reset: function() {
-      this.showGrids.reset();
-      this.boardDisplayMode.reset();
+      this.reset();
       this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes(); } );
       this.movableShapes.clear();
     }
-  };
-
-  return AreaBuilderExplorationModel;
+  } )
 } );

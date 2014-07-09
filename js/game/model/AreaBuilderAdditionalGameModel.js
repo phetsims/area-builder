@@ -13,6 +13,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
+  var PropertySet = require( 'AXON/PropertySet' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -26,6 +27,11 @@ define( function( require ) {
    */
   function AreaBuilderAdditionalGameModel() {
 
+    PropertySet.call( this, {
+      showGrid: true,
+      showDimensions: false
+    } );
+
     // Temp property for 'fake' challenges.  TODO - Remove this when all challenges are working.
     this.fakeCorrectAnswerProperty = new Property( false );
 
@@ -34,14 +40,16 @@ define( function( require ) {
       BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( 200, 100 ),
-      AreaBuilderSharedConstants.GREENISH_COLOR
+      AreaBuilderSharedConstants.GREENISH_COLOR,
+      this.showGridProperty,
+      this.showDimensionsProperty
     );
 
     // Array where shapes that are added by the user are tracked.
     this.movableShapes = new ObservableArray(); // @public
   }
 
-  return inherit( Object, AreaBuilderAdditionalGameModel, {
+  return inherit( PropertySet, AreaBuilderAdditionalGameModel, {
 
       // Function for adding new movable elements to this model
       addModelElement: function( shape ) {
@@ -90,5 +98,4 @@ define( function( require ) {
       }
     }
   )
-
 } );

@@ -52,11 +52,10 @@ define( function( require ) {
   function AreaBuilderExplorationView( model ) {
 
     ScreenView.call( this );
-    var showDimensionsProperty = new Property( false );
 
     // TODO: There is a lot of opportunity for consolidation below.
 
-    // Create the nodes needed for the required layering
+    // Create the nodes needed for the desired layering
     var backLayer = new Node();
     this.addChild( backLayer );
     var creatorLayer = new Node();
@@ -161,7 +160,7 @@ define( function( require ) {
     } );
 
     // Control which board(s), bucket(s), and shapes are visible.
-    model.boardDisplayMode.link( function( boardDisplayMode ) {
+    model.boardDisplayModeProperty.link( function( boardDisplayMode ) {
       leftBoardNode.visible = boardDisplayMode === 'dual';
       leftBoardClearButton.visible = boardDisplayMode === 'dual';
       leftAreaAndPerimeterDisplay.visible = leftBoardNode.visible;
@@ -219,7 +218,7 @@ define( function( require ) {
     var switchPanel = new Panel(
       new VBox( {
         children: [
-          new ABSwitch( model.boardDisplayMode, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 40, 20 ) } )
+          new ABSwitch( model.boardDisplayModeProperty, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 40, 20 ) } )
         ],
         spacing: 10
       } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
@@ -229,8 +228,8 @@ define( function( require ) {
     var controlPanel = new Panel(
       new VBox( {
         children: [
-          new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGrids, { spacing: 15 } ),
-          new Checkbox( new DimensionsIcon(), showDimensionsProperty, { spacing: 15 } )
+          new Checkbox( new Grid( 0, 0, 40, 40, 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGridsProperty, { spacing: 15 } ),
+          new Checkbox( new DimensionsIcon(), model.showDimensionsProperty, { spacing: 15 } )
         ],
         align: 'left',
         spacing: 10

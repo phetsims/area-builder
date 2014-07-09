@@ -49,22 +49,20 @@ define( function( require ) {
    * @param {Number} unitSquareLength
    * @param {Vector2} position
    * @param {String || Color} colorHandled
+   * @param {Property<Boolean>} showGridProperty
+   * @param {Property<Boolean>} showDimensionsProperty
    * @constructor
    */
-  function ShapePlacementBoard( size, unitSquareLength, position, colorHandled ) {
+  function ShapePlacementBoard( size, unitSquareLength, position, colorHandled, showGridProperty, showDimensionsProperty ) {
 
     // The size should be an integer number of unit squares for both dimensions.
     assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
 
     var self = this;
+    this.showGridProperty = showGridProperty;
+    this.showDimensionsProperty = showDimensionsProperty;
 
     PropertySet.call( this, {
-      // @public Boolean property that controls whether or not the placement grid is visible
-      showGrid: true,
-
-      // @public Boolean property that controls whether or not the dimensions of a created shape are visible
-      showDimensions: false,
-
       // @public Read-only property that indicates the area of the composite shape
       area: 0,
 
