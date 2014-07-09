@@ -542,7 +542,7 @@ define( function( require ) {
         return false;
       }
       return perimeter1.every( function( point, index ) {
-        return( point.equals( !perimeter2[ index ] ) );
+        return( point.equals( perimeter2[ index ] ) );
       } );
     },
 
