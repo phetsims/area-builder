@@ -112,5 +112,5 @@ define( function( require ) {
         this.movableShapes.clear();
       }
     }
-  )
+  );
 } );

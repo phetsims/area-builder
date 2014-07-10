@@ -17,7 +17,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Checkbox = require( 'SUN/Checkbox' );
   var Color = require( 'SCENERY/util/Color' );
-  var CompositeShapeNode = require( 'AREA_BUILDER/common/view/CompositeShapeNode' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
@@ -26,7 +25,6 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PaperAirplaneNode = require( 'SCENERY_PHET/PaperAirplaneNode' );
-  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangleCreatorNode = require( 'AREA_BUILDER/explore/view/RectangleCreatorNode' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );

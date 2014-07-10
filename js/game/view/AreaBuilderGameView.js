@@ -22,7 +22,6 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ScreenView = require( 'JOIST/ScreenView' );

@@ -14,7 +14,6 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
   var RectangleCreator = require( 'AREA_BUILDER/explore/model/RectangleCreator' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
@@ -166,5 +165,5 @@ define( function( require ) {
       this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes(); } );
       this.movableShapes.clear();
     }
-  } )
+  } );
 } );

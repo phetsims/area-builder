@@ -7,7 +7,6 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
   var Line = require( 'SCENERY/nodes/Line' );
-  var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
@@ -57,14 +56,12 @@ define( function( require ) {
   // TODO: temp stuff for demo
   var longRectangle = new Rectangle( 0, 0, 70, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
   longRectangle.addChild( new Line( 35, 0, 35, 35, { stroke: 'black', lineDash: [2] } ) );
-  var triangleShape = new Shape().moveTo( 35, 0 ).lineTo( 35, 35 ).lineTo( 0, 35 ).close();
-  var triangle = new Path( triangleShape, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
   var halfSquare = new Rectangle( 0, 0, 17.5, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
   // TODO: End of temp demo stuff
 
 
   // Challenge history, used to make sure unique challenges are generated.
-  var challengeHistory = [];
+//  var challengeHistory = []; commented out for lint, uncomment when ready
 
   // No constructor - this is a static type with a set of functions.
   return  {
@@ -92,7 +89,7 @@ define( function( require ) {
             areaToBuild = Math.floor( Math.random() * 2 ) + 6;
             break;
           default:
-            assert && assert( false, 'Invalid problem difficulty specified.' )
+            assert && assert( false, 'Invalid problem difficulty specified.' );
             areaToBuild = 1;
             break;
         }
@@ -197,10 +194,10 @@ define( function( require ) {
     // @private
     generateChallenge: function( level, difficulty, model ) {
       if ( level === 0 ) {
-        return this.generateBuildAreaChallenge( model, difficulty )
+        return this.generateBuildAreaChallenge( model, difficulty );
       }
       else if ( level === 1 ) {
-        return this.generateBuildAreaAndPerimeterChallenge( model, difficulty )
+        return this.generateBuildAreaAndPerimeterChallenge( model, difficulty );
       }
       else {
         // Create a fake challenge for the other levels.
