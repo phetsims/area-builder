@@ -59,8 +59,8 @@ define( function( require ) {
       } );
     }
     else {
-      goalInfoNode = new Text( StringUtils.format( areaEqualsString, goalArea ) );
-      solutionInfoNode = new Text( StringUtils.format( perimeterEqualsString, solutionPerimeter ), { font: FONT } );
+      goalInfoNode = new Text( StringUtils.format( areaEqualsString, goalArea ), { font: FONT } );
+      solutionInfoNode = new Text( StringUtils.format( areaEqualsString, solutionArea ), { font: FONT } );
     }
 
     // Layout
