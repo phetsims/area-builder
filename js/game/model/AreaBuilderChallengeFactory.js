@@ -77,15 +77,16 @@ define( function( require ) {
       var challenge;
       while ( !challengeIsUnique ) {
         var areaToBuild;
+        // TODO: Need info from design team on ranges here.
         switch( difficulty ) {
           case 'easy':
-            areaToBuild = Math.floor( Math.random() * 4 ) + 4;
+            areaToBuild = Math.floor( Math.random() * 2 ) + 2;
             break;
           case 'moderate':
-            areaToBuild = Math.floor( Math.random() * 8 ) + 8;
+            areaToBuild = Math.floor( Math.random() * 2 ) + 4;
             break;
           case 'hard':
-            areaToBuild = Math.floor( Math.random() * 16 ) + 16;
+            areaToBuild = Math.floor( Math.random() * 2 ) + 6;
             break;
           default:
             assert && assert( false, 'Invalid problem difficulty specified.' )
@@ -142,22 +143,6 @@ define( function( require ) {
       var challengeIsUnique = false;
       var challenge;
       while ( !challengeIsUnique ) {
-        var areaToBuild;
-        switch( difficulty ) {
-          case 'easy':
-            areaToBuild = Math.floor( Math.random() * 4 ) + 4;
-            break;
-          case 'moderate':
-            areaToBuild = Math.floor( Math.random() * 8 ) + 8;
-            break;
-          case 'hard':
-            areaToBuild = Math.floor( Math.random() * 16 ) + 16;
-            break;
-          default:
-            assert && assert( false, 'Invalid problem difficulty specified.' )
-            areaToBuild = 1;
-            break;
-        }
         challenge = new AreaBuilderGameChallenge(
           // Title of challenge
           buildItString,
