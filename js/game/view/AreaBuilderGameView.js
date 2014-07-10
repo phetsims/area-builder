@@ -409,7 +409,7 @@ define( function( require ) {
 
         // Create the carousel if present
         if ( challenge.carouselContents !== null ) {
-          var creatorNodeHBox = new HBox( { children: challenge.carouselContents, spacing: 10 } );
+          var creatorNodeHBox = new HBox( { children: challenge.carouselContents, spacing: 20 } );
           this.shapeCarousel = new Panel( creatorNodeHBox, {
             centerX: this.shapeBoard.centerX,
             top: this.shapeBoard.bottom + 10,

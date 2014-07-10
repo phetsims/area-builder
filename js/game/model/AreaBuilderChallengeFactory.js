@@ -59,6 +59,9 @@ define( function( require ) {
   longRectangle.addChild( new Line( 35, 0, 35, 35, { stroke: 'black', lineDash: [2] } ) );
   var triangleShape = new Shape().moveTo( 35, 0 ).lineTo( 35, 35 ).lineTo( 0, 35 ).close();
   var triangle = new Path( triangleShape, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
+  var halfSquare = new Rectangle( 0, 0, 17.5, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
+  // TODO: End of temp demo stuff
+
 
   // Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
@@ -114,8 +117,9 @@ define( function( require ) {
               AreaBuilderSharedConstants.GREENISH_COLOR,
               model
             ),
-            // The one below is fake, basically for demo purposes
-            longRectangle
+            // The ones below are fake, basically for demo purposes
+            longRectangle,
+            halfSquare
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.
@@ -164,8 +168,9 @@ define( function( require ) {
               AreaBuilderSharedConstants.GREENISH_COLOR,
               model
             ),
-            // The one below is fake, basically for demo purposes
-            longRectangle
+            // The ones below are fake, basically for demo purposes
+            longRectangle,
+            halfSquare
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.
