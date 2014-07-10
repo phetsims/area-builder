@@ -326,16 +326,22 @@ define( function( require ) {
 
         case 'displayingCorrectAnswer':
 
-          // Update the answer.
-          // TODO: This only handles "build it" type challenges now, will need to be extended to other challenge types.
           this.answerFeedback.removeAllChildren();
-          this.answerFeedback.addChild( new FeedbackWindow(
-            this.model.currentChallenge.buildSpec.area,
-            this.model.currentChallenge.buildSpec.perimeter,
-            this.model.additionalModel.shapePlacementBoard.area,
-            this.model.additionalModel.shapePlacementBoard.perimeter,
-            { minWidth: this.shapeBoard.width, minHeight: this.shapeBoard.height, center: this.shapeBoard.center }
-          ) );
+          if ( this.model.currentChallenge.buildSpec ) {
+            // Put up feedback for "build it" style challenges.
+            this.answerFeedback.addChild( new FeedbackWindow(
+              this.model.currentChallenge.buildSpec.area,
+              this.model.currentChallenge.buildSpec.perimeter,
+              this.model.additionalModel.shapePlacementBoard.area,
+              this.model.additionalModel.shapePlacementBoard.perimeter,
+              { minWidth: this.shapeBoard.width, minHeight: this.shapeBoard.height, center: this.shapeBoard.center }
+            ) );
+          }
+
+          // TODO: Remove once fake challenges go away.
+          if ( this.model.currentChallenge.fakeChallenge ) {
+            this.model.additionalModel.fakeCorrectAnswer = true;
+          }
 
           // Show the appropriate nodes for this state.
           this.show( [ this.scoreboard, this.nextButton, this.challengeView, this.answerFeedback ] );
