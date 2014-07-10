@@ -23,8 +23,8 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
+  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var ReturnToLevelSelectButton = require( 'SCENERY_PHET/ReturnToLevelSelectButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
@@ -126,8 +126,10 @@ define( function( require ) {
     this.controlLayer.addChild( this.scoreboard );
 
     // Add the button for returning to the level selection screen.
-    this.controlLayer.addChild( new ReturnToLevelSelectButton( {
+    this.controlLayer.addChild( new RectangularPushButton( {
+      content: new Text( 'Start Over', { font: BUTTON_FONT } ),
       listener: function() { gameModel.setChoosingLevelState(); },
+      baseColor: BUTTON_FILL,
       left: this.scoreboard.left,
       top: 20
     } ) );
