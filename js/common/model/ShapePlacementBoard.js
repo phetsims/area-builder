@@ -96,14 +96,14 @@ define( function( require ) {
 
     // Handle the addition of a shape.
     this.residentShapes.addItemAddedListener( function( addedShape ) {
-      self.updateCellsShapeAdded( addedShape );
+      self.updateCellOccupation( addedShape, 'add' );
       self.releaseAnyOrphans();
       self.updateAll();
     } );
 
     // Handle the removal of a shape.
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
-      self.updateCellsShapeRemoved( removedShape );
+      self.updateCellOccupation( removedShape, 'remove' );
 
       if ( removedShape.userControlled ) {
 
@@ -159,7 +159,7 @@ define( function( require ) {
      * @param {MovableShape} movableShape A model shape
      */
     placeShape: function( movableShape ) {
-      assert && assert( movableShape.userControlled === false, 'Shapes can\'t be place when still controlled by user.' );
+      assert && assert( movableShape.userControlled === false, 'Shapes can\'t be placed when still controlled by user.' );
       var self = this;
 
       // See if shape is of the correct color and overlapping with the board.
@@ -177,14 +177,30 @@ define( function( require ) {
         movableShape.setDestination( new Vector2( xPos, yPos ), true );
       }
       else {
-        // Choose the closest valid location.
-        var closestValidLocation = this.validPlacementLocations[ 0 ];
-        this.validPlacementLocations.forEach( function( candidatePosition ) {
-          if ( movableShape.position.distance( candidatePosition ) < movableShape.position.distance( closestValidLocation ) ) {
-            closestValidLocation = candidatePosition;
+        // TODO: Temp
+        var placementLocation = null;
+        for ( var surroundingPointsLevel = 0; surroundingPointsLevel < Math.max( this.numRows && placementLocation === null, this.numColumns ); surroundingPointsLevel++ ) {
+          var surroundingPoints = this.getOuterSurroundingPoints( movableShape.position, surroundingPointsLevel );
+
+          // TODO: Sort points by distance
+          for ( var pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
+            if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
+              placementLocation = surroundingPoints[ pointIndex ];
+            }
           }
-        } );
-        movableShape.setDestination( closestValidLocation, true );
+        }
+        movableShape.setDestination( placementLocation, true );
+
+        // TODO: End of temp
+
+        // Choose the closest valid location.
+//        var closestValidLocation = this.validPlacementLocations[ 0 ];
+//        this.validPlacementLocations.forEach( function( candidatePosition ) {
+//          if ( movableShape.position.distance( candidatePosition ) < movableShape.position.distance( closestValidLocation ) ) {
+//            closestValidLocation = candidatePosition;
+//          }
+//        } );
+//        movableShape.setDestination( closestValidLocation, true );
       }
 
       // The remaining code in this function assumes that the shape is animating to the new location, and will cause
@@ -256,30 +272,30 @@ define( function( require ) {
     },
 
     /**
-     * Update the array of cells with a newly added shape.
-     * @private
+     * Set or clear the occupation status of the cells.
+     *
+     * @param movableShape
+     * @param operation
      */
-    updateCellsShapeAdded: function( addedShape ) {
-      var xIndex = Math.round( ( addedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
-      var yIndex = Math.round( ( addedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.cells[ xIndex ][ yIndex ].occupiedBy === null, 'Attempt made to add square to occupied location.' );
-      this.cells[ xIndex ][ yIndex ].occupiedBy = addedShape;
-    },
-
-    /**
-     * Update the array of cells due to a removed shape.
-     * @private
-     */
-    updateCellsShapeRemoved: function( removedShape ) {
-      var xIndex = Math.round( ( removedShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
-      var yIndex = Math.round( ( removedShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
-      assert && assert( this.cells[ xIndex ][ yIndex ].occupiedBy === removedShape, 'Removed shape was not marked in occupied spaces.' );
-      this.cells[ xIndex ][ yIndex ].occupiedBy = null;
+    updateCellOccupation: function( movableShape, operation ) {
+      var xIndex = Math.round( ( movableShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
+      var yIndex = Math.round( ( movableShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
+      // Mark all cells occupied by this shape.
+      for ( var row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
+        for ( var column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
+          this.cells[ xIndex + column ][yIndex + row ].occupiedBy = operation === 'add' ? movableShape : null;
+        }
+      }
     },
 
     updateAreaAndTotalPerimeter: function() {
       if ( this.exteriorPerimeters.length <= 1 ) {
-        this.area = this.residentShapes.length;
+        var self = this;
+        var area = 0;
+        this.residentShapes.forEach( function( residentShape ) {
+          area += residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
+        } );
+        this.area = area;
         var totalPerimeterAccumulator = 0;
         this.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
           totalPerimeterAccumulator += exteriorPerimeter.length;
@@ -294,6 +310,101 @@ define( function( require ) {
         this.area = INVALID_VALUE_STRING;
         this.perimeter = INVALID_VALUE_STRING;
       }
+    },
+
+    /**
+     * Convenience function that handles out of bounds case by simply returning false (unoccupied).
+     * @private
+     * @param column
+     * @param row
+     */
+    isCellOccupied: function( column, row ) {
+      if ( column >= this.numColumns || column < 0 || row >= this.numRows || row < 0 ) {
+        return false;
+      }
+      else {
+        return this.cells[ column ][ row ].occupiedBy !== null;
+      }
+    },
+
+    /**
+     * Get the outer layer of grid points surrounding the given point.  The 2nd parameter indicates how many steps away
+     * from the center 'shell' should be provided.
+     * @private
+     * @param point
+     * @param levelsRemoved
+     */
+    getOuterSurroundingPoints: function( point, levelsRemoved ) {
+      var self = this;
+      var normalizedPoints = [];
+
+      // Get the closest point in cell coordinates.
+      var normalizedStartingPoint = new Vector2(
+          Math.floor( ( point.x - this.position.x ) / this.unitSquareLength ) - levelsRemoved + 1,
+          Math.floor( ( point.y - this.position.y ) / this.unitSquareLength ) - levelsRemoved + 1
+      );
+
+      var squareSize = ( levelsRemoved + 1 ) * 2;
+
+      for ( var row = 0; row < squareSize; row++ ) {
+        for ( var column = 0; column < squareSize; column++ ) {
+          if ( ( row === 0 || row === squareSize - 1 || column === 0 || column === squareSize - 1 ) &&
+               ( column + normalizedStartingPoint.x <= this.numColumns && row + normalizedStartingPoint.y <= this.numRows ) ) {
+            // This is an outer point, and is valid, so include it.
+            normalizedPoints.push( new Vector2( column + normalizedStartingPoint.x, row + normalizedStartingPoint.y ) );
+          }
+        }
+      }
+
+      var outerSurroundingPoints = [];
+      normalizedPoints.forEach( function( p ) { outerSurroundingPoints.push( self.cellToModelVector( p ) ) } );
+      return outerSurroundingPoints;
+    },
+
+    /**
+     * Determine whether it is valid to place the given shape at the given location.  For placement to be valid, the
+     * shape can't overlap with any other shape, and must share at least one side with an occupied space.
+     *
+     * @param movableShape
+     * @param location
+     * @returns {boolean}
+     */
+    isValidToPlace: function( movableShape, location ) {
+      var normalizedLocation = this.modelToCellVector( location );
+      var normalizedWidth = movableShape.shape.bounds.width / this.unitSquareLength;
+      var normalizedHeight = movableShape.shape.bounds.height / this.unitSquareLength;
+
+      // Return false if the shape goes off the board.  This has to compensate for the fact that there is an additional
+      // invisible row in the cell array (to support the perimeter tracing algorithm.
+      if ( normalizedLocation.x <= 0 || normalizedLocation.x + normalizedWidth > this.numColumns + 1 ||
+           normalizedLocation.y <= 0 || normalizedLocation.y + normalizedHeight > this.numRows + 1 ) {
+        return false;
+      }
+
+      // Return false if this shape overlaps any existing shapes.
+      for ( var row = 0; row < normalizedHeight; row++ ) {
+        for ( var column = 0; column < normalizedWidth; column++ ) {
+          if ( this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row ) ) {
+            return false;
+          }
+        }
+      }
+
+      // Return true if this shape shares an edge with any other placed shape.
+      for ( row = 0; row < normalizedHeight; row++ ) {
+        for ( column = 0; column < normalizedWidth; column++ ) {
+          if (
+            this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row - 1 ) ||
+            this.isCellOccupied( normalizedLocation.x + column - 1, normalizedLocation.y + row ) ||
+            this.isCellOccupied( normalizedLocation.x + column + 1, normalizedLocation.y + row ) ||
+            this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row )
+            ) {
+            return true;
+          }
+        }
+      }
+
+      return false;
     },
 
     /**
@@ -365,8 +476,16 @@ define( function( require ) {
       return new Vector2( ( column - 1 ) * this.unitSquareLength + this.position.x, ( row - 1 ) * this.unitSquareLength + this.position.y );
     },
 
+    cellToModelVector: function( v ) {
+      return this.cellToModelCoords( v.x, v.y );
+    },
+
     modelToCellCoords: function( x, y ) {
       return new Vector2( ( x - this.position.x ) / this.unitSquareLength + 1, ( y - this.position.y ) / this.unitSquareLength + 1 );
+    },
+
+    modelToCellVector: function( v ) {
+      return this.modelToCellCoords( v.x, v.y );
     },
 
     roundVector: function( vector ) {
@@ -634,9 +753,8 @@ define( function( require ) {
     },
 
     /**
-     * Update the list of locations where shapes can be placed where they will
-     * be adjacent to the existing shapes, won't overlap, and won't be off the
-     * board.
+     * Update the list of locations where shapes can be placed where they will be adjacent to the existing shapes,
+     * won't overlap, and won't be off the board.
      * @private
      */
     updateValidPlacementLocations: function() {

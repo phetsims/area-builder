@@ -22,6 +22,24 @@ define( function( require ) {
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
     .close();
+  var HORIZONTAL_DOUBLE_SQUARE_SHAPE = new Shape()
+    .moveTo( 0, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH )
+    .lineTo( 0, UNIT_SQUARE_LENGTH )
+    .close();
+  var VERTICAL_DOUBLE_SQUARE_SHAPE = new Shape()
+    .moveTo( 0, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH * 2 )
+    .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
+    .close();
+  var QUAD_SQUARE_SHAPE = new Shape()
+    .moveTo( 0, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
+    .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
+    .close();
   var AREA_AND_PERIMETER_BUILD_SPECS = [
     {
       area: 2,
@@ -56,6 +74,11 @@ define( function( require ) {
   // TODO: temp stuff for demo
   var longRectangle = new Rectangle( 0, 0, 70, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
   longRectangle.addChild( new Line( 35, 0, 35, 35, { stroke: 'black', lineDash: [2] } ) );
+  var tallRectangle = new Rectangle( 0, 0, 35, 70, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
+  tallRectangle.addChild( new Line( 0, 35, 35, 35, { stroke: 'black', lineDash: [2] } ) );
+  var fourRectangles = new Rectangle( 0, 0, 70, 70, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
+  fourRectangles.addChild( new Line( 35, 0, 35, 70, { stroke: 'black', lineDash: [2] } ) );
+  fourRectangles.addChild( new Line( 0, 35, 70, 35, { stroke: 'black', lineDash: [2] } ) );
   var halfSquare = new Rectangle( 0, 0, 17.5, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
   // TODO: End of temp demo stuff
 
@@ -114,9 +137,24 @@ define( function( require ) {
               AreaBuilderSharedConstants.GREENISH_COLOR,
               model
             ),
-            // The ones below are fake, basically for demo purposes
-            longRectangle,
-            halfSquare
+            new ShapeCreatorNode(
+              HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            ),
+            new ShapeCreatorNode(
+              VERTICAL_DOUBLE_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            ),
+            new ShapeCreatorNode(
+              QUAD_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            )
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.

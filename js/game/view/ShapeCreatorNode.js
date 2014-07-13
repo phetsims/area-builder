@@ -6,7 +6,8 @@
  * TODO: Look at consolidating this with the creator nodes used in the 'Explore' screen.  They are separate as of this
  * writing but do pretty much the same thing.  The difficulty in doing this at first was that the creator node on
  * the first screen relied upon a model element, and we didn't want one in this case, since the nodes will be going on
- * a carousel.  I'm not sure why I did it that way in the explore view actually.
+ * a carousel.  I'm not sure why I did it that way in the explore view actually, since it doesn't seem important to
+ * have a creator node in the model.
  *
  * @author John Blanco
  */
@@ -17,6 +18,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -24,6 +26,9 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+  var BORDER_LINE_WIDTH = 1;
 
   /**
    * @param shape
@@ -36,12 +41,33 @@ define( function( require ) {
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
 
+    options = _.extend( {
+      gridSpacing: null
+    }, options );
+
     // Create the node that the user will click upon to add a model element to the view.
+    // TODO: Assert that path is at 0, 0
     var representation = new Path( shape, {
       fill: color,
-      stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+      stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
+      lineWidth: BORDER_LINE_WIDTH
     } );
     this.addChild( representation );
+
+    // Add grid if specified.
+    if ( options.gridSpacing ) {
+      var gridNode = new Grid(
+          representation.bounds.minX + BORDER_LINE_WIDTH / 2,
+          representation.bounds.minY + BORDER_LINE_WIDTH / 2,
+          representation.bounds.width - BORDER_LINE_WIDTH,
+          representation.bounds.height - BORDER_LINE_WIDTH,
+        options.gridSpacing, {
+          lineDash: [ 1, 4 ],
+          stroke: 'black'
+        }
+      );
+      this.addChild( gridNode );
+    }
 
     // TODO: This will need to be reworked in order to support non-rectangular shapes, and triangles are currently part
     // of the design.  Consider passing through the shape to the constructor of the model element shape.  Kind of a
@@ -68,7 +94,7 @@ define( function( require ) {
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
-        var upperLeftCornerGlobal = self.localToGlobalPoint( new Vector2( self.bounds.minX, self.bounds.minY ) );
+        var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
         var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
         var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point ).plus( initialPositionOffset );
 
