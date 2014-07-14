@@ -177,7 +177,6 @@ define( function( require ) {
         movableShape.setDestination( new Vector2( xPos, yPos ), true );
       }
       else {
-        // TODO: Temp
         var placementLocation = null;
         for ( var surroundingPointsLevel = 0; surroundingPointsLevel < Math.max( this.numRows && placementLocation === null, this.numColumns ); surroundingPointsLevel++ ) {
           var surroundingPoints = this.getOuterSurroundingPoints( movableShape.position, surroundingPointsLevel );
@@ -190,17 +189,6 @@ define( function( require ) {
           }
         }
         movableShape.setDestination( placementLocation, true );
-
-        // TODO: End of temp
-
-        // Choose the closest valid location.
-//        var closestValidLocation = this.validPlacementLocations[ 0 ];
-//        this.validPlacementLocations.forEach( function( candidatePosition ) {
-//          if ( movableShape.position.distance( candidatePosition ) < movableShape.position.distance( closestValidLocation ) ) {
-//            closestValidLocation = candidatePosition;
-//          }
-//        } );
-//        movableShape.setDestination( closestValidLocation, true );
       }
 
       // The remaining code in this function assumes that the shape is animating to the new location, and will cause
@@ -381,6 +369,11 @@ define( function( require ) {
         return false;
       }
 
+      // If there are no other shapes on the board, any location is valid.
+      if ( this.residentShapes.length === 0 ) {
+        return true;
+      }
+
       // Return false if this shape overlaps any existing shapes.
       for ( var row = 0; row < normalizedHeight; row++ ) {
         for ( var column = 0; column < normalizedWidth; column++ ) {
@@ -390,14 +383,14 @@ define( function( require ) {
         }
       }
 
-      // Return true if this shape shares an edge with any other placed shape.
+      // Return true if the shape will share an edge with any other placed shape if placed at this location.
       for ( row = 0; row < normalizedHeight; row++ ) {
         for ( column = 0; column < normalizedWidth; column++ ) {
           if (
             this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row - 1 ) ||
             this.isCellOccupied( normalizedLocation.x + column - 1, normalizedLocation.y + row ) ||
             this.isCellOccupied( normalizedLocation.x + column + 1, normalizedLocation.y + row ) ||
-            this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row )
+            this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row + 1 )
             ) {
             return true;
           }
