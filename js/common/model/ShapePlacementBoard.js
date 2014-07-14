@@ -169,10 +169,11 @@ define( function( require ) {
 
       // Determine where to place the shape on the board.
       var placementLocation = null;
-      for ( var surroundingPointsLevel = 0; surroundingPointsLevel < Math.max( this.numRows && placementLocation === null, this.numColumns ); surroundingPointsLevel++ ) {
+      for ( var surroundingPointsLevel = 0; surroundingPointsLevel < Math.max( this.numRows, this.numColumns ) && placementLocation === null; surroundingPointsLevel++ ) {
         var surroundingPoints = this.getOuterSurroundingPoints( movableShape.position, surroundingPointsLevel );
-
-        // TODO: Sort points by distance
+        surroundingPoints.sort( function( p1, p2 ) {
+          return p1.distance( movableShape.position ) - p2.distance( movableShape.position );
+        } );
         for ( var pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
           if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
             placementLocation = surroundingPoints[ pointIndex ];
