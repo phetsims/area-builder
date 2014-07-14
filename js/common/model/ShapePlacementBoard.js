@@ -167,29 +167,19 @@ define( function( require ) {
         return false;
       }
 
-      // Choose a location for the shape
-      if ( this.validPlacementLocations === WILDCARD_PLACEMENT_ARRAY ) {
-        // This is the first shape to be added, so put it anywhere on the grid
-        var xPos = Math.round( ( movableShape.position.x - this.position.x ) / this.unitSquareLength ) * this.unitSquareLength + this.position.x;
-        xPos = Math.max( Math.min( xPos, this.bounds.maxX - this.unitSquareLength ), this.bounds.minX );
-        var yPos = Math.round( ( movableShape.position.y - this.position.y ) / this.unitSquareLength ) * this.unitSquareLength + this.position.y;
-        yPos = Math.max( Math.min( yPos, this.bounds.maxY - this.unitSquareLength ), this.bounds.minY );
-        movableShape.setDestination( new Vector2( xPos, yPos ), true );
-      }
-      else {
-        var placementLocation = null;
-        for ( var surroundingPointsLevel = 0; surroundingPointsLevel < Math.max( this.numRows && placementLocation === null, this.numColumns ); surroundingPointsLevel++ ) {
-          var surroundingPoints = this.getOuterSurroundingPoints( movableShape.position, surroundingPointsLevel );
+      // Determine where to place the shape on the board.
+      var placementLocation = null;
+      for ( var surroundingPointsLevel = 0; surroundingPointsLevel < Math.max( this.numRows && placementLocation === null, this.numColumns ); surroundingPointsLevel++ ) {
+        var surroundingPoints = this.getOuterSurroundingPoints( movableShape.position, surroundingPointsLevel );
 
-          // TODO: Sort points by distance
-          for ( var pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
-            if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
-              placementLocation = surroundingPoints[ pointIndex ];
-            }
+        // TODO: Sort points by distance
+        for ( var pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
+          if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
+            placementLocation = surroundingPoints[ pointIndex ];
           }
         }
-        movableShape.setDestination( placementLocation, true );
       }
+      movableShape.setDestination( placementLocation, true );
 
       // The remaining code in this function assumes that the shape is animating to the new location, and will cause
       // odd results if it isn't, so we check it here.
