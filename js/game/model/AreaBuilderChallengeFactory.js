@@ -79,7 +79,6 @@ define( function( require ) {
   var fourRectangles = new Rectangle( 0, 0, 70, 70, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
   fourRectangles.addChild( new Line( 35, 0, 35, 70, { stroke: 'black', lineDash: [2] } ) );
   fourRectangles.addChild( new Line( 0, 35, 70, 35, { stroke: 'black', lineDash: [2] } ) );
-  var halfSquare = new Rectangle( 0, 0, 17.5, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
   // TODO: End of temp demo stuff
 
 
@@ -203,9 +202,24 @@ define( function( require ) {
               AreaBuilderSharedConstants.GREENISH_COLOR,
               model
             ),
-            // The ones below are fake, basically for demo purposes
-            longRectangle,
-            halfSquare
+            new ShapeCreatorNode(
+              HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            ),
+            new ShapeCreatorNode(
+              VERTICAL_DOUBLE_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            ),
+            new ShapeCreatorNode(
+              QUAD_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            )
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.

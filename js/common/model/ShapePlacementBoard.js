@@ -94,13 +94,6 @@ define( function( require ) {
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
 
-    // Handle the addition of a shape.
-    this.residentShapes.addItemAddedListener( function( addedShape ) {
-      self.updateCellOccupation( addedShape, 'add' );
-      self.releaseAnyOrphans();
-      self.updateAll();
-    } );
-
     // Handle the removal of a shape.
     this.residentShapes.addItemRemovedListener( function( removedShape ) {
       self.updateCellOccupation( removedShape, 'remove' );
@@ -201,13 +194,13 @@ define( function( require ) {
         assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
         if ( !animating ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
-          self.residentShapes.push( movableShape );
+          self.addResidentShape( movableShape );
         }
 
         // Set up a listener to remove this shape when the user grabs is.
         var removalListener = function( userControlled ) {
           assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
-          self.residentShapes.remove( movableShape );
+          self.removeResidentShape( movableShape );
         };
         self.tagListener( removalListener );
         removalListener.placementBoardRemovalListener = true;
@@ -223,6 +216,49 @@ define( function( require ) {
 
       // If we made it to here, placement succeeded.
       return true;
+    },
+
+    // @private, add a shape to the list of residents and make the other updates that go along with this.
+    addResidentShape: function( movableShape ) {
+
+      // Make sure that the shape is not moving
+      assert && assert( movableShape.position.equals( movableShape.destination ), 'Error: Shapes should not become residents until they have completed animating.' );
+
+      // Made sure that the shape isn't already a resident.
+      assert && assert( !this.residentShapes.contains( movableShape ), 'Error: Attempt to add shape that is already a resident.' );
+
+      this.residentShapes.add( movableShape );
+
+      // Make the appropriate updates.
+      this.updateCellOccupation( movableShape, 'add' );
+      this.releaseAnyOrphans();
+      this.updateAll();
+    },
+
+    removeResidentShape: function( movableShape ) {
+      assert && assert( this.residentShapes.contains( movableShape ), 'Error: Attempt to remove shape that is not a resident.' );
+      var self = this;
+      this.residentShapes.remove( movableShape );
+      self.updateCellOccupation( movableShape, 'remove' );
+
+      if ( movableShape.userControlled ) {
+
+        // Watch the shape so that we can do needed updates when the user releases it.
+        movableShape.userControlledProperty.once( function( userControlled ) {
+          assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
+          if ( !self.shapeOverlapsBoard( movableShape ) ) {
+            // This shape isn't coming back, so we need to trigger an orphan release.
+            self.releaseAnyOrphans();
+            self.updateAll();
+          }
+        } );
+      }
+
+      // The following guard prevents having a zillion computationally intensive updates when the board is cleared, and
+      // also prevents undesirable recursion which could arise in some situations.
+      if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
+        self.updateAll();
+      }
     },
 
     // @private, tag a listener for removal
@@ -336,7 +372,7 @@ define( function( require ) {
       }
 
       var outerSurroundingPoints = [];
-      normalizedPoints.forEach( function( p ) { outerSurroundingPoints.push( self.cellToModelVector( p ) ) } );
+      normalizedPoints.forEach( function( p ) { outerSurroundingPoints.push( self.cellToModelVector( p ) ); } );
       return outerSurroundingPoints;
     },
 
@@ -352,6 +388,8 @@ define( function( require ) {
       var normalizedLocation = this.modelToCellVector( location );
       var normalizedWidth = movableShape.shape.bounds.width / this.unitSquareLength;
       var normalizedHeight = movableShape.shape.bounds.height / this.unitSquareLength;
+      var row;
+      var column;
 
       // Return false if the shape goes off the board.  This has to compensate for the fact that there is an additional
       // invisible row in the cell array (to support the perimeter tracing algorithm.
@@ -366,8 +404,8 @@ define( function( require ) {
       }
 
       // Return false if this shape overlaps any existing shapes.
-      for ( var row = 0; row < normalizedHeight; row++ ) {
-        for ( var column = 0; column < normalizedWidth; column++ ) {
+      for ( row = 0; row < normalizedHeight; row++ ) {
+        for ( column = 0; column < normalizedWidth; column++ ) {
           if ( this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row ) ) {
             return false;
           }
@@ -435,7 +473,7 @@ define( function( require ) {
       assert && assert( this.residentShapes.contains( shape ) || this.incomingShapes.contains( shape ), 'Error: An attempt was made to release a shape that is not present.' );
       if ( this.residentShapes.contains( shape ) ) {
         this.removeTaggedObservers( shape.userControlledProperty );
-        this.residentShapes.remove( shape );
+        this.removeResidentShape( shape );
       }
       else if ( this.incomingShapes.indexOf( shape ) >= 0 ) {
         this.removeTaggedObservers( shape.animatingProperty );
@@ -733,6 +771,30 @@ define( function( require ) {
         } );
         this.orphanReleaseInProgress = false;
       }
+    },
+
+    /**
+     * Replace one of the composite shapes that currently resides on this board with a set of unit squares.  This is
+     * generally done when a composite shape was placed on the board but we now want it treated as a bunch of smaller
+     * pieces instead.
+     *
+     * @param originalShape
+     * @param pieces Pieces that comprise the original shape, MUST BE CORRECTLY LOCATED since this method does not
+     * relocate them to the appropriate places.
+     */
+    replaceShapeWithUnitSquares: function( originalShape, pieces ) {
+      assert && assert( this.residentShapes.contains( originalShape ), 'Error: Specified shape to be replaced does not appear to be present.' );
+      var self = this;
+
+      // The following add and remove operations do not use the add and remove methods in order to avoid releasing
+      // orphans (which could cause undesired behavior) and attribute updates (which are unnecessary).
+      this.residentShapes.remove( originalShape );
+      this.updateCellOccupation( originalShape, 'remove' );
+
+      pieces.forEach( function( piece ) {
+        self.residentShapes.push( piece );
+        self.updateCellOccupation( piece, 'add' );
+      } );
     },
 
     /**

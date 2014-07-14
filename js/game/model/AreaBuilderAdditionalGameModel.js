@@ -52,14 +52,36 @@ define( function( require ) {
   return inherit( PropertySet, AreaBuilderAdditionalGameModel, {
 
       // Function for adding new movable elements to this model
-      addModelElement: function( shape ) {
+      addModelElement: function( movableShape ) {
         var self = this;
-        this.movableShapes.push( shape );
-        shape.userControlledProperty.link( function( userControlled ) {
+        this.movableShapes.push( movableShape );
+        movableShape.userControlledProperty.link( function( userControlled ) {
           if ( !userControlled ) {
-            if ( !self.shapePlacementBoard.placeShape( shape ) ) {
-              // Shape did not go onto board, possibly because it's not over the board or the board is fill.  Send it home.
-              shape.goHome( true );
+            if ( self.shapePlacementBoard.placeShape( movableShape ) ) {
+//              if ( movableShape.shape.bounds.width > UNIT_SQUARE_LENGTH || movableShape.shape.bounds.height > UNIT_SQUARE_LENGTH ) {
+//                // This is a composite shape, meaning that it is made up of more than one unit square.  Rather than
+//                // keeping track of these, the design team decided that they should decompose into individual unit
+//                // squares.
+//                var decomposeShape = function(){
+//                  self.shapePlacementBoard.replaceShapeWithUnitSquares( movableShape, movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH ) );
+//                };
+//                if ( movableShape.animating ){
+//                  movableShape.animatingProperty.once( function(){ decomposeShape(); } );
+//                }
+//                else{
+//                  decomposeShape();
+//                }
+//              }
+//              if ( movableShape.shape.bounds.width > UNIT_SQUARE_LENGTH || movableShape.shape.bounds.height > UNIT_SQUARE_LENGTH ){
+//                // This is a composite shape.  Break it into unit squares.  This was requested by design team.
+//                self.shapePlacementBoard.replaceShapeWithUnitSquares( movableShape)
+//              }
+//
+            }
+            else {
+              // Shape did not go onto board, possibly because it's not over the board or the board is full.  Send it
+              // home.
+              movableShape.goHome( true );
             }
           }
         } );
@@ -68,10 +90,10 @@ define( function( require ) {
         //TODO: relying on the shape to return to its origin and not be user controlled in order to remove it from the
         //TODO: model.  It may make more sense to have an explicit 'freed' or 'dismissed' signal or something of that
         //TODO: nature.
-        shape.on( 'returnedHome', function() {
-          if ( !shape.userControlled ) {
+        movableShape.on( 'returnedHome', function() {
+          if ( !movableShape.userControlled ) {
             // The shape has been returned to the bucket.
-            self.movableShapes.remove( shape );
+            self.movableShapes.remove( movableShape );
           }
         } );
       },

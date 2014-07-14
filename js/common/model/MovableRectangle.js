@@ -14,6 +14,7 @@ define( function( require ) {
 
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Shape = require( 'KITE/Shape' );
@@ -122,6 +123,26 @@ define( function( require ) {
 
     fadeAway: function() {
       this.fading = true;
+    },
+
+    /**
+     * Returns a set of squares that are of the specified size and are positioned correctly such that they collectively
+     * make up the same shape as this rectangle.  The specified length must be an integer value of the length and
+     * width or things will get weird.
+     *
+     * @public
+     * @param squareLength
+     */
+    decomposeIntoSquares: function( squareLength ) {
+      assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength );
+      var shapes = [];
+      var size = new Dimension2( squareLength, squareLength );
+      for ( var width = 0; width < this.shape.bounds.width; width += squareLength ) {
+        for ( var height = 0; height < this.shape.bounds.height; height += squareLength ) {
+          shapes.push( new MovableRectangle( size, this.color, this.position.plusXY( width, height ) ) );
+        }
+      }
+      return shapes;
     }
   } );
 } );

@@ -25,7 +25,6 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var BORDER_LINE_WIDTH = 1;
