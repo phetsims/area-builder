@@ -432,6 +432,7 @@ define( function( require ) {
 
     // @private
     releaseShape: function( shape ) {
+      assert && assert( this.residentShapes.contains( shape ) || this.incomingShapes.contains( shape ), 'Error: An attempt was made to release a shape that is not present.' );
       if ( this.residentShapes.contains( shape ) ) {
         this.removeTaggedObservers( shape.userControlledProperty );
         this.residentShapes.remove( shape );
@@ -439,10 +440,6 @@ define( function( require ) {
       else if ( this.incomingShapes.indexOf( shape ) >= 0 ) {
         this.removeTaggedObservers( shape.animatingProperty );
         this.incomingShapes.splice( this.incomingShapes.indexOf( shape ), 1 );
-      }
-      else {
-        //TODO: Remove this clause and warning once this method and its usage is fully tested.
-        console.log( 'Error: An attempt was made to release a shape that is not present.' );
       }
     },
 
@@ -711,7 +708,6 @@ define( function( require ) {
 
     releaseAnyOrphans: function() {
       var self = this;
-      this.orphanReleaseInProgress = true;
       var contiguousCellGroups = this.identifyContiguousCellGroups();
 
       if ( contiguousCellGroups.length > 1 ) {
@@ -723,17 +719,20 @@ define( function( require ) {
           }
         } );
 
+        this.orphanReleaseInProgress = true;
         contiguousCellGroups.forEach( function( group, groupIndex ) {
           if ( groupIndex !== indexOfRetainedGroup ) {
             group.forEach( function( cell ) {
               var movableShape = cell.occupiedBy;
-              self.releaseShape( movableShape );
-              movableShape.goHome( true );
+              if ( movableShape !== null ) { // Need to test in case a previously release shape covered multiple cells.
+                self.releaseShape( movableShape );
+                movableShape.goHome( true );
+              }
             } );
           }
         } );
+        this.orphanReleaseInProgress = false;
       }
-      this.orphanReleaseInProgress = false;
     },
 
     /**
