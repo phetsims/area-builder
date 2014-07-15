@@ -87,41 +87,15 @@ define( function( require ) {
     this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
-    this.releaseAllInProgress = false; // @private
-    this.orphanReleaseInProgress = false; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
 
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
 
-    // Handle the removal of a shape.
-//    this.residentShapes.addItemRemovedListener( function( removedShape ) {
-//      self.updateCellOccupation( removedShape, 'remove' );
-//
-//      if ( removedShape.userControlled ) {
-//
-//        // Watch the shape so that we can do needed updates when the user releases it.
-//        removedShape.userControlledProperty.once( function( userControlled ) {
-//          assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
-//          if ( !self.shapeOverlapsBoard( removedShape ) ) {
-//            // This shape isn't coming back, so we need to trigger an orphan release.
-//            self.releaseAnyOrphans();
-//            self.updateAll();
-//          }
-//        } );
-//      }
-//
-//      // The following guard prevents having a zillion computationally intensive updates when the board is cleared, and
-//      // also prevents undesirable recursion which could arise in some situations.
-//      if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
-//        self.updateAll();
-//      }
-//    } );
-
     // For efficiency and simplicity in evaluating the interior and exterior perimeter, locating orphans, and so forth,
     // a 2D array is used to track various state information about the 'cells' that correspond to the locations on this
     // board where shapes may be placed.  This array has a buffer of always-empty cells around it so that the 'marching
-    // squares' algorithm can be used even if this placement board is filled up.
+    // squares' algorithm can be used to evaluate the perimeters even if this placement board is filled up.
     this.cells = [];
     for ( var column = 0; column < this.numColumns + 2; column++ ) {
       var currentRow = [];
@@ -240,6 +214,7 @@ define( function( require ) {
       var self = this;
       this.residentShapes.remove( movableShape );
       self.updateCellOccupation( movableShape, 'remove' );
+      self.updateAll();
 
       if ( movableShape.userControlled ) {
 
@@ -252,12 +227,6 @@ define( function( require ) {
             self.updateAll();
           }
         } );
-      }
-
-      // The following guard prevents having a zillion computationally intensive updates when the board is cleared, and
-      // also prevents undesirable recursion which could arise in some situations.
-      if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
-        self.updateAll();
       }
     },
 
@@ -435,7 +404,6 @@ define( function( require ) {
      */
     releaseAllShapes: function( fade ) {
       var self = this;
-      this.releaseAllInProgress = true;
 
       var shapesToRelease = [];
 
@@ -470,7 +438,6 @@ define( function( require ) {
 
       // Update board state.
       this.updateValidPlacementLocations();
-      this.releaseAllInProgress = false;
       this.updatePerimeters();
       this.updateAreaAndTotalPerimeter();
     },
@@ -764,7 +731,6 @@ define( function( require ) {
           }
         } );
 
-        this.orphanReleaseInProgress = true;
         contiguousCellGroups.forEach( function( group, groupIndex ) {
           if ( groupIndex !== indexOfRetainedGroup ) {
             group.forEach( function( cell ) {
@@ -776,7 +742,6 @@ define( function( require ) {
             } );
           }
         } );
-        this.orphanReleaseInProgress = false;
       }
     },
 
