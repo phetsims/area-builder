@@ -84,7 +84,6 @@ define( function( require ) {
     // Private variables
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
     this.residentShapes = new ObservableArray(); // @private
-    this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY; // @private
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
@@ -130,7 +129,7 @@ define( function( require ) {
       var self = this;
 
       // See if shape is of the correct color and overlapping with the board.
-      if ( movableShape.color !== this.colorHandled || !this.shapeOverlapsBoard( movableShape ) || this.validPlacementLocations.length === 0 ) {
+      if ( movableShape.color !== this.colorHandled || !this.shapeOverlapsBoard( movableShape ) ) {
         return false;
       }
 
@@ -158,9 +157,6 @@ define( function( require ) {
       // the valid placement locations can be updated, especially in multi-touch environments.  So, basically, there is
       // an intermediate 'holding place' for incoming shapes.
       this.incomingShapes.push( movableShape );
-
-      // Update the valid locations for the next placement.
-      self.updateValidPlacementLocations();
 
       // Create a listener that will move this shape from the incoming shape list to the resident list once the
       // animation completes.
@@ -437,9 +433,7 @@ define( function( require ) {
       }
 
       // Update board state.
-      this.updateValidPlacementLocations();
-      this.updatePerimeters();
-      this.updateAreaAndTotalPerimeter();
+      this.updateAll();
     },
 
     // @private
@@ -780,57 +774,10 @@ define( function( require ) {
       } );
     },
 
-    /**
-     * Update the list of locations where shapes can be placed where they will be adjacent to the existing shapes,
-     * won't overlap, and won't be off the board.
-     * @private
-     */
-    updateValidPlacementLocations: function() {
-      var self = this;
-
-      if ( self.residentShapes.length + self.incomingShapes.length === 0 ) {
-        this.validPlacementLocations = WILDCARD_PLACEMENT_ARRAY;
-      }
-      else {
-
-        // Clear previous list.
-        self.validPlacementLocations = [];
-
-        // Create a list of all locations that share an edge with a resident or incoming shape.
-        var adjacentLocations = [];
-        var residentAndIncomingShapes = [];
-        self.residentShapes.forEach( function( shape ) { residentAndIncomingShapes.push( shape ); } );
-        self.incomingShapes.forEach( function( shape ) { residentAndIncomingShapes.push( shape ); } );
-        residentAndIncomingShapes.forEach( function( shape ) {
-          for ( var angle = 0; angle < 2 * Math.PI; angle += Math.PI / 2 ) {
-            var newPosition = shape.destination.plus( new Vector2.createPolar( self.unitSquareLength, angle ) );
-            if ( newPosition.x < self.bounds.maxX && newPosition.x >= self.bounds.minX && newPosition.y < self.bounds.maxY && newPosition.y >= self.bounds.minY ) {
-              adjacentLocations.push( newPosition );
-            }
-          }
-        } );
-
-        // Eliminate locations that are occupied.
-        adjacentLocations.forEach( function( adjacentLocation ) {
-          var isOccupied = false;
-          for ( var i = 0; i < residentAndIncomingShapes.length; i++ ) {
-            if ( residentAndIncomingShapes[ i ].destination.distance( adjacentLocation ) < DISTANCE_COMPARE_THRESHOLD ) {
-              isOccupied = true;
-              break;
-            }
-          }
-          if ( !isOccupied ) {
-            self.validPlacementLocations.push( adjacentLocation );
-          }
-        } );
-      }
-    },
-
     // Update perimeter points, placement locations, total area, and total perimeter.
     updateAll: function() {
       this.updatePerimeters();
       this.updateAreaAndTotalPerimeter();
-      this.updateValidPlacementLocations();
     }
   } );
 } );
