@@ -453,6 +453,13 @@ define( function( require ) {
       this.residentShapes.clear();
       this.incomingShapes.length = 0;
 
+      // Clear the cell array that tracks occupancy.
+      for ( var row = 0; row < this.numRows; row++ ) {
+        for ( var column = 0; column < this.numColumns; column++ ) {
+          this.cells[ column ][ row ].occupiedBy = null;
+        }
+      }
+
       // Send the shapes to their origin.
       if ( fade ) {
         shapesToRelease.forEach( function( shape ) { shape.fadeAway(); } );
