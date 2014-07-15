@@ -95,28 +95,28 @@ define( function( require ) {
     this.size = size; // @public
 
     // Handle the removal of a shape.
-    this.residentShapes.addItemRemovedListener( function( removedShape ) {
-      self.updateCellOccupation( removedShape, 'remove' );
-
-      if ( removedShape.userControlled ) {
-
-        // Watch the shape so that we can do needed updates when the user releases it.
-        removedShape.userControlledProperty.once( function( userControlled ) {
-          assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
-          if ( !self.shapeOverlapsBoard( removedShape ) ) {
-            // This shape isn't coming back, so we need to trigger an orphan release.
-            self.releaseAnyOrphans();
-            self.updateAll();
-          }
-        } );
-      }
-
-      // The following guard prevents having a zillion computationally intensive updates when the board is cleared, and
-      // also prevents undesirable recursion which could arise in some situations.
-      if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
-        self.updateAll();
-      }
-    } );
+//    this.residentShapes.addItemRemovedListener( function( removedShape ) {
+//      self.updateCellOccupation( removedShape, 'remove' );
+//
+//      if ( removedShape.userControlled ) {
+//
+//        // Watch the shape so that we can do needed updates when the user releases it.
+//        removedShape.userControlledProperty.once( function( userControlled ) {
+//          assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
+//          if ( !self.shapeOverlapsBoard( removedShape ) ) {
+//            // This shape isn't coming back, so we need to trigger an orphan release.
+//            self.releaseAnyOrphans();
+//            self.updateAll();
+//          }
+//        } );
+//      }
+//
+//      // The following guard prevents having a zillion computationally intensive updates when the board is cleared, and
+//      // also prevents undesirable recursion which could arise in some situations.
+//      if ( !( self.releaseAllInProgress || self.orphanReleaseInProgress ) ) {
+//        self.updateAll();
+//      }
+//    } );
 
     // For efficiency and simplicity in evaluating the interior and exterior perimeter, locating orphans, and so forth,
     // a 2D array is used to track various state information about the 'cells' that correspond to the locations on this
@@ -776,13 +776,13 @@ define( function( require ) {
     /**
      * Replace one of the composite shapes that currently resides on this board with a set of unit squares.  This is
      * generally done when a composite shape was placed on the board but we now want it treated as a bunch of smaller
-     * pieces instead.
+     * unitSquares instead.
      *
      * @param originalShape
-     * @param pieces Pieces that comprise the original shape, MUST BE CORRECTLY LOCATED since this method does not
+     * @param unitSquares Pieces that comprise the original shape, MUST BE CORRECTLY LOCATED since this method does not
      * relocate them to the appropriate places.
      */
-    replaceShapeWithUnitSquares: function( originalShape, pieces ) {
+    replaceShapeWithUnitSquares: function( originalShape, unitSquares ) {
       assert && assert( this.residentShapes.contains( originalShape ), 'Error: Specified shape to be replaced does not appear to be present.' );
       var self = this;
 
@@ -791,9 +791,20 @@ define( function( require ) {
       this.residentShapes.remove( originalShape );
       this.updateCellOccupation( originalShape, 'remove' );
 
-      pieces.forEach( function( piece ) {
-        self.residentShapes.push( piece );
-        self.updateCellOccupation( piece, 'add' );
+      unitSquares.forEach( function( movableUnitSquare ) {
+        self.residentShapes.push( movableUnitSquare );
+
+        // Set up a listener to remove this shape when the user grabs is.
+        // TODO: This code was cut and pasted from another portion of this file.  If kept, should be consolidated.
+        var removalListener = function( userControlled ) {
+          assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
+          self.removeResidentShape( movableUnitSquare );
+        };
+        self.tagListener( removalListener );
+        removalListener.placementBoardRemovalListener = true;
+        movableUnitSquare.userControlledProperty.once( removalListener );
+
+        self.updateCellOccupation( movableUnitSquare, 'add' );
       } );
     },
 
