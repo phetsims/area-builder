@@ -13,6 +13,7 @@ define( function( require ) {
 
   // strings
   var buildItString = require( 'string!AREA_BUILDER/buildIt' );
+  var findTheAreaString = require( 'string!AREA_BUILDER/findTheArea' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords
@@ -40,6 +41,30 @@ define( function( require ) {
     .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
     .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
     .close();
+  var LOWER_RIGHT_TRIANGLE_SHAPE = new Shape()
+    .moveTo( 0, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
+    .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
+    .close();
+
+  var SHAPES_FOR_AREA_FINDING_PROBLEMS = [
+
+    // This one is from the table in the spec for level 1 (as it was on 7/15/2014), looks like an upside down staircase
+    // with three steps.
+    new Shape()
+      .moveTo( 0, 0 )
+      .lineTo( UNIT_SQUARE_LENGTH * 6, 0 )
+      .lineTo( UNIT_SQUARE_LENGTH * 6, UNIT_SQUARE_LENGTH * 3 )
+      .lineTo( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 3 )
+      .lineTo( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 2 )
+      .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
+      .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 1 )
+      .lineTo( 0, UNIT_SQUARE_LENGTH * 1 )
+      .close()
+  ];
+
+  // TODO: This is temporary, eventually these should be algorithmically generated.
   var AREA_AND_PERIMETER_BUILD_SPECS = [
     {
       area: 2,
@@ -70,17 +95,6 @@ define( function( require ) {
       perimeter: 12
     }
   ];
-
-  // TODO: temp stuff for demo
-  var longRectangle = new Rectangle( 0, 0, 70, 35, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
-  longRectangle.addChild( new Line( 35, 0, 35, 35, { stroke: 'black', lineDash: [2] } ) );
-  var tallRectangle = new Rectangle( 0, 0, 35, 70, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
-  tallRectangle.addChild( new Line( 0, 35, 35, 35, { stroke: 'black', lineDash: [2] } ) );
-  var fourRectangles = new Rectangle( 0, 0, 70, 70, 0, 0, { fill: AreaBuilderSharedConstants.GREENISH_COLOR, stroke: 'green' } );
-  fourRectangles.addChild( new Line( 35, 0, 35, 70, { stroke: 'black', lineDash: [2] } ) );
-  fourRectangles.addChild( new Line( 0, 35, 70, 35, { stroke: 'black', lineDash: [2] } ) );
-  // TODO: End of temp demo stuff
-
 
   // Challenge history, used to make sure unique challenges are generated.
 //  var challengeHistory = []; commented out for lint, uncomment when ready
@@ -243,6 +257,71 @@ define( function( require ) {
       return challenge;
     },
 
+    generateFindTheAreaChallenge: function( model, difficulty ) {
+      var challengeIsUnique = false;
+      var challenge;
+      while ( !challengeIsUnique ) {
+        challenge = new AreaBuilderGameChallenge(
+          // Title of challenge
+          findTheAreaString,
+
+          // Tool control
+          {
+            gridControl: true,
+            dimensionsControl: true,
+            decompositionToolControl: true
+          },
+
+          // Keypad visibility flag
+          false,
+
+          // Kit contents
+          [
+            new ShapeCreatorNode(
+              SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model
+            ),
+            new ShapeCreatorNode(
+              HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            ),
+            new ShapeCreatorNode(
+              VERTICAL_DOUBLE_SQUARE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model,
+              { gridSpacing: UNIT_SQUARE_LENGTH }
+            ),
+            new ShapeCreatorNode(
+              LOWER_RIGHT_TRIANGLE_SHAPE,
+              AreaBuilderSharedConstants.GREENISH_COLOR,
+              model
+            )
+          ],
+
+          // Build spec, i.e. what the user should try to build, if anything.
+          null,
+
+          // Color prompts
+          null,
+          null,
+
+          // Background shape
+          SHAPES_FOR_AREA_FINDING_PROBLEMS[ 0 ],
+
+          // Check specification, i.e. what gets checked with the user submits their attempt.
+          'areaEntered',
+
+          // Flag for whether or not this is a fake challenge TODO remove once game is working
+          false
+        );
+        challengeIsUnique = this.isChallengeUnique( challenge );
+      }
+      return challenge;
+    },
+
     // @private
     generateChallenge: function( level, difficulty, model ) {
       if ( level === 0 ) {
@@ -250,6 +329,9 @@ define( function( require ) {
       }
       else if ( level === 1 ) {
         return this.generateBuildAreaAndPerimeterChallenge( model, difficulty );
+      }
+      else if ( level === 2 ) {
+        return this.generateFindTheAreaChallenge( model, difficulty );
       }
       else {
         // Create a fake challenge for the other levels.
