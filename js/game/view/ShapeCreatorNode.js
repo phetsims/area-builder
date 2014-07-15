@@ -95,7 +95,7 @@ define( function( require ) {
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
         var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
         var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
-        var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point ).plus( initialPositionOffset );
+        var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 
         // Create and add the new model element.
         modelElement = new MovableRectangle( rectangleSize, AreaBuilderSharedConstants.GREENISH_COLOR, initialPosition );
