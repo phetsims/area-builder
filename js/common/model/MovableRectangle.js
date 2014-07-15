@@ -137,11 +137,11 @@ define( function( require ) {
       assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength === 0, 'Error: A dimension of this movable shape is not an integer multiple of the provided dimension' );
       var shapes = [];
       var size = new Dimension2( squareLength, squareLength );
-      for ( var width = 0; width < this.shape.bounds.width; width += squareLength ) {
-        for ( var height = 0; height < this.shape.bounds.height; height += squareLength ) {
+      for ( var column = 0; column < this.shape.bounds.width; column += squareLength ) {
+        for ( var row = 0; row < this.shape.bounds.height; row += squareLength ) {
           var constituentShape = new MovableRectangle( size, this.color, this.positionProperty.initialValue );
-          constituentShape.setDestination( this.position.plusXY( width, height ) );
-          shapes.push( new MovableRectangle( size, this.color, this.position.plusXY( width, height ) ) );
+          constituentShape.setDestination( this.position.plusXY( column, row ), false );
+          shapes.push( constituentShape );
         }
       }
       return shapes;

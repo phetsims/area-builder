@@ -61,8 +61,8 @@ define( function( require ) {
             if ( self.shapePlacementBoard.placeShape( movableShape ) ) {
               if ( movableShape.shape.bounds.width > UNIT_SQUARE_LENGTH || movableShape.shape.bounds.height > UNIT_SQUARE_LENGTH ) {
                 // This is a composite shape, meaning that it is made up of more than one unit square.  Rather than
-                // tracking these, the design team decided that they should decompose into individual unit squares.
-                // This is done here, after placement is complete.
+                // tracking these, the design team decided that they should decompose into individual unit squares once
+                // they have been placed.
                 var decomposeShape = function() {
                   var constituentShapes = movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH );
                   constituentShapes.forEach( function( shape ) { self.addModelElement( shape ) } );
