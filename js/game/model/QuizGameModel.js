@@ -1,9 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Main model class for the area builder game.
- *
- * Note: Levels in this model are zero-indexed, even though they are often presented to the user as starting at level 1.
+ * Framework for a quiz style game, where the user is presented with various 'challenges' which must be answered and
+ * for which they get points.  The game has multiple levels.
  *
  * @author John Blanco
  */

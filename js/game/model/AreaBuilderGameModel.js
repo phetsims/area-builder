@@ -25,7 +25,7 @@ define( function( require ) {
    *
    * @constructor
    */
-  function AreaBuilderAdditionalGameModel() {
+  function AreaBuilderGameModel() {
 
     PropertySet.call( this, {
       showGrid: true,
@@ -49,7 +49,7 @@ define( function( require ) {
     this.movableShapes = new ObservableArray(); // @public
   }
 
-  return inherit( PropertySet, AreaBuilderAdditionalGameModel, {
+  return inherit( PropertySet, AreaBuilderGameModel, {
 
       // Function for adding new movable elements to this model
       addModelElement: function( movableShape ) {
@@ -112,6 +112,10 @@ define( function( require ) {
         // TODO: Get rid of the following if clause when fake challenges are removed.
         if ( challenge.fakeChallenge ) {
           answerIsCorrect = this.fakeCorrectAnswerProperty.value;
+        }
+        else if ( challenge.backgroundShape ) {
+          // TODO: This is temporary and will need to be implemented.
+          answerIsCorrect = true;
         }
         else if ( challenge.buildSpec ) {
           answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area;
