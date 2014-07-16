@@ -189,6 +189,7 @@ define( function( require ) {
     };
     this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
       listener: function() {
+        gameModel.simSpecificModel.areaGuess = self.numberEntryControl.value;
         gameModel.checkAnswer();
       } }, buttonOptions ) );
     this.gameControlButtons.push( this.checkAnswerButton );

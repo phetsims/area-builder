@@ -11,6 +11,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
@@ -20,6 +21,29 @@ define( function( require ) {
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels
   var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 12, UNIT_SQUARE_LENGTH * 8 );
+
+  /**
+   * Find the area of a shape in terms of unit squares.
+   * @param shape
+   */
+  function calculateUnitArea( shape ) {
+    assert && assert( shape.bounds.width % UNIT_SQUARE_LENGTH === 0 && shape.bounds.height % UNIT_SQUARE_LENGTH === 0,
+      'Error: This method will only work with shapes that have bounds of unit width and height.'
+    );
+    // TODO: Will only handle shapes with no angles, needs to be enhanced to handle angled edges.
+    var unitArea = 0;
+    var testPoint = new Vector2( 0, 0 );
+    for ( var row = 0; row * UNIT_SQUARE_LENGTH < shape.bounds.height; row++ ) {
+      for ( var column = 0; column * UNIT_SQUARE_LENGTH < shape.bounds.width; column++ ) {
+        testPoint.setXY( shape.bounds.minX + ( column + 0.5 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.5 ) * UNIT_SQUARE_LENGTH );
+        if ( shape.containsPoint( testPoint ) ) {
+          unitArea++;
+        }
+      }
+    }
+    return unitArea;
+  }
+
 
   /**
    *
@@ -34,6 +58,9 @@ define( function( require ) {
 
     // Temp property for 'fake' challenges.  TODO - Remove this when all challenges are working.
     this.fakeCorrectAnswerProperty = new Property( false );
+
+    // @public Value where the user's submission of area is stored.
+    this.areaGuess = 0;
 
     // @public The shape board where the user will build and/or evaluate shapes.
     this.shapePlacementBoard = new ShapePlacementBoard(
@@ -113,11 +140,11 @@ define( function( require ) {
         if ( challenge.fakeChallenge ) {
           answerIsCorrect = this.fakeCorrectAnswerProperty.value;
         }
-        else if ( challenge.backgroundShape ) {
-          // TODO: This is temporary and will need to be implemented.
-          answerIsCorrect = true;
+        else if ( challenge.checkSpec === 'areaEntered' ) {
+          // This is a "find the area" style of challenge
+          answerIsCorrect = this.areaGuess === calculateUnitArea( challenge.backgroundShape );
         }
-        else if ( challenge.buildSpec ) {
+        else if ( challenge.checkSpec === 'areaConstructed' ) {
           answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area;
           if ( answerIsCorrect && challenge.buildSpec.perimeter ) {
             answerIsCorrect = challenge.buildSpec.perimeter === this.shapePlacementBoard.exteriorPerimeters[0].length;
