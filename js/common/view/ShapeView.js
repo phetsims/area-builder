@@ -27,7 +27,7 @@ define( function( require ) {
     var self = this;
     this.color = movableShape.color; // @public
 
-    // Create the shadow that will be
+    // Create the shadow
     var shadow = new Path( movableShape.shape, {
       fill: SHADOW_COLOR
     } );
@@ -48,23 +48,34 @@ define( function( require ) {
     // Derive the opacity of the shape from multiple properties on the model element.  Because the composite shape is
     // used to depict the overall shape when a shape is on the placement board, this element is invisible (opacity set
     // to zero) unless it is user controlled, animating, or fading.
-    var opacityProperty = new DerivedProperty(
-      [ movableShape.userControlledProperty, movableShape.animatingProperty, movableShape.fadeProportionProperty ],
-      function( userControlled, animating, fadeProportion ) {
+    var mainShapeOpacityProperty = new DerivedProperty(
+      [ movableShape.userControlledProperty, movableShape.animatingProperty, movableShape.fadeProportionProperty, movableShape.invisibleWhenStillProperty ],
+      function( userControlled, animating, fadeProportion, invisibleWhenStill ) {
         if ( userControlled || animating ) {
           return 1;
         }
         else if ( fadeProportion > 0 ) {
           return 1 - fadeProportion;
         }
+        else if ( !invisibleWhenStill ) {
+          return 1;
+        }
         else {
           return 0;
         }
       } );
 
-    opacityProperty.link( function( opacity ) {
+    mainShapeOpacityProperty.link( function( opacity ) {
       self.opacity = opacity;
     } );
+
+    var shadowVisibilityProperty = new DerivedProperty(
+      [ movableShape.userControlledProperty, movableShape.animatingProperty ],
+      function( userControlled, animating ) {
+        return ( userControlled || animating );
+      } );
+
+    shadowVisibilityProperty.linkAttribute( shadow, 'visible' );
 
     movableShape.animatingProperty.link( function( animating ) {
       // To avoid certain complications, make it so that users can't grab this when it is moving.
@@ -74,8 +85,6 @@ define( function( require ) {
     movableShape.fadeProportionProperty.link( function( fadeProportion ) {
       // To avoid certain complications, make it so that users can't grab this when it is fading.
       self.pickable = fadeProportion === 0;
-      // Don't show the shadow when fading out.
-      shadow.visible = fadeProportion === 0;
     } );
 
     // Add the listener that will allow the user to drag the shape around.

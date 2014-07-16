@@ -62,6 +62,11 @@ define( function( require ) {
     this.showDimensionsProperty = showDimensionsProperty;
 
     PropertySet.call( this, {
+      // @public Read/Write value that controls whether the placement board moves individual shapes that are added to
+      // the board such that they form a single, contiguous, composite shape, or if it just snaps them to the grid. The
+      // perimeter and area values are only updated when this is set to true.
+      formComposite: 'formComposite',
+
       // @public Read-only property that indicates the area of the composite shape
       area: 0,
 
@@ -135,6 +140,9 @@ define( function( require ) {
       if ( movableShape.color !== this.colorHandled || !this.shapeOverlapsBoard( movableShape ) ) {
         return false;
       }
+
+      // Set the shape's visibility behavior based on whether a composite shape is being depicted.
+      movableShape.invisibleWhenStill = this.formComposite;
 
       // Determine where to place the shape on the board.
       var placementLocation = null;
@@ -380,7 +388,13 @@ define( function( require ) {
         }
       }
 
-      // Return true if the shape will share an edge with any other placed shape if placed at this location.
+      // If this board is not set to consolidate shapes, we've done enough, and this location is valid.
+      if ( !this.formComposite ) {
+        return true;
+      }
+
+      // This position is only valid if the shape will share an edge with an already placed shape, since the
+      // 'formComposite' mode is enabled.
       for ( row = 0; row < normalizedHeight; row++ ) {
         for ( column = 0; column < normalizedWidth; column++ ) {
           if (
@@ -553,12 +567,13 @@ define( function( require ) {
     updatePerimeters: function() {
       var self = this;
 
-      if ( this.residentShapes.length === 0 ) {
+      // The perimeters can only be computed for a single consolidated shape.
+      if ( !this.formComposite || this.residentShapes.length === 0 ) {
         this.perimeter = 0;
         this.exteriorPerimetersProperty.reset();
         this.interiorPerimetersProperty.reset();
       }
-      else {
+      else { // Do the full-blown perimeter calculation
         var row;
         var column;
         var exteriorPerimeters = [];
@@ -716,29 +731,33 @@ define( function( require ) {
     },
 
     releaseAnyOrphans: function() {
-      var self = this;
-      var contiguousCellGroups = this.identifyContiguousCellGroups();
 
-      if ( contiguousCellGroups.length > 1 ) {
-        // There are orphans that should be released.  Determine which ones.
-        var indexOfRetainedGroup = 0;
-        contiguousCellGroups.forEach( function( group, index ) {
-          if ( group.length > contiguousCellGroups[ indexOfRetainedGroup ].length ) {
-            indexOfRetainedGroup = index;
-          }
-        } );
+      // Orphans can only exist when operating in the 'formComposite' mode.
+      if ( this.formComposite ) {
+        var self = this;
+        var contiguousCellGroups = this.identifyContiguousCellGroups();
 
-        contiguousCellGroups.forEach( function( group, groupIndex ) {
-          if ( groupIndex !== indexOfRetainedGroup ) {
-            group.forEach( function( cell ) {
-              var movableShape = cell.occupiedBy;
-              if ( movableShape !== null ) { // Need to test in case a previously release shape covered multiple cells.
-                self.releaseShape( movableShape );
-                movableShape.goHome( true );
-              }
-            } );
-          }
-        } );
+        if ( contiguousCellGroups.length > 1 ) {
+          // There are orphans that should be released.  Determine which ones.
+          var indexOfRetainedGroup = 0;
+          contiguousCellGroups.forEach( function( group, index ) {
+            if ( group.length > contiguousCellGroups[ indexOfRetainedGroup ].length ) {
+              indexOfRetainedGroup = index;
+            }
+          } );
+
+          contiguousCellGroups.forEach( function( group, groupIndex ) {
+            if ( groupIndex !== indexOfRetainedGroup ) {
+              group.forEach( function( cell ) {
+                var movableShape = cell.occupiedBy;
+                if ( movableShape !== null ) { // Need to test in case a previously release shape covered multiple cells.
+                  self.releaseShape( movableShape );
+                  movableShape.goHome( true );
+                }
+              } );
+            }
+          } );
+        }
       }
     },
 

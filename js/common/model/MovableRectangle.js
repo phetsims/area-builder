@@ -52,7 +52,13 @@ define( function( require ) {
       // part of a feature where shapes can fade out.  Once fade has started,
       // it doesn't stop until it is fully faded, i.e. the value is 1.  This
       // should not be set externally.
-      fadeProportion: 0
+      fadeProportion: 0,
+
+      // A flag that indicates whether this individual shape should become
+      // invisible when it is done animating.  This is generally used in cases
+      // where it becomes part of a larger composite shape that is depicted
+      // instead.
+      invisibleWhenStill: true
     } );
 
     // Destination is used for animation, and should be set through accessor methods only.
@@ -141,6 +147,7 @@ define( function( require ) {
         for ( var row = 0; row < this.shape.bounds.height; row += squareLength ) {
           var constituentShape = new MovableRectangle( size, this.color, this.positionProperty.initialValue );
           constituentShape.setDestination( this.position.plusXY( column, row ), false );
+          constituentShape.invisibleWhenStill = this.invisibleWhenStill;
           shapes.push( constituentShape );
         }
       }

@@ -138,7 +138,17 @@ define( function( require ) {
        */
       setChallenge: function( challenge ) {
         assert && assert( typeof( challenge.backgroundShape !== 'undefined' ) );
-        this.shapePlacementBoard.setBackgroundShape( challenge.backgroundShape, true );
+        if ( challenge.backgroundShape ) {
+          // This is a 'find the area' style of challenge.  Add the shape to be estimated.
+          this.shapePlacementBoard.setBackgroundShape( challenge.backgroundShape, true );
+
+          // Set the board to allow shapes to be freely placed anywhere.
+          this.shapePlacementBoard.formComposite = false;
+        }
+        else {
+          // This is a 'build it' style of challenge, so turn on shape consolidation.
+          this.shapePlacementBoard.formComposite = true;
+        }
       },
 
       step: function( dt ) {
