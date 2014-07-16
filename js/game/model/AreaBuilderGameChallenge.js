@@ -7,6 +7,37 @@
 define( function( require ) {
   'use strict';
 
+  // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+  var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels
+
+  // private functions
+  /**
+   * Find the area of a shape in terms of unit squares.
+   * @param shape
+   */
+  function calculateUnitArea( shape ) {
+    assert && assert( shape.bounds.width % UNIT_SQUARE_LENGTH === 0 && shape.bounds.height % UNIT_SQUARE_LENGTH === 0,
+      'Error: This method will only work with shapes that have bounds of unit width and height.'
+    );
+    // TODO: Will only handle shapes with no angles, needs to be enhanced to handle angled edges.
+    var unitArea = 0;
+    var testPoint = new Vector2( 0, 0 );
+    for ( var row = 0; row * UNIT_SQUARE_LENGTH < shape.bounds.height; row++ ) {
+      for ( var column = 0; column * UNIT_SQUARE_LENGTH < shape.bounds.width; column++ ) {
+        testPoint.setXY( shape.bounds.minX + ( column + 0.5 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.5 ) * UNIT_SQUARE_LENGTH );
+        if ( shape.containsPoint( testPoint ) ) {
+          unitArea++;
+        }
+      }
+    }
+    return unitArea;
+  }
+
   /**
    * @param {string} challengeTitle Title for this challenge, shown at the top of the view.  Must be specified for all
    * challenges.
@@ -45,6 +76,7 @@ define( function( require ) {
 
     // Non-parameterized fields.
     this.maxAttemptsAllowed = 2;
+    this.backgroundShapeUnitArea = backgroundShape === null ? 0 : calculateUnitArea( backgroundShape );
   }
 
   return AreaBuilderGameChallenge;
