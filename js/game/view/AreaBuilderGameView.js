@@ -427,7 +427,7 @@ define( function( require ) {
         }
 
         // Show the number entry control if this is a "find the area" style of challenge.
-        this.numberEntryControl.visible = challenge.backgroundShape !== null;
+        this.numberEntryControl.visible = challenge.showNumberEntryPad;
 
         // Preset the fake challenge if specified. TODO: Remove once fake challenges no longer exist.
         if ( this.model.currentChallenge.fakeChallenge ) {

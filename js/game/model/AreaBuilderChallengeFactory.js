@@ -272,7 +272,7 @@ define( function( require ) {
           },
 
           // Keypad visibility flag
-          false,
+          true,
 
           // Kit contents
           [
