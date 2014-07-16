@@ -17,6 +17,7 @@ define( function( require ) {
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Keypad = require( 'AREA_BUILDER/game/view/Keypad' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -213,6 +214,10 @@ define( function( require ) {
       button.bottom = buttonBottom;
       self.rootNode.addChild( button );
     } );
+
+    // Add the number entry control, which is only visible on certain challenge types.
+    this.numberEntryControl = new Keypad( { centerX: buttonCenterX, bottom: this.checkAnswerButton.top - 10 } );
+    this.challengeLayer.addChild( this.numberEntryControl );
 
     // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
     this.faceWithPointsNode = new FaceWithPointsNode( {
