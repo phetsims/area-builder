@@ -61,7 +61,7 @@ define( function( require ) {
           representation.bounds.width - BORDER_LINE_WIDTH,
           representation.bounds.height - BORDER_LINE_WIDTH,
         options.gridSpacing, {
-          lineDash: [ 1, 4 ],
+          lineDash: [ 2, 4 ],
           stroke: 'black'
         }
       );

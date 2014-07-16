@@ -12,6 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   /**
@@ -21,24 +22,33 @@ define( function( require ) {
   function ShapePlacementBoardNode( shapePlacementBoard ) {
     Node.call( this );
 
-    // Create and add the background
-    var background = new Rectangle( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height, 0, 0, {
+    // Create and add the board itself.
+    var board = new Rectangle( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height, 0, 0, {
       fill: 'white',
       stroke: 'black'
     } );
-    this.addChild( background );
+    this.addChild( board );
 
     // Set the position
-    background.left = shapePlacementBoard.position.x;
-    background.top = shapePlacementBoard.position.y;
+    board.left = shapePlacementBoard.position.x;
+    board.top = shapePlacementBoard.position.y;
 
     // Create and add the grid
-    var lineOptions = { stroke: '#C0C0C0' };
-    var grid = new Grid( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height, shapePlacementBoard.unitSquareLength, lineOptions );
-    background.addChild( grid );
+    var grid = new Grid( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height, shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
+    board.addChild( grid );
 
     // Track and update the grid visibility
     shapePlacementBoard.showGridProperty.linkAttribute( grid, 'visible' );
+
+    // Monitor the background shape and add/remove/update it as it changes.
+    var backgroundShapeNode = new Node();
+    board.addChild( backgroundShapeNode );
+    shapePlacementBoard.backgroundShapeProperty.link( function( backgroundShape ) {
+      backgroundShapeNode.removeAllChildren();
+      if ( backgroundShape !== null ) {
+        backgroundShapeNode.addChild( new Path( backgroundShape, { fill: 'rgb( 0, 113, 189 )' } ) );
+      }
+    } );
 
     // Add the composite shape, which depicts the collection of all shapes added to the board.
     this.addChild( new CompositeShapeNode(

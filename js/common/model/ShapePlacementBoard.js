@@ -9,14 +9,13 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var DISTANCE_COMPARE_THRESHOLD = 1E-5;
-  var WILDCARD_PLACEMENT_ARRAY = [ '*' ];
   var INVALID_VALUE_STRING = '--';
   var MOVEMENT_VECTORS = {
     // This sim is using screen conventions, meaning positive Y indicates down.
@@ -73,7 +72,11 @@ define( function( require ) {
       exteriorPerimeters: [],
 
       // @public Read-only set of sets of points that define interior perimeters
-      interiorPerimeters: []
+      interiorPerimeters: [],
+
+      // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
+      // other shapes.  The shape is positioned relative to this board, not in absolute model space.
+      backgroundShape: null
     } );
 
     // Non-dynamic public values.
@@ -778,6 +781,32 @@ define( function( require ) {
     updateAll: function() {
       this.updatePerimeters();
       this.updateAreaAndTotalPerimeter();
+    },
+
+    /**
+     * Set the background shape.  The shape should be positioned at 0, 0 and will be centered horizontally and
+     * vertically when placed on the board.
+     * @public
+     * @param {Shape} shape The new background shape, or null to set no background shape.
+     * @param {Boolean} centered True if the shape should be centered on the board (but still aligned with grid).
+     */
+    setBackgroundShape: function( shape, centered ) {
+      if ( shape === null ) {
+        this.backgroundShape = shape;
+      }
+      else {
+        assert && assert( shape.bounds.width % this.unitSquareLength === 0 && shape.bounds.height % this.unitSquareLength === 0,
+          'Error: Background shapes must have dimensions that are integer multiples of the unit square size'
+        );
+        if ( centered ) {
+          var xOffset = Math.floor( ( ( this.size.width - shape.bounds.width ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          var yOffset = Math.floor( ( ( this.size.height - shape.bounds.height ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          this.backgroundShape = shape.transformed( Matrix3.translation( xOffset, yOffset ) );
+        }
+        else {
+          this.backgroundShape = shape;
+        }
+      }
     }
   } );
 } );

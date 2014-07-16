@@ -42,10 +42,9 @@ define( function( require ) {
     .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
     .close();
   var LOWER_RIGHT_TRIANGLE_SHAPE = new Shape()
-    .moveTo( 0, 0 )
-    .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
-    .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
-    .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
+    .moveTo( UNIT_SQUARE_LENGTH, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
+    .lineTo( 0, UNIT_SQUARE_LENGTH )
     .close();
 
   var SHAPES_FOR_AREA_FINDING_PROBLEMS = [

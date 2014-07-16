@@ -159,6 +159,7 @@ define( function( require ) {
           // Move to the next challenge.
           this.challengeIndex++;
           this.currentChallenge = this.challengeList[ this.challengeIndex ];
+          this.additionalModel.setChallenge( this.currentChallenge );
           this.gameState = 'presentingInteractiveChallenge';
         }
         else {
