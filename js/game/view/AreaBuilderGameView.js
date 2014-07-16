@@ -426,6 +426,9 @@ define( function( require ) {
           this.challengeLayer.addChild( this.shapeCarousel );
         }
 
+        // Show the number entry control if this is a "find the area" style of challenge.
+        this.numberEntryControl.visible = challenge.backgroundShape !== null;
+
         // Preset the fake challenge if specified. TODO: Remove once fake challenges no longer exist.
         if ( this.model.currentChallenge.fakeChallenge ) {
           this.model.simSpecificModel.fakeCorrectAnswerProperty.reset();
