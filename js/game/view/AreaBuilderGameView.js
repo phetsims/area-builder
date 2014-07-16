@@ -36,6 +36,7 @@ define( function( require ) {
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
+  var areaQuestionString = require( 'string!AREA_BUILDER/areaQuestion' );
   var buildItString = require( 'string!AREA_BUILDER/buildIt' );
   var checkString = require( 'string!VEGAS/check' );
   var nextString = require( 'string!VEGAS/next' );
@@ -218,6 +219,12 @@ define( function( require ) {
     // Add the number entry control, which is only visible on certain challenge types.
     this.numberEntryControl = new NumberEntryControl( { centerX: buttonCenterX, bottom: this.checkAnswerButton.top - 10 } );
     this.challengeLayer.addChild( this.numberEntryControl );
+    this.areaQuestionPrompt = new Text( areaQuestionString, { // This prompt goes with the number entry control.
+      font: new PhetFont( 20 ),
+      centerX: this.numberEntryControl.centerX,
+      bottom: this.numberEntryControl.top - 10
+    } );
+    this.challengeLayer.addChild( this.areaQuestionPrompt );
 
     // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
     this.faceWithPointsNode = new FaceWithPointsNode( {
@@ -428,6 +435,7 @@ define( function( require ) {
 
         // Show the number entry control if this is a "find the area" style of challenge.
         this.numberEntryControl.visible = challenge.showNumberEntryPad;
+        this.areaQuestionPrompt.visible = challenge.showNumberEntryPad;
 
         // Preset the fake challenge if specified. TODO: Remove once fake challenges no longer exist.
         if ( this.model.currentChallenge.fakeChallenge ) {

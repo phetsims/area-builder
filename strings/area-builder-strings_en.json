@@ -3,6 +3,7 @@
   "explore": "Explore",
   "game": "Game",
   "area": "Area:",
+  "areaQuestion": "Area?",
   "perimeter": "Perimeter:",
   "values": "Values",
   "level": "Level {0}",
