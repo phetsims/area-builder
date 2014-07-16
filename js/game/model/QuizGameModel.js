@@ -18,14 +18,14 @@ define( function( require ) {
   /**
    * TODO: doc this once it's stable
    * @param challengeFactory
-   * @param additionalModel
+   * @param simSpecificModel
    * @param options
    * @constructor
    */
-  function QuizGameModel( challengeFactory, additionalModel, options ) {
+  function QuizGameModel( challengeFactory, simSpecificModel, options ) {
     var thisModel = this;
     this.challengeFactory = challengeFactory; // @private
-    this.additionalModel = additionalModel; // @public
+    this.simSpecificModel = simSpecificModel; // @public
 
     options = _.extend( {
       numberOfLevels: 5,
@@ -72,13 +72,13 @@ define( function( require ) {
     thisModel.challengeList = null;
 
     // Let the sim-specific model know when the challenge changes.
-    thisModel.currentChallengeProperty.lazyLink( function( challenge ) { additionalModel.setChallenge( challenge ) } );
+    thisModel.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ) } );
   }
 
   return inherit( PropertySet, QuizGameModel,
     {
       step: function( dt ) {
-        this.additionalModel.step( dt );
+        this.simSpecificModel.step( dt );
       },
 
       reset: function() {
@@ -98,7 +98,7 @@ define( function( require ) {
         this.restartGameTimer();
 
         // Create the list of challenges.
-        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet, this.additionalModel );
+        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet, this.simSpecificModel );
 
         // Set up the model for the next challenge
         this.currentChallenge = this.challengeList[ this.challengeIndex ];
@@ -120,7 +120,7 @@ define( function( require ) {
 
       // Check the user's proposed answer.
       checkAnswer: function( answer ) {
-        this.handleProposedAnswer( this.additionalModel.checkAnswer( this.currentChallenge ) );
+        this.handleProposedAnswer( this.simSpecificModel.checkAnswer( this.currentChallenge ) );
       },
 
       handleProposedAnswer: function( answerIsCorrect ) {
@@ -188,7 +188,7 @@ define( function( require ) {
       displayCorrectAnswer: function() {
 
         // Set the challenge to display the correct answer.
-        this.additionalModel.displayCorrectAnswer( this.currentChallenge );
+        this.simSpecificModel.displayCorrectAnswer( this.currentChallenge );
 
         // Update the game state.
         this.gameState = 'displayingCorrectAnswer';

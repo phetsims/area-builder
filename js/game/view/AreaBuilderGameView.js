@@ -118,8 +118,8 @@ define( function( require ) {
       gameModel.scoreProperty,
       gameModel.elapsedTimeProperty,
       gameModel.timerEnabledProperty,
-      gameModel.additionalModel.showGridProperty,
-      gameModel.additionalModel.showDimensionsProperty,
+      gameModel.simSpecificModel.showGridProperty,
+      gameModel.simSpecificModel.showDimensionsProperty,
       { top: 100, left: 20 }
     );
     this.controlLayer.addChild( this.scoreboard );
@@ -134,7 +134,7 @@ define( function( require ) {
     } ) );
 
     // Set up the constant portions of the challenge view
-    this.shapeBoard = new ShapePlacementBoardNode( gameModel.additionalModel.shapePlacementBoard );
+    this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
     this.challengeLayer.addChild( this.shapeBoard );
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
@@ -172,7 +172,7 @@ define( function( require ) {
     this.challengeLayer.addChild( this.buildPromptPanel );
 
     // Made the build prompt node invisible when the user adds anything to the board.
-    gameModel.additionalModel.shapePlacementBoard.areaProperty.link( function( area ) {
+    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function( area ) {
       if ( area !== 0 ) {
         self.buildPromptPanel.visible = false;
       }
@@ -225,7 +225,7 @@ define( function( require ) {
     this.addChild( this.faceWithPointsNode );
 
     // Handle comings and goings of model shapes.
-    gameModel.additionalModel.movableShapes.addItemAddedListener( function( addedShape ) {
+    gameModel.simSpecificModel.movableShapes.addItemAddedListener( function( addedShape ) {
 
       // Create and add the view representation for this shape.
       var shapeView = new ShapeView( addedShape );
@@ -239,10 +239,10 @@ define( function( require ) {
       } );
 
       // Add the removal listener for if and when this shape is removed from the model.
-      gameModel.additionalModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
+      gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
         if ( removedShape === addedShape ) {
           self.challengeLayer.removeChild( shapeView );
-          gameModel.additionalModel.movableShapes.removeItemRemovedListener( removalListener );
+          gameModel.simSpecificModel.movableShapes.removeItemRemovedListener( removalListener );
         }
       } );
     } );
@@ -333,15 +333,15 @@ define( function( require ) {
             this.answerFeedback.addChild( new FeedbackWindow(
               this.model.currentChallenge.buildSpec.area,
               this.model.currentChallenge.buildSpec.perimeter,
-              this.model.additionalModel.shapePlacementBoard.area,
-              this.model.additionalModel.shapePlacementBoard.perimeter,
+              this.model.simSpecificModel.shapePlacementBoard.area,
+              this.model.simSpecificModel.shapePlacementBoard.perimeter,
               { minWidth: this.shapeBoard.width, minHeight: this.shapeBoard.height, center: this.shapeBoard.center }
             ) );
           }
 
           // TODO: Remove once fake challenges go away.
           if ( this.model.currentChallenge.fakeChallenge ) {
-            this.model.additionalModel.fakeCorrectAnswer = true;
+            this.model.simSpecificModel.fakeCorrectAnswer = true;
           }
 
           // Show the appropriate nodes for this state.
@@ -381,7 +381,7 @@ define( function( require ) {
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
 
         // Clean up previous challenge.
-        this.model.additionalModel.clearUserPlacedShapes();
+        this.model.simSpecificModel.clearUserPlacedShapes();
         if ( this.shapeCarousel !== null ) {
           this.challengeLayer.removeChild( this.shapeCarousel );
         }
@@ -423,9 +423,9 @@ define( function( require ) {
 
         // Preset the fake challenge if specified. TODO: Remove once fake challenges no longer exist.
         if ( this.model.currentChallenge.fakeChallenge ) {
-          this.model.additionalModel.fakeCorrectAnswerProperty.reset();
+          this.model.simSpecificModel.fakeCorrectAnswerProperty.reset();
           this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ),
-            this.model.additionalModel.fakeCorrectAnswerProperty, { left: 300, top: 200 } ) );
+            this.model.simSpecificModel.fakeCorrectAnswerProperty, { left: 300, top: 200 } ) );
           var color = generateRandomColor();
           var coloredRectangle = new Rectangle( 0, 0, 40, 20, 0, 0, {
             fill: color, stroke: 'black', left: 300, top: 150 } );
