@@ -391,6 +391,9 @@ define( function( require ) {
     },
 
     presentChallenge: function() {
+
+      this.numberEntryControl.clear();
+
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
 
         // Clean up previous challenge.

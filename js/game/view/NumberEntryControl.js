@@ -14,7 +14,7 @@ define( function( require ) {
   // constants
   var READOUT_FONT = new PhetFont( 20 );
 
-  function NumberEntryNode( options ) {
+  function NumberEntryControl( options ) {
     Node.call( this );
     var self = this;
     options = _.extend( {
@@ -22,8 +22,8 @@ define( function( require ) {
     }, options );
 
     // Add the keypad.
-    var keypad = new Keypad( { maxDigits: options.maxDigits } );
-    this.addChild( keypad );
+    this.keypad = new Keypad( { maxDigits: options.maxDigits } );
+    this.addChild( this.keypad );
 
     // Add the number readout background.
     var testString = new Text( '', { font: READOUT_FONT } );
@@ -32,7 +32,7 @@ define( function( require ) {
       fill: 'white',
       stroke: '#777777',
       lineWidth: 1.5,
-      centerX: keypad.width / 2
+      centerX: this.keypad.width / 2
     } );
     this.addChild( readoutBackground );
 
@@ -40,22 +40,25 @@ define( function( require ) {
     var digits = new Text( '', { font: READOUT_FONT } );
     this.addChild( digits );
     this.value = 0; // @private
-    keypad.digitString.link( function( digitString ) {
+    this.keypad.digitString.link( function( digitString ) {
       digits.text = digitString;
       digits.center = readoutBackground.center;
       self.value = Number( digitString );
     } );
 
     // Layout
-    keypad.top = readoutBackground.bottom + 10;
+    this.keypad.top = readoutBackground.bottom + 10;
 
     // Pass options through to parent class.
     this.mutate( options );
   }
 
-  return inherit( Node, NumberEntryNode, {
+  return inherit( Node, NumberEntryControl, {
     getValue: function() {
       return this.value;
+    },
+    clear: function() {
+      this.keypad.clear();
     }
   } );
 } );

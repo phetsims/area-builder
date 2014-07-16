@@ -123,5 +123,9 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( VBox, Keypad );
+  return inherit( VBox, Keypad, {
+    clear: function() {
+      this.digitString.reset();
+    }
+  } );
 } );
