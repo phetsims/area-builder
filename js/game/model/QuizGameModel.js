@@ -70,6 +70,9 @@ define( function( require ) {
 
     // Current set of challenges, which collectively comprise a single level, on which the user is currently working.
     thisModel.challengeList = null;
+
+    // Let the sim-specific model know when the challenge changes.
+    thisModel.currentChallengeProperty.lazyLink( function( challenge ) { additionalModel.setChallenge( challenge ) } );
   }
 
   return inherit( PropertySet, QuizGameModel,
@@ -159,7 +162,6 @@ define( function( require ) {
           // Move to the next challenge.
           this.challengeIndex++;
           this.currentChallenge = this.challengeList[ this.challengeIndex ];
-          this.additionalModel.setChallenge( this.currentChallenge );
           this.gameState = 'presentingInteractiveChallenge';
         }
         else {

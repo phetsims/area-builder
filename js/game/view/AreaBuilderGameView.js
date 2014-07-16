@@ -408,9 +408,6 @@ define( function( require ) {
           this.buildPromptPanel.visible = false;
         }
 
-        // Put the background shape on the placement board if specified.
-        this.model.additionalModel.shapePlacementBoard.setBackgroundShape( challenge.backgroundShape, true );
-
         // Create the carousel if present
         if ( challenge.carouselContents !== null ) {
           var creatorNodeHBox = new HBox( { children: challenge.carouselContents, spacing: 20 } );

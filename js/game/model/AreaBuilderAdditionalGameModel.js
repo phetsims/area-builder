@@ -123,6 +123,16 @@ define( function( require ) {
         return answerIsCorrect;
       },
 
+      /**
+       * Set up anything in the model that is needed for the specified challenge.
+       *
+       * @param challenge
+       */
+      setChallenge: function( challenge ) {
+        assert && assert( typeof( challenge.backgroundShape !== 'undefined' ) );
+        this.shapePlacementBoard.setBackgroundShape( challenge.backgroundShape, true );
+      },
+
       step: function( dt ) {
         this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );
       },
