@@ -16,10 +16,12 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -61,22 +63,36 @@ define( function( require ) {
       }, options ) );
     }
 
+    // backspace icon
+    var backspaceIconOutlineShape = new Shape().
+      moveTo( 0, 5 ).
+      lineTo( 5, 0 ).
+      lineTo( 15, 0 ).
+      lineTo( 15, 10 ).
+      lineTo( 5, 10 ).
+      close();
+    var backspaceIcon = new Path( backspaceIconOutlineShape, { fill: 'white' } );
+    backspaceIcon.addChild( new Text( '\u00D7', {
+      font: new PhetFont( 12 ),
+      fill: 'red',
+      centerX: backspaceIcon.width * 0.6,
+      centerY: backspaceIcon.centerY
+    } ) );
+    backspaceIcon.scale( Math.min( options.minButtonWidth / backspaceIcon.width, ( options.minButtonHeight * 0.8 ) / backspaceIcon.height ) );
+
     // backspace button
     var backspaceButton = new RectangularPushButton( {
-      content: new Text( 'X' ),
+      content: backspaceIcon,
       minWidth: options.minButtonWidth,
       minHeight: options.minButtonHeight,
+      xMargin: 1,
+      baseColor: 'red',
       listener: function() {
         if ( self.digitString.value.length > 0 ) {
           // Remove the last digit from the string.
           self.digitString.value = self.digitString.value.slice( 0, -1 );
         }
       }
-    } );
-
-    // disable backspace button if user has not entered anything
-    this.digitString.link( function( inputString ) {
-      backspaceButton.enabled = inputString.length > 0;
     } );
 
     // Add the buttons.
