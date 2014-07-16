@@ -74,7 +74,7 @@ define( function( require ) {
     var backspaceIcon = new Path( backspaceIconOutlineShape, { fill: 'white' } );
     backspaceIcon.addChild( new Text( '\u00D7', {
       font: new PhetFont( 12 ),
-      fill: 'red',
+      fill: '#ff2000',
       centerX: backspaceIcon.width * 0.6,
       centerY: backspaceIcon.centerY
     } ) );
