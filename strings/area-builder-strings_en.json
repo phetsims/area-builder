@@ -10,11 +10,11 @@
   "pattern.0challenge.1max": "{0} of {1}",
   "buildIt": "Build it!",
   "findTheArea": "Find the area!",
-  "areaQuestion": "Area?",
   "yourGoal": "Your goal:",
   "yourSolution": "Your solution:",
   "areaEquals": "Area = {0}",
   "perimeterEquals": "Perimeter = {0}",
   "chooseYourLevel": "Choose Your Level!",
-  "showSolution": "Show Solution"
+  "showSolution": "Show Solution",
+  "solutionAreaEquals": "Solution: Area = {0}"
 }
