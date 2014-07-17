@@ -29,9 +29,23 @@ define( function( require ) {
     var testPoint = new Vector2( 0, 0 );
     for ( var row = 0; row * UNIT_SQUARE_LENGTH < shape.bounds.height; row++ ) {
       for ( var column = 0; column * UNIT_SQUARE_LENGTH < shape.bounds.width; column++ ) {
-        testPoint.setXY( shape.bounds.minX + ( column + 0.5 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.5 ) * UNIT_SQUARE_LENGTH );
+        // Scan four points in the unit square.  This allows support for triangular 1/2 unit square shapes.  This is
+        // in-lined rather than looped for the sake of efficiency, since this approach avoids vector allocations.
+        testPoint.setXY( shape.bounds.minX + ( column + 0.25 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.5 ) * UNIT_SQUARE_LENGTH );
         if ( shape.containsPoint( testPoint ) ) {
-          unitArea++;
+          unitArea += 0.25;
+        }
+        testPoint.setXY( shape.bounds.minX + ( column + 0.5 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.25 ) * UNIT_SQUARE_LENGTH );
+        if ( shape.containsPoint( testPoint ) ) {
+          unitArea += 0.25;
+        }
+        testPoint.setXY( shape.bounds.minX + ( column + 0.5 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.75 ) * UNIT_SQUARE_LENGTH );
+        if ( shape.containsPoint( testPoint ) ) {
+          unitArea += 0.25;
+        }
+        testPoint.setXY( shape.bounds.minX + ( column + 0.75 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.5 ) * UNIT_SQUARE_LENGTH );
+        if ( shape.containsPoint( testPoint ) ) {
+          unitArea += 0.25;
         }
       }
     }
