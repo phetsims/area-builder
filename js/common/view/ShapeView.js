@@ -34,7 +34,8 @@ define( function( require ) {
     var representation = new Path( movableShape.shape, {
       fill: movableShape.color,
       stroke: Color.toColor( movableShape.color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      lineWidth: 1
+      lineWidth: 1,
+      lineJoin: 'round'
     } );
     this.addChild( shadow );
     this.addChild( representation );

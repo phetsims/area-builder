@@ -17,6 +17,9 @@ define( function( require ) {
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords
+
+  // TODO: Can I consolidate the creator nodes instead of just the shapes?  Seems like it should work, and would make
+  // TODO: the creator code much more compact.
   var SQUARE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
@@ -41,10 +44,11 @@ define( function( require ) {
     .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
     .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
     .close();
-  var LOWER_RIGHT_TRIANGLE_SHAPE = new Shape()
+  var RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
     .moveTo( UNIT_SQUARE_LENGTH, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
+    .lineTo( UNIT_SQUARE_LENGTH, 0 )
     .close();
 
   var SHAPES_FOR_AREA_FINDING_PROBLEMS = [
@@ -58,8 +62,8 @@ define( function( require ) {
       .lineTo( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 3 )
       .lineTo( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 2 )
       .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
-      .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 1 )
-      .lineTo( 0, UNIT_SQUARE_LENGTH * 1 )
+      .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH )
+      .lineTo( 0, UNIT_SQUARE_LENGTH )
       .close()
   ];
 
@@ -294,7 +298,7 @@ define( function( require ) {
               { gridSpacing: UNIT_SQUARE_LENGTH }
             ),
             new ShapeCreatorNode(
-              LOWER_RIGHT_TRIANGLE_SHAPE,
+              RIGHT_BOTTOM_TRIANGLE_SHAPE,
               AreaBuilderSharedConstants.GREENISH_COLOR,
               model
             )

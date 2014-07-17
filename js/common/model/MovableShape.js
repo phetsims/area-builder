@@ -1,14 +1,9 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Type that defines a rectangle that can be moved by the user and placed on
- * the placement boards.
+ * Type that defines a shape that can be moved by the user and placed on the shape placement boards.
  *
- * TODO: If other shapes, such as triangles, are added to the simulation, this
- * class should be split into a base class and a set of subclasses.
  */
-
-
 define( function( require ) {
   'use strict';
 
@@ -24,12 +19,12 @@ define( function( require ) {
   var FADE_RATE = 2; // proportion per second
 
   /**
-   * @param {Dimension2} size
+   * @param {Shape} shape
    * @param {Color || String} color
    * @param {Vector2} initialPosition
    * @constructor
    */
-  function MovableRectangle( size, color, initialPosition ) {
+  function MovableShape( shape, color, initialPosition ) {
     var self = this;
 
     PropertySet.call( this, {
@@ -72,14 +67,14 @@ define( function( require ) {
     } );
 
     // Non-dynamic attributes
-    this.shape = Shape.rect( 0, 0, size.width, size.height ); // @public
+    this.shape = shape; // @public
     this.color = color; // @public
 
     // Internal vars
     this.fading = false; // @private
   }
 
-  return inherit( PropertySet, MovableRectangle, {
+  return inherit( PropertySet, MovableShape, {
 
     step: function( dt ) {
       if ( !this.userControlled ) {
@@ -136,16 +131,18 @@ define( function( require ) {
      * make up the same shape as this rectangle.  The specified length must be an integer value of the length and
      * width or things will get weird.
      *
+     * NOTE: This only works properly for rectangular shapes!
+     *
      * @public
      * @param squareLength
      */
     decomposeIntoSquares: function( squareLength ) {
       assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength === 0, 'Error: A dimension of this movable shape is not an integer multiple of the provided dimension' );
       var shapes = [];
-      var size = new Dimension2( squareLength, squareLength );
+      var unitSquareShape = Shape.rect( 0, 0, squareLength, squareLength );
       for ( var column = 0; column < this.shape.bounds.width; column += squareLength ) {
         for ( var row = 0; row < this.shape.bounds.height; row += squareLength ) {
-          var constituentShape = new MovableRectangle( size, this.color, this.positionProperty.initialValue );
+          var constituentShape = new MovableShape( unitSquareShape, this.color, this.positionProperty.initialValue );
           constituentShape.setDestination( this.position.plusXY( column, row ), false );
           constituentShape.invisibleWhenStill = this.invisibleWhenStill;
           shapes.push( constituentShape );

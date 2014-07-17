@@ -20,7 +20,7 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
+  var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -30,13 +30,14 @@ define( function( require ) {
   var BORDER_LINE_WIDTH = 1;
 
   /**
-   * @param shape
-   * @param color
-   * @param model
-   * @param options
+   * @param {Shape} shape
+   * @param {String || Color} color
+   * @param {Object} model A model that supports adding shapes.
+   * @param {Object} options
    * @constructor
    */
   function ShapeCreatorNode( shape, color, model, options ) {
+    assert && assert( shape.bounds.minX === 0 && shape.bounds.minY === 0, 'Error: Shape is expected to be located at 0, 0' );
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
 
@@ -45,7 +46,6 @@ define( function( require ) {
     }, options );
 
     // Create the node that the user will click upon to add a model element to the view.
-    // TODO: Assert that path is at 0, 0
     var representation = new Path( shape, {
       fill: color,
       stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
@@ -67,11 +67,6 @@ define( function( require ) {
       );
       this.addChild( gridNode );
     }
-
-    // TODO: This will need to be reworked in order to support non-rectangular shapes, and triangles are currently part
-    // of the design.  Consider passing through the shape to the constructor of the model element shape.  Kind of a
-    // 'common currency' for creating both the view and model element.
-    var rectangleSize = new Dimension2( shape.bounds.width, shape.bounds.height );
 
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
     var parentScreen = null; // needed for coordinate transforms
@@ -98,7 +93,7 @@ define( function( require ) {
         var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 
         // Create and add the new model element.
-        modelElement = new MovableRectangle( rectangleSize, AreaBuilderSharedConstants.GREENISH_COLOR, initialPosition );
+        modelElement = new MovableShape( shape, AreaBuilderSharedConstants.GREENISH_COLOR, initialPosition );
         modelElement.userControlled = true;
         model.addModelElement( modelElement );
       },

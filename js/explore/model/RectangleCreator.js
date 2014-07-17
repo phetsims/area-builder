@@ -10,7 +10,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var MovableRectangle = require( 'AREA_BUILDER/common/model/MovableRectangle' );
+  var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
+  var Shape = require( 'KITE/Shape' );
 
   /**
    * @param size
@@ -31,7 +32,7 @@ define( function( require ) {
 
     createModelInstance: function() {
       assert && assert( this.activeModelInstance === null, 'Should not be creating a new instance until existing instance is released.' );
-      this.activeModelInstance = new MovableRectangle( this.size, this.color, this.position );
+      this.activeModelInstance = new MovableShape( Shape.rect( 0, 0, this.size.x, this.size.y ), this.color, this.position );
       this.activeModelInstance.userControlled = true;
       this.addToModelFunction( this.activeModelInstance );
     },
