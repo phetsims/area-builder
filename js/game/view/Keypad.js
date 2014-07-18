@@ -61,7 +61,8 @@ define( function( require ) {
         xMargin: 5,
         yMargin: 5,
         listener: function() {
-          if ( self.digitString.value.length < options.maxDigits ) {
+          // Add the digit to the string, but limit the length and prevent leading zeros.
+          if ( self.digitString.value.length < options.maxDigits && !( self.digitString.value.length === 0 && number === 0 ) ) {
             self.digitString.value += number.toString();
           }
         }
