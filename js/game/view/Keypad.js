@@ -38,6 +38,7 @@ define( function( require ) {
       buttonFont: new PhetFont( { size: 20 } ),
       minButtonWidth: 35,
       minButtonHeight: 35,
+      doubleWideZeroKey: true,
       xSpacing: 10,
       ySpacing: 10,
       keyColor: 'white',
@@ -49,12 +50,13 @@ define( function( require ) {
     // @public String of digits entered by the user
     this.digitString = new Property( '' );
 
-    // Function for creating a key
-    function createNumberKey( number ) {
+    // Function for creating a number key
+    function createNumberKey( number, doubleWide ) {
+      var minWidth = doubleWide ? options.minButtonWidth * 2 + options.xSpacing : options.minButtonWidth;
       return new RectangularPushButton( _.extend( {
         content: new Text( number.toString(), { font: options.buttonFont } ),
         baseColor: options.keyColor,
-        minWidth: options.minButtonWidth,
+        minWidth: minWidth,
         minHeight: options.minButtonHeight,
         xMargin: 5,
         yMargin: 5,
@@ -103,28 +105,31 @@ define( function( require ) {
       }
     } );
 
+    // The bottom row of buttons can vary based on options.
+    var bottomButtonRowChildren = [ createNumberKey( 0, options.doubleWideZeroKey )];
+    if ( !options.doubleWideZeroKey ) {
+      bottomButtonRowChildren.push( new HStrut( options.minButtonWidth ) )
+    }
+    bottomButtonRowChildren.push( backspaceButton );
+
     // Add the buttons.
     VBox.call( this, {spacing: options.ySpacing, children: [
-      new HBox( {spacing: options.xSpacing, children: [
+      new HBox( { spacing: options.xSpacing, children: [
         createNumberKey( 7 ),
         createNumberKey( 8 ),
         createNumberKey( 9 )
       ] } ),
-      new HBox( {spacing: options.xSpacing, children: [
+      new HBox( { spacing: options.xSpacing, children: [
         createNumberKey( 4 ),
         createNumberKey( 5 ),
         createNumberKey( 6 )
       ] } ),
-      new HBox( {spacing: options.xSpacing, children: [
+      new HBox( { spacing: options.xSpacing, children: [
         createNumberKey( 1 ),
         createNumberKey( 2 ),
         createNumberKey( 3 )
       ] } ),
-      new HBox( {spacing: options.xSpacing, children: [
-        createNumberKey( 0 ),
-        new HStrut( options.minButtonWidth ),
-        backspaceButton
-      ] } )
+      new HBox( { spacing: options.xSpacing, children: bottomButtonRowChildren } )
     ] } );
 
     // Pass options through to parent class
