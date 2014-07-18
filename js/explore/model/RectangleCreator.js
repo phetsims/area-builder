@@ -32,7 +32,7 @@ define( function( require ) {
 
     createModelInstance: function() {
       assert && assert( this.activeModelInstance === null, 'Should not be creating a new instance until existing instance is released.' );
-      this.activeModelInstance = new MovableShape( Shape.rect( 0, 0, this.size.x, this.size.y ), this.color, this.position );
+      this.activeModelInstance = new MovableShape( Shape.rect( 0, 0, this.size.width, this.size.height ), this.color, this.position );
       this.activeModelInstance.userControlled = true;
       this.addToModelFunction( this.activeModelInstance );
     },
