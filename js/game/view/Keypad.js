@@ -25,6 +25,9 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
+  // constants
+  var REDDISH_COLOR_FOR_BACKSPACE_KEY = '#ff2000';
+
   /**
    * @param options {Object}
    * @constructor
@@ -71,14 +74,19 @@ define( function( require ) {
       lineTo( 15, 10 ).
       lineTo( 5, 10 ).
       close();
-    var backspaceIcon = new Path( backspaceIconOutlineShape, { fill: 'white' } );
+    var backspaceIcon = new Path( backspaceIconOutlineShape, {
+      fill: options.keyColor,
+      stroke: REDDISH_COLOR_FOR_BACKSPACE_KEY,
+      lineWidth: 1.5,
+      lineJoin: 'round'
+    } );
     backspaceIcon.addChild( new Text( '\u00D7', {
-      font: new PhetFont( 12 ),
-      fill: '#ff2000',
-      centerX: backspaceIcon.width * 0.6,
+      font: new PhetFont( { size: 12, weight: 'bold' } ),
+      fill: REDDISH_COLOR_FOR_BACKSPACE_KEY,
+      centerX: backspaceIcon.width * 0.55,
       centerY: backspaceIcon.centerY
     } ) );
-    backspaceIcon.scale( Math.min( options.minButtonWidth / backspaceIcon.width, ( options.minButtonHeight * 0.8 ) / backspaceIcon.height ) );
+    backspaceIcon.scale( Math.min( options.minButtonWidth / backspaceIcon.width * 0.75, ( options.minButtonHeight * 0.65 ) / backspaceIcon.height ) );
 
     // backspace button
     var backspaceButton = new RectangularPushButton( {
@@ -86,7 +94,7 @@ define( function( require ) {
       minWidth: options.minButtonWidth,
       minHeight: options.minButtonHeight,
       xMargin: 1,
-      baseColor: 'red',
+      baseColor: options.keyColor,
       listener: function() {
         if ( self.digitString.value.length > 0 ) {
           // Remove the last digit from the string.
