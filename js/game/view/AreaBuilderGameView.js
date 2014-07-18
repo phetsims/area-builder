@@ -12,6 +12,7 @@ define( function( require ) {
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var CheckBox = require( 'SUN/CheckBox' );
+  var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
@@ -139,6 +140,14 @@ define( function( require ) {
     // Set up the constant portions of the challenge view
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
     this.challengeLayer.addChild( this.shapeBoard );
+    this.eraserButton = new EraserButton( {
+      right: this.shapeBoard.right,
+      top: this.shapeBoard.bottom + 10,
+      listener: function() {
+        gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( true );
+      }
+    } );
+    this.challengeLayer.addChild( this.eraserButton );
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
@@ -453,6 +462,12 @@ define( function( require ) {
             fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
           } );
           this.challengeLayer.addChild( this.shapeCarousel );
+        }
+
+        // Position the eraser button.
+        this.eraserButton.right = this.shapeBoard.right;
+        if ( challenge.carouselContents !== null && this.eraserButton.left <= this.shapeCarousel.right + 10 ) {
+          this.eraserButton.left = this.shapeCarousel.right + 10;
         }
 
         // Show the number entry control if this is a "find the area" style of challenge.
