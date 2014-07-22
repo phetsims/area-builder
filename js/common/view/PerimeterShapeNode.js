@@ -1,9 +1,9 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * A shape that is defined by lists of perimeter points.  The perimeter points are supplied in terms of external and
- * internal perimeters.  This node also allows specification of a unit length that is used to depict a grid on the
- * shape, and can also show dimensions of the shape.
+ * A Scenery node that represents a shape that is defined by lists of perimeter points.  The perimeter points are
+ * supplied in terms of external and internal perimeters.  This node also allows specification of a unit length that is
+ * used to depict a grid on the shape, and can also show dimensions of the shape.
  */
 define( function( require ) {
     'use strict';
@@ -100,7 +100,7 @@ define( function( require ) {
         gridLayer.removeAllChildren();
         dimensionsLayer.removeAllChildren();
 
-        // Add in the shape of any interior spaces and the grid.
+        // Add in the shape of any interior spaces.
         if ( !mainShape.bounds.isEmpty() ) {
           perimeterShapeNode.visible = true;
           perimeterNode.visible = true;
@@ -116,9 +116,9 @@ define( function( require ) {
           perimeterShapeNode.setShape( mainShape );
           perimeterNode.setShape( mainShape );
 
+          // Add the grid
           // TODO: Consider optimization where grid is only redrawn if bounds of shape changes.
           if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
-            // Add the grid
             var gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
                 lineDash: [ 1, 4 ],
                 stroke: 'black'
@@ -129,12 +129,10 @@ define( function( require ) {
           }
 
           // Add the dimension labels for the exterior perimeter, but only if there is only 1 perimeter.
-          if ( perimeterShapeProperty.value.length !== 1 ) {}
-          else {
-
+          if ( perimeterShapeProperty.value.exteriorPerimeters.length === 1 ) {
             var segment = { startIndex: 0, endIndex: 0 };
             var segmentLabelsInfo = [];
-            var perimeterPoints = perimeterShapeProperty.value[ 0 ];
+            var perimeterPoints = perimeterShapeProperty.value.exteriorPerimeters[ 0 ];
             do {
               segment = identifySegment( perimeterPoints, segment.endIndex );
               segmentLabelsInfo.push( {

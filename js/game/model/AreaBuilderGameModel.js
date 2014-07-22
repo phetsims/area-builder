@@ -119,12 +119,12 @@ define( function( require ) {
         }
         else if ( challenge.checkSpec === 'areaEntered' ) {
           // This is a "find the area" style of challenge
-          answerIsCorrect = this.areaGuess === challenge.backgroundShapeUnitArea;
+          answerIsCorrect = this.areaGuess === challenge.backgroundShape.unitArea;
         }
         else if ( challenge.checkSpec === 'areaConstructed' ) {
           answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area;
           if ( answerIsCorrect && challenge.buildSpec.perimeter ) {
-            answerIsCorrect = challenge.buildSpec.perimeter === this.shapePlacementBoard.exteriorPerimeters[0].length;
+            answerIsCorrect = challenge.buildSpec.perimeter === this.shapePlacementBoard.perimeter;
           }
         }
 

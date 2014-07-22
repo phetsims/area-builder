@@ -10,47 +10,11 @@ define( function( require ) {
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels
-
-  // private functions
-  /**
-   * Find the area of a shape in terms of unit squares.
-   * @param shape
-   */
-  function calculateUnitArea( shape ) {
-    assert && assert( shape.bounds.width % UNIT_SQUARE_LENGTH === 0 && shape.bounds.height % UNIT_SQUARE_LENGTH === 0,
-      'Error: This method will only work with shapes that have bounds of unit width and height.'
-    );
-    // TODO: Will only handle shapes with no angles, needs to be enhanced to handle angled edges.
-    var unitArea = 0;
-    var testPoint = new Vector2( 0, 0 );
-    for ( var row = 0; row * UNIT_SQUARE_LENGTH < shape.bounds.height; row++ ) {
-      for ( var column = 0; column * UNIT_SQUARE_LENGTH < shape.bounds.width; column++ ) {
-        // Scan four points in the unit square.  This allows support for triangular 1/2 unit square shapes.  This is
-        // in-lined rather than looped for the sake of efficiency, since this approach avoids vector allocations.
-        testPoint.setXY( shape.bounds.minX + ( column + 0.25 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.5 ) * UNIT_SQUARE_LENGTH );
-        if ( shape.containsPoint( testPoint ) ) {
-          unitArea += 0.25;
-        }
-        testPoint.setXY( shape.bounds.minX + ( column + 0.5 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.25 ) * UNIT_SQUARE_LENGTH );
-        if ( shape.containsPoint( testPoint ) ) {
-          unitArea += 0.25;
-        }
-        testPoint.setXY( shape.bounds.minX + ( column + 0.5 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.75 ) * UNIT_SQUARE_LENGTH );
-        if ( shape.containsPoint( testPoint ) ) {
-          unitArea += 0.25;
-        }
-        testPoint.setXY( shape.bounds.minX + ( column + 0.75 ) * UNIT_SQUARE_LENGTH, shape.bounds.minY + ( row + 0.5 ) * UNIT_SQUARE_LENGTH );
-        if ( shape.containsPoint( testPoint ) ) {
-          unitArea += 0.25;
-        }
-      }
-    }
-    return unitArea;
-  }
 
   /**
    * @param {string} challengeTitle Title for this challenge, shown at the top of the view.  Must be specified for all
@@ -68,7 +32,8 @@ define( function( require ) {
    * a two-tone area. Should be null if not used.
    * @param {object} colorPrompt2 Object with a 'text' field and a 'color' field that is used when users need to build
    * a two-tone area. Should be null if not used.
-   * @param {Shape} backgroundShape Shape that should appear on the board
+   * @param {PerimeterShape} backgroundShape Shape that should appear on the board, null for challenges that don't
+   * include such a shape.
    * @param {string} checkSpec Specifies what should be checked when the user pressed the 'Check' button.  Valid values
    * are 'areaConstructed', 'areaAndPerimeterConstructed', 'areaEntered'.
    * @param {boolean} fakeChallenge Indicates that everything else should be ignored and this is really just a fake
@@ -76,7 +41,10 @@ define( function( require ) {
    * @constructor
    */
   function AreaBuilderGameChallenge( challengeTitle, toolSpec, showNumberEntryPad, carouselContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, fakeChallenge ) {
-    // TODO: Maybe add some verification.
+    // Verification
+    assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
+    // TODO: Maybe add some additional verification.
+
     this.challengeTitle = challengeTitle;
     this.toolSpec = toolSpec;
     this.showNumberEntryPad = showNumberEntryPad;
@@ -90,7 +58,6 @@ define( function( require ) {
 
     // Non-parameterized fields.
     this.maxAttemptsAllowed = 2;
-    this.backgroundShapeUnitArea = backgroundShape === null ? 0 : calculateUnitArea( backgroundShape );
   }
 
   return AreaBuilderGameChallenge;

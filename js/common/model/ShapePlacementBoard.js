@@ -76,11 +76,11 @@ define( function( require ) {
 
       // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by
       // all of the individual shapes placed on the board by the user.
-      compositeShape: new PerimeterShape( [], [] ),
+      compositeShape: new PerimeterShape( [], [], unitSquareLength ),
 
       // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
       // other shapes.  The shape is positioned relative to this board, not in absolute model space.
-      backgroundShape: null
+      backgroundShape: new PerimeterShape( [], [], unitSquareLength )
     } );
 
     // Non-dynamic public values.
@@ -646,7 +646,7 @@ define( function( require ) {
         // work done in the view.
         if ( !( this.perimeterListsEqual( exteriorPerimeters, this.compositeShape.exteriorPerimeters ) &&
                 this.perimeterListsEqual( interiorPerimeters, this.compositeShape.interiorPerimeters ) ) ) {
-          this.compositeShape = new PerimeterShape( exteriorPerimeters, interiorPerimeters );
+          this.compositeShape = new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitSquareLength );
         }
       }
     },
@@ -802,25 +802,25 @@ define( function( require ) {
      * Set the background shape.  The shape should be positioned at 0, 0 and will be centered horizontally and
      * vertically when placed on the board.
      * @public
-     * @param {Shape} shape The new background shape, or null to set no background shape.
+     * @param {PerimeterShape} shape The new background shape, or null to set no background shape.
      * @param {Boolean} centered True if the shape should be centered on the board (but still aligned with grid).
      */
     setBackgroundShape: function( shape, centered ) {
       if ( shape === null ) {
-        this.backgroundShape = shape;
+        this.backgroundShapeProperty.reset();
       }
       else {
-        assert && assert( shape.bounds.width % this.unitSquareLength === 0 && shape.bounds.height % this.unitSquareLength === 0,
-          'Error: Background shapes must have dimensions that are integer multiples of the unit square size'
-        );
-        if ( centered ) {
-          var xOffset = Math.floor( ( ( this.size.width - shape.bounds.width ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
-          var yOffset = Math.floor( ( ( this.size.height - shape.bounds.height ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
-          this.backgroundShape = shape.transformed( Matrix3.translation( xOffset, yOffset ) );
-        }
-        else {
-          this.backgroundShape = shape;
-        }
+        //TODO: Centering commented out during refactoring for consistent shape handling, need to add back if desired.
+        assert && assert( shape instanceof PerimeterShape, 'Background shape must be a PerimeterShape.' );
+        this.backgroundShape = shape;
+//        if ( centered ) {
+//          var xOffset = Math.floor( ( ( this.size.width - shape.bounds.width ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+//          var yOffset = Math.floor( ( ( this.size.height - shape.bounds.height ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+//          this.backgroundShape = shape.transformed( Matrix3.translation( xOffset, yOffset ) );
+//        }
+//        else {
+//          this.backgroundShape = shape;
+//        }
       }
     }
   } );

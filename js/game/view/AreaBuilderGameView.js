@@ -371,7 +371,7 @@ define( function( require ) {
               bottom: this.shapeBoard.top - 20
             } );
             this.answerFeedback.addChild( solutionBanner );
-            var solutionText = StringUtils.format( solutionAreaEquals, this.model.currentChallenge.backgroundShapeUnitArea );
+            var solutionText = StringUtils.format( solutionAreaEquals, this.model.currentChallenge.backgroundShape.unitArea );
             this.answerFeedback.addChild( new Text( solutionText, {
               fill: 'white',
               font: new PhetFont( 24 ),

@@ -7,9 +7,11 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
   var Line = require( 'SCENERY/nodes/Line' );
+  var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var buildItString = require( 'string!AREA_BUILDER/buildIt' );
@@ -53,18 +55,56 @@ define( function( require ) {
 
   var SHAPES_FOR_AREA_FINDING_PROBLEMS = [
 
-    // This one is from the table in the spec for level 1 (as it was on 7/15/2014), looks like an upside down staircase
-    // with three steps.
-    new Shape()
-      .moveTo( 0, 0 )
-      .lineTo( UNIT_SQUARE_LENGTH * 6, 0 )
-      .lineTo( UNIT_SQUARE_LENGTH * 6, UNIT_SQUARE_LENGTH * 3 )
-      .lineTo( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 3 )
-      .lineTo( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 2 )
-      .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
-      .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH )
-      .lineTo( 0, UNIT_SQUARE_LENGTH )
-      .close()
+    // This shape is from the table in the spec for level 1 (as it was on 7/15/2014), looks like an upside down
+    // staircase with three steps.
+    new PerimeterShape(
+      // Exterior perimeters
+      [
+        [
+          Vector2.ZERO,
+          new Vector2( UNIT_SQUARE_LENGTH * 6, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 6, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 2 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH ),
+          new Vector2( 0, UNIT_SQUARE_LENGTH )
+        ]
+      ],
+
+      // Interior perimeters
+      [],
+
+      // Unit size
+      UNIT_SQUARE_LENGTH
+    ),
+
+    // This shape is from a mockup in the spec (as is was as of 7/22/2014).  It looks like a somewhat stylized 'F',
+    // reversed and lying down, with an angular portion.
+    new PerimeterShape(
+      // Exterior perimeters
+      [
+        [
+          new Vector2( 0, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 3, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 3, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 4, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 5, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 5, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 7, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 7, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 5, UNIT_SQUARE_LENGTH * 5 ),
+          new Vector2( 0, UNIT_SQUARE_LENGTH * 5 )
+        ]
+      ],
+
+      // Interior perimeters
+      [],
+
+      // Unit size
+      UNIT_SQUARE_LENGTH
+    )
   ];
 
   // TODO: This is temporary, eventually these should be algorithmically generated.
@@ -98,6 +138,11 @@ define( function( require ) {
       perimeter: 12
     }
   ];
+
+  // private functions
+  function randomElement( array ) {
+    return array[ Math.floor( Math.random() * array.length ) ];
+  }
 
   // Challenge history, used to make sure unique challenges are generated.
 //  var challengeHistory = []; commented out for lint, uncomment when ready
@@ -240,7 +285,7 @@ define( function( require ) {
           ],
 
           // Build spec, i.e. what the user should try to build, if anything.
-          AREA_AND_PERIMETER_BUILD_SPECS[ Math.floor( Math.random() * AREA_AND_PERIMETER_BUILD_SPECS.length ) ],
+          randomElement( AREA_AND_PERIMETER_BUILD_SPECS ),
 
           // Color prompts
           null,
@@ -312,7 +357,7 @@ define( function( require ) {
           null,
 
           // Background shape
-          SHAPES_FOR_AREA_FINDING_PROBLEMS[ 0 ],
+          randomElement( SHAPES_FOR_AREA_FINDING_PROBLEMS ),
 
           // Check specification, i.e. what gets checked with the user submits their attempt.
           'areaEntered',
