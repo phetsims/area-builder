@@ -8,44 +8,20 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var inherit = require( 'PHET_CORE/inherit' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // Utility function to compute the unit area of a perimeter shape.
-  function calculateUnitArea( exteriorPerimeters, interiorPerimeters, unitLength ) {
+  function calculateUnitArea( shape, unitLength ) {
 
-    if ( exteriorPerimeters.length === 0 ) {
+    if ( !shape.bounds.isFinite() ) {
       return 0;
     }
-
-    // Create a KITE shape that will be defined based on the perimeter points and used to test the unit area.
-    var shape = new Shape();
-
-    // Define the shape of the outer perimeter.
-    exteriorPerimeters.forEach( function( exteriorPerimeter ) {
-      shape.moveToPoint( exteriorPerimeter[ 0 ] );
-      for ( var i = 1; i < exteriorPerimeter.length; i++ ) {
-        shape.lineToPoint( exteriorPerimeter[ i ] );
-      }
-      shape.lineToPoint( exteriorPerimeter[ 0 ] );
-      shape.close();
-    } );
 
     assert && assert( shape.bounds.width % unitLength === 0 && shape.bounds.height % unitLength === 0,
       'Error: This method will only work with shapes that have bounds of unit width and height.'
     );
-
-    // Subtract out the shape of any interior spaces.
-    if ( !shape.bounds.isEmpty() ) {
-      interiorPerimeters.forEach( function( interiorPerimeter ) {
-        shape.moveToPoint( interiorPerimeter[ 0 ] );
-        for ( i = 1; i < interiorPerimeter.length; i++ ) {
-          shape.lineToPoint( interiorPerimeter[ i ] );
-        }
-        shape.lineToPoint( interiorPerimeter[ 0 ] );
-        shape.close();
-      } );
-    }
 
     // Compute the unit area by testing whether or not points on a sub-grid are contained in the shape.
     var unitArea = 0;
@@ -85,6 +61,7 @@ define( function( require ) {
    * @constructor
    */
   function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength ) {
+    var self = this;
 
     // @public, read only
     this.exteriorPerimeters = exteriorPerimeters;
@@ -92,9 +69,61 @@ define( function( require ) {
     // @public, read only
     this.interiorPerimeters = interiorPerimeters;
 
+    // @private
+    this.unitLength = unitLength;
+
+    // @private A Kite shape created from the points, useful in various situations.
+    this.kiteShape = new Shape();
+    exteriorPerimeters.forEach( function( exteriorPerimeter ) {
+      self.kiteShape.moveToPoint( exteriorPerimeter[ 0 ] );
+      for ( var i = 1; i < exteriorPerimeter.length; i++ ) {
+        self.kiteShape.lineToPoint( exteriorPerimeter[ i ] );
+      }
+      self.kiteShape.lineToPoint( exteriorPerimeter[ 0 ] );
+      self.kiteShape.close();
+    } );
+    if ( !self.kiteShape.bounds.isEmpty() ) {
+      interiorPerimeters.forEach( function( interiorPerimeter ) {
+        self.kiteShape.moveToPoint( interiorPerimeter[ 0 ] );
+        for ( i = 1; i < interiorPerimeter.length; i++ ) {
+          self.kiteShape.lineToPoint( interiorPerimeter[ i ] );
+        }
+        self.kiteShape.lineToPoint( interiorPerimeter[ 0 ] );
+        self.kiteShape.close();
+      } );
+    }
+
     // @public, read only
-    this.unitArea = calculateUnitArea( exteriorPerimeters, interiorPerimeters, unitLength );
+    this.unitArea = calculateUnitArea( this.kiteShape, unitLength );
   }
 
-  return PerimeterShape;
+  return inherit( Object, PerimeterShape, {
+
+    // Returns a linearly translated version of this perimeter shape.
+    translated: function( x, y ) {
+      var exteriorPerimeters = [];
+      var interiorPerimeters = [];
+      this.exteriorPerimeters.forEach( function( exteriorPerimeter, index ) {
+        exteriorPerimeters.push( [] );
+        exteriorPerimeter.forEach( function( point ) {
+          exteriorPerimeters[ index ].push( point.plusXY( x, y ) );
+        } );
+      } );
+      this.interiorPerimeters.forEach( function( interiorPerimeter, index ) {
+        interiorPerimeters.push( [] );
+        interiorPerimeter.forEach( function( point ) {
+          interiorPerimeters[ index ].push( point.plusXY( x, y ) );
+        } );
+      } );
+      return new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitLength );
+    },
+
+    getWidth: function() {
+      return this.kiteShape.bounds.width;
+    },
+
+    getHeight: function() {
+      return this.kiteShape.bounds.height;
+    }
+  } );
 } );

@@ -799,28 +799,27 @@ define( function( require ) {
     },
 
     /**
-     * Set the background shape.  The shape should be positioned at 0, 0 and will be centered horizontally and
+     * Set the background shape.  The shape should be positioned at 0, 0 and can be centered horizontally and
      * vertically when placed on the board.
      * @public
-     * @param {PerimeterShape} shape The new background shape, or null to set no background shape.
-     * @param {Boolean} centered True if the shape should be centered on the board (but still aligned with grid).
+     * @param {PerimeterShape} perimeterShape The new background perimeterShape, or null to set no background
+     * perimeterShape.
+     * @param {Boolean} centered True if the perimeterShape should be centered on the board (but still aligned with grid).
      */
-    setBackgroundShape: function( shape, centered ) {
-      if ( shape === null ) {
+    setBackgroundShape: function( perimeterShape, centered ) {
+      if ( perimeterShape === null ) {
         this.backgroundShapeProperty.reset();
       }
       else {
-        //TODO: Centering commented out during refactoring for consistent shape handling, need to add back if desired.
-        assert && assert( shape instanceof PerimeterShape, 'Background shape must be a PerimeterShape.' );
-        this.backgroundShape = shape;
-//        if ( centered ) {
-//          var xOffset = Math.floor( ( ( this.size.width - shape.bounds.width ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
-//          var yOffset = Math.floor( ( ( this.size.height - shape.bounds.height ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
-//          this.backgroundShape = shape.transformed( Matrix3.translation( xOffset, yOffset ) );
-//        }
-//        else {
-//          this.backgroundShape = shape;
-//        }
+        assert && assert( perimeterShape instanceof PerimeterShape, 'Background perimeterShape must be a PerimeterShape.' );
+        if ( centered ) {
+          var xOffset = Math.floor( ( ( this.size.width - perimeterShape.getWidth() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          var yOffset = Math.floor( ( ( this.size.height - perimeterShape.getHeight() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          this.backgroundShape = perimeterShape.translated( xOffset, yOffset );
+        }
+        else {
+          this.backgroundShape = perimeterShape;
+        }
       }
     }
   } );
