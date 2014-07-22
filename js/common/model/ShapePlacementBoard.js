@@ -11,6 +11,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -73,11 +74,9 @@ define( function( require ) {
       // @public Read-only property that indicates the perimeter of the composite shape
       perimeter: 0,
 
-      // @public Read-only set of points that define the outer perimeter(s) of the composite shape
-      exteriorPerimeters: [],
-
-      // @public Read-only set of sets of points that define interior perimeters
-      interiorPerimeters: [],
+      // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by
+      // all of the individual shapes placed on the board by the user.
+      compositeShape: new PerimeterShape( [], [] ),
 
       // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
       // other shapes.  The shape is positioned relative to this board, not in absolute model space.
@@ -280,7 +279,7 @@ define( function( require ) {
     },
 
     updateAreaAndTotalPerimeter: function() {
-      if ( this.exteriorPerimeters.length <= 1 ) {
+      if ( this.compositeShape.exteriorPerimeters.length <= 1 ) {
         var self = this;
         var area = 0;
         this.residentShapes.forEach( function( residentShape ) {
@@ -288,10 +287,10 @@ define( function( require ) {
         } );
         this.area = area;
         var totalPerimeterAccumulator = 0;
-        this.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
+        this.compositeShape.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
           totalPerimeterAccumulator += exteriorPerimeter.length;
         } );
-        this.interiorPerimeters.forEach( function( interiorPerimeter ) {
+        this.compositeShape.interiorPerimeters.forEach( function( interiorPerimeter ) {
           totalPerimeterAccumulator += interiorPerimeter.length;
         } );
         this.perimeter = totalPerimeterAccumulator;
@@ -570,8 +569,7 @@ define( function( require ) {
       // The perimeters can only be computed for a single consolidated shape.
       if ( !this.formComposite || this.residentShapes.length === 0 ) {
         this.perimeter = 0;
-        this.exteriorPerimetersProperty.reset();
-        this.interiorPerimetersProperty.reset();
+        this.compositeShapeProperty.reset();
       }
       else { // Do the full-blown perimeter calculation
         var row;
@@ -644,13 +642,11 @@ define( function( require ) {
           enclosedSpaces = leftoverEmptySpaces;
         }
 
-        // Update externally visible properties.  Only update the perimeters
-        // if they have changed in order to minimize work done in the view.
-        if ( !this.perimeterListsEqual( exteriorPerimeters, this.exteriorPerimeters ) ) {
-          this.exteriorPerimeters = exteriorPerimeters;
-        }
-        if ( !this.perimeterListsEqual( interiorPerimeters, this.interiorPerimeters ) ) {
-          this.interiorPerimeters = interiorPerimeters;
+        // Update externally visible properties.  Only update the perimeters if they have changed in order to minimize
+        // work done in the view.
+        if ( !( this.perimeterListsEqual( exteriorPerimeters, this.compositeShape.exteriorPerimeters ) &&
+                this.perimeterListsEqual( interiorPerimeters, this.compositeShape.interiorPerimeters ) ) ) {
+          this.compositeShape = new PerimeterShape( exteriorPerimeters, interiorPerimeters );
         }
       }
     },

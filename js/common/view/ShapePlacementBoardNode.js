@@ -52,8 +52,7 @@ define( function( require ) {
 
     // Add the composite shape, which depicts the collection of all shapes added to the board.
     this.addChild( new PerimeterShapeNode(
-      shapePlacementBoard.exteriorPerimetersProperty,
-      shapePlacementBoard.interiorPerimetersProperty,
+      shapePlacementBoard.compositeShapeProperty,
       shapePlacementBoard.unitSquareLength,
       shapePlacementBoard.colorHandled,
       shapePlacementBoard.showDimensionsProperty

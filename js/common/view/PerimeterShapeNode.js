@@ -56,15 +56,14 @@ define( function( require ) {
     }
 
     /**
-     * @param exteriorPerimetersProperty
-     * @param interiorPerimetersProperty
-     * @param unitSquareLength
-     * @param color
-     * @param showDimensionsProperty
-     * @param options
+     * @param {PerimeterShape} perimeterShapeProperty
+     * @param {Number} unitSquareLength
+     * @param {String || Color} color
+     * @param {Boolean} showDimensionsProperty
+     * @param {object} options
      * @constructor
      */
-    function PerimeterShapeNode( exteriorPerimetersProperty, interiorPerimetersProperty, unitSquareLength, color, showDimensionsProperty, options ) {
+    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, color, showDimensionsProperty, options ) {
 
       Node.call( this );
 
@@ -89,12 +88,12 @@ define( function( require ) {
         var mainShape = new Shape();
 
         // Define the shape of the outer perimeter.
-        exteriorPerimetersProperty.value.forEach( function( exteriorPerimeterPoints ) {
-          mainShape.moveToPoint( exteriorPerimeterPoints[ 0 ] );
-          for ( i = 1; i < exteriorPerimeterPoints.length; i++ ) {
-            mainShape.lineToPoint( exteriorPerimeterPoints[ i ] );
+        perimeterShapeProperty.value.exteriorPerimeters.forEach( function( exteriorPerimeters ) {
+          mainShape.moveToPoint( exteriorPerimeters[ 0 ] );
+          for ( i = 1; i < exteriorPerimeters.length; i++ ) {
+            mainShape.lineToPoint( exteriorPerimeters[ i ] );
           }
-          mainShape.lineToPoint( exteriorPerimeterPoints[ 0 ] );
+          mainShape.lineToPoint( exteriorPerimeters[ 0 ] );
           mainShape.close();
         } );
 
@@ -105,12 +104,12 @@ define( function( require ) {
         if ( !mainShape.bounds.isEmpty() ) {
           perimeterShapeNode.visible = true;
           perimeterNode.visible = true;
-          interiorPerimetersProperty.value.forEach( function( interiorPerimeterPoints ) {
-            mainShape.moveToPoint( interiorPerimeterPoints[ 0 ] );
-            for ( i = 1; i < interiorPerimeterPoints.length; i++ ) {
-              mainShape.lineToPoint( interiorPerimeterPoints[ i ] );
+          perimeterShapeProperty.value.interiorPerimeters.forEach( function( interiorPerimeter ) {
+            mainShape.moveToPoint( interiorPerimeter[ 0 ] );
+            for ( i = 1; i < interiorPerimeter.length; i++ ) {
+              mainShape.lineToPoint( interiorPerimeter[ i ] );
             }
-            mainShape.lineToPoint( interiorPerimeterPoints[ 0 ] );
+            mainShape.lineToPoint( interiorPerimeter[ 0 ] );
             mainShape.close();
           } );
 
@@ -130,12 +129,12 @@ define( function( require ) {
           }
 
           // Add the dimension labels for the exterior perimeter, but only if there is only 1 perimeter.
-          if ( exteriorPerimetersProperty.value.length !== 1 ) {}
+          if ( perimeterShapeProperty.value.length !== 1 ) {}
           else {
 
             var segment = { startIndex: 0, endIndex: 0 };
             var segmentLabelsInfo = [];
-            var perimeterPoints = exteriorPerimetersProperty.value[ 0 ];
+            var perimeterPoints = perimeterShapeProperty.value[ 0 ];
             do {
               segment = identifySegment( perimeterPoints, segment.endIndex );
               segmentLabelsInfo.push( {
@@ -181,11 +180,7 @@ define( function( require ) {
         }
       }
 
-      exteriorPerimetersProperty.link( function() {
-        update();
-      } );
-
-      interiorPerimetersProperty.link( function() {
+      perimeterShapeProperty.link( function() {
         update();
       } );
 
