@@ -146,29 +146,32 @@ define( function( require ) {
             } while ( segment.endIndex !== 0 );
 
             segmentLabelsInfo.forEach( function( segmentLabelInfo ) {
-              var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 14 ) } );
-              var labelPositionOffset = new Vector2();
-              // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
-              // containment testing unreliable if there is an edge on the same line as the containment test.  As a
-              // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the
-              // label offset itself can be used for the test.  See https://github.com/phetsims/kite/issues/3.
-              var containmentTestOffset;
-              if ( segmentLabelInfo.edgeAngle === 0 || segmentLabelInfo.edgeAngle === Math.PI ) {
-                // Label is on horizontal edge, so use height to determine offset.
-                labelPositionOffset.setXY( 0, dimensionLabel.height / 2 );
-                containmentTestOffset = labelPositionOffset.plusXY( 1, 0 );
+              // Add the label, but only for integer values.
+              if ( Math.round( segmentLabelInfo.length ) === segmentLabelInfo.length ) {
+                var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 14 ) } );
+                var labelPositionOffset = new Vector2();
+                // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
+                // containment testing unreliable if there is an edge on the same line as the containment test.  As a
+                // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the
+                // label offset itself can be used for the test.  See https://github.com/phetsims/kite/issues/3.
+                var containmentTestOffset;
+                if ( segmentLabelInfo.edgeAngle === 0 || segmentLabelInfo.edgeAngle === Math.PI ) {
+                  // Label is on horizontal edge, so use height to determine offset.
+                  labelPositionOffset.setXY( 0, dimensionLabel.height / 2 );
+                  containmentTestOffset = labelPositionOffset.plusXY( 1, 0 );
+                }
+                else { // TODO: Do we need to handle 45 degree edges?  If so, yikes!
+                  // Label is on a vertical edge
+                  labelPositionOffset.setXY( dimensionLabel.width * 0.8, 0 );
+                  containmentTestOffset = labelPositionOffset.plusXY( 0, 1 );
+                }
+                if ( mainShape.containsPoint( segmentLabelInfo.position.plus( containmentTestOffset ) ) ) {
+                  // Flip the offset vector to keep the label outside of the shape.
+                  labelPositionOffset.rotate( Math.PI );
+                }
+                dimensionLabel.center = segmentLabelInfo.position.plus( labelPositionOffset );
+                dimensionsLayer.addChild( dimensionLabel );
               }
-              else { // TODO: Do we need to handle 45 degree edges?  If so, yikes!
-                // Label is on a vertical edge
-                labelPositionOffset.setXY( dimensionLabel.width * 0.8, 0 );
-                containmentTestOffset = labelPositionOffset.plusXY( 0, 1 );
-              }
-              if ( mainShape.containsPoint( segmentLabelInfo.position.plus( containmentTestOffset ) ) ) {
-                // Flip the offset vector to keep the label outside of the shape.
-                labelPositionOffset.rotate( Math.PI );
-              }
-              dimensionLabel.center = segmentLabelInfo.position.plus( labelPositionOffset );
-              dimensionsLayer.addChild( dimensionLabel );
             } );
           }
         }
