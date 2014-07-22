@@ -1,14 +1,14 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * View representation of a ShapePlacementBoard, which is a board (like a
- * whiteboard or bulletin board) where shapes can be placed.
+ * View representation of a ShapePlacementBoard, which is a board (like a whiteboard or bulletin board) where shapes
+ * can be placed.
  */
 define( function( require ) {
   'use strict';
 
   // modules
-  var CompositeShapeNode = require( 'AREA_BUILDER/common/view/CompositeShapeNode' );
+  var PerimeterShapeNode = require( 'AREA_BUILDER/common/view/PerimeterShapeNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -51,7 +51,7 @@ define( function( require ) {
     } );
 
     // Add the composite shape, which depicts the collection of all shapes added to the board.
-    this.addChild( new CompositeShapeNode(
+    this.addChild( new PerimeterShapeNode(
       shapePlacementBoard.exteriorPerimetersProperty,
       shapePlacementBoard.interiorPerimetersProperty,
       shapePlacementBoard.unitSquareLength,

@@ -1,9 +1,9 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * A shape that is composed of a number of unit shapes, but is drawn as more
- * of a contiguous shape with an emphasized perimeter and with dotted lines
- * representing the inner edges of the unit squares.
+ * A shape that is defined by lists of perimeter points.  The perimeter points are supplied in terms of external and
+ * internal perimeters.  This node also allows specification of a unit length that is used to depict a grid on the
+ * shape, and can also show dimensions of the shape.
  */
 define( function( require ) {
     'use strict';
@@ -64,12 +64,12 @@ define( function( require ) {
      * @param options
      * @constructor
      */
-    function CompositeShapeNode( exteriorPerimetersProperty, interiorPerimetersProperty, unitSquareLength, color, showDimensionsProperty, options ) {
+    function PerimeterShapeNode( exteriorPerimetersProperty, interiorPerimetersProperty, unitSquareLength, color, showDimensionsProperty, options ) {
 
       Node.call( this );
 
-      var compositeShapeNode = new Path( null, { fill: color } );
-      this.addChild( compositeShapeNode );
+      var perimeterShapeNode = new Path( null, { fill: color } );
+      this.addChild( perimeterShapeNode );
       var gridLayer = new Node();
       this.addChild( gridLayer );
       var perimeterNode = new Path( null, {
@@ -83,7 +83,7 @@ define( function( require ) {
       // Control visibility of the dimension indicators.
       showDimensionsProperty.linkAttribute( dimensionsLayer, 'visible' );
 
-      // Define function for updating the appearance of the composite shape.
+      // Define function for updating the appearance of the perimeter shape.
       function update() {
         var i;
         var mainShape = new Shape();
@@ -103,7 +103,7 @@ define( function( require ) {
 
         // Add in the shape of any interior spaces and the grid.
         if ( !mainShape.bounds.isEmpty() ) {
-          compositeShapeNode.visible = true;
+          perimeterShapeNode.visible = true;
           perimeterNode.visible = true;
           interiorPerimetersProperty.value.forEach( function( interiorPerimeterPoints ) {
             mainShape.moveToPoint( interiorPerimeterPoints[ 0 ] );
@@ -114,7 +114,7 @@ define( function( require ) {
             mainShape.close();
           } );
 
-          compositeShapeNode.setShape( mainShape );
+          perimeterShapeNode.setShape( mainShape );
           perimeterNode.setShape( mainShape );
 
           // TODO: Consider optimization where grid is only redrawn if bounds of shape changes.
@@ -176,16 +176,16 @@ define( function( require ) {
           }
         }
         else {
-          compositeShapeNode.visible = false;
+          perimeterShapeNode.visible = false;
           perimeterNode.visible = false;
         }
       }
 
-      exteriorPerimetersProperty.link( function( perims ) {
+      exteriorPerimetersProperty.link( function() {
         update();
       } );
 
-      interiorPerimetersProperty.link( function( innerPerimeter ) {
+      interiorPerimetersProperty.link( function() {
         update();
       } );
 
@@ -193,6 +193,6 @@ define( function( require ) {
       this.mutate( options );
     }
 
-    return inherit( Node, CompositeShapeNode );
+    return inherit( Node, PerimeterShapeNode );
   }
 );
