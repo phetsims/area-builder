@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var PerimeterShapeNode = require( 'AREA_BUILDER/common/view/PerimeterShapeNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
@@ -44,7 +45,7 @@ define( function( require ) {
     board.addChild( new PerimeterShapeNode(
       shapePlacementBoard.backgroundShapeProperty,
       shapePlacementBoard.unitSquareLength,
-      'rgb( 0, 113, 189 )',
+      AreaBuilderSharedConstants.BACKGROUND_SHAPE_COLOR,
       shapePlacementBoard.showDimensionsProperty,
       { showGrid: false }
     ) );

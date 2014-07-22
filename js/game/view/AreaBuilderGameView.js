@@ -451,6 +451,9 @@ define( function( require ) {
           this.buildPromptPanel.visible = false;
         }
 
+        // Set the state of the control panel/scoreboard.
+        this.scoreboard.dimensionsIcon.setStyle( challenge.backgroundShape ? 'background' : 'composite' );
+
         // Create the carousel if present
         if ( challenge.carouselContents !== null ) {
           var creatorNodeHBox = new HBox( { children: challenge.carouselContents, spacing: 20 } );

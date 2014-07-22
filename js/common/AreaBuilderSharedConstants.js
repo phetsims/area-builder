@@ -15,6 +15,7 @@ define( function( require ) {
 
     // Various other constants
     CONTROL_PANEL_BACKGROUND_COLOR: 'rgb( 254, 241, 233 )',
+    BACKGROUND_SHAPE_COLOR: 'rgb( 0, 113, 189 )',
 
     UNIT_SQUARE_LENGTH: 35 // In screen coordinates, used in several places
   };
