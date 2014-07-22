@@ -45,22 +45,9 @@ define( function( require ) {
       shapePlacementBoard.backgroundShapeProperty,
       shapePlacementBoard.unitSquareLength,
       'rgb( 0, 113, 189 )',
-      shapePlacementBoard.showDimensionsProperty
+      shapePlacementBoard.showDimensionsProperty,
+      { showGrid: false }
     ) );
-
-//    var backgroundShapeNode = new Node();
-//    board.addChild( backgroundShapeNode );
-//    shapePlacementBoard.backgroundShapeProperty.link( function( backgroundShape ) {
-//      backgroundShapeNode.removeAllChildren();
-//      if ( backgroundShape !== null ) {
-//        backgroundShapeNode.addChild( new PerimeterShapeNode(
-//          backgroundShape,
-//          shapePlacementBoard.unitSquareLength,
-//          { fill: 'rgb( 0, 113, 189 )' },
-//          shapePlacementBoard.showDimensionsProperty
-//        ) );
-//      }
-//    } );
 
     // Add the composite shape, which depicts the collection of all shapes added to the board.
     this.addChild( new PerimeterShapeNode(

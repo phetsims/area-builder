@@ -67,6 +67,8 @@ define( function( require ) {
 
       Node.call( this );
 
+      options = _.extend( { showGrid: true }, options );
+
       var perimeterShapeNode = new Path( null, { fill: color } );
       this.addChild( perimeterShapeNode );
       var gridLayer = new Node();
@@ -118,14 +120,16 @@ define( function( require ) {
 
           // Add the grid
           // TODO: Consider optimization where grid is only redrawn if bounds of shape changes.
-          if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
-            var gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
-                lineDash: [ 1, 4 ],
-                stroke: 'black'
-              }
-            );
-            gridNode.clipArea = mainShape;
-            gridLayer.addChild( gridNode );
+          if ( options.showGrid ) {
+            if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
+              var gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
+                  lineDash: [ 1, 4 ],
+                  stroke: 'black'
+                }
+              );
+              gridNode.clipArea = mainShape;
+              gridLayer.addChild( gridNode );
+            }
           }
 
           // Add the dimension labels for the exterior perimeter, but only if there is only 1 perimeter.
