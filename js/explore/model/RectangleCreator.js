@@ -1,15 +1,14 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Model element that is stationary in the model and can be clicked on in the
- * view in order to add similar looking new model elements to the model.  This
- * is often used to create the illusion of dragging items from a bucket or
- * carousel.
+ * Model element that is stationary in the model and can be clicked on in the view in order to add similar looking new
+ * model elements to the model.  This is often used to create the illusion of dragging items from a bucket or carousel.
  */
 define( function( require ) {
   'use strict';
 
   // modules
+  var inherit = require( 'PHET_CORE/inherit' );
   var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   var Shape = require( 'KITE/Shape' );
 
@@ -28,7 +27,7 @@ define( function( require ) {
     this.activeModelInstance = null;
   }
 
-  RectangleCreator.prototype = {
+  return inherit( Object, RectangleCreator, {
 
     createModelInstance: function() {
       assert && assert( this.activeModelInstance === null, 'Should not be creating a new instance until existing instance is released.' );
@@ -48,7 +47,5 @@ define( function( require ) {
       this.activeModelInstance.userControlled = false;
       this.activeModelInstance = null;
     }
-  };
-
-  return RectangleCreator;
+  } )
 } );
