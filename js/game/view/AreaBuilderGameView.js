@@ -452,6 +452,10 @@ define( function( require ) {
         // Set up the titles and prompts
         var challenge = this.model.currentChallenge; // Convenience var
         this.challengePromptBanner.properties.mode = challenge.buildSpec ? 'buildIt' : 'findArea';
+        if ( challenge.buildSpec ) {
+          this.challengePromptBanner.properties.targetArea = challenge.buildSpec.area;
+          this.challengePromptBanner.properties.targetPerimeter = challenge.buildSpec.perimeter || null;
+        }
         this.challengeView.removeAllChildren();
         if ( challenge.buildSpec ) {
           var promptText = StringUtils.format( areaEqualsString, challenge.buildSpec.area );
