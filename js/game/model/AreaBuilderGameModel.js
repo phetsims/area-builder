@@ -144,6 +144,10 @@ define( function( require ) {
 
         // Set the board to either form composite shapes or allow free placement.
         this.shapePlacementBoard.formComposite = challenge.backgroundShape === null;
+
+        // Clear the 'show dimensions' flag for each new challenge.
+        // TODO: Confirm this behavior with the design team.
+        this.shapePlacementBoard.showDimensionsProperty.value = false;
       },
 
       step: function( dt ) {
