@@ -44,10 +44,22 @@ define( function( require ) {
 
     // @public These properties are the main API for this class, and they control what is and isn't shown on the banner.
     this.properties = new PropertySet( {
-      mode: 'buildIt', // Challenge type being presented to user, valid values are 'buildIt' and 'findArea'.
+
+      // Challenge type being presented to user, valid values are 'buildIt' and 'findArea'.  This controls which title
+      // is being shown.
+      mode: 'buildIt',
+
+      // Area that the user should be building, if any.
       targetArea: null,
+
+      // Perimeter that the user should be building, if any.
       targetPerimeter: null,
+
+      // This flag controls whether the prompts are visible.  It should be toggled each time the prompts are updated
+      // for correct fade in behavior.
       promptsVisible: false,
+
+      // Spec for fractional area building problems.
       buildProportions: { numerator: 1, denominator: 1, color1: 'black', color2: 'white' }
     } );
 
@@ -92,11 +104,13 @@ define( function( require ) {
         areaOnlyPrompt.text = areaPromptText;
         var perimeterPromptText = targetPerimeter ? StringUtils.format( perimeterEqualsString, targetPerimeter ) : '';
         areaAndPerimeterPrompt.text = areaPromptText + '\n' + perimeterPromptText;
-
-        // Update the visibility of the prompts
-        areaOnlyPrompt.visible = areaPromptText.length > 0 && perimeterPromptText.length === 0;
-        areaAndPerimeterPrompt.visible = areaPromptText.length > 0 && perimeterPromptText.length > 0;
       } );
+
+    // Control the visibility of the various prompts.
+    this.properties.promptsVisibleProperty.link( function( promptsVisible ) {
+      areaOnlyPrompt.visible = ( self.properties.targetArea !== null && !self.properties.targetPerimeter === null ) && promptsVisible;
+      areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && !self.properties.targetPerimeter !== null ) && promptsVisible;
+    } );
 
     // Pass options through to parent class.
     this.mutate( options );

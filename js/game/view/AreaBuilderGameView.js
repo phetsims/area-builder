@@ -186,13 +186,6 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.buildPromptPanel );
 
-    // Made the build prompt node invisible when the user adds anything to the board.
-    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function( area ) {
-      if ( area !== 0 ) {
-        self.buildPromptPanel.visible = false;
-      }
-    } );
-
     // Add and lay out the game control buttons.
     this.gameControlButtons = [];
     var buttonOptions = {
@@ -271,6 +264,12 @@ define( function( require ) {
           gameModel.simSpecificModel.movableShapes.removeItemRemovedListener( removalListener );
         }
       } );
+
+      // If the initial build prompt is visible, hide it.
+      self.buildPromptPanel.visible = false;
+
+      // Show the build prompts on the challenge prompt banner if they aren't shown already.
+      self.challengePromptBanner.properties.promptsVisible = true;
     } );
 
     // Various other initialization
@@ -462,8 +461,13 @@ define( function( require ) {
         var challenge = this.model.currentChallenge; // Convenience var
         this.challengePromptBanner.properties.mode = challenge.buildSpec ? 'buildIt' : 'findArea';
         if ( challenge.buildSpec ) {
+
+          // Set the prompt values.
           this.challengePromptBanner.properties.targetArea = challenge.buildSpec.area;
           this.challengePromptBanner.properties.targetPerimeter = challenge.buildSpec.perimeter || null;
+
+          // The prompts on the banner are initially invisible, and show up once the user adds a shape.
+          this.challengePromptBanner.properties.promptsVisible = false;
         }
         this.challengeView.removeAllChildren();
         if ( challenge.buildSpec ) {
