@@ -56,7 +56,7 @@ define( function( require ) {
       targetPerimeter: null,
 
       // This flag controls whether the prompts are visible.  It should be toggled each time the prompts are updated
-      // for correct fade in behavior.
+      // for correct fade-in behavior.
       promptsVisible: false,
 
       // Spec for fractional area building problems.
@@ -106,10 +106,16 @@ define( function( require ) {
         areaAndPerimeterPrompt.text = areaPromptText + '\n' + perimeterPromptText;
       } );
 
-    // Control the visibility of the various prompts.
+    // Control the visibility of the various prompts.  The active prompts fade in what this property becomes true,
+    // and disappear instantly when this prompt goes false.
     this.properties.promptsVisibleProperty.link( function( promptsVisible ) {
       areaOnlyPrompt.visible = ( self.properties.targetArea !== null && !self.properties.targetPerimeter === null ) && promptsVisible;
       areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && !self.properties.targetPerimeter !== null ) && promptsVisible;
+      if ( promptsVisible && ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) ) {
+        var promptToFadeIn = areaOnlyPrompt.visible ? areaOnlyPrompt : areaAndPerimeterPrompt;
+        promptToFadeIn.opacity = 0;
+        new TWEEN.Tween( promptToFadeIn ).to( { opacity: 1 }, 400 ).easing( TWEEN.Easing.Cubic.InOut ).start();
+      }
     } );
 
     // Pass options through to parent class.

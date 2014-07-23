@@ -266,7 +266,9 @@ define( function( require ) {
       } );
 
       // If the initial build prompt is visible, hide it.
-      self.buildPromptPanel.visible = false;
+      if ( self.buildPromptPanel.opacity === 1 ) {
+        new TWEEN.Tween( self.buildPromptPanel ).to( { opacity: 0 }, 400 ).easing( TWEEN.Easing.Cubic.InOut ).start();
+      }
 
       // Show the build prompts on the challenge prompt banner if they aren't shown already.
       self.challengePromptBanner.properties.promptsVisible = true;
@@ -481,6 +483,7 @@ define( function( require ) {
           this.buildPromptPanel.centerX = this.shapeBoard.centerX;
           this.buildPromptPanel.centerY = this.shapeBoard.centerY;
           this.buildPromptPanel.visible = true;
+          this.buildPromptPanel.opacity = 1; // Necessary because the board is set to fade out elsewhere.
         }
         else {
           this.buildSpecNode.text = '';
