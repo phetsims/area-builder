@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var ChallengePromptBanner = require( 'AREA_BUILDER/game/view/ChallengePromptBanner' );
   var CheckBox = require( 'SUN/CheckBox' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
@@ -29,6 +30,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
+  var SolutionBanner = require( 'AREA_BUILDER/game/view/SolutionBanner' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -57,6 +59,7 @@ define( function( require ) {
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
   var BUTTON_FILL = '#F2E916';
+  var INFO_BANNER_HEIGHT = 50; // Height of the prompt and solution banners, empirically determined.
 
   // TODO - Temporary stuff for supporting 'fake' challenges, remove when all challenges working.
   // Utility function
@@ -153,6 +156,16 @@ define( function( require ) {
     this.challengeLayer.addChild( this.challengeView );
     this.answerFeedback = new Node();
     this.challengeLayer.addChild( this.answerFeedback );
+    this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
+      left: this.shapeBoard.left,
+      bottom: this.shapeBoard.top - 10
+    } );
+    this.challengeLayer.addChild( this.challengePromptBanner );
+    this.solutionBanner = new SolutionBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
+      left: this.shapeBoard.left,
+      bottom: this.shapeBoard.top - 10
+    } );
+    this.challengeLayer.addChild( this.solutionBanner );
 
     // Add the title.  It is blank to start with, and is updated later at the appropriate state change.
     this.challengeTitleNode = new Text( '',
@@ -296,14 +309,20 @@ define( function( require ) {
         case 'presentingInteractiveChallenge':
           this.challengeLayer.pickable = null; // Pass through, prunes subtree, see Scenery documentation for details.
           this.presentChallenge();
-          this.show( [ this.scoreboard, this.challengeTitleNode, this.checkAnswerButton, this.challengeView ] );
+          this.show( [
+            this.scoreboard,
+            this.challengeTitleNode,
+            this.checkAnswerButton,
+            this.challengeView,
+            this.challengePromptBanner
+          ] );
           this.showChallengeGraphics();
           break;
 
         case 'showingCorrectAnswerFeedback':
 
           // Show the appropriate nodes for this state.
-          this.show( [ this.scoreboard, this.nextButton, this.challengeView ] );
+          this.show( [ this.scoreboard, this.nextButton, this.challengeView, this.challengePromptBanner ] );
 
           // Give the user the appropriate audio and visual feedback
           this.gameAudioPlayer.correctAnswer();
@@ -319,7 +338,7 @@ define( function( require ) {
         case 'showingIncorrectAnswerFeedbackTryAgain':
 
           // Show the appropriate nodes for this state.
-          this.show( [ this.scoreboard, this.tryAgainButton, this.challengeView ] );
+          this.show( [ this.scoreboard, this.tryAgainButton, this.challengeView, this.challengePromptBanner ] );
 
           // Give the user the appropriate feedback
           this.gameAudioPlayer.wrongAnswer();
@@ -335,7 +354,12 @@ define( function( require ) {
         case 'showingIncorrectAnswerFeedbackMoveOn':
 
           // Show the appropriate nodes for this state.
-          this.show( [ this.scoreboard, this.displayCorrectAnswerButton, this.challengeView ] );
+          this.show( [
+            this.scoreboard,
+            this.displayCorrectAnswerButton,
+            this.challengeView,
+            this.challengePromptBanner
+          ] );
 
           // Give the user the appropriate feedback
           this.gameAudioPlayer.wrongAnswer();
@@ -349,6 +373,15 @@ define( function( require ) {
           break;
 
         case 'displayingCorrectAnswer':
+
+          // Show the appropriate nodes for this state.
+          this.show( [
+            this.scoreboard,
+            this.nextButton,
+            this.challengeView,
+            this.answerFeedback,
+            this.solutionBanner
+          ] );
 
           this.answerFeedback.removeAllChildren();
           if ( this.model.currentChallenge.buildSpec ) {
@@ -383,9 +416,6 @@ define( function( require ) {
           if ( this.model.currentChallenge.fakeChallenge ) {
             this.model.simSpecificModel.fakeCorrectAnswer = true;
           }
-
-          // Show the appropriate nodes for this state.
-          this.show( [ this.scoreboard, this.nextButton, this.challengeView, this.answerFeedback ] );
 
           // Display the correct answer
           // TODO: Display the correct answer.
@@ -500,7 +530,9 @@ define( function( require ) {
         this.challengeTitleNode,
         this.faceWithPointsNode,
         this.scoreboard,
-        this.answerFeedback
+        this.answerFeedback,
+        this.challengePromptBanner,
+        this.solutionBanner
       ] );
     },
 
