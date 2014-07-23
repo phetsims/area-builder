@@ -31,6 +31,7 @@ define( function( require ) {
   var TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
   var LARGE_FONT = new PhetFont( { size: 24 } ); // Font for single line text
   var SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
+  var TITLE_INDENT = 15;
 
   /**
    * @param {Number} width
@@ -49,23 +50,8 @@ define( function( require ) {
       buildProportions: { numerator: 1, denominator: 1, color1: 'black', color2: 'white' }
     } );
 
-    var title = new Text( '', { font: TITLE_FONT, fill: TEXT_FILL_COLOR, centerY: height / 2 } );
+    var title = new Text( '', { font: TITLE_FONT, fill: TEXT_FILL_COLOR, centerY: height / 2, left: TITLE_INDENT } );
     this.addChild( title );
-    title.left = 20;
-
-    this.properties.modeProperty.link( function( mode ) {
-      switch( mode ) {
-        case 'buildIt':
-          title.text = aSolutionString;
-          break;
-        case 'findArea':
-          title.text = solutionString;
-          break;
-        default:
-          title.text = 'undefined';
-          break;
-      }
-    } );
 
     var areaOnlyPrompt = new Text( '', {
       font: LARGE_FONT,
@@ -83,9 +69,32 @@ define( function( require ) {
     } );
     this.addChild( areaAndPerimeterPrompt );
 
+    function updatePromptPositions() {
+      var promptCenterX = ( title.width + width ) / 2;
+      areaOnlyPrompt.centerX = promptCenterX;
+      areaAndPerimeterPrompt.centerX = promptCenterX;
+      areaAndPerimeterPrompt.centerY = height / 2;
+    }
+
+    this.properties.modeProperty.link( function( mode ) {
+      switch( mode ) {
+        case 'buildIt':
+          title.text = aSolutionString;
+          break;
+        case 'findArea':
+          title.text = solutionString;
+          break;
+        default:
+          title.text = 'undefined';
+          break;
+      }
+      updatePromptPositions();
+    } );
+
     Property.multilink( [ this.properties.targetAreaProperty, this.properties.targetPerimeterProperty ],
       function( targetArea, targetPerimeter ) {
-        // Update the text of both build prompts.
+
+        // Update the text and position of both build prompts.
         var areaPromptText = targetArea ? StringUtils.format( areaEqualsString, targetArea ) : '';
         areaOnlyPrompt.text = areaPromptText;
         var perimeterPromptText = targetPerimeter ? StringUtils.format( perimeterEqualsString, targetPerimeter ) : '';
@@ -94,13 +103,14 @@ define( function( require ) {
         // Update the visibility of the prompts
         areaOnlyPrompt.visible = areaPromptText.length > 0 && perimeterPromptText.length === 0;
         areaAndPerimeterPrompt.visible = areaPromptText.length > 0 && perimeterPromptText.length > 0;
+
+        // Center the prompts in the position to the right of the title.
+        updatePromptPositions();
       } );
 
     // Pass options through to parent class.
     this.mutate( options );
   }
 
-  return inherit( Rectangle, SolutionBanner, {
-    //TODO prototypes
-  } );
+  return inherit( Rectangle, SolutionBanner );
 } );

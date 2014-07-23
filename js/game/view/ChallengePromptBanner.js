@@ -4,6 +4,10 @@
  * A Scenery node that displays the prompt for the challenges in the Area Builder game.  It looks like a banner with
  * text fields that vary for each of the different challenges.
  *
+ * If this is ever reused, it should be noted that there are some implicit assumptions about the order in which the
+ * property values that act as the API are set.  This is probably fine for use in a single simulation under tight time
+ * constraints, but may be problematic in other environments.
+ *
  * TODO: Consider consolidation with SolutionBanner
  */
 define( function( require ) {
@@ -140,7 +144,5 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Rectangle, ChallengePromptBanner, {
-    //TODO prototypes
-  } );
+  return inherit( Rectangle, ChallengePromptBanner );
 } );
