@@ -45,7 +45,6 @@ define( function( require ) {
   var nextString = require( 'string!VEGAS/next' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
   var showSolutionString = require( 'string!AREA_BUILDER/showSolution' );
-  var solutionAreaEquals = require( 'string!AREA_BUILDER/solutionAreaEquals' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
 
@@ -290,6 +289,8 @@ define( function( require ) {
       // Hide all nodes - the appropriate ones will be shown later based on the current state.
       this.hideAllGameNodes();
 
+      var challenge = this.model.currentChallenge; // convenience var
+
       // Show the nodes appropriate to the state
       switch( gameState ) {
         case 'choosingLevel':
@@ -374,40 +375,48 @@ define( function( require ) {
           ] );
 
           this.answerFeedback.removeAllChildren();
-          if ( this.model.currentChallenge.buildSpec ) {
-            // Put up feedback for this "build it" style challenge.
-            this.answerFeedback.addChild( new FeedbackWindow(
-              this.model.currentChallenge.buildSpec.area,
-              this.model.currentChallenge.buildSpec.perimeter,
-              this.model.simSpecificModel.shapePlacementBoard.area,
-              this.model.simSpecificModel.shapePlacementBoard.perimeter,
-              { minWidth: this.shapeBoard.width, minHeight: this.shapeBoard.height, center: this.shapeBoard.center }
-            ) );
+          if ( challenge.buildSpec ) {
+//            // Put up feedback for this "build it" style challenge.
+//            this.answerFeedback.addChild( new FeedbackWindow(
+//              challenge.buildSpec.area,
+//              challenge.buildSpec.perimeter,
+//              this.model.simSpecificModel.shapePlacementBoard.area,
+//              this.model.simSpecificModel.shapePlacementBoard.perimeter,
+//              { minWidth: this.shapeBoard.width, minHeight: this.shapeBoard.height, center: this.shapeBoard.center }
+//            ) );
           }
-          else if ( this.model.currentChallenge.backgroundShape ) {
+          else if ( challenge.backgroundShape ) {
             // Put up the feedback for this "find the area" style challenge.
             // TODO: If this banner approach is retained, I should have a class called "InfoBanner" and consolidate
             // TODO: the stuff below, as well as any similar stuff, into it.
-            var solutionBanner = new Rectangle( 0, 0, this.shapeBoard.width, 40, 0, 0, {
-              fill: '#01BC14',
-              centerX: this.shapeBoard.centerX,
-              bottom: this.shapeBoard.top - 20
-            } );
-            this.answerFeedback.addChild( solutionBanner );
-            var solutionText = StringUtils.format( solutionAreaEquals, this.model.currentChallenge.backgroundShape.unitArea );
-            this.answerFeedback.addChild( new Text( solutionText, {
-              fill: 'white',
-              font: new PhetFont( 24 ),
-              center: solutionBanner.center
-            } ) );
+//            var solutionBanner = new Rectangle( 0, 0, this.shapeBoard.width, 40, 0, 0, {
+//              fill: '#01BC14',
+//              centerX: this.shapeBoard.centerX,
+//              bottom: this.shapeBoard.top - 20
+//            } );
+//            this.answerFeedback.addChild( solutionBanner );
+//            this.answerFeedback.addChild( new Text( solutionText, {
+//              fill: 'white',
+//              font: new PhetFont( 24 ),
+//              center: solutionBanner.center
+//            } ) );
           }
 
           // TODO: Remove once fake challenges go away.
-          if ( this.model.currentChallenge.fakeChallenge ) {
+          if ( challenge.fakeChallenge ) {
             this.model.simSpecificModel.fakeCorrectAnswer = true;
           }
 
           // Display the correct answer
+          if ( challenge.buildSpec ) {
+            this.solutionBanner.properties.mode = 'buildIt';
+            this.solutionBanner.properties.targetArea = challenge.buildSpec.area;
+            this.solutionBanner.properties.targetPerimeter = challenge.buildSpec.perimeter || null;
+          }
+          else {
+            this.solutionBanner.properties.mode = 'findArea';
+            this.solutionBanner.properties.targetArea = challenge.backgroundShape.unitArea;
+          }
           // TODO: Display the correct answer.
           this.model.displayCorrectAnswer();
           this.showChallengeGraphics();

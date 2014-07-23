@@ -3,6 +3,8 @@
 /**
  * A Scenery node that displays the prompt for the challenges in the Area Builder game.  It looks like a banner with
  * text fields that vary for each of the different challenges.
+ *
+ * TODO: Consider consolidation with SolutionBanner
  */
 define( function( require ) {
   'use strict';
@@ -40,7 +42,7 @@ define( function( require ) {
     Rectangle.call( this, 0, 0, width, height, 0, 0, { fill: BACKGROUND_FILL_COLOR } );
     var self = this;
 
-    // @public These properties are the main API for this class, and control what is and isn't shown on the banner.
+    // @public These properties are the main API for this class, and they control what is and isn't shown on the banner.
     this.properties = new PropertySet( {
       mode: 'buildIt', // Challenge type being presented to user, valid values are 'buildIt' and 'findArea'.
       targetArea: null,
@@ -60,6 +62,9 @@ define( function( require ) {
           break;
         case 'findArea':
           title.text = findTheAreaString;
+          break;
+        default:
+          title.text = 'undefined';
           break;
       }
     } );

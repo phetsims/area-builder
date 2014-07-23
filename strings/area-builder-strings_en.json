@@ -1,5 +1,6 @@
 {
   "area.name": "Area Builder",
+  "aSolution": "A solution:",
   "explore": "Explore",
   "game": "Game",
   "area": "Area:",
@@ -16,5 +17,5 @@
   "perimeterEquals": "Perimeter = {0}",
   "chooseYourLevel": "Choose Your Level!",
   "showSolution": "Show Solution",
-  "solutionAreaEquals": "Solution: Area = {0}"
+  "solution": "Solution:"
 }
