@@ -468,9 +468,9 @@ define( function( require ) {
         }
 
         // Position the eraser button.
-        this.eraserButton.right = this.shapeBoard.right;
-        if ( challenge.carouselContents !== null && this.eraserButton.left <= this.shapeCarousel.right + 10 ) {
-          this.eraserButton.left = this.shapeCarousel.right + 10;
+        this.eraserButton.left = this.shapeBoard.left;
+        if ( challenge.carouselContents !== null && this.eraserButton.right + 10 >= this.shapeCarousel.left ) {
+          this.eraserButton.right = this.shapeCarousel.left - 10;
         }
 
         // Show the number entry control if this is a "find the area" style of challenge.
