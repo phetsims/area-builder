@@ -13,10 +13,6 @@ define( function( require ) {
   var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // strings
-  var buildItString = require( 'string!AREA_BUILDER/buildIt' );
-  var findTheAreaString = require( 'string!AREA_BUILDER/findTheArea' );
-
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords
 
@@ -178,9 +174,6 @@ define( function( require ) {
             break;
         }
         challenge = new AreaBuilderGameChallenge(
-          // Title of challenge
-          buildItString,
-
           // Tool control
           {
             gridControl: true,
@@ -244,9 +237,6 @@ define( function( require ) {
       var challenge;
       while ( !challengeIsUnique ) {
         challenge = new AreaBuilderGameChallenge(
-          // Title of challenge
-          buildItString,
-
           // Tool control
           {
             gridControl: true,
@@ -310,9 +300,6 @@ define( function( require ) {
       var challenge;
       while ( !challengeIsUnique ) {
         challenge = new AreaBuilderGameChallenge(
-          // Title of challenge
-          findTheAreaString,
-
           // Tool control
           {
             gridControl: true,

@@ -13,12 +13,7 @@ define( function( require ) {
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // constants
-  var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels
-
   /**
-   * @param {string} challengeTitle Title for this challenge, shown at the top of the view.  Must be specified for all
-   * challenges.
    * @param {object} toolSpec An object that specifies which tools are available to the user.  It should have three
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether
    * the user is allowed to control these things for this challenge.
@@ -40,12 +35,11 @@ define( function( require ) {
    * challenge, i.e. one with just a check box to get the right answer.  TODO Remove this once game is working.
    * @constructor
    */
-  function AreaBuilderGameChallenge( challengeTitle, toolSpec, showNumberEntryPad, carouselContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, fakeChallenge ) {
+  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, carouselContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, fakeChallenge ) {
     // Verification
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
     // TODO: Maybe add some additional verification.
 
-    this.challengeTitle = challengeTitle;
     this.toolSpec = toolSpec;
     this.showNumberEntryPad = showNumberEntryPad;
     this.carouselContents = carouselContents;
