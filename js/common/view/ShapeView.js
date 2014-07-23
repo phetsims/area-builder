@@ -53,15 +53,21 @@ define( function( require ) {
       [ movableShape.userControlledProperty, movableShape.animatingProperty, movableShape.fadeProportionProperty, movableShape.invisibleWhenStillProperty ],
       function( userControlled, animating, fadeProportion, invisibleWhenStill ) {
         if ( userControlled || animating ) {
+          // The shape is either being dragged by the user or is moving to a location, so should be fully opaque.
           return 1;
         }
         else if ( fadeProportion > 0 ) {
+          // The shape is fading away.
           return 1 - fadeProportion;
         }
         else if ( !invisibleWhenStill ) {
-          return 1;
+          // The shape is not controlled by the user, animated, or fading, so it is most likely placed on the board.
+          // It is set to be visible in this situation.  Return a value that makes it slightly transparent so that the
+          // user can see any shapes that may be behind it on the board.
+          return 0.85; // Value is empirically determined.
         }
         else {
+          // The shape should be fully transparent.
           return 0;
         }
       } );
