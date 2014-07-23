@@ -267,7 +267,7 @@ define( function( require ) {
 
       // If the initial build prompt is visible, hide it.
       if ( self.buildPromptPanel.opacity === 1 ) {
-        new TWEEN.Tween( self.buildPromptPanel ).to( { opacity: 0 }, 400 ).easing( TWEEN.Easing.Cubic.InOut ).start();
+        new TWEEN.Tween( self.buildPromptPanel ).to( { opacity: 0 }, 600 ).easing( TWEEN.Easing.Cubic.InOut ).start();
       }
 
       // Show the build prompts on the challenge prompt banner if they aren't shown already.

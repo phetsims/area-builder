@@ -31,6 +31,8 @@ define( function( require ) {
   var TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
   var LARGE_FONT = new PhetFont( { size: 24 } ); // Font for single line text
   var SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
+  var TITLE_INDENT = 15;
+  var ANIMATION_TIME = 600; // In milliseconds
 
   /**
    * @param {Number} width
@@ -71,9 +73,11 @@ define( function( require ) {
       switch( mode ) {
         case 'buildIt':
           title.text = buildItString;
+          title.centerX = width / 2;
           break;
         case 'findArea':
           title.text = findTheAreaString;
+          title.centerX = width / 2;
           break;
         default:
           title.text = 'undefined';
@@ -99,22 +103,36 @@ define( function( require ) {
 
     Property.multilink( [ this.properties.targetAreaProperty, this.properties.targetPerimeterProperty ],
       function( targetArea, targetPerimeter ) {
-        // Update the text of both build prompts.
+        // Update the text of both build prompts.  One will be set to a value, the other to an empty string.
+        var buildPromptCenterX = ( title.width + width ) / 2;
         var areaPromptText = targetArea ? StringUtils.format( areaEqualsString, targetArea ) : '';
         areaOnlyPrompt.text = areaPromptText;
+        areaPromptText.centerX = buildPromptCenterX;
         var perimeterPromptText = targetPerimeter ? StringUtils.format( perimeterEqualsString, targetPerimeter ) : '';
         areaAndPerimeterPrompt.text = areaPromptText + '\n' + perimeterPromptText;
+        areaAndPerimeterPrompt.centerX = buildPromptCenterX;
+        areaAndPerimeterPrompt.centerY = height / 2;
       } );
 
     // Control the visibility of the various prompts.  The active prompts fade in what this property becomes true,
     // and disappear instantly when this prompt goes false.
     this.properties.promptsVisibleProperty.link( function( promptsVisible ) {
-      areaOnlyPrompt.visible = ( self.properties.targetArea !== null && !self.properties.targetPerimeter === null ) && promptsVisible;
-      areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && !self.properties.targetPerimeter !== null ) && promptsVisible;
-      if ( promptsVisible && ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) ) {
-        var promptToFadeIn = areaOnlyPrompt.visible ? areaOnlyPrompt : areaAndPerimeterPrompt;
-        promptToFadeIn.opacity = 0;
-        new TWEEN.Tween( promptToFadeIn ).to( { opacity: 1 }, 400 ).easing( TWEEN.Easing.Cubic.InOut ).start();
+      areaOnlyPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter === null ) && promptsVisible;
+      areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter !== null ) && promptsVisible;
+      if ( promptsVisible ) {
+        // Move the title over to make room for the prompts.
+        new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
+
+        // Fade in whatever prompts are currently set to be visible.
+        if ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) {
+          var promptToFadeIn = areaOnlyPrompt.visible ? areaOnlyPrompt : areaAndPerimeterPrompt;
+          promptToFadeIn.opacity = 0;
+          new TWEEN.Tween( promptToFadeIn ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
+        }
+      }
+      else {
+        // Center the title.
+        title.centerX = width / 2;
       }
     } );
 
