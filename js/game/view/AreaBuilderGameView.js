@@ -166,14 +166,6 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.solutionBanner );
 
-    // Add the 'Build Spec' text, which is shown on some challenges to instruct the user on what to build.
-    this.buildSpecNode = new Text( '',
-      {
-        font: new PhetFont( { size: 20 } ),
-        top: 10
-      } );
-    this.challengeLayer.addChild( this.buildSpecNode );
-
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
     this.buildPromptText = new MultiLineText( '',
       {
@@ -477,8 +469,6 @@ define( function( require ) {
           if ( challenge.buildSpec.perimeter ) {
             promptText += '   ' + StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter );
           }
-          this.buildSpecNode.text = promptText;
-          this.buildSpecNode.centerX = this.shapeBoard.centerX;
           this.buildPromptText.text = yourGoalString + '\n\n' + promptText + '\n\n' + buildItString;
           this.buildPromptPanel.centerX = this.shapeBoard.centerX;
           this.buildPromptPanel.centerY = this.shapeBoard.centerY;
@@ -486,7 +476,6 @@ define( function( require ) {
           this.buildPromptPanel.opacity = 1; // Necessary because the board is set to fade out elsewhere.
         }
         else {
-          this.buildSpecNode.text = '';
           this.buildPromptText.text = '';
           this.buildPromptPanel.visible = false;
         }
