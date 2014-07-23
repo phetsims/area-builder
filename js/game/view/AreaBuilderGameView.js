@@ -167,15 +167,6 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.solutionBanner );
 
-    // Add the title.  It is blank to start with, and is updated later at the appropriate state change.
-    this.challengeTitleNode = new Text( '',
-      {
-        font: new PhetFont( { size: 20, weight: 'bold' } ),
-        left: this.shapeBoard.left,
-        bottom: this.shapeBoard.top - 20
-      } );
-    this.challengeLayer.addChild( this.challengeTitleNode );
-
     // Add the 'Build Spec' text, which is shown on some challenges to instruct the user on what to build.
     this.buildSpecNode = new Text( '',
       {
@@ -311,7 +302,6 @@ define( function( require ) {
           this.presentChallenge();
           this.show( [
             this.scoreboard,
-            this.challengeTitleNode,
             this.checkAnswerButton,
             this.challengeView,
             this.challengePromptBanner
@@ -461,7 +451,7 @@ define( function( require ) {
 
         // Set up the titles and prompts
         var challenge = this.model.currentChallenge; // Convenience var
-        this.challengeTitleNode.text = challenge.challengeTitle;
+        this.challengePromptBanner.properties.mode = challenge.buildSpec ? 'buildIt' : 'findArea';
         this.challengeView.removeAllChildren();
         if ( challenge.buildSpec ) {
           var promptText = StringUtils.format( areaEqualsString, challenge.buildSpec.area );
@@ -527,7 +517,6 @@ define( function( require ) {
       this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
       this.setNodeVisibility( false, [
         this.startGameLevelNode,
-        this.challengeTitleNode,
         this.faceWithPointsNode,
         this.scoreboard,
         this.answerFeedback,

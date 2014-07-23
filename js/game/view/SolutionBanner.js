@@ -9,11 +9,11 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Text = require( 'SCENERY/nodes/Text' );
 
   // constants
-  var FILL_COLOR = '#17BC00';
+  var BACKGROUND_FILL_COLOR = '#17BC00';
   var TEXT_FILL_COLOR = 'white';
 
   /**
@@ -23,14 +23,13 @@ define( function( require ) {
    * @constructor
    */
   function SolutionBanner( width, height, options ) {
-    Node.call( this );
-    this.addChild( new Rectangle( 0, 0, width, height, 0, 0, { fill: FILL_COLOR } ) );
+    Rectangle.call( this, 0, 0, width, height, 0, 0, { fill: BACKGROUND_FILL_COLOR } );
 
     // Pass options through to parent class.
     this.mutate( options );
   }
 
-  return inherit( Node, SolutionBanner, {
+  return inherit( Rectangle, SolutionBanner, {
     //TODO prototypes
   } );
 } );
