@@ -62,6 +62,7 @@ define( function( require ) {
    */
   function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength ) {
     var self = this;
+    var i;
 
     // @public, read only
     this.exteriorPerimeters = exteriorPerimeters;
@@ -76,7 +77,7 @@ define( function( require ) {
     this.kiteShape = new Shape();
     exteriorPerimeters.forEach( function( exteriorPerimeter ) {
       self.kiteShape.moveToPoint( exteriorPerimeter[ 0 ] );
-      for ( var i = 1; i < exteriorPerimeter.length; i++ ) {
+      for ( i = 1; i < exteriorPerimeter.length; i++ ) {
         self.kiteShape.lineToPoint( exteriorPerimeter[ i ] );
       }
       self.kiteShape.lineToPoint( exteriorPerimeter[ 0 ] );
