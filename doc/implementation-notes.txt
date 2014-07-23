@@ -11,6 +11,6 @@ There is a pervasive concept in the code that is called "Placement Boards".
 These are conceptually like real world poster boards or bulletin boards, where
 items can be stuck on them and removed from them.
 
-Another central concept is that of a perimeter, which is a shape that is
+Another central concept is that of a perimeter shape, which is a shape that is
 defined by an ordered set of points, with straight lines being drawn between
-the points.
+the points when depicting it in the view.
