@@ -55,5 +55,43 @@ define( function( require ) {
     this.maxAttemptsAllowed = 2;
   }
 
+  AreaBuilderGameChallenge.createBuildAreaChallenge = function( areaToBuild, carouselContents, exampleSolution ) {
+    return new AreaBuilderGameChallenge(
+      // toolSpec
+      {
+        gridControl: true,
+        dimensionsControl: true,
+        decompositionToolControl: true
+      },
+
+      // showNumberEntryPad
+      false,
+
+      // carouselContents
+      carouselContents,
+
+      // buildSpec
+      { area: areaToBuild },
+
+      // colorPrompt1
+      null,
+
+      // colorPrompt2
+      null,
+
+      // backgroundShape
+      null,
+
+      // checkSpec
+      'areaConstructed',
+
+      // exampleBuildItSolution
+      exampleSolution,
+
+      // fakeChallenge
+      false
+    );
+  }
+
   return AreaBuilderGameChallenge;
 } );
