@@ -25,14 +25,17 @@ define( function( require ) {
    * @param {object} colorPrompt2 Object with a 'text' field and a 'color' field that is used when users need to build
    * a two-tone area. Should be null if not used.
    * @param {PerimeterShape} backgroundShape Shape that should appear on the board, null for challenges that don't
-   * include such a shape.
+   * require such a shape.
    * @param {string} checkSpec Specifies what should be checked when the user pressed the 'Check' button.  Valid values
    * are 'areaConstructed', 'areaAndPerimeterConstructed', 'areaEntered'.
+   * @param {Array<Object>} exampleBuildItSolution An example solution for a build problem.  It consists of a list of
+   * cell positions for unit squares and a color, e.g. { cellColumn: x, cellRow: y, color: 'blue' }.  This should be
+   * null for challenges where no example solution needs to be shown.
    * @param {boolean} fakeChallenge Indicates that everything else should be ignored and this is really just a fake
    * challenge, i.e. one with just a check box to get the right answer.  TODO Remove this once game is working.
    * @constructor
    */
-  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, carouselContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, fakeChallenge ) {
+  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, carouselContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, exampleBuildItSolution, fakeChallenge ) {
     // Verification
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
     // TODO: Maybe add some additional verification.
@@ -45,6 +48,7 @@ define( function( require ) {
     this.colorPrompt2 = colorPrompt2;
     this.backgroundShape = backgroundShape;
     this.checkSpec = checkSpec;
+    this.exampleBuildItSolution = exampleBuildItSolution;
     this.fakeChallenge = fakeChallenge;
 
     // Non-parameterized fields.

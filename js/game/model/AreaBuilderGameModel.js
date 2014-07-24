@@ -56,7 +56,7 @@ define( function( require ) {
 
     // @private The location from which squares that animate onto the board to show a solution should emerge.  The
     // offset is empirically determined to be somewhere in the carousel.
-    this.solutionShapeOrigin = new Vector2( this.shapePlacementBoard.bounds.centerX, this.shapePlacementBoard.bounds.maxY + 30 );
+    this.solutionShapeOrigin = new Vector2( this.shapePlacementBoard.bounds.left + 30, this.shapePlacementBoard.bounds.maxY + 30 );
   }
 
   return inherit( PropertySet, AreaBuilderGameModel, {
@@ -139,14 +139,17 @@ define( function( require ) {
       },
 
       displayCorrectAnswer: function( challenge ) {
+        var self = this;
         // TODO - remove this when fake challenges are no longer needed.
         this.fakeCorrectAnswerProperty.value = true;
         if ( challenge.buildSpec ) {
           this.clearShapePlacementBoard();
 
           // Add the shapes that comprise the solution.
-//          assert && assert( challenge.exampleBuildSolution !== null, 'Error: Challenge does not contain an example solution.' );
-          this.addUnitSquareDirectlyToBoard( 5, 5, AreaBuilderSharedConstants.GREENISH_COLOR );
+          assert && assert( challenge.exampleBuildItSolution !== null, 'Error: Challenge does not contain an example solution.' );
+          challenge.exampleBuildItSolution.forEach( function( shapePlacementSpec ) {
+            self.addUnitSquareDirectlyToBoard( shapePlacementSpec.cellColumn, shapePlacementSpec.cellRow, shapePlacementSpec.color );
+          } );
         }
       },
 

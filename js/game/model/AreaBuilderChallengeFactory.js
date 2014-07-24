@@ -222,6 +222,30 @@ define( function( require ) {
           // Check specification, i.e. what gets checked with the user submits their attempt.
           'areaConstructed',
 
+          // Example solution for 'build it' style challenges TODO: this is a fixed example, not correct
+          [
+            {
+              cellColumn: 5,
+              cellRow: 3,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            },
+            {
+              cellColumn: 6,
+              cellRow: 3,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            },
+            {
+              cellColumn: 5,
+              cellRow: 4,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            },
+            {
+              cellColumn: 6,
+              cellRow: 4,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            }
+          ],
+
           // Flag for whether or not this is a fake challenge TODO remove once game is working
           false
         );
@@ -283,7 +307,31 @@ define( function( require ) {
           null,
 
           // Check specification, i.e. what gets checked with the user submits their attempt.
-          'areaConstructed',
+          'areaAndPerimeterConstructed',
+
+          // Example solution for 'build it' style challenges TODO: this is a fixed example, not correct
+          [
+            {
+              cellColumn: 5,
+              cellRow: 3,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            },
+            {
+              cellColumn: 6,
+              cellRow: 3,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            },
+            {
+              cellColumn: 5,
+              cellRow: 4,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            },
+            {
+              cellColumn: 6,
+              cellRow: 4,
+              color: AreaBuilderSharedConstants.GREENISH_COLOR
+            }
+          ],
 
           // Flag for whether or not this is a fake challenge TODO remove once game is working
           false
@@ -346,6 +394,9 @@ define( function( require ) {
 
           // Check specification, i.e. what gets checked with the user submits their attempt.
           'areaEntered',
+
+          // Example solution for 'build it' style challenges
+          null,
 
           // Flag for whether or not this is a fake challenge TODO remove once game is working
           false
