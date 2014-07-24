@@ -144,5 +144,9 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Rectangle, ChallengePromptBanner );
+  return inherit( Rectangle, ChallengePromptBanner, {
+    reset: function() {
+      this.properties.reset();
+    }
+  } );
 } );

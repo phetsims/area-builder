@@ -383,6 +383,7 @@ define( function( require ) {
             this.solutionBanner
           ] );
 
+          this.solutionBanner.reset();
           this.answerFeedback.removeAllChildren();
           if ( challenge.buildSpec ) {
             if ( challenge.buildSpec.perimeter ) {
@@ -399,7 +400,8 @@ define( function( require ) {
             this.model.simSpecificModel.fakeCorrectAnswer = true;
           }
 
-          // Display the correct answer
+          // Update the solution banner.
+          this.solutionBanner.reset();
           if ( challenge.buildSpec ) {
             this.solutionBanner.properties.mode = 'buildIt';
             this.solutionBanner.properties.targetArea = challenge.buildSpec.area;
@@ -444,6 +446,7 @@ define( function( require ) {
 
         // Clean up previous challenge.
         this.model.simSpecificModel.clearShapePlacementBoard();
+        this.challengePromptBanner.reset();
         if ( this.shapeCarousel !== null ) {
           this.challengeLayer.removeChild( this.shapeCarousel );
         }

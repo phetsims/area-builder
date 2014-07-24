@@ -112,5 +112,9 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Rectangle, SolutionBanner );
+  return inherit( Rectangle, SolutionBanner, {
+    reset: function() {
+      this.properties.reset();
+    }
+  } );
 } );
