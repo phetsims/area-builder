@@ -94,6 +94,7 @@ define( function( require ) {
         this.level = level;
         this.score = 0;
         this.challengeIndex = 0;
+        this.incorrectGuessesOnCurrentChallenge = 0;
         this.restartGameTimer();
 
         // Create the list of challenges.
