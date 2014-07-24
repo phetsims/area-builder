@@ -71,7 +71,7 @@ define( function( require ) {
     thisModel.challengeList = null;
 
     // Let the sim-specific model know when the challenge changes.
-    thisModel.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ) } );
+    thisModel.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ); } );
   }
 
   return inherit( PropertySet, QuizGameModel,

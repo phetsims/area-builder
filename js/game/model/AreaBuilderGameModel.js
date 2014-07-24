@@ -11,7 +11,6 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
@@ -69,7 +68,7 @@ define( function( require ) {
                 // they have been placed.
                 var decomposeShape = function() {
                   var constituentShapes = movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH );
-                  constituentShapes.forEach( function( shape ) { self.addModelElement( shape ) } );
+                  constituentShapes.forEach( function( shape ) { self.addModelElement( shape ); } );
                   self.movableShapes.remove( movableShape );
                   self.shapePlacementBoard.replaceShapeWithUnitSquares( movableShape, constituentShapes );
                 };

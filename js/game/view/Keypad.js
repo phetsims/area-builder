@@ -11,15 +11,12 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -109,7 +106,7 @@ define( function( require ) {
     // The bottom row of buttons can vary based on options.
     var bottomButtonRowChildren = [ createNumberKey( 0, options.doubleWideZeroKey )];
     if ( !options.doubleWideZeroKey ) {
-      bottomButtonRowChildren.push( new HStrut( options.minButtonWidth ) )
+      bottomButtonRowChildren.push( new HStrut( options.minButtonWidth ) );
     }
     bottomButtonRowChildren.push( backspaceButton );
 

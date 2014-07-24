@@ -47,5 +47,5 @@ define( function( require ) {
       this.activeModelInstance.userControlled = false;
       this.activeModelInstance = null;
     }
-  } )
+  } );
 } );

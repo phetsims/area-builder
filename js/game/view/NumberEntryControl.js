@@ -27,7 +27,7 @@ define( function( require ) {
 
     // Add the number readout background.
     var testString = new Text( '', { font: READOUT_FONT } );
-    _.times( options.maxDigits, function() { testString.text += '9' } );
+    _.times( options.maxDigits, function() { testString.text += '9'; } );
     var readoutBackground = new Rectangle( 0, 0, testString.width * 1.2, testString.height * 1.2, 4, 4, {
       fill: 'white',
       stroke: '#777777',

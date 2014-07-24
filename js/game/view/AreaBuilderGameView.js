@@ -15,7 +15,6 @@ define( function( require ) {
   var CheckBox = require( 'SUN/CheckBox' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
-  var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );

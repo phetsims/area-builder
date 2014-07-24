@@ -9,7 +9,6 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var PropertySet = require( 'AXON/PropertySet' );
@@ -58,7 +57,6 @@ define( function( require ) {
     // The size should be an integer number of unit squares for both dimensions.
     assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
 
-    var self = this;
     this.showGridProperty = showGridProperty;
     this.showDimensionsProperty = showDimensionsProperty;
 

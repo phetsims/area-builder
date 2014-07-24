@@ -6,9 +6,7 @@ define( function( require ) {
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
-  var Line = require( 'SCENERY/nodes/Line' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
   var Vector2 = require( 'DOT/Vector2' );

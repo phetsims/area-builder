@@ -8,10 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {object} toolSpec An object that specifies which tools are available to the user.  It should have three
