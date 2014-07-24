@@ -119,6 +119,25 @@ define( function( require ) {
       UNIT_SQUARE_LENGTH
     ),
 
+    // Basic rectangular shape
+    new PerimeterShape(
+      // Exterior perimeters
+      [
+        [
+          new Vector2( 0, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 5, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 5, UNIT_SQUARE_LENGTH * 4 ),
+          new Vector2( 0, UNIT_SQUARE_LENGTH * 4 )
+        ]
+      ],
+
+      // Interior perimeters
+      [],
+
+      // Unit size
+      UNIT_SQUARE_LENGTH
+    ),
+
     // Thin rectangular shape
     new PerimeterShape(
       // Exterior perimeters
@@ -504,6 +523,136 @@ define( function( require ) {
           color: AreaBuilderSharedConstants.GREENISH_COLOR
         }
       ]
+    },
+    {
+      areaToBuild: 25,
+      exampleSolution: [
+        {
+          cellColumn: 4,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 7,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 7,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 7,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 7,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 7,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        }
+      ]
     }
   ];
   var BUILD_AREA_AND_PERIMETER_SPECS = [
@@ -756,6 +905,148 @@ define( function( require ) {
         },
         {
           cellColumn: 8,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        }
+      ]
+    },
+    {
+      areaToBuild: 14,
+      perimeterToBuild: 18,
+      exampleSolution: [
+        {
+          cellColumn: 4,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        }
+      ]
+    },
+    {
+      areaToBuild: 12,
+      perimeterToBuild: 16,
+      exampleSolution: [
+        {
+          cellColumn: 4,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
           cellRow: 4,
           color: AreaBuilderSharedConstants.GREENISH_COLOR
         },
