@@ -35,6 +35,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var HBox = require( 'SCENERY/nodes/HBox' );
+  var YourSolutionWindow = require( 'AREA_BUILDER/game/view/YourSolutionWindow' );
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
@@ -152,6 +153,11 @@ define( function( require ) {
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
+    this.yourSolutionWindow = new YourSolutionWindow( this.layoutBounds.width - this.shapeBoard.right - 20, 85, {
+      centerX: ( this.layoutBounds.width + this.shapeBoard.right ) / 2,
+      centerY: this.shapeBoard.centerY
+    } );
+    this.challengeLayer.addChild( this.yourSolutionWindow );
     this.answerFeedback = new Node();
     this.challengeLayer.addChild( this.answerFeedback );
     this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
@@ -177,6 +183,10 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.buildPromptPanel );
 
+    // Define some variables for taking a snapshot of the user's solution.
+    this.areaOfUserCreatedShape = 0;
+    this.perimeterOfUserCreatedShape = 0;
+
     // Add and lay out the game control buttons.
     this.gameControlButtons = [];
     var buttonOptions = {
@@ -186,7 +196,14 @@ define( function( require ) {
     };
     this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
       listener: function() {
+        // Save the parameters of what the user has built, if they've built anything.
+        self.areaOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.area;
+        self.perimeterOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.perimeter;
+
+        // Submit the user's area guess, if there is one.
         gameModel.simSpecificModel.areaGuess = self.numberEntryControl.value;
+
+        // Check the answer.
         gameModel.checkAnswer();
       } }, buttonOptions ) );
     this.gameControlButtons.push( this.checkAnswerButton );
@@ -368,30 +385,13 @@ define( function( require ) {
 
           this.answerFeedback.removeAllChildren();
           if ( challenge.buildSpec ) {
-//            // Put up feedback for this "build it" style challenge.
-//            this.answerFeedback.addChild( new FeedbackWindow(
-//              challenge.buildSpec.area,
-//              challenge.buildSpec.perimeter,
-//              this.model.simSpecificModel.shapePlacementBoard.area,
-//              this.model.simSpecificModel.shapePlacementBoard.perimeter,
-//              { minWidth: this.shapeBoard.width, minHeight: this.shapeBoard.height, center: this.shapeBoard.center }
-//            ) );
-          }
-          else if ( challenge.backgroundShape ) {
-            // Put up the feedback for this "find the area" style challenge.
-            // TODO: If this banner approach is retained, I should have a class called "InfoBanner" and consolidate
-            // TODO: the stuff below, as well as any similar stuff, into it.
-//            var solutionBanner = new Rectangle( 0, 0, this.shapeBoard.width, 40, 0, 0, {
-//              fill: '#01BC14',
-//              centerX: this.shapeBoard.centerX,
-//              bottom: this.shapeBoard.top - 20
-//            } );
-//            this.answerFeedback.addChild( solutionBanner );
-//            this.answerFeedback.addChild( new Text( solutionText, {
-//              fill: 'white',
-//              font: new PhetFont( 24 ),
-//              center: solutionBanner.center
-//            } ) );
+            if ( challenge.buildSpec.perimeter ) {
+              this.yourSolutionWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
+            }
+            else {
+              this.yourSolutionWindow.setAreaOnly( this.areaOfUserCreatedShape );
+            }
+            this.yourSolutionWindow.visible = true;
           }
 
           // TODO: Remove once fake challenges go away.
@@ -527,7 +527,8 @@ define( function( require ) {
         this.scoreboard,
         this.answerFeedback,
         this.challengePromptBanner,
-        this.solutionBanner
+        this.solutionBanner,
+        this.yourSolutionWindow
       ] );
     },
 
