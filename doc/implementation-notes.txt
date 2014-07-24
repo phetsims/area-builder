@@ -7,9 +7,13 @@ In this sim, 'self' is being tried out as the way to make 'this' persistent
 and thus usable in closures, rather than 'thisModel', 'thisScreen' and so
 forth.
 
-There is a pervasive concept in the code that is called "Placement Boards".
-These are conceptually like real world poster boards or bulletin boards, where
-items can be stuck on them and removed from them.
+There is a pervasive concept in the code that is called "shape placement
+boards". These are conceptually like real world poster boards or bulletin
+boards, where items can be stuck on them and removed from them.
+
+When working with - and within - the shape placement boards, the code
+is sometimes written to work in terms of cells and at other times in terms of
+model coordinates, whichever is most reasonable for the problem at hand.
 
 Another central concept is that of a perimeter shape, which is a shape that is
 defined by an ordered set of points, with straight lines being drawn between
