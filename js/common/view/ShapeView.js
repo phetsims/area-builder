@@ -21,6 +21,7 @@ define( function( require ) {
   // constants
   var SHADOW_COLOR = 'rgba( 50, 50, 50, 0.5 )';
   var SHADOW_OFFSET = new Vector2( 5, 5 );
+  var OPACITY_OF_TRANSLUCENT_SHAPES = 0.65; // Value is empirically determined.
 
   function ShapeView( movableShape ) {
     Node.call( this, { cursor: 'pointer' } );
@@ -64,7 +65,7 @@ define( function( require ) {
           // The shape is not controlled by the user, animated, or fading, so it is most likely placed on the board.
           // It is set to be visible in this situation.  Return a value that makes it slightly transparent so that the
           // user can see any shapes that may be behind it on the board.
-          return 0.85; // Value is empirically determined.
+          return OPACITY_OF_TRANSLUCENT_SHAPES;
         }
         else {
           // The shape should be fully transparent.
