@@ -409,8 +409,6 @@ define( function( require ) {
             this.solutionBanner.properties.mode = 'findArea';
             this.solutionBanner.properties.targetArea = challenge.backgroundShape.unitArea;
           }
-          // TODO: Display the correct answer.
-          this.model.displayCorrectAnswer();
           this.showChallengeGraphics();
 
           // Disable interaction with the challenge elements.
@@ -445,7 +443,7 @@ define( function( require ) {
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
 
         // Clean up previous challenge.
-        this.model.simSpecificModel.clearUserPlacedShapes();
+        this.model.simSpecificModel.clearShapePlacementBoard();
         if ( this.shapeCarousel !== null ) {
           this.challengeLayer.removeChild( this.shapeCarousel );
         }

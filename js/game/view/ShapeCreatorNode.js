@@ -31,6 +31,7 @@ define( function( require ) {
   /**
    * @param {Shape} shape
    * @param {String || Color} color
+   * TODO: Pass in just the creator function instead of the whole model.
    * @param {Object} model A model that supports adding shapes.
    * @param {Object} options
    * @constructor
@@ -94,7 +95,7 @@ define( function( require ) {
         // Create and add the new model element.
         modelElement = new MovableShape( shape, AreaBuilderSharedConstants.GREENISH_COLOR, initialPosition );
         modelElement.userControlled = true;
-        model.addModelElement( modelElement );
+        model.addUserCreatedMovableShape( modelElement );
       },
 
       translate: function( translationParams ) {

@@ -133,7 +133,7 @@ define( function( require ) {
       assert && assert( movableShape.userControlled === false, 'Shapes can\'t be placed when still controlled by user.' );
       var self = this;
 
-      // See if shape is of the correct color and overlapping with the board.
+      // Only place the shape if it is of the correct color and is positioned so that it overlaps with the board.
       if ( movableShape.color !== this.colorHandled || !this.shapeOverlapsBoard( movableShape ) ) {
         return false;
       }
@@ -194,6 +194,35 @@ define( function( require ) {
 
       // If we made it to here, placement succeeded.
       return true;
+    },
+
+    /**
+     * Add a shape directly the to specified cell.  This bypasses the placement process, and is generally used when
+     * displaying solutions to challenges.
+     *
+     * @param cellColumn
+     * @param cellRow
+     * @param movableShape
+     */
+    addShapeDirectlyToCell: function( cellColumn, cellRow, movableShape ) {
+      var self = this;
+      movableShape.invisibleWhenStill = false; // Don't hide the shape when it stops moving.
+      movableShape.setDestination( this.cellToModelCoords( cellColumn, cellRow ), true );
+      // TODO: Would it work to add it directly to the resident shape list?  Try it.
+      this.incomingShapes.push( movableShape );
+
+      // The remaining code in this function assumes that the shape is animating to the new location, and will cause
+      // odd results if it isn't, so we check it here.
+      assert && assert( movableShape.animating, 'Shape is not animating after being directly added to board.' );
+
+      // Move the shape to the resident list once it has finished animating.
+      movableShape.animatingProperty.once( function( animating ) {
+        assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
+        if ( !animating ) {
+          self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
+          self.addResidentShape( movableShape );
+        }
+      } );
     },
 
     // @private, add a shape to the list of residents and make the other updates that go along with this.

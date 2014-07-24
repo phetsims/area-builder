@@ -12,14 +12,17 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
+  var Shape = require( 'KITE/Shape' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels
   var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 12, UNIT_SQUARE_LENGTH * 8 );
+  var UNIT_SQUARE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
 
   /**
    *
@@ -48,14 +51,23 @@ define( function( require ) {
       this.showDimensionsProperty
     );
 
-    // Array where shapes that are added by the user are tracked.
-    this.movableShapes = new ObservableArray(); // @public
+    // @public Array where shapes that are added by the user are tracked.
+    this.movableShapes = new ObservableArray();
+
+    // @private The location from which squares that animate onto the board to show a solution should emerge.  The
+    // offset is empirically determined to be somewhere in the carousel.
+    this.solutionShapeOrigin = new Vector2( this.shapePlacementBoard.bounds.centerX, this.shapePlacementBoard.bounds.maxY + 30 );
   }
 
   return inherit( PropertySet, AreaBuilderGameModel, {
 
-      // Function for adding new movable elements to this model
-      addModelElement: function( movableShape ) {
+      /**
+       * Function for adding new movable shapes to this model when the user is creating them, generally by clicking on
+       * some sort of creator node.
+       * @public
+       * @param movableShape
+       */
+      addUserCreatedMovableShape: function( movableShape ) {
         var self = this;
         this.movableShapes.push( movableShape );
 
@@ -68,7 +80,7 @@ define( function( require ) {
                 // they have been placed.
                 var decomposeShape = function() {
                   var constituentShapes = movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH );
-                  constituentShapes.forEach( function( shape ) { self.addModelElement( shape ); } );
+                  constituentShapes.forEach( function( shape ) { self.addUserCreatedMovableShape( shape ); } );
                   self.movableShapes.remove( movableShape );
                   self.shapePlacementBoard.replaceShapeWithUnitSquares( movableShape, constituentShapes );
                 };
@@ -100,14 +112,42 @@ define( function( require ) {
         } );
       },
 
+      /**
+       * Add a unit square directly to the shape placement board in the specified cell location (as opposed to model
+       * location).  This was created to enable solutions to game challenges to be shown, but may have other uses.
+       * @param cellColumn
+       * @param cellRow
+       * @param color
+       */
+      addUnitSquareDirectlyToBoard: function( cellColumn, cellRow, color ) {
+        var self = this;
+        var shape = new MovableShape( UNIT_SQUARE_SHAPE, color, this.solutionShapeOrigin );
+        this.movableShapes.push( shape );
+
+        // TODO: As noted above, it's a little weird to rely on returning home to remove the shape.  May want to change eventually.
+        shape.on( 'returnedHome', function() {
+          // The shape has been returned to its origin.
+          self.movableShapes.remove( shape );
+        } );
+
+        this.shapePlacementBoard.addShapeDirectlyToCell( cellColumn, cellRow, shape );
+      },
+
       // Clear the placement board of all shapes placed on it by the user
-      clearUserPlacedShapes: function() {
+      clearShapePlacementBoard: function() {
         this.shapePlacementBoard.releaseAllShapes( false );
       },
 
       displayCorrectAnswer: function( challenge ) {
-        // TODO - stubbed for now
+        // TODO - remove this when fake challenges are no longer needed.
         this.fakeCorrectAnswerProperty.value = true;
+        if ( challenge.buildSpec ) {
+          this.clearShapePlacementBoard();
+
+          // Add the shapes that comprise the solution.
+//          assert && assert( challenge.exampleBuildSolution !== null, 'Error: Challenge does not contain an example solution.' );
+          this.addUnitSquareDirectlyToBoard( 5, 5, AreaBuilderSharedConstants.GREENISH_COLOR );
+        }
       },
 
       checkAnswer: function( challenge ) {
