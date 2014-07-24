@@ -98,6 +98,63 @@ define( function( require ) {
 
       // Unit size
       UNIT_SQUARE_LENGTH
+    ),
+
+    // Basic rectangular shape
+    new PerimeterShape(
+      // Exterior perimeters
+      [
+        [
+          new Vector2( 0, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 6, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 6, UNIT_SQUARE_LENGTH * 3 ),
+          new Vector2( 0, UNIT_SQUARE_LENGTH * 3 )
+        ]
+      ],
+
+      // Interior perimeters
+      [],
+
+      // Unit size
+      UNIT_SQUARE_LENGTH
+    ),
+
+    // Thin rectangular shape
+    new PerimeterShape(
+      // Exterior perimeters
+      [
+        [
+          new Vector2( 0, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 10, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH * 10, UNIT_SQUARE_LENGTH ),
+          new Vector2( 0, UNIT_SQUARE_LENGTH )
+        ]
+      ],
+
+      // Interior perimeters
+      [],
+
+      // Unit size
+      UNIT_SQUARE_LENGTH
+    ),
+
+    // Tall rectangular shape
+    new PerimeterShape(
+      // Exterior perimeters
+      [
+        [
+          new Vector2( 0, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH, 0 ),
+          new Vector2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH * 6 ),
+          new Vector2( 0, UNIT_SQUARE_LENGTH * 6 )
+        ]
+      ],
+
+      // Interior perimeters
+      [],
+
+      // Unit size
+      UNIT_SQUARE_LENGTH
     )
   ];
 
