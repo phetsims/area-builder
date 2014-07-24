@@ -8,6 +8,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var inherit = require( 'PHET_CORE/inherit' );
+
+  // modules
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
 
   /**
@@ -91,45 +94,54 @@ define( function( require ) {
       // fakeChallenge
       false
     );
-  },
+  };
 
-    AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, carouselContents, exampleSolution ) {
-      return new AreaBuilderGameChallenge(
-        // toolSpec
-        {
-          gridControl: true,
-          dimensionsControl: true,
-          decompositionToolControl: true
-        },
+  AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, carouselContents, exampleSolution ) {
+    return new AreaBuilderGameChallenge(
+      // toolSpec
+      {
+        gridControl: true,
+        dimensionsControl: true,
+        decompositionToolControl: true
+      },
 
-        // showNumberEntryPad
-        false,
+      // showNumberEntryPad
+      false,
 
-        // carouselContents
-        carouselContents,
+      // carouselContents
+      carouselContents,
 
-        // buildSpec
-        { area: areaToBuild, perimeter: perimeterToBuild },
+      // buildSpec
+      { area: areaToBuild, perimeter: perimeterToBuild },
 
-        // colorPrompt1
-        null,
+      // colorPrompt1
+      null,
 
-        // colorPrompt2
-        null,
+      // colorPrompt2
+      null,
 
-        // backgroundShape
-        null,
+      // backgroundShape
+      null,
 
-        // checkSpec
-        'areaConstructed',
+      // checkSpec
+      'areaConstructed',
 
-        // exampleBuildItSolution
-        exampleSolution,
+      // exampleBuildItSolution
+      exampleSolution,
 
-        // fakeChallenge
-        false
-      );
-    };
+      // fakeChallenge
+      false
+    );
+  };
 
-  return AreaBuilderGameChallenge;
+  return inherit( Object, AreaBuilderGameChallenge, {
+    equals: function( challenge ) {
+      // Note: This doesn't compare everything, but it is enough for the sim's purposes.
+      return this.showNumberEntryPad === challenge.showNumberEntryPad &&
+             this.buildSpec.area === challenge.buildSpec.area &&
+             this.buildSpec.perimeter === challenge.buildSpec.perimeter &&
+             this.backgroundShape === challenge.backgroundShape &&
+             this.checkSpec === challenge.checkSpec;
+    }
+  } );
 } );

@@ -1110,14 +1110,26 @@ define( function( require ) {
   }
 
   // Challenge history, used to make sure unique challenges are generated.
-//  var challengeHistory = []; commented out for lint, uncomment when ready
+  var challengeHistory = [];
 
   // No constructor - this is a static type with a set of functions.
   return  {
 
     // @private
     isChallengeUnique: function( challenge ) {
-      return true; // TODO: Check uniqueness
+      var challengeIsUnique = true;
+      //TODO: Get this working.
+//      console.log( '------------------------------');
+//      console.log( 'challenge.buildSpec.area = ' + challenge.buildSpec.area );
+//      for ( var i = 0; i < challengeHistory.length; i++ ){
+//        console.log( 'challengeHistory[ ' + i + ' ].buildSpec.area = ' + challengeHistory[i].buildSpec.area );
+//        if ( _.isEqual( challenge, challengeHistory[ i ] ) ){
+//          challengeIsUnique = false;
+//          break;
+//        }
+//      }
+//      console.log( 'challengeIsUnique = ' + challengeIsUnique );
+      return challengeIsUnique;
     },
 
     // @private
@@ -1154,7 +1166,6 @@ define( function( require ) {
       var challengeIsUnique = false;
       var challenge;
       while ( !challengeIsUnique ) {
-        var areaToBuild;
         // TODO: This is temporary, eventually these challenges should be algorithmically generated.
         // TODO: Also, difficulty is ignored.
         var spec = randomElement( BUILD_AREA_ONLY_SPECS );
@@ -1196,7 +1207,6 @@ define( function( require ) {
       var challengeIsUnique = false;
       var challenge;
       while ( !challengeIsUnique ) {
-        var areaToBuild;
         // TODO: This is temporary, eventually these challenges should be algorithmically generated.
         // TODO: Also, difficulty is ignored.
         var spec = randomElement( BUILD_AREA_AND_PERIMETER_SPECS );
@@ -1273,18 +1283,19 @@ define( function( require ) {
 
     // @private
     generateChallenge: function( level, difficulty, model ) {
+      var challenge;
       if ( level === 0 ) {
-        return this.generateBuildAreaChallenge( model, difficulty );
+        challenge = this.generateBuildAreaChallenge( model, difficulty );
       }
       else if ( level === 1 ) {
-        return this.generateBuildAreaAndPerimeterChallenge( model, difficulty );
+        challenge = this.generateBuildAreaAndPerimeterChallenge( model, difficulty );
       }
       else if ( level === 2 ) {
-        return this.generateFindTheAreaChallenge( model, difficulty );
+        challenge = this.generateFindTheAreaChallenge( model, difficulty );
       }
       else {
         // Create a fake challenge for the other levels.
-        return new AreaBuilderGameChallenge(
+        challenge = new AreaBuilderGameChallenge(
           'Fake Challenge',
           null,
           null,
@@ -1297,6 +1308,8 @@ define( function( require ) {
           true
         );
       }
+      challengeHistory.push( challenge );
+      return challenge;
     },
 
     mapIndexToDifficulty: function( index, numChallenges ) {
@@ -1306,6 +1319,7 @@ define( function( require ) {
 
     // @public
     generateChallengeSet: function( level, numChallenges, model ) {
+      challengeHistory = []; // TODO: This is temporary until more challenges are created, then it should be cleared 1/2 at a time when having trouble creating unique challenges.
       var self = this;
       var challengeSet = [];
       _.times( numChallenges, function( index ) {
