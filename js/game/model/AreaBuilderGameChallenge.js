@@ -91,7 +91,45 @@ define( function( require ) {
       // fakeChallenge
       false
     );
-  }
+  },
+
+    AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, carouselContents, exampleSolution ) {
+      return new AreaBuilderGameChallenge(
+        // toolSpec
+        {
+          gridControl: true,
+          dimensionsControl: true,
+          decompositionToolControl: true
+        },
+
+        // showNumberEntryPad
+        false,
+
+        // carouselContents
+        carouselContents,
+
+        // buildSpec
+        { area: areaToBuild, perimeter: perimeterToBuild },
+
+        // colorPrompt1
+        null,
+
+        // colorPrompt2
+        null,
+
+        // backgroundShape
+        null,
+
+        // checkSpec
+        'areaConstructed',
+
+        // exampleBuildItSolution
+        exampleSolution,
+
+        // fakeChallenge
+        false
+      );
+    };
 
   return AreaBuilderGameChallenge;
 } );

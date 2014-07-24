@@ -449,36 +449,310 @@ define( function( require ) {
       ]
     }
   ];
-
-  // TODO: This is temporary, eventually these should be algorithmically generated.
-  var AREA_AND_PERIMETER_BUILD_SPECS = [
+  var BUILD_AREA_AND_PERIMETER_SPECS = [
     {
-      area: 2,
-      perimeter: 6
+      areaToBuild: 9,
+      perimeterToBuild: 12,
+      exampleSolution: [
+        {
+          cellColumn: 5,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        }
+      ]
     },
     {
-      area: 4,
-      perimeter: 8
+      areaToBuild: 12,
+      perimeterToBuild: 14,
+      exampleSolution: [
+        {
+          cellColumn: 5,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        }
+      ]
     },
     {
-      area: 4,
-      perimeter: 10
+      areaToBuild: 15,
+      perimeterToBuild: 16,
+      exampleSolution: [
+        {
+          cellColumn: 4,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        }
+      ]
     },
     {
-      area: 5,
-      perimeter: 10
-    },
-    {
-      area: 5,
-      perimeter: 12
-    },
-    {
-      area: 6,
-      perimeter: 10
-    },
-    {
-      area: 6,
-      perimeter: 12
+      areaToBuild: 20,
+      perimeterToBuild: 18,
+      exampleSolution: [
+        {
+          cellColumn: 4,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 3,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 4,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 5,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 4,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 5,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 6,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 7,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        },
+        {
+          cellColumn: 8,
+          cellRow: 6,
+          color: AreaBuilderSharedConstants.GREENISH_COLOR
+        }
+      ]
     }
   ];
 
@@ -543,87 +817,42 @@ define( function( require ) {
     },
 
     generateBuildAreaAndPerimeterChallenge: function( model, difficulty ) {
+      // Create the shape kit used for these challenges.
+      var buildItShapeKit = [
+        new ShapeCreatorNode(
+          SQUARE_SHAPE,
+          AreaBuilderSharedConstants.GREENISH_COLOR,
+          model
+        ),
+        new ShapeCreatorNode(
+          HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+          AreaBuilderSharedConstants.GREENISH_COLOR,
+          model,
+          { gridSpacing: UNIT_SQUARE_LENGTH }
+        ),
+        new ShapeCreatorNode(
+          VERTICAL_DOUBLE_SQUARE_SHAPE,
+          AreaBuilderSharedConstants.GREENISH_COLOR,
+          model,
+          { gridSpacing: UNIT_SQUARE_LENGTH }
+        ),
+        new ShapeCreatorNode(
+          QUAD_SQUARE_SHAPE,
+          AreaBuilderSharedConstants.GREENISH_COLOR,
+          model,
+          { gridSpacing: UNIT_SQUARE_LENGTH }
+        )
+      ];
+
+      // Create a unique challenge
       var challengeIsUnique = false;
       var challenge;
       while ( !challengeIsUnique ) {
-        challenge = new AreaBuilderGameChallenge(
-          // Tool control
-          {
-            gridControl: true,
-            dimensionsControl: true,
-            decompositionToolControl: true
-          },
-
-          // Keypad visibility flag
-          false,
-
-          // Kit contents
-          [
-            new ShapeCreatorNode(
-              SQUARE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model
-            ),
-            new ShapeCreatorNode(
-              HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model,
-              { gridSpacing: UNIT_SQUARE_LENGTH }
-            ),
-            new ShapeCreatorNode(
-              VERTICAL_DOUBLE_SQUARE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model,
-              { gridSpacing: UNIT_SQUARE_LENGTH }
-            ),
-            new ShapeCreatorNode(
-              QUAD_SQUARE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model,
-              { gridSpacing: UNIT_SQUARE_LENGTH }
-            )
-          ],
-
-          // Build spec, i.e. what the user should try to build, if anything.
-          randomElement( AREA_AND_PERIMETER_BUILD_SPECS ),
-
-          // Color prompts
-          null,
-          null,
-
-          // Background shape
-          null,
-
-          // Check specification, i.e. what gets checked with the user submits their attempt.
-          'areaAndPerimeterConstructed',
-
-          // Example solution for 'build it' style challenges TODO: this is a fixed example, not correct
-          [
-            {
-              cellColumn: 5,
-              cellRow: 3,
-              color: AreaBuilderSharedConstants.GREENISH_COLOR
-            },
-            {
-              cellColumn: 6,
-              cellRow: 3,
-              color: AreaBuilderSharedConstants.GREENISH_COLOR
-            },
-            {
-              cellColumn: 5,
-              cellRow: 4,
-              color: AreaBuilderSharedConstants.GREENISH_COLOR
-            },
-            {
-              cellColumn: 6,
-              cellRow: 4,
-              color: AreaBuilderSharedConstants.GREENISH_COLOR
-            }
-          ],
-
-          // Flag for whether or not this is a fake challenge TODO remove once game is working
-          false
-        );
+        var areaToBuild;
+        // TODO: This is temporary, eventually these challenges should be algorithmically generated.
+        // TODO: Also, difficulty is ignored.
+        var spec = randomElement( BUILD_AREA_AND_PERIMETER_SPECS );
+        challenge = AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( spec.areaToBuild, spec.perimeterToBuild, buildItShapeKit, spec.exampleSolution );
         challengeIsUnique = this.isChallengeUnique( challenge );
       }
       return challenge;
