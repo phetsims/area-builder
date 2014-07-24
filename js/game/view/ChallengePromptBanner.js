@@ -123,8 +123,8 @@ define( function( require ) {
     this.properties.promptsVisibleProperty.link( function( promptsVisible ) {
       areaOnlyPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter === null ) && promptsVisible;
       areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter !== null ) && promptsVisible;
-      if ( promptsVisible ) {
-        // Move the title over to make room for the prompts.
+      if ( promptsVisible && ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) ) {
+        // Move the title over to make room for the build prompt.
         new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
 
         // Fade in whatever prompts are currently set to be visible.
