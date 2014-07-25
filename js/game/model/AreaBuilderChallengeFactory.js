@@ -1186,8 +1186,14 @@ define( function( require ) {
         while ( width * height < 8 || width * height > 36 ) {
           height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
         }
-        challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, buildItShapeKit,
-          createRectangularSolutionSpec( 1, 1, width, height, AreaBuilderSharedConstants.GREENISH_COLOR ) );
+        var exampleSolution = createRectangularSolutionSpec(
+          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
+          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
+          width,
+          height,
+          AreaBuilderSharedConstants.GREENISH_COLOR
+        );
+        challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, buildItShapeKit, exampleSolution );
         challengeIsUnique = this.isChallengeUnique( challenge );
       }
       return challenge;
