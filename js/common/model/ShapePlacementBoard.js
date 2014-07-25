@@ -171,7 +171,7 @@ define( function( require ) {
         assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
         if ( !animating ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
-          self.addResidentShape( movableShape );
+          self.addResidentShape( movableShape, true );
         }
 
         // Set up a listener to remove this shape when the user grabs is.
@@ -222,17 +222,13 @@ define( function( require ) {
         assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
         if ( !animating ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
-
-          // Avoid using the add method here so that orphan release isn't triggered.
-          self.residentShapes.add( movableShape );
-          self.updateCellOccupation( movableShape, 'add' );
-          self.updateAll();
+          self.addResidentShape( movableShape, false );
         }
       } );
     },
 
     // @private, add a shape to the list of residents and make the other updates that go along with this.
-    addResidentShape: function( movableShape ) {
+    addResidentShape: function( movableShape, releaseOrphans ) {
 
       // Make sure that the shape is not moving
       assert && assert( movableShape.position.equals( movableShape.destination ), 'Error: Shapes should not become residents until they have completed animating.' );
@@ -244,7 +240,9 @@ define( function( require ) {
 
       // Make the appropriate updates.
       this.updateCellOccupation( movableShape, 'add' );
-      this.releaseAnyOrphans();
+      if ( releaseOrphans ) {
+        this.releaseAnyOrphans();
+      }
       this.updateAll();
     },
 
