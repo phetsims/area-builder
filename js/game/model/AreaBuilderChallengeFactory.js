@@ -1231,10 +1231,31 @@ define( function( require ) {
       var challengeIsUnique = false;
       var challenge;
       while ( !challengeIsUnique ) {
-        // TODO: This is temporary, eventually these challenges should be algorithmically generated.
+        // TODO: Only generates rectangular challenges at this point.
         // TODO: Also, difficulty is ignored.
-        var spec = randomElement( BUILD_AREA_AND_PERIMETER_SPECS );
-        challenge = AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( spec.areaToBuild, spec.perimeterToBuild, buildItShapeKit, spec.exampleSolution );
+
+        var width = 0;
+        var height = 0;
+
+        // Width can be any value from 3 to 8 excluding 7, see design doc.
+        while ( width === 0 || width === 7 ) {
+          width = _.random( 3, 8 );
+        }
+
+        // Choose the height based on the total area.
+        while ( width * height < 12 || width * height > 36 || height === 7 ) {
+          height = _.random( 3, 8 );
+        }
+
+        var exampleSolution = createRectangularSolutionSpec(
+          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
+          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
+          width,
+          height,
+          AreaBuilderSharedConstants.GREENISH_COLOR
+        );
+        challenge = AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width * height,
+            2 * width + 2 * height, buildItShapeKit, exampleSolution );
         challengeIsUnique = this.isChallengeUnique( challenge );
       }
       return challenge;
