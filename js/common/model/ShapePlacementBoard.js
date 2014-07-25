@@ -222,7 +222,11 @@ define( function( require ) {
         assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
         if ( !animating ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
-          self.addResidentShape( movableShape );
+
+          // Avoid using the add method here so that orphan release isn't triggered.
+          self.residentShapes.add( movableShape );
+          self.updateCellOccupation( movableShape, 'add' );
+          self.updateAll();
         }
       } );
     },

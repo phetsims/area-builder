@@ -306,9 +306,35 @@ define( function( require ) {
         )
       ];
 
-      var w1 = _.random()
+      // Create first rectangle dimensions
+      var width1 = _.random( 2, 6 );
+      var height1;
+      do {
+        height1 = _.random( 1, 4 );
+      } while ( width1 % 2 === height1 % 2 );
 
+      // Create second rectangle dimensions
+      do {
+        var width2 = _.random( 1, 6 );
+      } while ( width1 + width2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      var height2;
+      do {
+        height2 = _.random( 1, 6 );
+      } while ( width2 % 2 === height2 % 2 || height1 + height2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
+      // Choose the amount of overlap
+      var overlap = _.random( 1, Math.min( width1, width2 ) - 1 );
+
+      var left = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - ( width1 + width2 - overlap ) ) / 2 );
+      var top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
+
+      // Create a solution spec by merging specs for each of the rectangles together.
+      var solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR );
+      solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR ).concat(
+        createRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
+
+      return( AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width1 * height1 + width2 * height2,
+          2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, buildItShapeKit, solutionSpec ) );
     },
 
     generateBuildAreaAndPerimeterChallenge: function( model, difficulty ) {
@@ -449,6 +475,9 @@ define( function( require ) {
       }
       else if ( level === 2 ) {
         challenge = this.generateFindTheAreaChallenge( model, difficulty );
+      }
+      else if ( level === 3 ) {
+        challenge = this.generateTwoRectangleBuildAreaAndPerimeterChallenge( model, difficulty );
       }
       else {
         // Create a fake challenge for the other levels.
