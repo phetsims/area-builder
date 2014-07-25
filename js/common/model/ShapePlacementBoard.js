@@ -205,7 +205,10 @@ define( function( require ) {
      */
     addShapeDirectlyToCell: function( cellColumn, cellRow, movableShape ) {
       var self = this;
-      movableShape.invisibleWhenStill = false; // Don't hide the shape when it stops moving.
+
+      // Set the shape's visibility behavior based on whether a composite shape is being depicted.
+      movableShape.invisibleWhenStill = this.formComposite;
+
       movableShape.setDestination( this.cellToModelCoords( cellColumn, cellRow ), true );
       // TODO: Would it work to add it directly to the resident shape list?  Try it.
       this.incomingShapes.push( movableShape );
