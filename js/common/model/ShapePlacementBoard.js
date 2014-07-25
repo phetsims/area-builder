@@ -96,14 +96,13 @@ define( function( require ) {
     // Non-dynamic properties that are externally visible
     this.size = size; // @public
 
-    // For efficiency and simplicity in evaluating the interior and exterior perimeter, locating orphans, and so forth,
-    // a 2D array is used to track various state information about the 'cells' that correspond to the locations on this
-    // board where shapes may be placed.  This array has a buffer of always-empty cells around it so that the 'marching
-    // squares' algorithm can be used to evaluate the perimeters even if this placement board is filled up.
+    // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
+    // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
+    // locations on this board where shapes may be placed.
     this.cells = [];
-    for ( var column = 0; column < this.numColumns + 2; column++ ) {
+    for ( var column = 0; column < this.numColumns; column++ ) {
       var currentRow = [];
-      for ( var row = 0; row < this.numRows + 2; row++ ) {
+      for ( var row = 0; row < this.numRows; row++ ) {
         currentRow.push( {
           column: column,
           row: row,
@@ -288,6 +287,20 @@ define( function( require ) {
       } );
     },
 
+    // @private Convenience function for returning a cell or null if row or column are out of range.
+    getCell: function( column, row ) {
+      if ( column < 0 || row < 0 || column >= this.numColumns || row >= this.numRows ) {
+        return null;
+      }
+      return this.cells[ column ][ row ];
+    },
+
+    // @private Function for getting the occupant of the specified cell, does bounds checking.
+    getCellOccupant: function( column, row ) {
+      var cell = this.getCell( column, row );
+      return cell ? cell.occupiedBy : null;
+    },
+
     /**
      * Set or clear the occupation status of the cells.
      *
@@ -295,8 +308,8 @@ define( function( require ) {
      * @param operation
      */
     updateCellOccupation: function( movableShape, operation ) {
-      var xIndex = Math.round( ( movableShape.destination.x - this.position.x ) / this.unitSquareLength ) + 1;
-      var yIndex = Math.round( ( movableShape.destination.y - this.position.y ) / this.unitSquareLength ) + 1;
+      var xIndex = Math.round( ( movableShape.destination.x - this.position.x ) / this.unitSquareLength );
+      var yIndex = Math.round( ( movableShape.destination.y - this.position.y ) / this.unitSquareLength );
       // Mark all cells occupied by this shape.
       for ( var row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
         for ( var column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
@@ -357,8 +370,8 @@ define( function( require ) {
 
       // Get the closest point in cell coordinates.
       var normalizedStartingPoint = new Vector2(
-          Math.floor( ( point.x - this.position.x ) / this.unitSquareLength ) - levelsRemoved + 1,
-          Math.floor( ( point.y - this.position.y ) / this.unitSquareLength ) - levelsRemoved + 1
+          Math.floor( ( point.x - this.position.x ) / this.unitSquareLength ) - levelsRemoved,
+          Math.floor( ( point.y - this.position.y ) / this.unitSquareLength ) - levelsRemoved
       );
 
       var squareSize = ( levelsRemoved + 1 ) * 2;
@@ -393,10 +406,9 @@ define( function( require ) {
       var row;
       var column;
 
-      // Return false if the shape goes off the board.  This has to compensate for the fact that there is an additional
-      // invisible row in the cell array (to support the perimeter tracing algorithm.
-      if ( normalizedLocation.x <= 0 || normalizedLocation.x + normalizedWidth > this.numColumns + 1 ||
-           normalizedLocation.y <= 0 || normalizedLocation.y + normalizedHeight > this.numRows + 1 ) {
+      // Return false if the shape goes off the board.
+      if ( normalizedLocation.x < 0 || normalizedLocation.x + normalizedWidth > this.numColumns ||
+           normalizedLocation.y < 0 || normalizedLocation.y + normalizedHeight > this.numRows ) {
         return false;
       }
 
@@ -503,7 +515,7 @@ define( function( require ) {
     },
 
     cellToModelCoords: function( column, row ) {
-      return new Vector2( ( column - 1 ) * this.unitSquareLength + this.position.x, ( row - 1 ) * this.unitSquareLength + this.position.y );
+      return new Vector2( column * this.unitSquareLength + this.position.x, row * this.unitSquareLength + this.position.y );
     },
 
     cellToModelVector: function( v ) {
@@ -511,7 +523,7 @@ define( function( require ) {
     },
 
     modelToCellCoords: function( x, y ) {
-      return new Vector2( ( x - this.position.x ) / this.unitSquareLength + 1, ( y - this.position.y ) / this.unitSquareLength + 1 );
+      return new Vector2( ( x - this.position.x ) / this.unitSquareLength, ( y - this.position.y ) / this.unitSquareLength );
     },
 
     modelToCellVector: function( v ) {
@@ -550,7 +562,7 @@ define( function( require ) {
      * http://devblog.phillipspiess.com/2010/02/23/better-know-an-algorithm-1-marching-squares/
      * @private
      */
-    scanPerimeter: function( cells, windowStart ) {
+    scanPerimeter: function( windowStart ) {
       var scanWindow = windowStart.copy();
       var scanComplete = false;
       var perimeterPoints = [];
@@ -558,17 +570,17 @@ define( function( require ) {
       while ( !scanComplete ) {
 
         // Scan the current four-pixel area.
-        var upLeft = cells[ scanWindow.x - 1 ][ scanWindow.y - 1 ].occupiedBy;
-        var upRight = cells[ scanWindow.x ][ scanWindow.y - 1 ].occupiedBy;
-        var downLeft = cells[ scanWindow.x - 1 ][ scanWindow.y ].occupiedBy;
-        var downRight = cells[ scanWindow.x ][ scanWindow.y ].occupiedBy;
+        var upLeftOccupied = this.isCellOccupied( scanWindow.x - 1, scanWindow.y - 1 );
+        var upRightOccupied = this.isCellOccupied( scanWindow.x, scanWindow.y - 1 );
+        var downLeftOccupied = this.isCellOccupied( scanWindow.x - 1, scanWindow.y );
+        var downRightOccupied = this.isCellOccupied( scanWindow.x, scanWindow.y );
 
         // Map the scan to the one of 16 possible states.
         var marchingSquaresState = 0;
-        if ( upLeft !== null ) { marchingSquaresState |= 1; }
-        if ( upRight !== null ) { marchingSquaresState |= 2; }
-        if ( downLeft !== null ) { marchingSquaresState |= 4; }
-        if ( downRight !== null ) { marchingSquaresState |= 8; }
+        if ( upLeftOccupied ) { marchingSquaresState |= 1; }
+        if ( upRightOccupied ) { marchingSquaresState |= 2; }
+        if ( downLeftOccupied ) { marchingSquaresState |= 4; }
+        if ( downRightOccupied ) { marchingSquaresState |= 8; }
 
         assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
 
@@ -602,7 +614,6 @@ define( function( require ) {
         var row;
         var column;
         var exteriorPerimeters = [];
-        var mutableVector = new Vector2();
 
         // Identify each outer perimeter.  There may be more than one if the user is moving a shape that was previously
         // on this board, since any orphaned shapes are not released until the move is complete.
@@ -618,16 +629,16 @@ define( function( require ) {
           } );
 
           // Scan the outer perimeter and add to list.
-          mutableVector.setXY( topLeftCell.column, topLeftCell.row );
-          exteriorPerimeters.push( self.scanPerimeter( self.cells, mutableVector ) );
+          var topLeftCellOfGroup = new Vector2( topLeftCell.column, topLeftCell.row );
+          exteriorPerimeters.push( self.scanPerimeter( topLeftCellOfGroup ) );
         } );
 
         // Scan for empty spaces enclosed within the outer perimeter(s).
         var outlineShape = this.createShapeFromPerimeterList( exteriorPerimeters );
         var enclosedSpaces = [];
-        for ( row = 1; row < this.numRows; row++ ) {
-          for ( column = 1; column < this.numColumns; column++ ) {
-            if ( this.cells[ column ][ row ].occupiedBy === null ) {
+        for ( row = 0; row < this.numRows; row++ ) {
+          for ( column = 0; column < this.numColumns; column++ ) {
+            if ( !this.isCellOccupied( column, row ) ) {
               // This cell is empty.  Test if it is within the outline perimeter.
               var cellCenterInModel = this.cellToModelCoords( column, row ).addXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
               if ( outlineShape.containsPoint( cellCenterInModel ) ) {
@@ -650,7 +661,7 @@ define( function( require ) {
           } );
 
           // Map the interior perimeter.
-          var enclosedPerimeterPoints = this.scanPerimeter( this.cells, topLeftSpace );
+          var enclosedPerimeterPoints = this.scanPerimeter( topLeftSpace );
           interiorPerimeters.push( enclosedPerimeterPoints );
 
           // Identify and save all spaces not enclosed by this perimeter.
@@ -700,14 +711,17 @@ define( function( require ) {
     },
 
     /**
-     * Identify all cells that are adjacent to the provided cell, intended
-     * to be used recursively.
+     * Identify all cells that are adjacent to the provided cell and that are currently occupied by a shape.  Only
+     * shapes that share an edge are considered to be adjacent, shapes that only touch at the corner don't count.  This
+     * uses recursion.  It also relies on a flag that must be cleared for the cells before calling this algorithm.  The
+     * flag is done for efficiency, but this could be changed to search through the list of cells in the cell group if
+     * that flag method is too weird.
      *
      * @private
      * @param startCell
      * @param cellGroup
      */
-    identifyAdjacentCells: function( startCell, cellGroup ) {
+    identifyAdjacentOccupiedCells: function( startCell, cellGroup ) {
       assert && assert( startCell.occupiedBy !== null, 'Usage error: Unoccupied cell passed to group identification.' );
       assert && assert( !startCell.cataloged, 'Usage error: Cataloged cell passed to group identification algorithm.' );
       var self = this;
@@ -716,12 +730,12 @@ define( function( require ) {
       cellGroup.push( startCell );
       startCell.cataloged = true;
 
-      // Kick off cataloging of adjacent cells.
+      // Check occupancy of each of the four adjecent cells.
       Object.keys( MOVEMENT_VECTORS ).forEach( function( key ) {
         var movementVector = MOVEMENT_VECTORS[ key ];
-        var adjacentCell = self.cells[ startCell.column + movementVector.x ][ startCell.row + movementVector.y ];
-        if ( adjacentCell.occupiedBy !== null && !adjacentCell.cataloged ) {
-          self.identifyAdjacentCells( adjacentCell, cellGroup );
+        var adjacentCell = self.getCell( startCell.column + movementVector.x, startCell.row + movementVector.y );
+        if ( adjacentCell !== null && adjacentCell.occupiedBy !== null && !adjacentCell.cataloged ) {
+          self.identifyAdjacentOccupiedCells( adjacentCell, cellGroup );
         }
       } );
     },
@@ -730,8 +744,8 @@ define( function( require ) {
 
       // Make a list of locations for all occupied cells.
       var ungroupedOccupiedCells = [];
-      for ( var row = 1; row <= this.numRows; row++ ) {
-        for ( var column = 1; column <= this.numColumns; column++ ) {
+      for ( var row = 0; row < this.numRows; row++ ) {
+        for ( var column = 0; column < this.numColumns; column++ ) {
           var cell = this.cells[ column ][ row ];
           if ( cell.occupiedBy !== null ) {
             ungroupedOccupiedCells.push( this.cells[ column ][ row ] );
@@ -745,7 +759,7 @@ define( function( require ) {
       var contiguousCellGroups = [];
       while ( ungroupedOccupiedCells.length > 0 ) {
         var cellGroup = [];
-        this.identifyAdjacentCells( ungroupedOccupiedCells[ 0 ], cellGroup );
+        this.identifyAdjacentOccupiedCells( ungroupedOccupiedCells[ 0 ], cellGroup );
         contiguousCellGroups.push( cellGroup );
         ungroupedOccupiedCells = _.difference( ungroupedOccupiedCells, cellGroup );
       }
