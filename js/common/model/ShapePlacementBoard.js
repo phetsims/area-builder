@@ -153,6 +153,10 @@ define( function( require ) {
           }
         }
       }
+      if ( placementLocation === null ) {
+        // No valid location found - bail out.
+        return false;
+      }
       movableShape.setDestination( placementLocation, true );
 
       // The remaining code in this function assumes that the shape is animating to the new location, and will cause
