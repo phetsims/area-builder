@@ -1118,17 +1118,12 @@ define( function( require ) {
     // @private
     isChallengeUnique: function( challenge ) {
       var challengeIsUnique = true;
-      //TODO: Get this working.
-//      console.log( '------------------------------');
-//      console.log( 'challenge.buildSpec.area = ' + challenge.buildSpec.area );
-//      for ( var i = 0; i < challengeHistory.length; i++ ){
-//        console.log( 'challengeHistory[ ' + i + ' ].buildSpec.area = ' + challengeHistory[i].buildSpec.area );
-//        if ( _.isEqual( challenge, challengeHistory[ i ] ) ){
-//          challengeIsUnique = false;
-//          break;
-//        }
-//      }
-//      console.log( 'challengeIsUnique = ' + challengeIsUnique );
+      for ( var i = 0; i < challengeHistory.length; i++ ) {
+        if ( challenge.basicallyEquals( challengeHistory[ i ] ) ) {
+          challengeIsUnique = false;
+          break;
+        }
+      }
       return challengeIsUnique;
     },
 
