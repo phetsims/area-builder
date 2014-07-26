@@ -220,6 +220,59 @@ define( function( require ) {
     );
   }
 
+  function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing ) {
+    assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
+
+    var exteriorPerimeter = [
+      new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2()
+    ];
+
+    switch( missingCorner ) {
+
+      case 'leftTop':
+        exteriorPerimeter[ 0 ].setXY( x + widthMissing, y );
+        exteriorPerimeter[ 1 ].setXY( x + width, y );
+        exteriorPerimeter[ 2 ].setXY( x + width, y + height );
+        exteriorPerimeter[ 3 ].setXY( x, y + height );
+        exteriorPerimeter[ 4 ].setXY( x, y + heightMissing );
+        exteriorPerimeter[ 5 ].setXY( x + widthMissing, y + heightMissing );
+        break;
+
+      case 'rightTop':
+        exteriorPerimeter[ 0 ].setXY( x, y );
+        exteriorPerimeter[ 1 ].setXY( x + width - widthMissing, y );
+        exteriorPerimeter[ 2 ].setXY( x + width - widthMissing, y + heightMissing );
+        exteriorPerimeter[ 3 ].setXY( x + width, y + heightMissing );
+        exteriorPerimeter[ 4 ].setXY( x + width, y + height );
+        exteriorPerimeter[ 5 ].setXY( x, y + height );
+        break;
+
+      case 'leftBottom':
+        exteriorPerimeter[ 0 ].setXY( x, y );
+        exteriorPerimeter[ 1 ].setXY( x + width, y );
+        exteriorPerimeter[ 2 ].setXY( x + width, y + heightMissing );
+        exteriorPerimeter[ 3 ].setXY( x + widthMissing, y + heightMissing );
+        exteriorPerimeter[ 4 ].setXY( x + widthMissing, y + height );
+        exteriorPerimeter[ 5 ].setXY( x, y + height );
+        break;
+
+      case 'rightBottom':
+        exteriorPerimeter[ 0 ].setXY( x, y );
+        exteriorPerimeter[ 1 ].setXY( x + width, y );
+        exteriorPerimeter[ 2 ].setXY( x + width, y + height );
+        exteriorPerimeter[ 3 ].setXY( x + widthMissing, y + height );
+        exteriorPerimeter[ 4 ].setXY( x + widthMissing, y + heightMissing );
+        exteriorPerimeter[ 5 ].setXY( x, y + heightMissing );
+        break;
+
+      default:
+        assert && assert( false, 'Unrecognized value for specifying L-shape' );
+        break;
+    }
+
+    return new PerimeterShape( [ exteriorPerimeter ], [], UNIT_SQUARE_LENGTH );
+  }
+
   // @private
   function isChallengeUnique( challenge ) {
     var challengeIsUnique = true;
@@ -448,12 +501,53 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, findAreaShapeKit );
   }
 
+  function generateLShapedFindAreaChallenge( model, difficulty ) {
+    var findAreaShapeKit = [
+      new ShapeCreatorNode(
+        SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model
+      ),
+      new ShapeCreatorNode(
+        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        VERTICAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        QUAD_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      )
+    ];
+
+    do {
+      var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      var height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+    } while ( width * height < 16 || width * height > 36 );
+    var missingWidth = _.random( 1, width - 1 );
+    var missingHeight = _.random( 1, height - 1 );
+    var missingCorner = randomElement( ['leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
+    var perimeterShape = createLShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      missingCorner, missingWidth * UNIT_SQUARE_LENGTH, missingHeight * UNIT_SQUARE_LENGTH );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, findAreaShapeKit );
+  }
+
+
   function generateFindTheAreaChallenge( model, difficulty ) {
 
     var challengeIsUnique = false;
     var challenge;
     while ( !challengeIsUnique ) {
-      challenge = generateRectangularFindAreaChallenge( model, difficulty );
+      challenge = generateLShapedFindAreaChallenge( model, difficulty );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
