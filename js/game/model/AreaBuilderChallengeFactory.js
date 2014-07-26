@@ -200,316 +200,324 @@ define( function( require ) {
     return solutionSpec;
   }
 
+  function createRectangularPerimeterShape( x, y, width, height ) {
+    return new PerimeterShape(
+      // Exterior perimeters
+      [
+        [
+          new Vector2( x, y ),
+          new Vector2( x + width, y ),
+          new Vector2( x + width, y + height ),
+          new Vector2( x, y + height )
+        ]
+      ],
+
+      // Interior perimeters
+      [],
+
+      // Unit size
+      UNIT_SQUARE_LENGTH
+    );
+  }
+
+  // @private
+  function isChallengeUnique( challenge ) {
+    var challengeIsUnique = true;
+    for ( var i = 0; i < challengeHistory.length; i++ ) {
+      if ( challenge.basicallyEquals( challengeHistory[ i ] ) ) {
+        challengeIsUnique = false;
+        break;
+      }
+    }
+    return challengeIsUnique;
+  }
+
+  function generateBuildAreaChallenge( model, difficulty ) {
+
+    // Create the shape kit used for these challenges.
+    var buildItShapeKit = [
+      new ShapeCreatorNode(
+        SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model
+      ),
+      new ShapeCreatorNode(
+        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        VERTICAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        QUAD_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      )
+    ];
+
+    // Create a unique challenge
+    var challengeIsUnique = false;
+    var challenge;
+    while ( !challengeIsUnique ) {
+      // TODO: Only generates rectangular challenges at this point.
+      // TODO: Also, difficulty is ignored.
+      var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      var height = 0;
+      while ( width * height < 8 || width * height > 36 ) {
+        height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      }
+      var exampleSolution = createRectangularSolutionSpec(
+        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
+        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
+        width,
+        height,
+        AreaBuilderSharedConstants.GREENISH_COLOR
+      );
+      challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, buildItShapeKit, exampleSolution );
+      challengeIsUnique = isChallengeUnique( challenge );
+    }
+    return challenge;
+  }
+
+  /**
+   * Generate a 'build it' area+perimeter challenge that consists of two connected rectangles.  See the design spec
+   * for details.
+   *
+   * @private
+   * @param model
+   */
+  function generateTwoRectangleBuildAreaAndPerimeterChallenge( model ) {
+    var buildItShapeKit = [
+      new ShapeCreatorNode(
+        SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model
+      ),
+      new ShapeCreatorNode(
+        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        VERTICAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        QUAD_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      )
+    ];
+
+    // Create first rectangle dimensions
+    var width1 = _.random( 2, 6 );
+    var height1;
+    do {
+      height1 = _.random( 1, 4 );
+    } while ( width1 % 2 === height1 % 2 );
+
+    // Create second rectangle dimensions
+    do {
+      var width2 = _.random( 1, 6 );
+    } while ( width1 + width2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+    var height2;
+    do {
+      height2 = _.random( 1, 6 );
+    } while ( width2 % 2 === height2 % 2 || height1 + height2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+
+    // Choose the amount of overlap
+    var overlap = _.random( 1, Math.min( width1, width2 ) - 1 );
+
+    var left = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - ( width1 + width2 - overlap ) ) / 2 );
+    var top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
+
+    // Create a solution spec by merging specs for each of the rectangles together.
+    var solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR );
+    solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR ).concat(
+      createRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
+
+    return( AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width1 * height1 + width2 * height2,
+        2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, buildItShapeKit, solutionSpec ) );
+  }
+
+  function generateBuildAreaAndPerimeterChallenge( model, difficulty ) {
+    // Create the shape kit used for these challenges.
+    var buildItShapeKit = [
+      new ShapeCreatorNode(
+        SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model
+      ),
+      new ShapeCreatorNode(
+        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        VERTICAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        QUAD_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      )
+    ];
+
+    // Create a unique challenge
+    var challengeIsUnique = false;
+    var challenge;
+    while ( !challengeIsUnique ) {
+      // TODO: Only generates rectangular challenges at this point.
+      // TODO: Also, difficulty is ignored.
+
+      var width = 0;
+      var height = 0;
+
+      // Width can be any value from 3 to 8 excluding 7, see design doc.
+      while ( width === 0 || width === 7 ) {
+        width = _.random( 3, 8 );
+      }
+
+      // Choose the height based on the total area.
+      while ( width * height < 12 || width * height > 36 || height === 7 ) {
+        height = _.random( 3, 8 );
+      }
+
+      var exampleSolution = createRectangularSolutionSpec(
+        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
+        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
+        width,
+        height,
+        AreaBuilderSharedConstants.GREENISH_COLOR
+      );
+      challenge = AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width * height,
+          2 * width + 2 * height, buildItShapeKit, exampleSolution );
+      challengeIsUnique = isChallengeUnique( challenge );
+    }
+    return challenge;
+  }
+
+  function generateRectangularFindAreaChallenge( model, difficulty ) {
+    var findAreaShapeKit = [
+      new ShapeCreatorNode(
+        SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model
+      ),
+      new ShapeCreatorNode(
+        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        VERTICAL_DOUBLE_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      ),
+      new ShapeCreatorNode(
+        QUAD_SQUARE_SHAPE,
+        AreaBuilderSharedConstants.GREENISH_COLOR,
+        model,
+        { gridSpacing: UNIT_SQUARE_LENGTH }
+      )
+    ];
+
+    do {
+      var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      var height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+    } while ( width * height < 16 || width * height > 36 );
+    var perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, findAreaShapeKit );
+  }
+
+  function generateFindTheAreaChallenge( model, difficulty ) {
+
+    var challengeIsUnique = false;
+    var challenge;
+    while ( !challengeIsUnique ) {
+      challenge = generateRectangularFindAreaChallenge( model, difficulty );
+      challengeIsUnique = isChallengeUnique( challenge );
+    }
+    return challenge;
+  }
+
+  function mapIndexToDifficulty( index, numChallenges ) {
+    var mappingValue = index % ( numChallenges / 3 );
+    return mappingValue === 0 ? 'easy' : mappingValue === 1 ? 'moderate' : 'hard';
+  }
+
+  function generateChallenge( level, difficulty, model ) {
+    var challenge;
+    if ( level === 0 ) {
+      challenge = generateBuildAreaChallenge( model, difficulty );
+    }
+    else if ( level === 1 ) {
+      challenge = generateBuildAreaAndPerimeterChallenge( model, difficulty );
+    }
+    else if ( level === 2 ) {
+      challenge = generateFindTheAreaChallenge( model, difficulty );
+    }
+    else if ( level === 3 ) {
+      challenge = generateTwoRectangleBuildAreaAndPerimeterChallenge( model, difficulty );
+    }
+    else {
+      // Create a fake challenge for the other levels.
+      challenge = new AreaBuilderGameChallenge(
+        'Fake Challenge',
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true
+      );
+    }
+    challengeHistory.push( challenge );
+    return challenge;
+  }
+
   // Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
 
-  // No constructor - this is a static type with a set of functions.
+  // No constructor - this is a static type.
   return  {
 
-    // @private
-    isChallengeUnique: function( challenge ) {
-      var challengeIsUnique = true;
-      for ( var i = 0; i < challengeHistory.length; i++ ) {
-        if ( challenge.basicallyEquals( challengeHistory[ i ] ) ) {
-          challengeIsUnique = false;
-          break;
-        }
-      }
-      return challengeIsUnique;
-    },
-
-    // @private
-    generateBuildAreaChallenge: function( model, difficulty ) {
-
-      // Create the shape kit used for these challenges.
-      var buildItShapeKit = [
-        new ShapeCreatorNode(
-          SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model
-        ),
-        new ShapeCreatorNode(
-          HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        ),
-        new ShapeCreatorNode(
-          VERTICAL_DOUBLE_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        ),
-        new ShapeCreatorNode(
-          QUAD_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        )
-      ];
-
-      // Create a unique challenge
-      var challengeIsUnique = false;
-      var challenge;
-      while ( !challengeIsUnique ) {
-        // TODO: Only generates rectangular challenges at this point.
-        // TODO: Also, difficulty is ignored.
-        var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-        var height = 0;
-        while ( width * height < 8 || width * height > 36 ) {
-          height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
-        }
-        var exampleSolution = createRectangularSolutionSpec(
-          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
-          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
-          width,
-          height,
-          AreaBuilderSharedConstants.GREENISH_COLOR
-        );
-        challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, buildItShapeKit, exampleSolution );
-        challengeIsUnique = this.isChallengeUnique( challenge );
-      }
-      return challenge;
-    },
-
     /**
-     * Generate a 'build it' area+perimeter challenge that consists of two connected rectangles.  See the design spec
-     * for details.
+     * Generate a set of challenges for the given game level.
      *
-     * @private
+     * @public
+     * @param level
+     * @param numChallenges
      * @param model
+     * @returns {Array}
      */
-    generateTwoRectangleBuildAreaAndPerimeterChallenge: function( model ) {
-      var buildItShapeKit = [
-        new ShapeCreatorNode(
-          SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model
-        ),
-        new ShapeCreatorNode(
-          HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        ),
-        new ShapeCreatorNode(
-          VERTICAL_DOUBLE_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        ),
-        new ShapeCreatorNode(
-          QUAD_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        )
-      ];
-
-      // Create first rectangle dimensions
-      var width1 = _.random( 2, 6 );
-      var height1;
-      do {
-        height1 = _.random( 1, 4 );
-      } while ( width1 % 2 === height1 % 2 );
-
-      // Create second rectangle dimensions
-      do {
-        var width2 = _.random( 1, 6 );
-      } while ( width1 + width2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height2;
-      do {
-        height2 = _.random( 1, 6 );
-      } while ( width2 % 2 === height2 % 2 || height1 + height2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
-
-      // Choose the amount of overlap
-      var overlap = _.random( 1, Math.min( width1, width2 ) - 1 );
-
-      var left = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - ( width1 + width2 - overlap ) ) / 2 );
-      var top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
-
-      // Create a solution spec by merging specs for each of the rectangles together.
-      var solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR );
-      solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR ).concat(
-        createRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
-
-      return( AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width1 * height1 + width2 * height2,
-          2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, buildItShapeKit, solutionSpec ) );
-    },
-
-    generateBuildAreaAndPerimeterChallenge: function( model, difficulty ) {
-      // Create the shape kit used for these challenges.
-      var buildItShapeKit = [
-        new ShapeCreatorNode(
-          SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model
-        ),
-        new ShapeCreatorNode(
-          HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        ),
-        new ShapeCreatorNode(
-          VERTICAL_DOUBLE_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        ),
-        new ShapeCreatorNode(
-          QUAD_SQUARE_SHAPE,
-          AreaBuilderSharedConstants.GREENISH_COLOR,
-          model,
-          { gridSpacing: UNIT_SQUARE_LENGTH }
-        )
-      ];
-
-      // Create a unique challenge
-      var challengeIsUnique = false;
-      var challenge;
-      while ( !challengeIsUnique ) {
-        // TODO: Only generates rectangular challenges at this point.
-        // TODO: Also, difficulty is ignored.
-
-        var width = 0;
-        var height = 0;
-
-        // Width can be any value from 3 to 8 excluding 7, see design doc.
-        while ( width === 0 || width === 7 ) {
-          width = _.random( 3, 8 );
-        }
-
-        // Choose the height based on the total area.
-        while ( width * height < 12 || width * height > 36 || height === 7 ) {
-          height = _.random( 3, 8 );
-        }
-
-        var exampleSolution = createRectangularSolutionSpec(
-          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
-          Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
-          width,
-          height,
-          AreaBuilderSharedConstants.GREENISH_COLOR
-        );
-        challenge = AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width * height,
-            2 * width + 2 * height, buildItShapeKit, exampleSolution );
-        challengeIsUnique = this.isChallengeUnique( challenge );
-      }
-      return challenge;
-    },
-
-    generateFindTheAreaChallenge: function( model, difficulty ) {
-      var challengeIsUnique = false;
-      var challenge;
-      while ( !challengeIsUnique ) {
-        challenge = new AreaBuilderGameChallenge(
-          // Tool control
-          {
-            gridControl: true,
-            dimensionsControl: true,
-            decompositionToolControl: true
-          },
-
-          // Keypad visibility flag
-          true,
-
-          // Kit contents
-          [
-            new ShapeCreatorNode(
-              SQUARE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model
-            ),
-            new ShapeCreatorNode(
-              HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model,
-              { gridSpacing: UNIT_SQUARE_LENGTH }
-            ),
-            new ShapeCreatorNode(
-              VERTICAL_DOUBLE_SQUARE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model,
-              { gridSpacing: UNIT_SQUARE_LENGTH }
-            ),
-            new ShapeCreatorNode(
-              RIGHT_BOTTOM_TRIANGLE_SHAPE,
-              AreaBuilderSharedConstants.GREENISH_COLOR,
-              model
-            )
-          ],
-
-          // Build spec, i.e. what the user should try to build, if anything.
-          null,
-
-          // Color prompts
-          null,
-          null,
-
-          // Background shape
-          randomElement( SHAPES_FOR_AREA_FINDING_PROBLEMS ),
-
-          // Check specification, i.e. what gets checked with the user submits their attempt.
-          'areaEntered',
-
-          // Example solution for 'build it' style challenges
-          null,
-
-          // Flag for whether or not this is a fake challenge TODO remove once game is working
-          false
-        );
-        challengeIsUnique = this.isChallengeUnique( challenge );
-      }
-      return challenge;
-    },
-
-    // @private
-    generateChallenge: function( level, difficulty, model ) {
-      var challenge;
-      if ( level === 0 ) {
-        challenge = this.generateBuildAreaChallenge( model, difficulty );
-      }
-      else if ( level === 1 ) {
-        challenge = this.generateBuildAreaAndPerimeterChallenge( model, difficulty );
-      }
-      else if ( level === 2 ) {
-        challenge = this.generateFindTheAreaChallenge( model, difficulty );
-      }
-      else if ( level === 3 ) {
-        challenge = this.generateTwoRectangleBuildAreaAndPerimeterChallenge( model, difficulty );
-      }
-      else {
-        // Create a fake challenge for the other levels.
-        challenge = new AreaBuilderGameChallenge(
-          'Fake Challenge',
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          true
-        );
-      }
-      challengeHistory.push( challenge );
-      return challenge;
-    },
-
-    mapIndexToDifficulty: function( index, numChallenges ) {
-      var mappingValue = index % ( numChallenges / 3 );
-      return mappingValue === 0 ? 'easy' : mappingValue === 1 ? 'moderate' : 'hard';
-    },
-
-    // @public
     generateChallengeSet: function( level, numChallenges, model ) {
       challengeHistory = []; // TODO: This is temporary until more challenges are created, then it should be cleared 1/2 at a time when having trouble creating unique challenges.
       var self = this;
       var challengeSet = [];
       _.times( numChallenges, function( index ) {
-        challengeSet.push( self.generateChallenge( level, self.mapIndexToDifficulty( index, numChallenges ), model ) );
+        challengeSet.push( generateChallenge( level, mapIndexToDifficulty( index, numChallenges ), model ) );
       } );
       return challengeSet;
     }

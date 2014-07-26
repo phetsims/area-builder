@@ -134,6 +134,44 @@ define( function( require ) {
     );
   };
 
+  AreaBuilderGameChallenge.createFindAreaChallenge = function( areaShape, carouselContents ) {
+    return new AreaBuilderGameChallenge(
+      // toolSpec
+      {
+        gridControl: true,
+        dimensionsControl: true,
+        decompositionToolControl: true
+      },
+
+      // showNumberEntryPad
+      true,
+
+      // carouselContents
+      carouselContents,
+
+      // buildSpec
+      null,
+
+      // colorPrompt1
+      null,
+
+      // colorPrompt2
+      null,
+
+      // backgroundShape
+      areaShape,
+
+      // checkSpec
+      'areaEntered',
+
+      // exampleBuildItSolution
+      null,
+
+      // fakeChallenge
+      false
+    );
+  };
+
   return inherit( Object, AreaBuilderGameChallenge, {
     /**
      * Compares two challenges and returns true if the are basically equal, meaning that the parts that are significant
