@@ -12,6 +12,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -22,7 +23,13 @@ define( function( require ) {
   var SHADOW_COLOR = 'rgba( 50, 50, 50, 0.5 )';
   var SHADOW_OFFSET = new Vector2( 5, 5 );
   var OPACITY_OF_TRANSLUCENT_SHAPES = 0.65; // Value is empirically determined.
+  var UNIT_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
+  var BORDER_LINE_WIDTH = 1;
 
+  /**
+   * @param movableShape
+   * @constructor
+   */
   function ShapeView( movableShape ) {
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
@@ -32,14 +39,26 @@ define( function( require ) {
     var shadow = new Path( movableShape.shape, {
       fill: SHADOW_COLOR
     } );
+    this.addChild( shadow );
+
+    // Create the primary representation
     var representation = new Path( movableShape.shape, {
       fill: movableShape.color,
       stroke: Color.toColor( movableShape.color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       lineWidth: 1,
       lineJoin: 'round'
     } );
-    this.addChild( shadow );
     this.addChild( representation );
+
+    // Add the grid
+    representation.addChild( new Grid(
+        representation.bounds.minX + BORDER_LINE_WIDTH / 2,
+        representation.bounds.minY + BORDER_LINE_WIDTH / 2,
+        representation.bounds.width - BORDER_LINE_WIDTH,
+        representation.bounds.height - BORDER_LINE_WIDTH,
+      UNIT_LENGTH,
+      { lineDash: [ 2, 4 ], stroke: 'black' }
+    ) );
 
     // Move the shape as the model representation moves
     movableShape.positionProperty.link( function( position ) {
