@@ -397,8 +397,6 @@ define( function( require ) {
 
     return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
   }
-  
-  
 
 
   // @private
@@ -540,19 +538,19 @@ define( function( require ) {
 
   function generateUShapedFindAreaChallenge( difficulty ) {
     do {
-      var width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-      var height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      var width = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      var height = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     } while ( width * height < 16 || width * height > 36 );
     var sideWithCutout = randomElement( ['left', 'right', 'top', 'bottom' ] );
     var cutoutWidth, cutoutHeight, cutoutOffset;
     if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
-      cutoutWidth = _.random( 1, width - 1 );
+      cutoutWidth = _.random( 2, width - 1 );
       cutoutHeight = _.random( 1, height - 2 );
       cutoutOffset = _.random( 1, height - cutoutHeight - 1 );
     }
     else {
       cutoutWidth = _.random( 1, width - 2 );
-      cutoutHeight = _.random( 1, height - 1 );
+      cutoutHeight = _.random( 2, height - 1 );
       cutoutOffset = _.random( 1, width - cutoutWidth - 1 );
     }
     var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
@@ -590,6 +588,28 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
+  function generateLargeRectWithChipMissingChallenge( difficulty ) {
+    var width = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+    var height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+    var sideWithCutout = randomElement( ['left', 'right', 'top', 'bottom' ] );
+    var cutoutWidth, cutoutHeight, cutoutOffset;
+    if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
+      cutoutWidth = 1;
+      cutoutHeight = _.random( 1, 3 );
+      cutoutOffset = _.random( 1, height - cutoutHeight - 1 );
+    }
+    else {
+      cutoutWidth = _.random( 1, 3 );
+      cutoutHeight = 1;
+      cutoutOffset = _.random( 1, width - cutoutWidth - 1 );
+    }
+    var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH, cutoutOffset * UNIT_SQUARE_LENGTH );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
+
+
   function generateFindTheAreaChallenge( difficulty ) {
 
     var challengeIsUnique = false;
@@ -598,7 +618,8 @@ define( function( require ) {
 //      challenge = generateLShapedFindAreaChallenge( difficulty );
 //      challenge = generateUShapedFindAreaChallenge( difficulty );
 //      challenge = generateOShapedFindAreaChallenge( difficulty );
-      challenge = generateIsoscelesRightTriangleFindAreaChallenge( difficulty );
+//      challenge = generateIsoscelesRightTriangleFindAreaChallenge( difficulty );
+      challenge = generateLargeRectWithChipMissingChallenge( difficulty );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
