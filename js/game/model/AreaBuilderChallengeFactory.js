@@ -361,6 +361,45 @@ define( function( require ) {
     return new PerimeterShape( [ exteriorPerimeterPoints ], [ interiorPerimeterPoints ], UNIT_SQUARE_LENGTH );
   }
 
+  function createPerimeterShapeRightIsoscelesTriangle( x, y, edgeLength, cornerPosition ) {
+    var perimeterPoints = [ new Vector2(), new Vector2(), new Vector2() ];
+
+    switch( cornerPosition ) {
+
+      case 'leftTop':
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + edgeLength, y );
+        perimeterPoints[ 2 ].setXY( x, y + edgeLength );
+        break;
+
+      case 'rightTop':
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + edgeLength, y );
+        perimeterPoints[ 2 ].setXY( x + edgeLength, y + edgeLength );
+        break;
+
+      case 'leftBottom':
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + edgeLength, y + edgeLength );
+        perimeterPoints[ 2 ].setXY( x, y + edgeLength );
+        break;
+
+      case 'rightBottom':
+        perimeterPoints[ 0 ].setXY( x + edgeLength, y );
+        perimeterPoints[ 1 ].setXY( x + edgeLength, y + edgeLength );
+        perimeterPoints[ 2 ].setXY( x, y + edgeLength );
+        break;
+
+      default:
+        assert && assert( false, 'Unrecognized value for specifying L-shape' );
+        break;
+    }
+
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+  }
+  
+  
+
 
   // @private
   function isChallengeUnique( challenge ) {
@@ -538,6 +577,19 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
+  function generateIsoscelesRightTriangleFindAreaChallenge( difficulty ) {
+    var cornerPosition = randomElement( ['leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
+    var edgeLength = 0;
+    do {
+      edgeLength = _.random( 3, Math.min( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2,
+          AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 ) );
+    } while ( edgeLength % 2 !== 0 );
+
+    var perimeterShape = createPerimeterShapeRightIsoscelesTriangle( 0, 0, edgeLength * UNIT_SQUARE_LENGTH, cornerPosition );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
+
   function generateFindTheAreaChallenge( difficulty ) {
 
     var challengeIsUnique = false;
@@ -545,7 +597,8 @@ define( function( require ) {
     while ( !challengeIsUnique ) {
 //      challenge = generateLShapedFindAreaChallenge( difficulty );
 //      challenge = generateUShapedFindAreaChallenge( difficulty );
-      challenge = generateOShapedFindAreaChallenge( difficulty );
+//      challenge = generateOShapedFindAreaChallenge( difficulty );
+      challenge = generateIsoscelesRightTriangleFindAreaChallenge( difficulty );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
