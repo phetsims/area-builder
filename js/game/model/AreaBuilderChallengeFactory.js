@@ -221,6 +221,34 @@ define( function( require ) {
     return solutionSpec;
   }
 
+  function flipPerimeterPointsHorizontally( perimeterPointList ) {
+    var reflectedPoints = [];
+    var minX = Number.POSITIVE_INFINITY;
+    var maxX = Number.NEGATIVE_INFINITY;
+    perimeterPointList.forEach( function( point ) {
+      minX = Math.min( point.x, minX );
+      maxX = Math.max( point.x, maxX );
+    } );
+    perimeterPointList.forEach( function( point ) {
+      reflectedPoints.push( new Vector2( -1 * ( point.x - minX - maxX ), point.y ) );
+    } );
+    return reflectedPoints;
+  }
+
+  function flipPerimeterPointsVertically( perimeterPointList ) {
+    var reflectedPoints = [];
+    var minY = Number.POSITIVE_INFINITY;
+    var maxY = Number.NEGATIVE_INFINITY;
+    perimeterPointList.forEach( function( point ) {
+      minY = Math.min( point.y, minY );
+      maxY = Math.max( point.y, maxY );
+    } );
+    perimeterPointList.forEach( function( point ) {
+      reflectedPoints.push( new Vector2( point.x, -1 * ( point.y - minY - maxY ) ) );
+    } );
+    return reflectedPoints;
+  }
+
   function createRectangularPerimeterShape( x, y, width, height ) {
     return new PerimeterShape(
       // Exterior perimeters
@@ -398,6 +426,28 @@ define( function( require ) {
     return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
   }
 
+  function createShapeWithDiagonalAndMissingCorner( x, y, width, height, diagonalPosition, diagonalSquareLength, cutWidth, cutHeight ) {
+    assert && assert( width - diagonalSquareLength >= cutWidth && height - diagonalSquareLength >= cutHeight, 'Invalid parameters' );
+
+    var perimeterPoints = [];
+    // Start in upper right corner of unrotated shape.
+    perimeterPoints.push( new Vector2( x + width, y ) );
+    perimeterPoints.push( new Vector2( x + width, y + height - diagonalSquareLength ) );
+    perimeterPoints.push( new Vector2( x + width - diagonalSquareLength, y + height ) );
+    perimeterPoints.push( new Vector2( x, y + height ) );
+    perimeterPoints.push( new Vector2( x, y + cutHeight ) );
+    perimeterPoints.push( new Vector2( x + cutWidth, y + cutHeight ) );
+    perimeterPoints.push( new Vector2( x + cutWidth, y ) );
+
+    if ( diagonalPosition === 'leftTop' || diagonalPosition === 'leftBottom' ) {
+      perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
+    }
+    if ( diagonalPosition === 'rightTop' || diagonalPosition === 'leftTop' ) {
+      perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
+    }
+
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+  }
 
   // @private
   function isChallengeUnique( challenge ) {
@@ -609,6 +659,23 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
+  function generateShapeWithDiagonalFindAreaChallenge( difficulty ) {
+    var width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+    var height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+    var diagonalPosition = randomElement( ['leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
+    var diagonalSquareLength = 2;
+    if ( height > 4 && width > 4 && Math.random() > 0.5 ) {
+      diagonalSquareLength = 4;
+    }
+    var cutWidth = _.random( 0, width - diagonalSquareLength );
+    var cutHeight = _.random( 0, height - diagonalSquareLength );
+
+    var perimeterShape = createShapeWithDiagonalAndMissingCorner( 0, 0, width * UNIT_SQUARE_LENGTH,
+        height * UNIT_SQUARE_LENGTH, diagonalPosition, diagonalSquareLength * UNIT_SQUARE_LENGTH,
+        cutWidth * UNIT_SQUARE_LENGTH, cutHeight * UNIT_SQUARE_LENGTH );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
 
   function generateFindTheAreaChallenge( difficulty ) {
 
@@ -619,7 +686,8 @@ define( function( require ) {
 //      challenge = generateUShapedFindAreaChallenge( difficulty );
 //      challenge = generateOShapedFindAreaChallenge( difficulty );
 //      challenge = generateIsoscelesRightTriangleFindAreaChallenge( difficulty );
-      challenge = generateLargeRectWithChipMissingChallenge( difficulty );
+//      challenge = generateLargeRectWithChipMissingChallenge( difficulty );
+      challenge = generateShapeWithDiagonalFindAreaChallenge( difficulty );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
