@@ -273,50 +273,19 @@ define( function( require ) {
     assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
 
     var perimeterPoints = [
-      new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2()
+      new Vector2( x + widthMissing, y ),
+      new Vector2( x + width, y ),
+      new Vector2( x + width, y + height ),
+      new Vector2( x, y + height ),
+      new Vector2( x, y + heightMissing ),
+      new Vector2( x + widthMissing, y + heightMissing )
     ];
 
-    switch( missingCorner ) {
-
-      case 'leftTop':
-        perimeterPoints[ 0 ].setXY( x + widthMissing, y );
-        perimeterPoints[ 1 ].setXY( x + width, y );
-        perimeterPoints[ 2 ].setXY( x + width, y + height );
-        perimeterPoints[ 3 ].setXY( x, y + height );
-        perimeterPoints[ 4 ].setXY( x, y + heightMissing );
-        perimeterPoints[ 5 ].setXY( x + widthMissing, y + heightMissing );
-        break;
-
-      case 'rightTop':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + width - widthMissing, y );
-        perimeterPoints[ 2 ].setXY( x + width - widthMissing, y + heightMissing );
-        perimeterPoints[ 3 ].setXY( x + width, y + heightMissing );
-        perimeterPoints[ 4 ].setXY( x + width, y + height );
-        perimeterPoints[ 5 ].setXY( x, y + height );
-        break;
-
-      case 'leftBottom':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + width, y );
-        perimeterPoints[ 2 ].setXY( x + width, y + heightMissing );
-        perimeterPoints[ 3 ].setXY( x + widthMissing, y + heightMissing );
-        perimeterPoints[ 4 ].setXY( x + widthMissing, y + height );
-        perimeterPoints[ 5 ].setXY( x, y + height );
-        break;
-
-      case 'rightBottom':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + width, y );
-        perimeterPoints[ 2 ].setXY( x + width, y + height );
-        perimeterPoints[ 3 ].setXY( x + widthMissing, y + height );
-        perimeterPoints[ 4 ].setXY( x + widthMissing, y + heightMissing );
-        perimeterPoints[ 5 ].setXY( x, y + heightMissing );
-        break;
-
-      default:
-        assert && assert( false, 'Unrecognized value for specifying L-shape' );
-        break;
+    if ( missingCorner === 'rightTop' || missingCorner === 'rightBottom' ) {
+      perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
+    }
+    if ( missingCorner === 'leftBottom' || missingCorner === 'rightBottom' ) {
+      perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
     }
 
     return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
@@ -326,48 +295,33 @@ define( function( require ) {
   function createUShapedPerimeterShape( x, y, width, height, sideWithCutout, cutoutWidth, cutoutHeight, cutoutOffset ) {
     var perimeterPoints = [ new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2() ];
 
-    switch( sideWithCutout ) {
-      case 'left':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + width, y );
-        perimeterPoints[ 2 ].setXY( x + width, y + height );
-        perimeterPoints[ 3 ].setXY( x, y + height );
-        perimeterPoints[ 4 ].setXY( x, y + cutoutOffset + cutoutHeight );
-        perimeterPoints[ 5 ].setXY( x + cutoutWidth, y + cutoutOffset + cutoutHeight );
-        perimeterPoints[ 6 ].setXY( x + cutoutWidth, y + cutoutOffset );
-        perimeterPoints[ 7 ].setXY( x, y + cutoutOffset );
-        break;
-      case 'right':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + width, y );
-        perimeterPoints[ 2 ].setXY( x + width, y + cutoutOffset );
-        perimeterPoints[ 3 ].setXY( x + width - cutoutWidth, y + cutoutOffset );
-        perimeterPoints[ 4 ].setXY( x + width - cutoutWidth, y + cutoutOffset + cutoutHeight );
-        perimeterPoints[ 5 ].setXY( x + width, y + cutoutOffset + cutoutHeight );
-        perimeterPoints[ 6 ].setXY( x + width, y + height );
-        perimeterPoints[ 7 ].setXY( x, y + height );
-        break;
-      case 'top':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + cutoutOffset, y );
-        perimeterPoints[ 2 ].setXY( x + cutoutOffset, y + cutoutHeight );
-        perimeterPoints[ 3 ].setXY( x + cutoutOffset + cutoutWidth, y + cutoutHeight );
-        perimeterPoints[ 4 ].setXY( x + cutoutOffset + cutoutWidth, y );
-        perimeterPoints[ 5 ].setXY( x + width, y );
-        perimeterPoints[ 6 ].setXY( x + width, y + height );
-        perimeterPoints[ 7 ].setXY( x, y + height );
-        break;
-      case 'bottom':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + width, y );
-        perimeterPoints[ 2 ].setXY( x + width, y + height );
-        perimeterPoints[ 3 ].setXY( x + cutoutOffset + cutoutWidth, y + height );
-        perimeterPoints[ 4 ].setXY( x + cutoutOffset + cutoutWidth, y + height - cutoutHeight );
-        perimeterPoints[ 5 ].setXY( x + cutoutOffset, y + height - cutoutHeight );
-        perimeterPoints[ 6 ].setXY( x + cutoutOffset, y + height );
-        perimeterPoints[ 7 ].setXY( x, y + height );
-        break;
+    if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
+      perimeterPoints[ 0 ].setXY( x, y );
+      perimeterPoints[ 1 ].setXY( x + width, y );
+      perimeterPoints[ 2 ].setXY( x + width, y + height );
+      perimeterPoints[ 3 ].setXY( x, y + height );
+      perimeterPoints[ 4 ].setXY( x, y + cutoutOffset + cutoutHeight );
+      perimeterPoints[ 5 ].setXY( x + cutoutWidth, y + cutoutOffset + cutoutHeight );
+      perimeterPoints[ 6 ].setXY( x + cutoutWidth, y + cutoutOffset );
+      perimeterPoints[ 7 ].setXY( x, y + cutoutOffset );
+      if ( sideWithCutout === 'right' ) {
+        perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
+      }
     }
+    else {
+      perimeterPoints[ 0 ].setXY( x, y );
+      perimeterPoints[ 1 ].setXY( x + cutoutOffset, y );
+      perimeterPoints[ 2 ].setXY( x + cutoutOffset, y + cutoutHeight );
+      perimeterPoints[ 3 ].setXY( x + cutoutOffset + cutoutWidth, y + cutoutHeight );
+      perimeterPoints[ 4 ].setXY( x + cutoutOffset + cutoutWidth, y );
+      perimeterPoints[ 5 ].setXY( x + width, y );
+      perimeterPoints[ 6 ].setXY( x + width, y + height );
+      perimeterPoints[ 7 ].setXY( x, y + height );
+      if ( sideWithCutout === 'bottom' ) {
+        perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
+      }
+    }
+
     return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
   }
 
@@ -390,37 +344,12 @@ define( function( require ) {
   }
 
   function createPerimeterShapeRightIsoscelesTriangle( x, y, edgeLength, cornerPosition ) {
-    var perimeterPoints = [ new Vector2(), new Vector2(), new Vector2() ];
-
-    switch( cornerPosition ) {
-
-      case 'leftTop':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + edgeLength, y );
-        perimeterPoints[ 2 ].setXY( x, y + edgeLength );
-        break;
-
-      case 'rightTop':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + edgeLength, y );
-        perimeterPoints[ 2 ].setXY( x + edgeLength, y + edgeLength );
-        break;
-
-      case 'leftBottom':
-        perimeterPoints[ 0 ].setXY( x, y );
-        perimeterPoints[ 1 ].setXY( x + edgeLength, y + edgeLength );
-        perimeterPoints[ 2 ].setXY( x, y + edgeLength );
-        break;
-
-      case 'rightBottom':
-        perimeterPoints[ 0 ].setXY( x + edgeLength, y );
-        perimeterPoints[ 1 ].setXY( x + edgeLength, y + edgeLength );
-        perimeterPoints[ 2 ].setXY( x, y + edgeLength );
-        break;
-
-      default:
-        assert && assert( false, 'Unrecognized value for specifying L-shape' );
-        break;
+    var perimeterPoints = [ new Vector2( x, y ), new Vector2( x + edgeLength, y ), new Vector2( x, y + edgeLength ) ];
+    if ( cornerPosition === 'rightTop' || cornerPosition === 'rightBottom' ) {
+      perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
+    }
+    if ( cornerPosition === 'leftBottom' || cornerPosition === 'rightBottom' ) {
+      perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
     }
 
     return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
@@ -682,12 +611,12 @@ define( function( require ) {
     var challengeIsUnique = false;
     var challenge;
     while ( !challengeIsUnique ) {
-//      challenge = generateLShapedFindAreaChallenge( difficulty );
+      challenge = generateLShapedFindAreaChallenge( difficulty );
 //      challenge = generateUShapedFindAreaChallenge( difficulty );
 //      challenge = generateOShapedFindAreaChallenge( difficulty );
 //      challenge = generateIsoscelesRightTriangleFindAreaChallenge( difficulty );
 //      challenge = generateLargeRectWithChipMissingChallenge( difficulty );
-      challenge = generateShapeWithDiagonalFindAreaChallenge( difficulty );
+//      challenge = generateShapeWithDiagonalFindAreaChallenge( difficulty );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
