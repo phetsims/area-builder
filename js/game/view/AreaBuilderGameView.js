@@ -452,6 +452,7 @@ define( function( require ) {
         this.challengePromptBanner.reset();
         if ( this.shapeCarousel !== null ) {
           this.challengeLayer.removeChild( this.shapeCarousel );
+          this.shapeCarousel = null;
         }
 
         // Set up the titles and prompts

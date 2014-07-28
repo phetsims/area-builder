@@ -390,7 +390,7 @@ define( function( require ) {
     return challengeIsUnique;
   }
 
-  function generateBuildAreaChallenge( difficulty ) {
+  function generateBuildAreaChallenge() {
 
     // Create a unique challenge
     var challengeIsUnique = false;
@@ -455,7 +455,7 @@ define( function( require ) {
         2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, BASIC_SHAPE_KIT, solutionSpec ) );
   }
 
-  function generateBuildAreaAndPerimeterChallenge( difficulty ) {
+  function generateBuildAreaAndPerimeterChallenge() {
 
     // Create a unique challenge
     var challengeIsUnique = false;
@@ -491,7 +491,7 @@ define( function( require ) {
     return challenge;
   }
 
-  function generateRectangularFindAreaChallenge( difficulty ) {
+  function generateRectangularFindAreaChallenge() {
     do {
       var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       var height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
@@ -622,48 +622,10 @@ define( function( require ) {
     return challenge;
   }
 
-  function mapIndexToDifficulty( index, numChallenges ) {
-    var mappingValue = index % ( numChallenges / 3 );
-    return mappingValue === 0 ? 'easy' : mappingValue === 1 ? 'moderate' : 'hard';
-  }
-
-  function generateChallenge( level, difficulty ) {
-    var challenge;
-    if ( level === 0 ) {
-      challenge = generateBuildAreaChallenge( difficulty );
-    }
-    else if ( level === 1 ) {
-      challenge = generateBuildAreaAndPerimeterChallenge( difficulty );
-    }
-    else if ( level === 2 ) {
-      challenge = generateFindTheAreaChallenge( difficulty );
-    }
-    else if ( level === 3 ) {
-      challenge = generateTwoRectangleBuildAreaAndPerimeterChallenge( difficulty );
-    }
-    else {
-      // Create a fake challenge for the other levels.
-      challenge = new AreaBuilderGameChallenge(
-        'Fake Challenge',
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        true
-      );
-    }
-    challengeHistory.push( challenge );
-    return challenge;
-  }
-
-// Challenge history, used to make sure unique challenges are generated.
+  // Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
 
-// No constructor - this is a static type.
+  // No constructor - this is a static type.
   return  {
 
     /**
@@ -671,17 +633,51 @@ define( function( require ) {
      *
      * @public
      * @param level
-     * @param numChallenges
-     * @param model
      * @returns {Array}
      */
     generateChallengeSet: function( level, numChallenges ) {
-      challengeHistory = []; // TODO: This is temporary until more challenges are created, then it should be cleared 1/2 at a time when having trouble creating unique challenges.
-      var self = this;
+      challengeHistory = []; // TODO: This reset of the history array is temporary until more challenges are created, then it should be cleared 1/2 at a time when having trouble creating unique challenges.
       var challengeSet = [];
-      _.times( numChallenges, function( index ) {
-        challengeSet.push( generateChallenge( level, mapIndexToDifficulty( index, numChallenges ) ) );
-      } );
+      switch( level ) {
+        case 0:
+          _.times( 3, function() { challengeSet.push( generateBuildAreaChallenge() ) } );
+          _.times( 2, function() { challengeSet.push( generateRectangularFindAreaChallenge() ) } );
+          challengeSet.push( generateLShapedFindAreaChallenge() );
+          challengeSet = _.shuffle( challengeSet );
+          break;
+
+        case 1:
+          _.times( 3, function() { challengeSet.push( generateBuildAreaAndPerimeterChallenge() ) } );
+          _.times( 3, function() { challengeSet.push( generateTwoRectangleBuildAreaAndPerimeterChallenge() ) } );
+          break;
+
+        case 2:
+          challengeSet.push( generateUShapedFindAreaChallenge() );
+          challengeSet.push( generateOShapedFindAreaChallenge() );
+          challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
+          challengeSet = _.shuffle( challengeSet );
+          _.times( 2, function() { challengeSet.push( generateIsoscelesRightTriangleFindAreaChallenge() ) } );
+          challengeSet.push( generateLargeRectWithChipMissingChallenge() );
+          break;
+
+        case 3:
+          challengeSet.push( generateUShapedFindAreaChallenge() );
+          challengeSet.push( generateOShapedFindAreaChallenge() );
+          challengeSet.push( generateOShapedFindAreaChallenge() );
+          challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
+          challengeSet = _.shuffle( challengeSet );
+          // For the next challenge, choose randomly from the shapes that don't have diagonals.
+          var genFunction = randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] );
+          challengeSet.push( genFunction() );
+          challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
+          break;
+
+        case 4:
+          _.times( numChallenges, function() { challengeSet.push( AreaBuilderGameChallenge.createFakeChallenge() ) } );
+          break;
+
+      }
+      assert && assert( challengeSet.length === numChallenges, 'Error: Didn\'t generate correct number of challenges.' );
       return challengeSet;
     }
   };

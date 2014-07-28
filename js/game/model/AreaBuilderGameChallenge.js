@@ -173,6 +173,44 @@ define( function( require ) {
     );
   };
 
+  AreaBuilderGameChallenge.createFakeChallenge = function() {
+    return new AreaBuilderGameChallenge(
+      // toolSpec
+      {
+        gridControl: true,
+        dimensionsControl: true,
+        decompositionToolControl: true
+      },
+
+      // showNumberEntryPad
+      false,
+
+      // userShapes
+      null,
+
+      // buildSpec
+      null,
+
+      // colorPrompt1
+      null,
+
+      // colorPrompt2
+      null,
+
+      // backgroundShape
+      null,
+
+      // checkSpec
+      'areaEntered',
+
+      // exampleBuildItSolution
+      null,
+
+      // fakeChallenge
+      true
+    );
+  };
+
   return inherit( Object, AreaBuilderGameChallenge, {
     /**
      * Compares two challenges and returns true if the are basically equal, meaning that the parts that are significant
