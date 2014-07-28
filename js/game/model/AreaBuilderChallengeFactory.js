@@ -244,46 +244,46 @@ define( function( require ) {
   function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing ) {
     assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
 
-    var exteriorPerimeter = [
+    var perimeterPoints = [
       new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2()
     ];
 
     switch( missingCorner ) {
 
       case 'leftTop':
-        exteriorPerimeter[ 0 ].setXY( x + widthMissing, y );
-        exteriorPerimeter[ 1 ].setXY( x + width, y );
-        exteriorPerimeter[ 2 ].setXY( x + width, y + height );
-        exteriorPerimeter[ 3 ].setXY( x, y + height );
-        exteriorPerimeter[ 4 ].setXY( x, y + heightMissing );
-        exteriorPerimeter[ 5 ].setXY( x + widthMissing, y + heightMissing );
+        perimeterPoints[ 0 ].setXY( x + widthMissing, y );
+        perimeterPoints[ 1 ].setXY( x + width, y );
+        perimeterPoints[ 2 ].setXY( x + width, y + height );
+        perimeterPoints[ 3 ].setXY( x, y + height );
+        perimeterPoints[ 4 ].setXY( x, y + heightMissing );
+        perimeterPoints[ 5 ].setXY( x + widthMissing, y + heightMissing );
         break;
 
       case 'rightTop':
-        exteriorPerimeter[ 0 ].setXY( x, y );
-        exteriorPerimeter[ 1 ].setXY( x + width - widthMissing, y );
-        exteriorPerimeter[ 2 ].setXY( x + width - widthMissing, y + heightMissing );
-        exteriorPerimeter[ 3 ].setXY( x + width, y + heightMissing );
-        exteriorPerimeter[ 4 ].setXY( x + width, y + height );
-        exteriorPerimeter[ 5 ].setXY( x, y + height );
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + width - widthMissing, y );
+        perimeterPoints[ 2 ].setXY( x + width - widthMissing, y + heightMissing );
+        perimeterPoints[ 3 ].setXY( x + width, y + heightMissing );
+        perimeterPoints[ 4 ].setXY( x + width, y + height );
+        perimeterPoints[ 5 ].setXY( x, y + height );
         break;
 
       case 'leftBottom':
-        exteriorPerimeter[ 0 ].setXY( x, y );
-        exteriorPerimeter[ 1 ].setXY( x + width, y );
-        exteriorPerimeter[ 2 ].setXY( x + width, y + heightMissing );
-        exteriorPerimeter[ 3 ].setXY( x + widthMissing, y + heightMissing );
-        exteriorPerimeter[ 4 ].setXY( x + widthMissing, y + height );
-        exteriorPerimeter[ 5 ].setXY( x, y + height );
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + width, y );
+        perimeterPoints[ 2 ].setXY( x + width, y + heightMissing );
+        perimeterPoints[ 3 ].setXY( x + widthMissing, y + heightMissing );
+        perimeterPoints[ 4 ].setXY( x + widthMissing, y + height );
+        perimeterPoints[ 5 ].setXY( x, y + height );
         break;
 
       case 'rightBottom':
-        exteriorPerimeter[ 0 ].setXY( x, y );
-        exteriorPerimeter[ 1 ].setXY( x + width, y );
-        exteriorPerimeter[ 2 ].setXY( x + width, y + height );
-        exteriorPerimeter[ 3 ].setXY( x + widthMissing, y + height );
-        exteriorPerimeter[ 4 ].setXY( x + widthMissing, y + heightMissing );
-        exteriorPerimeter[ 5 ].setXY( x, y + heightMissing );
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + width, y );
+        perimeterPoints[ 2 ].setXY( x + width, y + height );
+        perimeterPoints[ 3 ].setXY( x + widthMissing, y + height );
+        perimeterPoints[ 4 ].setXY( x + widthMissing, y + heightMissing );
+        perimeterPoints[ 5 ].setXY( x, y + heightMissing );
         break;
 
       default:
@@ -291,8 +291,76 @@ define( function( require ) {
         break;
     }
 
-    return new PerimeterShape( [ exteriorPerimeter ], [], UNIT_SQUARE_LENGTH );
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
   }
+
+  // @private Create a perimeter shape with a cutout in the top, bottom, left, or right side.
+  function createUShapedPerimeterShape( x, y, width, height, sideWithCutout, cutoutWidth, cutoutHeight, cutoutOffset ) {
+    var perimeterPoints = [ new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2() ];
+
+    switch( sideWithCutout ) {
+      case 'left':
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + width, y );
+        perimeterPoints[ 2 ].setXY( x + width, y + height );
+        perimeterPoints[ 3 ].setXY( x, y + height );
+        perimeterPoints[ 4 ].setXY( x, y + cutoutOffset + cutoutHeight );
+        perimeterPoints[ 5 ].setXY( x + cutoutWidth, y + cutoutOffset + cutoutHeight );
+        perimeterPoints[ 6 ].setXY( x + cutoutWidth, y + cutoutOffset );
+        perimeterPoints[ 7 ].setXY( x, y + cutoutOffset );
+        break;
+      case 'right':
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + width, y );
+        perimeterPoints[ 2 ].setXY( x + width, y + cutoutOffset );
+        perimeterPoints[ 3 ].setXY( x + width - cutoutWidth, y + cutoutOffset );
+        perimeterPoints[ 4 ].setXY( x + width - cutoutWidth, y + cutoutOffset + cutoutHeight );
+        perimeterPoints[ 5 ].setXY( x + width, y + cutoutOffset + cutoutHeight );
+        perimeterPoints[ 6 ].setXY( x + width, y + height );
+        perimeterPoints[ 7 ].setXY( x, y + height );
+        break;
+      case 'top':
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + cutoutOffset, y );
+        perimeterPoints[ 2 ].setXY( x + cutoutOffset, y + cutoutHeight );
+        perimeterPoints[ 3 ].setXY( x + cutoutOffset + cutoutWidth, y + cutoutHeight );
+        perimeterPoints[ 4 ].setXY( x + cutoutOffset + cutoutWidth, y );
+        perimeterPoints[ 5 ].setXY( x + width, y );
+        perimeterPoints[ 6 ].setXY( x + width, y + height );
+        perimeterPoints[ 7 ].setXY( x, y + height );
+        break;
+      case 'bottom':
+        perimeterPoints[ 0 ].setXY( x, y );
+        perimeterPoints[ 1 ].setXY( x + width, y );
+        perimeterPoints[ 2 ].setXY( x + width, y + height );
+        perimeterPoints[ 3 ].setXY( x + cutoutOffset + cutoutWidth, y + height );
+        perimeterPoints[ 4 ].setXY( x + cutoutOffset + cutoutWidth, y + height - cutoutHeight );
+        perimeterPoints[ 5 ].setXY( x + cutoutOffset, y + height - cutoutHeight );
+        perimeterPoints[ 6 ].setXY( x + cutoutOffset, y + height );
+        perimeterPoints[ 7 ].setXY( x, y + height );
+        break;
+    }
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+  }
+
+  function createPerimeterShapeWithHole( x, y, width, height, holeWidth, holeHeight, holeXOffset, holeYOffset ) {
+    var exteriorPerimeterPoints = [
+      new Vector2( x, y ),
+      new Vector2( x + width, y ),
+      new Vector2( x + width, y + height ),
+      new Vector2( x, y + height )
+    ];
+    var interiorPerimeterPoints = [
+      // Have to draw hole in opposite direction for it to appear.
+      new Vector2( x + holeXOffset, y + holeYOffset ),
+      new Vector2( x + holeXOffset, y + holeYOffset + holeHeight ),
+      new Vector2( x + holeXOffset + holeWidth, y + holeYOffset + holeHeight ),
+      new Vector2( x + holeXOffset + holeWidth, y + holeYOffset )
+    ];
+
+    return new PerimeterShape( [ exteriorPerimeterPoints ], [ interiorPerimeterPoints ], UNIT_SQUARE_LENGTH );
+  }
+
 
   // @private
   function isChallengeUnique( challenge ) {
@@ -418,7 +486,6 @@ define( function( require ) {
   }
 
   function generateLShapedFindAreaChallenge( difficulty ) {
-
     do {
       var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       var height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
@@ -432,13 +499,53 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
+  function generateUShapedFindAreaChallenge( difficulty ) {
+    do {
+      var width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      var height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+    } while ( width * height < 16 || width * height > 36 );
+    var sideWithCutout = randomElement( ['left', 'right', 'top', 'bottom' ] );
+    var cutoutWidth, cutoutHeight, cutoutOffset;
+    if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
+      cutoutWidth = _.random( 1, width - 1 );
+      cutoutHeight = _.random( 1, height - 2 );
+      cutoutOffset = _.random( 1, height - cutoutHeight - 1 );
+    }
+    else {
+      cutoutWidth = _.random( 1, width - 2 );
+      cutoutHeight = _.random( 1, height - 1 );
+      cutoutOffset = _.random( 1, width - cutoutWidth - 1 );
+    }
+    var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH, cutoutOffset * UNIT_SQUARE_LENGTH );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
+
+  function generateOShapedFindAreaChallenge( difficulty ) {
+    do {
+      var width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      var height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+    } while ( width * height < 16 || width * height > 36 );
+    var holeWidth = _.random( 1, width - 2 );
+    var holeHeight = _.random( 1, height - 2 );
+    var holeXOffset = _.random( 1, width - holeWidth - 1 );
+    var holeYOffset = _.random( 1, height - holeHeight - 1 );
+    var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+        holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
+        holeYOffset * UNIT_SQUARE_LENGTH );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
 
   function generateFindTheAreaChallenge( difficulty ) {
 
     var challengeIsUnique = false;
     var challenge;
     while ( !challengeIsUnique ) {
-      challenge = generateLShapedFindAreaChallenge( difficulty );
+//      challenge = generateLShapedFindAreaChallenge( difficulty );
+//      challenge = generateUShapedFindAreaChallenge( difficulty );
+      challenge = generateOShapedFindAreaChallenge( difficulty );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
