@@ -98,7 +98,7 @@ define( function( require ) {
         this.restartGameTimer();
 
         // Create the list of challenges.
-        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet, this.simSpecificModel );
+        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet );
 
         // Set up the model for the next challenge
         this.currentChallenge = this.challengeList[ this.challengeIndex ];

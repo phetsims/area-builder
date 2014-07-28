@@ -205,7 +205,8 @@ define( function( require ) {
     {
       // Size of the shape board in terms of the unit length, needed by the challenge factory.
       SHAPE_BOARD_UNIT_WIDTH: BOARD_SIZE.width / UNIT_SQUARE_LENGTH,
-      SHAPE_BOARD_UNIT_HEIGHT: BOARD_SIZE.height / UNIT_SQUARE_LENGTH
+      SHAPE_BOARD_UNIT_HEIGHT: BOARD_SIZE.height / UNIT_SQUARE_LENGTH,
+      UNIT_SQUARE_LENGTH: UNIT_SQUARE_LENGTH
     }
   );
 } );

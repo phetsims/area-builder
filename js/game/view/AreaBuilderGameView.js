@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var ChallengePromptBanner = require( 'AREA_BUILDER/game/view/ChallengePromptBanner' );
@@ -27,6 +28,7 @@ define( function( require ) {
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
   var SolutionBanner = require( 'AREA_BUILDER/game/view/SolutionBanner' );
@@ -440,6 +442,7 @@ define( function( require ) {
 
     presentChallenge: function() {
 
+      var self = this;
       this.numberEntryControl.clear();
 
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
@@ -484,8 +487,15 @@ define( function( require ) {
         this.scoreboard.dimensionsIcon.setStyle( challenge.backgroundShape ? 'background' : 'composite' );
 
         // Create the carousel if present
-        if ( challenge.carouselContents !== null ) {
-          var creatorNodeHBox = new HBox( { children: challenge.carouselContents, spacing: 20 } );
+        if ( challenge.userShapes !== null ) {
+          var creatorNodes = [];
+          challenge.userShapes.forEach( function( userShapeSpec ) {
+            creatorNodes.push( new ShapeCreatorNode( userShapeSpec.shape, userShapeSpec.color, self.model.simSpecificModel, {
+              gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH
+            } ) );
+          } );
+          var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
+          // TODO: This is just a panel now, needs to become a real carousel at some point.
           this.shapeCarousel = new Panel( creatorNodeHBox, {
             centerX: this.shapeBoard.centerX,
             top: this.shapeBoard.bottom + 10,
@@ -498,7 +508,7 @@ define( function( require ) {
 
         // Position the eraser button.
         this.eraserButton.left = this.shapeBoard.left;
-        if ( challenge.carouselContents !== null && this.eraserButton.right + 10 >= this.shapeCarousel.left ) {
+        if ( challenge.userShapes !== null && this.eraserButton.right + 10 >= this.shapeCarousel.left ) {
           this.eraserButton.right = this.shapeCarousel.left - 10;
         }
 

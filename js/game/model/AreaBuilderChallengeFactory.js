@@ -1,5 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+/**
+ * A factory object that creates the challenges for the Area Builder game.
+ */
 define( function( require ) {
   'use strict';
 
@@ -9,7 +12,6 @@ define( function( require ) {
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Shape = require( 'KITE/Shape' );
-  var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -47,6 +49,25 @@ define( function( require ) {
     .lineTo( 0, UNIT_SQUARE_LENGTH )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
     .close();
+
+  var BASIC_SHAPE_KIT = [
+    {
+      shape: SQUARE_SHAPE,
+      color: AreaBuilderSharedConstants.GREENISH_COLOR
+    },
+    {
+      shape: HORIZONTAL_DOUBLE_SQUARE_SHAPE,
+      color: AreaBuilderSharedConstants.GREENISH_COLOR
+    },
+    {
+      shape: VERTICAL_DOUBLE_SQUARE_SHAPE,
+      color: AreaBuilderSharedConstants.GREENISH_COLOR
+    },
+    {
+      shape: QUAD_SQUARE_SHAPE,
+      color: AreaBuilderSharedConstants.GREENISH_COLOR
+    }
+  ];
 
   var SHAPES_FOR_AREA_FINDING_PROBLEMS = [
 
@@ -285,34 +306,7 @@ define( function( require ) {
     return challengeIsUnique;
   }
 
-  function generateBuildAreaChallenge( model, difficulty ) {
-
-    // Create the shape kit used for these challenges.
-    var buildItShapeKit = [
-      new ShapeCreatorNode(
-        SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model
-      ),
-      new ShapeCreatorNode(
-        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        VERTICAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        QUAD_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      )
-    ];
+  function generateBuildAreaChallenge( difficulty ) {
 
     // Create a unique challenge
     var challengeIsUnique = false;
@@ -332,7 +326,7 @@ define( function( require ) {
         height,
         AreaBuilderSharedConstants.GREENISH_COLOR
       );
-      challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, buildItShapeKit, exampleSolution );
+      challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, BASIC_SHAPE_KIT, exampleSolution );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
@@ -343,34 +337,8 @@ define( function( require ) {
    * for details.
    *
    * @private
-   * @param model
    */
-  function generateTwoRectangleBuildAreaAndPerimeterChallenge( model ) {
-    var buildItShapeKit = [
-      new ShapeCreatorNode(
-        SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model
-      ),
-      new ShapeCreatorNode(
-        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        VERTICAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        QUAD_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      )
-    ];
+  function generateTwoRectangleBuildAreaAndPerimeterChallenge() {
 
     // Create first rectangle dimensions
     var width1 = _.random( 2, 6 );
@@ -400,36 +368,10 @@ define( function( require ) {
       createRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
 
     return( AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width1 * height1 + width2 * height2,
-        2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, buildItShapeKit, solutionSpec ) );
+        2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, BASIC_SHAPE_KIT, solutionSpec ) );
   }
 
-  function generateBuildAreaAndPerimeterChallenge( model, difficulty ) {
-    // Create the shape kit used for these challenges.
-    var buildItShapeKit = [
-      new ShapeCreatorNode(
-        SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model
-      ),
-      new ShapeCreatorNode(
-        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        VERTICAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        QUAD_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      )
-    ];
+  function generateBuildAreaAndPerimeterChallenge( difficulty ) {
 
     // Create a unique challenge
     var challengeIsUnique = false;
@@ -459,74 +401,23 @@ define( function( require ) {
         AreaBuilderSharedConstants.GREENISH_COLOR
       );
       challenge = AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width * height,
-          2 * width + 2 * height, buildItShapeKit, exampleSolution );
+          2 * width + 2 * height, BASIC_SHAPE_KIT, exampleSolution );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
   }
 
-  function generateRectangularFindAreaChallenge( model, difficulty ) {
-    var findAreaShapeKit = [
-      new ShapeCreatorNode(
-        SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model
-      ),
-      new ShapeCreatorNode(
-        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        VERTICAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        QUAD_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      )
-    ];
-
+  function generateRectangularFindAreaChallenge( difficulty ) {
     do {
       var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       var height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
     } while ( width * height < 16 || width * height > 36 );
     var perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH );
 
-    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, findAreaShapeKit );
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateLShapedFindAreaChallenge( model, difficulty ) {
-    var findAreaShapeKit = [
-      new ShapeCreatorNode(
-        SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model
-      ),
-      new ShapeCreatorNode(
-        HORIZONTAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        VERTICAL_DOUBLE_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      ),
-      new ShapeCreatorNode(
-        QUAD_SQUARE_SHAPE,
-        AreaBuilderSharedConstants.GREENISH_COLOR,
-        model,
-        { gridSpacing: UNIT_SQUARE_LENGTH }
-      )
-    ];
+  function generateLShapedFindAreaChallenge( difficulty ) {
 
     do {
       var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
@@ -538,16 +429,16 @@ define( function( require ) {
     var perimeterShape = createLShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
       missingCorner, missingWidth * UNIT_SQUARE_LENGTH, missingHeight * UNIT_SQUARE_LENGTH );
 
-    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, findAreaShapeKit );
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
 
-  function generateFindTheAreaChallenge( model, difficulty ) {
+  function generateFindTheAreaChallenge( difficulty ) {
 
     var challengeIsUnique = false;
     var challenge;
     while ( !challengeIsUnique ) {
-      challenge = generateLShapedFindAreaChallenge( model, difficulty );
+      challenge = generateLShapedFindAreaChallenge( difficulty );
       challengeIsUnique = isChallengeUnique( challenge );
     }
     return challenge;
@@ -558,19 +449,19 @@ define( function( require ) {
     return mappingValue === 0 ? 'easy' : mappingValue === 1 ? 'moderate' : 'hard';
   }
 
-  function generateChallenge( level, difficulty, model ) {
+  function generateChallenge( level, difficulty ) {
     var challenge;
     if ( level === 0 ) {
-      challenge = generateBuildAreaChallenge( model, difficulty );
+      challenge = generateBuildAreaChallenge( difficulty );
     }
     else if ( level === 1 ) {
-      challenge = generateBuildAreaAndPerimeterChallenge( model, difficulty );
+      challenge = generateBuildAreaAndPerimeterChallenge( difficulty );
     }
     else if ( level === 2 ) {
-      challenge = generateFindTheAreaChallenge( model, difficulty );
+      challenge = generateFindTheAreaChallenge( difficulty );
     }
     else if ( level === 3 ) {
-      challenge = generateTwoRectangleBuildAreaAndPerimeterChallenge( model, difficulty );
+      challenge = generateTwoRectangleBuildAreaAndPerimeterChallenge( difficulty );
     }
     else {
       // Create a fake challenge for the other levels.
@@ -591,10 +482,10 @@ define( function( require ) {
     return challenge;
   }
 
-  // Challenge history, used to make sure unique challenges are generated.
+// Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
 
-  // No constructor - this is a static type.
+// No constructor - this is a static type.
   return  {
 
     /**
@@ -606,14 +497,15 @@ define( function( require ) {
      * @param model
      * @returns {Array}
      */
-    generateChallengeSet: function( level, numChallenges, model ) {
+    generateChallengeSet: function( level, numChallenges ) {
       challengeHistory = []; // TODO: This is temporary until more challenges are created, then it should be cleared 1/2 at a time when having trouble creating unique challenges.
       var self = this;
       var challengeSet = [];
       _.times( numChallenges, function( index ) {
-        challengeSet.push( generateChallenge( level, mapIndexToDifficulty( index, numChallenges ), model ) );
+        challengeSet.push( generateChallenge( level, mapIndexToDifficulty( index, numChallenges ) ) );
       } );
       return challengeSet;
     }
   };
-} );
+} )
+;

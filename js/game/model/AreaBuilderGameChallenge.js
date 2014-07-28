@@ -18,8 +18,9 @@ define( function( require ) {
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether
    * the user is allowed to control these things for this challenge.
    * @param {boolean} showNumberEntryPad Flag that controls whether key pad is present in this challenge.
-   * @param {array} carouselContents An array of creator nodes that should be placed in the carousel so that the user
-   * can use them to drag out shapes for placement on the board.  Can be null to signify no kit, should never be empty.
+   * @param {Array<Object>} userShapes An array of shape specification that describe the shapes that can be created and
+   * manipulated by the user for this challenge.  Each shape specification is an object with a 'shape' field and a
+   * 'color' field.  This value can be null to signify no user shapes are present for the challenge.
    * @param {object} buildSpec Object that specifies what the user should build.  This is only used if this is a 'build
    * it' type of challenge, otherwise it should be null.  It should always have an 'area' field with a number, and can
    * optionally have a 'perimeter' field with a number as well.
@@ -38,14 +39,14 @@ define( function( require ) {
    * challenge, i.e. one with just a check box to get the right answer.  TODO Remove this once game is working.
    * @constructor
    */
-  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, carouselContents, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, exampleBuildItSolution, fakeChallenge ) {
+  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, userShapes, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, exampleBuildItSolution, fakeChallenge ) {
     // Verification
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
     // TODO: Maybe add some additional verification.
 
     this.toolSpec = toolSpec;
     this.showNumberEntryPad = showNumberEntryPad;
-    this.carouselContents = carouselContents;
+    this.userShapes = userShapes;
     this.buildSpec = buildSpec;
     this.colorPrompt1 = colorPrompt1;
     this.colorPrompt2 = colorPrompt2;
@@ -58,7 +59,7 @@ define( function( require ) {
     this.maxAttemptsAllowed = 2;
   }
 
-  AreaBuilderGameChallenge.createBuildAreaChallenge = function( areaToBuild, carouselContents, exampleSolution ) {
+  AreaBuilderGameChallenge.createBuildAreaChallenge = function( areaToBuild, userShapes, exampleSolution ) {
     return new AreaBuilderGameChallenge(
       // toolSpec
       {
@@ -70,8 +71,8 @@ define( function( require ) {
       // showNumberEntryPad
       false,
 
-      // carouselContents
-      carouselContents,
+      // userShapes
+      userShapes,
 
       // buildSpec
       { area: areaToBuild },
@@ -96,7 +97,7 @@ define( function( require ) {
     );
   };
 
-  AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, carouselContents, exampleSolution ) {
+  AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, userShapes, exampleSolution ) {
     return new AreaBuilderGameChallenge(
       // toolSpec
       {
@@ -108,8 +109,8 @@ define( function( require ) {
       // showNumberEntryPad
       false,
 
-      // carouselContents
-      carouselContents,
+      // userShapes
+      userShapes,
 
       // buildSpec
       { area: areaToBuild, perimeter: perimeterToBuild },
@@ -134,7 +135,7 @@ define( function( require ) {
     );
   };
 
-  AreaBuilderGameChallenge.createFindAreaChallenge = function( areaShape, carouselContents ) {
+  AreaBuilderGameChallenge.createFindAreaChallenge = function( areaShape, userShapes ) {
     return new AreaBuilderGameChallenge(
       // toolSpec
       {
@@ -146,8 +147,8 @@ define( function( require ) {
       // showNumberEntryPad
       true,
 
-      // carouselContents
-      carouselContents,
+      // userShapes
+      userShapes,
 
       // buildSpec
       null,
