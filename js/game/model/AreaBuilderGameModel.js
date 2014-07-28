@@ -31,7 +31,7 @@ define( function( require ) {
   function AreaBuilderGameModel() {
 
     PropertySet.call( this, {
-      showGrid: true,
+      showGrid: false,
       showDimensions: false
     } );
 
@@ -187,9 +187,9 @@ define( function( require ) {
         // Set the board to either form composite shapes or allow free placement.
         this.shapePlacementBoard.formComposite = challenge.backgroundShape === null;
 
-        // Clear the 'show dimensions' flag for each new challenge.
-        // TODO: Confirm this behavior with the design team.
+        // Clear the 'show dimensions' and 'show grid' flag for each new challenge.
         this.shapePlacementBoard.showDimensionsProperty.value = false;
+        this.shapePlacementBoard.showGridProperty.value = false;
       },
 
       step: function( dt ) {
