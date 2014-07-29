@@ -37,7 +37,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var HBox = require( 'SCENERY/nodes/HBox' );
-  var YourSolutionWindow = require( 'AREA_BUILDER/game/view/YourSolutionWindow' );
+  var YouBuiltWindow = require( 'AREA_BUILDER/game/view/YouBuiltWindow' );
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
@@ -155,11 +155,11 @@ define( function( require ) {
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
-    this.yourSolutionWindow = new YourSolutionWindow( this.layoutBounds.width - this.shapeBoard.right - 20, 85, {
+    this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 20, 85, {
       centerX: ( this.layoutBounds.width + this.shapeBoard.right ) / 2,
       centerY: this.shapeBoard.centerY
     } );
-    this.challengeLayer.addChild( this.yourSolutionWindow );
+    this.challengeLayer.addChild( this.youBuiltWindow );
     this.answerFeedback = new Node();
     this.challengeLayer.addChild( this.answerFeedback );
     this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
@@ -389,12 +389,12 @@ define( function( require ) {
           this.answerFeedback.removeAllChildren();
           if ( challenge.buildSpec ) {
             if ( challenge.buildSpec.perimeter ) {
-              this.yourSolutionWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
+              this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
             }
             else {
-              this.yourSolutionWindow.setAreaOnly( this.areaOfUserCreatedShape );
+              this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
             }
-            this.yourSolutionWindow.visible = true;
+            this.youBuiltWindow.visible = true;
           }
 
           // TODO: Remove once fake challenges go away.
@@ -542,7 +542,7 @@ define( function( require ) {
         this.answerFeedback,
         this.challengePromptBanner,
         this.solutionBanner,
-        this.yourSolutionWindow
+        this.youBuiltWindow
       ] );
     },
 

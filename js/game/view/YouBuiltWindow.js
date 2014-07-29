@@ -18,7 +18,7 @@ define( function( require ) {
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
-  var yourSolutionString = require( 'string!AREA_BUILDER/yourSolution' );
+  var youBuiltString = require( 'string!AREA_BUILDER/youBuilt' );
 
   // constants
   var X_MARGIN = 5;
@@ -31,15 +31,15 @@ define( function( require ) {
    * @param options
    * @constructor
    */
-  function YourSolutionWindow( width, height, options ) {
+  function YouBuiltWindow( width, height, options ) {
     Rectangle.call( this, 0, 0, width, height, 4, 4, { fill: 'white', stroke: 'black' } );
 
     // title
-    var yourSolutionText = new Text( yourSolutionString, { font: TITLE_FONT } );
-    yourSolutionText.scale( Math.min( ( width - 2 * X_MARGIN ) / yourSolutionText.width, 1 ) );
-    yourSolutionText.top = 5;
-    yourSolutionText.centerX = width / 2;
-    this.addChild( yourSolutionText );
+    var youBuiltText = new Text( youBuiltString, { font: TITLE_FONT } );
+    youBuiltText.scale( Math.min( ( width - 2 * X_MARGIN ) / youBuiltText.width, 1 ) );
+    youBuiltText.top = 5;
+    youBuiltText.centerX = width / 2;
+    this.addChild( youBuiltText );
 
     // text for area only
     this.areaOnlyTextNode = new Text( StringUtils.format( areaEqualsString, 99 ), {
@@ -65,7 +65,7 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Rectangle, YourSolutionWindow, {
+  return inherit( Rectangle, YouBuiltWindow, {
     setAreaOnly: function( area ) {
       this.areaOnlyTextNode.text = StringUtils.format( areaEqualsString, area );
       this.areaOnlyTextNode.visible = true;
