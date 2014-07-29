@@ -140,7 +140,7 @@ define( function( require ) {
   }
 
   function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing ) {
-    assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
+    assert && assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
 
     var perimeterPoints = [
       new Vector2( x + widthMissing, y ),
@@ -502,8 +502,8 @@ define( function( require ) {
         case 0:
           _.times( 3, function() { challengeSet.push( generateBuildAreaChallenge() ); } );
           _.times( 2, function() { challengeSet.push( generateRectangularFindAreaChallenge() ); } );
-          challengeSet.push( generateLShapedFindAreaChallenge() );
           challengeSet = _.shuffle( challengeSet );
+          challengeSet.push( generateLShapedFindAreaChallenge() );
           break;
 
         case 1:
