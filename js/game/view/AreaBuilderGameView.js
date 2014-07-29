@@ -511,11 +511,25 @@ define( function( require ) {
               gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH
             } ) );
           } );
-          this.shapeCarousel = new HCarousel( creatorNodes, {
-            centerX: this.shapeBoard.centerX,
-            top: this.shapeBoard.bottom + 10,
-            fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
-          } );
+          if ( creatorNodes.length > 4 ) {
+            // Add a scrolling carousel.
+            this.shapeCarousel = new HCarousel( creatorNodes, {
+              centerX: this.shapeBoard.centerX,
+              top: this.shapeBoard.bottom + 10,
+              fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
+            } );
+          }
+          else {
+            // Add a non-scrolling panel
+            var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
+            this.shapeCarousel = new Panel( creatorNodeHBox, {
+              centerX: this.shapeBoard.centerX,
+              top: this.shapeBoard.bottom + 10,
+              xMargin: 50,
+              yMargin: 15,
+              fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
+            } );
+          }
           this.challengeLayer.addChild( this.shapeCarousel );
         }
 
