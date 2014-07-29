@@ -49,7 +49,8 @@ define( function( require ) {
     var representation = new Path( shape, {
       fill: color,
       stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      lineWidth: BORDER_LINE_WIDTH
+      lineWidth: BORDER_LINE_WIDTH,
+      lineJoin: 'round'
     } );
     this.addChild( representation );
 
