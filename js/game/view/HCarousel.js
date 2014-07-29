@@ -8,6 +8,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
@@ -17,7 +18,7 @@ define( function( require ) {
   var ARROW_WIDTH = 12;
   var ARROW_HEIGHT = 40;
   var BUTTON_INSET = 5;
-  var INTER_ITEM_SPACING = 10;
+  var INTER_ITEM_SPACING = 5;
   var ITEM_INSET = 10;
 
   /**
@@ -50,28 +51,33 @@ define( function( require ) {
     var previousButton = new RectangularPushButton( { content: previousIcon } );
     var nextButton = new RectangularPushButton( { content: nextIcon } );
 
-    // Construct what is effectively the background
-    var totalWidth = BUTTON_INSET * 2 +
+    // Construct the outer container
+    var panelWidth = BUTTON_INSET * 2 +
                      previousButton.bounds.width +
                      nextButton.bounds.width +
                      ITEM_INSET * 2 +
                      options.numVisibleAtOnce * maxChildWidth +
                      ( options.numVisibleAtOnce - 1 ) * INTER_ITEM_SPACING;
-    var totalHeight = Math.max( BUTTON_INSET * 2 + previousButton.bounds.height, ITEM_INSET * 2 + maxChildHeight );
+    var panelHeight = Math.max( BUTTON_INSET * 2 + previousButton.bounds.height, ITEM_INSET * 2 + maxChildHeight );
+    Rectangle.call( this, 0, 0, panelWidth, panelHeight, 4, 4, options );
 
-    // Create what is effectively the background.  Options will be passed through later that may affect appearance.
-    Rectangle.call( this, 0, 0, totalWidth, totalHeight, 4, 4 );
+    // Add the content
+    var contentRoot = new Node();
+    children.forEach( function( child, index ) {
+      child.centerX = ITEM_INSET + maxChildWidth / 2 + index * ( maxChildWidth + 2 * INTER_ITEM_SPACING );
+      child.centerY = panelHeight / 2;
+      contentRoot.addChild( child );
+    } );
+    contentRoot.left = BUTTON_INSET + nextButton.width + ITEM_INSET;
+    this.addChild( contentRoot );
 
     // Position the buttons and add them to the background
     previousButton.left = BUTTON_INSET;
-    previousButton.centerY = totalHeight / 2;
+    previousButton.centerY = panelHeight / 2;
     this.addChild( previousButton );
-    nextButton.right = totalWidth - BUTTON_INSET;
-    nextButton.centerY = totalHeight / 2;
+    nextButton.right = panelWidth - BUTTON_INSET;
+    nextButton.centerY = panelHeight / 2;
     this.addChild( nextButton );
-
-    // Pass options through to the parent
-    this.mutate( options );
   }
 
   return inherit( Rectangle, HCarousel, {
