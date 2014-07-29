@@ -378,14 +378,7 @@ define( function( require ) {
 
           this.show( buttonsToShow );
 
-          // There are two general classes of challenges, and they have different titles for this button.
-          if ( challenge.buildSpec ) {
-            this.show( [ ] )
-          }
-          this.showTheSolutionButton,
-
-
-            // Give the user the appropriate feedback
+          // Give the user the appropriate feedback
           this.gameAudioPlayer.wrongAnswer();
           this.faceWithPointsNode.grimace();
           this.faceWithPointsNode.setPoints( this.model.score );

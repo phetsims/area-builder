@@ -43,12 +43,12 @@ define( function( require ) {
     .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
     .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
     .close();
-  var RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
-    .moveTo( UNIT_SQUARE_LENGTH, 0 )
-    .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
-    .lineTo( 0, UNIT_SQUARE_LENGTH )
-    .lineTo( UNIT_SQUARE_LENGTH, 0 )
-    .close();
+//  var RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
+//    .moveTo( UNIT_SQUARE_LENGTH, 0 )
+//    .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
+//    .lineTo( 0, UNIT_SQUARE_LENGTH )
+//    .lineTo( UNIT_SQUARE_LENGTH, 0 )
+//    .close();
 
   var BASIC_SHAPE_KIT = [
     {
@@ -67,136 +67,6 @@ define( function( require ) {
       shape: QUAD_SQUARE_SHAPE,
       color: AreaBuilderSharedConstants.GREENISH_COLOR
     }
-  ];
-
-  var SHAPES_FOR_AREA_FINDING_PROBLEMS = [
-
-    // This shape is from the table in the spec for level 1 (as it was on 7/15/2014), looks like an upside down
-    // staircase with three steps.
-    new PerimeterShape(
-      // Exterior perimeters
-      [
-        [
-          Vector2.ZERO,
-          new Vector2( UNIT_SQUARE_LENGTH * 6, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 6, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 2 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH ),
-          new Vector2( 0, UNIT_SQUARE_LENGTH )
-        ]
-      ],
-
-      // Interior perimeters
-      [],
-
-      // Unit size
-      UNIT_SQUARE_LENGTH
-    ),
-
-    // This shape is from a mockup in the spec (as is was as of 7/22/2014).  It looks like a somewhat stylized 'F',
-    // reversed and lying down, with an angular portion.
-    new PerimeterShape(
-      // Exterior perimeters
-      [
-        [
-          new Vector2( 0, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 3, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 3, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 4, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 4, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 5, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 5, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 7, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 7, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 5, UNIT_SQUARE_LENGTH * 5 ),
-          new Vector2( 0, UNIT_SQUARE_LENGTH * 5 )
-        ]
-      ],
-
-      // Interior perimeters
-      [],
-
-      // Unit size
-      UNIT_SQUARE_LENGTH
-    ),
-
-    // Basic rectangular shape
-    new PerimeterShape(
-      // Exterior perimeters
-      [
-        [
-          new Vector2( 0, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 6, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 6, UNIT_SQUARE_LENGTH * 3 ),
-          new Vector2( 0, UNIT_SQUARE_LENGTH * 3 )
-        ]
-      ],
-
-      // Interior perimeters
-      [],
-
-      // Unit size
-      UNIT_SQUARE_LENGTH
-    ),
-
-    // Basic rectangular shape
-    new PerimeterShape(
-      // Exterior perimeters
-      [
-        [
-          new Vector2( 0, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 5, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 5, UNIT_SQUARE_LENGTH * 4 ),
-          new Vector2( 0, UNIT_SQUARE_LENGTH * 4 )
-        ]
-      ],
-
-      // Interior perimeters
-      [],
-
-      // Unit size
-      UNIT_SQUARE_LENGTH
-    ),
-
-    // Thin rectangular shape
-    new PerimeterShape(
-      // Exterior perimeters
-      [
-        [
-          new Vector2( 0, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 10, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH * 10, UNIT_SQUARE_LENGTH ),
-          new Vector2( 0, UNIT_SQUARE_LENGTH )
-        ]
-      ],
-
-      // Interior perimeters
-      [],
-
-      // Unit size
-      UNIT_SQUARE_LENGTH
-    ),
-
-    // Tall rectangular shape
-    new PerimeterShape(
-      // Exterior perimeters
-      [
-        [
-          new Vector2( 0, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH, 0 ),
-          new Vector2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH * 6 ),
-          new Vector2( 0, UNIT_SQUARE_LENGTH * 6 )
-        ]
-      ],
-
-      // Interior perimeters
-      [],
-
-      // Unit size
-      UNIT_SQUARE_LENGTH
-    )
   ];
 
   // -------------- private functions ---------------------------
@@ -432,8 +302,9 @@ define( function( require ) {
     } while ( width1 % 2 === height1 % 2 );
 
     // Create second rectangle dimensions
+    var width2 = 0;
     do {
-      var width2 = _.random( 1, 6 );
+      width2 = _.random( 1, 6 );
     } while ( width1 + width2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
     var height2;
     do {
@@ -492,19 +363,21 @@ define( function( require ) {
   }
 
   function generateRectangularFindAreaChallenge() {
+    var width, height;
     do {
-      var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-      var height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+      width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
     } while ( width * height < 16 || width * height > 36 );
     var perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateLShapedFindAreaChallenge( difficulty ) {
+  function generateLShapedFindAreaChallenge() {
+    var width, height;
     do {
-      var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-      var height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+      width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
     } while ( width * height < 16 || width * height > 36 );
     var missingWidth = _.random( 1, width - 1 );
     var missingHeight = _.random( 1, height - 1 );
@@ -515,10 +388,11 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateUShapedFindAreaChallenge( difficulty ) {
+  function generateUShapedFindAreaChallenge() {
+    var width, height;
     do {
-      var width = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-      var height = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      width = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      height = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     } while ( width * height < 16 || width * height > 36 );
     var sideWithCutout = randomElement( ['left', 'right', 'top', 'bottom' ] );
     var cutoutWidth, cutoutHeight, cutoutOffset;
@@ -538,10 +412,11 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateOShapedFindAreaChallenge( difficulty ) {
+  function generateOShapedFindAreaChallenge() {
+    var width, height;
     do {
-      var width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-      var height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     } while ( width * height < 16 || width * height > 36 );
     var holeWidth = _.random( 1, width - 2 );
     var holeHeight = _.random( 1, height - 2 );
@@ -554,7 +429,7 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateIsoscelesRightTriangleFindAreaChallenge( difficulty ) {
+  function generateIsoscelesRightTriangleFindAreaChallenge() {
     var cornerPosition = randomElement( ['leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
     var edgeLength = 0;
     do {
@@ -567,7 +442,7 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateLargeRectWithChipMissingChallenge( difficulty ) {
+  function generateLargeRectWithChipMissingChallenge() {
     var width = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
     var height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     var sideWithCutout = randomElement( ['left', 'right', 'top', 'bottom' ] );
@@ -588,7 +463,7 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateShapeWithDiagonalFindAreaChallenge( difficulty ) {
+  function generateShapeWithDiagonalFindAreaChallenge() {
     var width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
     var height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
     var diagonalPosition = randomElement( ['leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
@@ -606,22 +481,6 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateFindTheAreaChallenge( difficulty ) {
-
-    var challengeIsUnique = false;
-    var challenge;
-    while ( !challengeIsUnique ) {
-      challenge = generateLShapedFindAreaChallenge( difficulty );
-//      challenge = generateUShapedFindAreaChallenge( difficulty );
-//      challenge = generateOShapedFindAreaChallenge( difficulty );
-//      challenge = generateIsoscelesRightTriangleFindAreaChallenge( difficulty );
-//      challenge = generateLargeRectWithChipMissingChallenge( difficulty );
-//      challenge = generateShapeWithDiagonalFindAreaChallenge( difficulty );
-      challengeIsUnique = isChallengeUnique( challenge );
-    }
-    return challenge;
-  }
-
   // Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
 
@@ -633,6 +492,7 @@ define( function( require ) {
      *
      * @public
      * @param level
+     * @param numChallenges
      * @returns {Array}
      */
     generateChallengeSet: function( level, numChallenges ) {
@@ -640,15 +500,15 @@ define( function( require ) {
       var challengeSet = [];
       switch( level ) {
         case 0:
-          _.times( 3, function() { challengeSet.push( generateBuildAreaChallenge() ) } );
-          _.times( 2, function() { challengeSet.push( generateRectangularFindAreaChallenge() ) } );
+          _.times( 3, function() { challengeSet.push( generateBuildAreaChallenge() ); } );
+          _.times( 2, function() { challengeSet.push( generateRectangularFindAreaChallenge() ); } );
           challengeSet.push( generateLShapedFindAreaChallenge() );
           challengeSet = _.shuffle( challengeSet );
           break;
 
         case 1:
-          _.times( 3, function() { challengeSet.push( generateBuildAreaAndPerimeterChallenge() ) } );
-          _.times( 3, function() { challengeSet.push( generateTwoRectangleBuildAreaAndPerimeterChallenge() ) } );
+          _.times( 3, function() { challengeSet.push( generateBuildAreaAndPerimeterChallenge() ); } );
+          _.times( 3, function() { challengeSet.push( generateTwoRectangleBuildAreaAndPerimeterChallenge() ); } );
           break;
 
         case 2:
@@ -656,7 +516,7 @@ define( function( require ) {
           challengeSet.push( generateOShapedFindAreaChallenge() );
           challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
           challengeSet = _.shuffle( challengeSet );
-          _.times( 2, function() { challengeSet.push( generateIsoscelesRightTriangleFindAreaChallenge() ) } );
+          _.times( 2, function() { challengeSet.push( generateIsoscelesRightTriangleFindAreaChallenge() ); } );
           challengeSet.push( generateLargeRectWithChipMissingChallenge() );
           break;
 
@@ -673,7 +533,7 @@ define( function( require ) {
           break;
 
         case 4:
-          _.times( numChallenges, function() { challengeSet.push( AreaBuilderGameChallenge.createFakeChallenge() ) } );
+          _.times( numChallenges, function() { challengeSet.push( AreaBuilderGameChallenge.createFakeChallenge() ); } );
           break;
 
       }
