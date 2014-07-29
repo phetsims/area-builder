@@ -76,7 +76,10 @@ define( function( require ) {
     windowNode.clipArea = new Shape.rect( previousButton.right + MIN_INTER_ITEM_SPACING / 2,
       0, nextButton.left - previousButton.right - MIN_INTER_ITEM_SPACING, panelHeight );
     this.addChild( windowNode );
-    var scrollingNode = new Node();
+    var scrollingNode = new Rectangle( 0, 0,
+        BUTTON_INSET + previousButton.width + children.length * ( maxChildWidth + 2 * MIN_INTER_ITEM_SPACING),
+      panelHeight, 0, 0, { fill: 'rgba( 0, 0, 0, 0)' }
+    );
     children.forEach( function( child, index ) {
       child.centerX = previousButton.right + MIN_INTER_ITEM_SPACING + maxChildWidth / 2 + index * ( maxChildWidth + 2 * MIN_INTER_ITEM_SPACING );
       child.centerY = panelHeight / 2;
@@ -92,17 +95,20 @@ define( function( require ) {
 
     function scrollRight() {
       targetPosition.value += 1;
-      scrollingNode.left = scrollingNode.left + scrollDistance;
     }
 
     function scrollLeft() {
       targetPosition.value -= 1;
-      scrollingNode.left = scrollingNode.left - scrollDistance;
     }
 
     targetPosition.link( function( pos ) {
+
+      // Enable/disable the navigation buttons.
       nextButton.enabled = pos > options.numVisibleAtOnce - children.length;
       previousButton.enabled = pos < 0;
+
+      // Set up the animation to scroll to the next location.
+      new TWEEN.Tween( scrollingNode ).to( { left: targetPosition.value * scrollDistance }, 200 ).easing( TWEEN.Easing.Cubic.InOut ).start();
     } );
 
     // Hook up the scrolling nodes to the buttons.
