@@ -213,9 +213,37 @@ define( function( require ) {
     return new PerimeterShape( [ exteriorPerimeterPoints ], [ interiorPerimeterPoints ], UNIT_SQUARE_LENGTH );
   }
 
-  function createPerimeterShapeRightIsoscelesTriangle( x, y, edgeLength, cornerPosition ) {
+  function createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( x, y, edgeLength, cornerPosition ) {
     var perimeterPoints = [ new Vector2( x, y ), new Vector2( x + edgeLength, y ), new Vector2( x, y + edgeLength ) ];
     if ( cornerPosition === 'rightTop' || cornerPosition === 'rightBottom' ) {
+      perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
+    }
+    if ( cornerPosition === 'leftBottom' || cornerPosition === 'rightBottom' ) {
+      perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
+    }
+
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+  }
+
+  function createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( x, y, hypotenuseLength, cornerPosition ) {
+    var perimeterPoints;
+    if ( cornerPosition === 'centerTop' || cornerPosition === 'centerBottom' ) {
+      perimeterPoints = [ new Vector2( x, y ), new Vector2( x + hypotenuseLength, y ),
+        new Vector2( x + hypotenuseLength / 2, y + hypotenuseLength / 2 ) ];
+      if ( cornerPosition === 'centerBottom' ) {
+        perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
+      }
+    }
+    else {
+      perimeterPoints = [ new Vector2( x, y ), new Vector2( x, y + hypotenuseLength ),
+        new Vector2( x + hypotenuseLength / 2, y + hypotenuseLength / 2 ) ];
+      if ( cornerPosition === 'centerLeft' ) {
+        perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
+      }
+    }
+
+    // Reflect as appropriate to create the specified orientation.
+    if ( cornerPosition === 'centerTop' || cornerPosition === 'rightBottom' ) {
       perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
     }
     if ( cornerPosition === 'leftBottom' || cornerPosition === 'rightBottom' ) {
@@ -430,16 +458,33 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
-  function generateIsoscelesRightTriangleFindAreaChallenge() {
-    var cornerPosition = randomElement( ['leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
+  function generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge() {
+    var cornerPosition = randomElement( [ 'leftTop', 'rightTop', 'rightBottom', 'leftBottom' ] );
     var edgeLength = 0;
     do {
-      edgeLength = _.random( 3, Math.min( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2,
+      edgeLength = _.random( 4, Math.min( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2,
           AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 ) );
     } while ( edgeLength % 2 !== 0 );
+    var perimeterShape = createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( 0, 0,
+        edgeLength * UNIT_SQUARE_LENGTH, cornerPosition );
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
 
-    var perimeterShape = createPerimeterShapeRightIsoscelesTriangle( 0, 0, edgeLength * UNIT_SQUARE_LENGTH, cornerPosition );
-
+  function generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge() {
+    var cornerPosition = randomElement( [ 'centerTop', 'rightCenter', 'centerBottom', 'leftCenter' ] );
+    var hypotenuseLength = 0;
+    var maxHypotenuse;
+    if ( cornerPosition === 'centerTop' || cornerPosition === 'centerBottom' ) {
+      maxHypotenuse = AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4;
+    }
+    else {
+      maxHypotenuse = AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2;
+    }
+    do {
+      hypotenuseLength = _.random( 2, maxHypotenuse );
+    } while ( hypotenuseLength % 2 !== 0 );
+    var perimeterShape = createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( 0, 0,
+        hypotenuseLength * UNIT_SQUARE_LENGTH, cornerPosition );
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
   }
 
@@ -462,6 +507,31 @@ define( function( require ) {
       sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH, cutoutOffset * UNIT_SQUARE_LENGTH );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
+
+  function generateLargeRectWithSmallHoleMissingChallenge() {
+    var width = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+    var height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+    var holeWidth, holeHeight;
+    if ( Math.random() < 0.5 ) {
+      holeWidth = _.random( 1, 3 );
+      holeHeight = 1;
+    }
+    else {
+      holeHeight = _.random( 1, 3 );
+      holeWidth = 1;
+    }
+    var holeXOffset = _.random( 1, width - holeWidth - 1 );
+    var holeYOffset = _.random( 1, height - holeHeight - 1 );
+    var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+        holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
+        holeYOffset * UNIT_SQUARE_LENGTH );
+
+    return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_SHAPE_KIT );
+  }
+
+  function generateLargeRectWithPieceMissingChallenge() {
+    return Math.random() < 0.7 ? generateLargeRectWithChipMissingChallenge() : generateLargeRectWithSmallHoleMissingChallenge();
   }
 
   function generateShapeWithDiagonalFindAreaChallenge() {
@@ -517,8 +587,12 @@ define( function( require ) {
           challengeSet.push( generateOShapedFindAreaChallenge() );
           challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
           challengeSet = _.shuffle( challengeSet );
-          _.times( 2, function() { challengeSet.push( generateIsoscelesRightTriangleFindAreaChallenge() ); } );
-          challengeSet.push( generateLargeRectWithChipMissingChallenge() );
+          var triangleChallenges = _.shuffle( [
+            generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge(),
+            generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge()
+          ] );
+          triangleChallenges.forEach( function( challenge ) { challengeSet.push( challenge ) } );
+          challengeSet.push( generateLargeRectWithPieceMissingChallenge() );
           break;
 
         case 3:

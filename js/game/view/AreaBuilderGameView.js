@@ -17,6 +17,7 @@ define( function( require ) {
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
+  var HCarousel = require( 'AREA_BUILDER/game/view/HCarousel' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
@@ -510,13 +511,9 @@ define( function( require ) {
               gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH
             } ) );
           } );
-          var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
-          // TODO: This is just a panel now, needs to become a real carousel at some point.
-          this.shapeCarousel = new Panel( creatorNodeHBox, {
+          this.shapeCarousel = new HCarousel( creatorNodes, {
             centerX: this.shapeBoard.centerX,
             top: this.shapeBoard.bottom + 10,
-            xMargin: 50,
-            yMargin: 15,
             fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
           } );
           this.challengeLayer.addChild( this.shapeCarousel );
