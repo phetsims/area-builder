@@ -229,7 +229,7 @@ define( function( require ) {
     assert && assert( width - diagonalSquareLength >= cutWidth && height - diagonalSquareLength >= cutHeight, 'Invalid parameters' );
 
     var perimeterPoints = [];
-    // Start in upper right corner of unrotated shape.
+    // Draw shape with diagonal in lower right corner, starting in upper right corner.
     perimeterPoints.push( new Vector2( x + width, y ) );
     perimeterPoints.push( new Vector2( x + width, y + height - diagonalSquareLength ) );
     perimeterPoints.push( new Vector2( x + width - diagonalSquareLength, y + height ) );
@@ -238,6 +238,7 @@ define( function( require ) {
     perimeterPoints.push( new Vector2( x + cutWidth, y + cutHeight ) );
     perimeterPoints.push( new Vector2( x + cutWidth, y ) );
 
+    // Reflect shape as needed to meet the specified orientation.
     if ( diagonalPosition === 'leftTop' || diagonalPosition === 'leftBottom' ) {
       perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
     }
@@ -471,8 +472,8 @@ define( function( require ) {
     if ( height > 4 && width > 4 && Math.random() > 0.5 ) {
       diagonalSquareLength = 4;
     }
-    var cutWidth = _.random( 0, width - diagonalSquareLength );
-    var cutHeight = _.random( 0, height - diagonalSquareLength );
+    var cutWidth = _.random( 1, width - diagonalSquareLength );
+    var cutHeight = _.random( 1, height - diagonalSquareLength );
 
     var perimeterShape = createShapeWithDiagonalAndMissingCorner( 0, 0, width * UNIT_SQUARE_LENGTH,
         height * UNIT_SQUARE_LENGTH, diagonalPosition, diagonalSquareLength * UNIT_SQUARE_LENGTH,
