@@ -43,12 +43,12 @@ define( function( require ) {
     .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
     .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
     .close();
-//  var RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
-//    .moveTo( UNIT_SQUARE_LENGTH, 0 )
-//    .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
-//    .lineTo( 0, UNIT_SQUARE_LENGTH )
-//    .lineTo( UNIT_SQUARE_LENGTH, 0 )
-//    .close();
+  var RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
+    .moveTo( UNIT_SQUARE_LENGTH, 0 )
+    .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
+    .lineTo( 0, UNIT_SQUARE_LENGTH )
+    .lineTo( UNIT_SQUARE_LENGTH, 0 )
+    .close();
 
   var BASIC_SHAPE_KIT = [
     {
@@ -65,6 +65,10 @@ define( function( require ) {
     },
     {
       shape: QUAD_SQUARE_SHAPE,
+      color: AreaBuilderSharedConstants.GREENISH_COLOR
+    },
+    {
+      shape: RIGHT_BOTTOM_TRIANGLE_SHAPE,
       color: AreaBuilderSharedConstants.GREENISH_COLOR
     }
   ];
