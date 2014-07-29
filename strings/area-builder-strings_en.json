@@ -1,6 +1,7 @@
 {
   "area.name": "Area Builder",
-  "aSolution": "A solution:",
+  "aSolutionColon": "A solution:",
+  "aSolution": "A Solution",
   "explore": "Explore",
   "game": "Game",
   "area": "Area:",

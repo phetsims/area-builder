@@ -32,7 +32,7 @@ define( function( require ) {
    * @constructor
    */
   function YouBuiltWindow( width, height, options ) {
-    Rectangle.call( this, 0, 0, width, height, 4, 4, { fill: 'white', stroke: 'black' } );
+    Rectangle.call( this, 0, 0, width, height, 4, 4, { fill: '#F2E916', stroke: 'black' } );
 
     // title
     var youBuiltText = new Text( youBuiltString, { font: TITLE_FONT } );

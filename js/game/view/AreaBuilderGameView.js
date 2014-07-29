@@ -46,6 +46,7 @@ define( function( require ) {
   var checkString = require( 'string!VEGAS/check' );
   var nextString = require( 'string!VEGAS/next' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
+  var ASolutionString = require( 'string!AREA_BUILDER/aSolution' );
   var showSolutionString = require( 'string!AREA_BUILDER/showSolution' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
@@ -220,10 +221,15 @@ define( function( require ) {
     }, buttonOptions ) );
     this.gameControlButtons.push( this.tryAgainButton );
 
-    this.displayCorrectAnswerButton = new TextPushButton( showSolutionString, _.extend( {
+    this.showTheSolutionButton = new TextPushButton( showSolutionString, _.extend( {
       listener: function() { gameModel.displayCorrectAnswer(); }
     }, buttonOptions ) );
-    this.gameControlButtons.push( this.displayCorrectAnswerButton );
+    this.gameControlButtons.push( this.showTheSolutionButton );
+
+    this.showASolutionButton = new TextPushButton( ASolutionString, _.extend( {
+      listener: function() { gameModel.displayCorrectAnswer(); }
+    }, buttonOptions ) );
+    this.gameControlButtons.push( this.showASolutionButton );
 
     var buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
     var buttonBottom = this.shapeBoard.bottom;
@@ -355,15 +361,31 @@ define( function( require ) {
 
         case 'showingIncorrectAnswerFeedbackMoveOn':
 
-          // Show the appropriate nodes for this state.
-          this.show( [
+          // Show the appropriate nodes for this state.  The button for showing the correct answer varies a bit based
+          // on the type of challenge.
+          var buttonsToShow = [
             this.scoreboard,
-            this.displayCorrectAnswerButton,
             this.challengeView,
             this.challengePromptBanner
-          ] );
+          ];
 
-          // Give the user the appropriate feedback
+          if ( challenge.buildSpec ) {
+            buttonsToShow.push( this.showASolutionButton );
+          }
+          else {
+            buttonsToShow.push( this.showTheSolutionButton );
+          }
+
+          this.show( buttonsToShow );
+
+          // There are two general classes of challenges, and they have different titles for this button.
+          if ( challenge.buildSpec ) {
+            this.show( [ ] )
+          }
+          this.showTheSolutionButton,
+
+
+            // Give the user the appropriate feedback
           this.gameAudioPlayer.wrongAnswer();
           this.faceWithPointsNode.grimace();
           this.faceWithPointsNode.setPoints( this.model.score );

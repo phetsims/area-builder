@@ -21,7 +21,7 @@ define( function( require ) {
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
-  var aSolutionString = require( 'string!AREA_BUILDER/aSolution' );
+  var aSolutionString = require( 'string!AREA_BUILDER/aSolutionColon' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
   var solutionString = require( 'string!AREA_BUILDER/solution' );
 
