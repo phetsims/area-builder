@@ -46,7 +46,7 @@ define( function( require ) {
       BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( 200, 100 ),
-      AreaBuilderSharedConstants.GREENISH_COLOR,
+      '*', // Allow any color shape to be placed on the board
       this.showGridProperty,
       this.showDimensionsProperty
     );

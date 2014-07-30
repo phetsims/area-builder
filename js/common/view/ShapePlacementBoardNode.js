@@ -53,7 +53,7 @@ define( function( require ) {
     this.addChild( new PerimeterShapeNode(
       shapePlacementBoard.compositeShapeProperty,
       shapePlacementBoard.unitSquareLength,
-      shapePlacementBoard.colorHandled,
+        shapePlacementBoard.colorHandled === '*' ? AreaBuilderSharedConstants.GREENISH_COLOR : shapePlacementBoard.colorHandled,
       shapePlacementBoard.showDimensionsProperty
     ) );
   }

@@ -132,8 +132,8 @@ define( function( require ) {
     return array[ Math.floor( Math.random() * array.length ) ];
   }
 
-  // Create a solution spec (a.k.a. an example solution) that represents a rectangle with the specified orign and size.
-  function createRectangularSolutionSpec( x, y, width, height, color ) {
+  // Create a solution spec (a.k.a. an example solution) that represents a rectangle with the specified origin and size.
+  function createMonochromeRectangularSolutionSpec( x, y, width, height, color ) {
     var solutionSpec = [];
     for ( var column = 0; column < width; column++ ) {
       for ( var row = 0; row < height; row++ ) {
@@ -145,6 +145,40 @@ define( function( require ) {
       }
     }
     return solutionSpec;
+  }
+
+  // Create a solution spec (a.k.a. an example solution) for a two-tone challenge
+  function createTwoColorRectangularSolutionSpec( x, y, width, height, color1, color2, color1proportion ) {
+    var solutionSpec = [];
+    for ( var column = 0; column < width; column++ ) {
+      for ( var row = 0; row < height; row++ ) {
+        solutionSpec.push( {
+          cellColumn: column + x,
+          cellRow: row + y,
+          color: row * column < color1proportion * ( width * height ) ? color1 : color2
+        } );
+      }
+    }
+    return solutionSpec;
+  }
+
+  function createTwoToneRectangleBuildKit( color1, color2 ) {
+    var kit = [];
+    BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
+      var modifiedKitElement = {
+        shape: kitElement.shape,
+        color: color1
+      };
+      kit.push( modifiedKitElement )
+    } );
+    BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
+      var modifiedKitElement = {
+        shape: kitElement.shape,
+        color: color2
+      };
+      kit.push( modifiedKitElement )
+    } );
+    return kit;
   }
 
   function flipPerimeterPointsHorizontally( perimeterPointList ) {
@@ -358,7 +392,7 @@ define( function( require ) {
       while ( width * height < 8 || width * height > 36 ) {
         height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       }
-      var exampleSolution = createRectangularSolutionSpec(
+      var exampleSolution = createMonchromeRectangularSolutionSpec(
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
         width,
@@ -403,9 +437,9 @@ define( function( require ) {
     var top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
 
     // Create a solution spec by merging specs for each of the rectangles together.
-    var solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR );
-    solutionSpec = createRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR ).concat(
-      createRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
+    var solutionSpec = createMonchromeRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR );
+    solutionSpec = createMonchromeRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR ).concat(
+      createMonchromeRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
 
     return( AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width1 * height1 + width2 * height2,
         2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, BASIC_RECTANGLES_SHAPE_KIT, solutionSpec ) );
@@ -433,7 +467,7 @@ define( function( require ) {
         height = _.random( 3, 8 );
       }
 
-      var exampleSolution = createRectangularSolutionSpec(
+      var exampleSolution = createMonochromeRectangularSolutionSpec(
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
         width,
@@ -608,6 +642,78 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, RECTANGLES_AND_TRIANGLES_SHAPE_KIT );
   }
 
+  function generateProportionalBuildAreaChallenge() {
+    var width = _.random( 3, 8 );
+    var height = width === 3 ? _.random( 4, 8 ) : _.random( 2, 12 );
+    var fractionDenominator;
+    do {
+      fractionDenominator = _.random( 2, 5 );
+    } while ( ( width * height ) % fractionDenominator !== 0 );
+
+    var color1, color2;
+    if ( Math.random() < 0.5 ) {
+      color1 = 'red';
+      color2 = 'blue';
+    }
+    else {
+      color1 = 'orange';
+      color2 = 'yellow';
+    }
+
+    var exampleSolution = createTwoColorRectangularSolutionSpec( 0, 0, width, height, color1, color2, 1 / fractionDenominator );
+    var userShapes = createTwoToneRectangleBuildKit( color1, color2 );
+    return AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge( width * height, color1, color2, 1, fractionDenominator, userShapes, exampleSolution );
+  }
+
+  function generateProportionalBuildAreaAndPerimeterChallenge() {
+
+    var width = 0;
+    var height = 0;
+
+    // Width can be any value from 3 to 8 excluding 7, see design doc.
+    while ( width === 0 || width === 7 ) {
+      width = _.random( 3, 8 );
+    }
+
+    // Choose the height based on the total area.
+    while ( width * height < 12 || width * height > 36 || height === 7 ) {
+      height = _.random( 3, 8 );
+    }
+
+    var color1, color2;
+    if ( Math.random() < 0.5 ) {
+      color1 = 'red';
+      color2 = 'blue';
+    }
+    else {
+      color1 = 'orange';
+      color2 = 'yellow';
+    }
+
+    // Determine what fraction to have the user build.
+    var fractionDenominator;
+    do {
+      fractionDenominator = _.random( 2, 5 );
+    } while ( ( width * height ) % fractionDenominator !== 0 );
+
+    // Create an example solution to present if the user doesn't get a correct answer.
+    var exampleSolution = createTwoColorRectangularSolutionSpec(
+      Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
+      Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
+      width,
+      height,
+      color1,
+      color2,
+        1 / fractionDenominator,
+      AreaBuilderSharedConstants.GREENISH_COLOR
+    );
+
+    // Create the challenge.
+    return AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge( width * height,
+        2 * width + 2 * height, color1, color2, 1, fractionDenominator,
+      createTwoToneRectangleBuildKit( color1, color2 ), exampleSolution );
+  }
+
   // Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
 
@@ -683,7 +789,8 @@ define( function( require ) {
           break;
 
         case 4:
-          _.times( numChallenges, function() { challengeSet.push( AreaBuilderGameChallenge.createFakeChallenge() ); } );
+          _.times( 3, function() { challengeSet.push( generateProportionalBuildAreaChallenge() ); } );
+          _.times( 3, function() { challengeSet.push( generateProportionalBuildAreaAndPerimeterChallenge() ); } );
           break;
 
       }

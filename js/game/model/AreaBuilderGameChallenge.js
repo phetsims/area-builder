@@ -46,8 +46,6 @@ define( function( require ) {
     this.showNumberEntryPad = showNumberEntryPad;
     this.userShapes = userShapes;
     this.buildSpec = buildSpec;
-    this.colorPrompt1 = color1;
-    this.colorPrompt2 = colorPrompt2;
     this.backgroundShape = backgroundShape;
     this.checkSpec = checkSpec;
     this.exampleBuildItSolution = exampleBuildItSolution;
@@ -74,6 +72,87 @@ define( function( require ) {
 
       // buildSpec
       { area: areaToBuild },
+
+      // backgroundShape
+      null,
+
+      // checkSpec
+      'areaConstructed',
+
+      // exampleBuildItSolution
+      exampleSolution,
+
+      // fakeChallenge
+      false
+    );
+  };
+
+  AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge = function( areaToBuild, color1, color2, color1Numerator, color1Denominator, userShapes, exampleSolution ) {
+    return new AreaBuilderGameChallenge(
+      // toolSpec
+      {
+        gridControl: true,
+        dimensionsControl: true,
+        decompositionToolControl: true
+      },
+
+      // showNumberEntryPad
+      false,
+
+      // userShapes
+      userShapes,
+
+      // buildSpec
+      {
+        area: areaToBuild,
+        proportion: {
+          color1: color1,
+          color2: color2,
+          color1ProportionNumerator: color1Numerator,
+          color1ProportionDenominator: color1Denominator
+        }
+      },
+
+      // backgroundShape
+      null,
+
+      // checkSpec
+      'areaConstructed',
+
+      // exampleBuildItSolution
+      exampleSolution,
+
+      // fakeChallenge
+      false
+    );
+  };
+
+  AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge = function( areaToBuild, PerimeterToBuild, color1, color2, color1Numerator, color1Denominator, userShapes, exampleSolution ) {
+    return new AreaBuilderGameChallenge(
+      // toolSpec
+      {
+        gridControl: true,
+        dimensionsControl: true,
+        decompositionToolControl: true
+      },
+
+      // showNumberEntryPad
+      false,
+
+      // userShapes
+      userShapes,
+
+      // buildSpec
+      {
+        area: areaToBuild,
+        perimeter: perimeterToBuild,
+        proportion: {
+          color1: color1,
+          color2: color2,
+          color1ProportionNumerator: color1Numerator,
+          color1ProportionDenominator: color1Denominator
+        }
+      },
 
       // backgroundShape
       null,

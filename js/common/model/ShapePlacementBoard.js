@@ -47,7 +47,7 @@ define( function( require ) {
    * @param {Dimension2} size
    * @param {Number} unitSquareLength
    * @param {Vector2} position
-   * @param {String || Color} colorHandled
+   * @param {String || Color || '*'} colorHandled, can be wildcard string for all colors
    * @param {Property<Boolean>} showGridProperty
    * @param {Property<Boolean>} showDimensionsProperty
    * @constructor
@@ -133,7 +133,7 @@ define( function( require ) {
       var self = this;
 
       // Only place the shape if it is of the correct color and is positioned so that it overlaps with the board.
-      if ( movableShape.color !== this.colorHandled || !this.shapeOverlapsBoard( movableShape ) ) {
+      if ( ( this.colorHandled !== '*' && movableShape.color !== this.colorHandled ) || !this.shapeOverlapsBoard( movableShape ) ) {
         return false;
       }
 
