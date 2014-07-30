@@ -87,6 +87,13 @@ define( function( require ) {
     }
   ];
 
+  var UNIT_SQUARE_ONLY_SHAPE_KIT = [
+    {
+      shape: SQUARE_SHAPE,
+      color: AreaBuilderSharedConstants.GREENISH_COLOR
+    }
+  ];
+
   var RECTANGLES_AND_TRIANGLES_SHAPE_KIT = [
     {
       shape: HORIZONTAL_DOUBLE_SQUARE_SHAPE,
@@ -115,7 +122,7 @@ define( function( require ) {
     {
       shape: RIGHT_TOP_TRIANGLE_SHAPE,
       color: AreaBuilderSharedConstants.GREENISH_COLOR
-    },
+    }
   ];
 
   // -------------- private functions ---------------------------
@@ -651,9 +658,15 @@ define( function( require ) {
           challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
           challengeSet = _.shuffle( challengeSet );
           // For the next challenge, choose randomly from the shapes that don't have diagonals.
-          var genFunction = randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] );
-          challengeSet.push( genFunction() );
-          challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
+          var challenge = randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] )();
+          // Make some mods to the challenge.
+          challenge.toolSpec.gridControl = false;
+          challenge.userShapes = null;
+          challengeSet.push( challenge );
+          challenge = generateShapeWithDiagonalFindAreaChallenge();
+          challenge.toolSpec.gridControl = false;
+          challenge.userShapes = null;
+          challengeSet.push( challenge );
           break;
 
         case 4:
