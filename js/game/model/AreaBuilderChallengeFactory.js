@@ -625,6 +625,7 @@ define( function( require ) {
     generateChallengeSet: function( level, numChallenges ) {
       challengeHistory = []; // TODO: This reset of the history array is temporary until more challenges are created, then it should be cleared 1/2 at a time when having trouble creating unique challenges.
       var challengeSet = [];
+      var tempChallenge;
       switch( level ) {
         case 0:
           _.times( 3, function() { challengeSet.push( generateBuildAreaChallenge() ); } );
@@ -652,21 +653,33 @@ define( function( require ) {
           break;
 
         case 3:
-          challengeSet.push( generateUShapedFindAreaChallenge() );
-          challengeSet.push( generateOShapedFindAreaChallenge() );
-          challengeSet.push( generateOShapedFindAreaChallenge() );
-          challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
+          // For this level, the grid is disabled for all challenges and some different build kits are used.
+          tempChallenge = generateUShapedFindAreaChallenge();
+          tempChallenge.toolSpec.gridControl = false;
+          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
+          challengeSet.push( tempChallenge );
+          tempChallenge = generateOShapedFindAreaChallenge();
+          tempChallenge.toolSpec.gridControl = false;
+          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
+          challengeSet.push( tempChallenge );
+          tempChallenge = generateOShapedFindAreaChallenge();
+          tempChallenge.toolSpec.gridControl = false;
+          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
+          challengeSet.push( tempChallenge );
+          tempChallenge = generateShapeWithDiagonalFindAreaChallenge();
+          tempChallenge.toolSpec.gridControl = false;
+          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
+          challengeSet.push( tempChallenge );
           challengeSet = _.shuffle( challengeSet );
           // For the next challenge, choose randomly from the shapes that don't have diagonals.
-          var challenge = randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] )();
-          // Make some mods to the challenge.
-          challenge.toolSpec.gridControl = false;
-          challenge.userShapes = null;
-          challengeSet.push( challenge );
-          challenge = generateShapeWithDiagonalFindAreaChallenge();
-          challenge.toolSpec.gridControl = false;
-          challenge.userShapes = null;
-          challengeSet.push( challenge );
+          tempChallenge = randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] )();
+          tempChallenge.toolSpec.gridControl = false;
+          tempChallenge.userShapes = null;
+          challengeSet.push( tempChallenge );
+          tempChallenge = generateShapeWithDiagonalFindAreaChallenge();
+          tempChallenge.toolSpec.gridControl = false;
+          tempChallenge.userShapes = null;
+          challengeSet.push( tempChallenge );
           break;
 
         case 4:
