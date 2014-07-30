@@ -641,8 +641,18 @@ define( function( require ) {
   }
 
   function generateProportionalBuildAreaChallenge() {
-    var width = _.random( 3, 8 );
-    var height = width === 3 ? _.random( 4, 8 ) : _.random( 2, 12 );
+    var width, height;
+
+    // Width can be any value from 3 to 8 excluding 7, see design doc.
+    do {
+      width = _.random( 3, 8 );
+    } while ( width === 0 || width === 7 );
+
+    // Choose the height based on the total area.
+    do {
+      height = _.random( 3, 8 );
+    } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+
     var fractionDenominator;
     do {
       fractionDenominator = _.random( 2, 5 );
@@ -669,14 +679,14 @@ define( function( require ) {
     var height = 0;
 
     // Width can be any value from 3 to 8 excluding 7, see design doc.
-    while ( width === 0 || width === 7 ) {
+    do {
       width = _.random( 3, 8 );
-    }
+    } while ( width === 0 || width === 7 );
 
     // Choose the height based on the total area.
-    while ( width * height < 12 || width * height > 36 || height === 7 ) {
+    do {
       height = _.random( 3, 8 );
-    }
+    } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
     var color1, color2;
     if ( Math.random() < 0.5 ) {
