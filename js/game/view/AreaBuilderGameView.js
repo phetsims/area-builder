@@ -127,12 +127,14 @@ define( function( require ) {
       gameModel.challengesPerProblemSet,
       gameModel.scoreProperty,
       gameModel.elapsedTimeProperty,
-      gameModel.timerEnabledProperty,
       gameModel.simSpecificModel.showGridProperty,
       gameModel.simSpecificModel.showDimensionsProperty,
       { top: 100, left: 20 }
     );
     this.controlLayer.addChild( this.scoreboard );
+
+    // Control timer visibility on the scoreboard.
+    gameModel.timerEnabledProperty.linkAttribute( this.scoreboard.visibilityControls, 'timeVisible' );
 
     // Add the button for returning to the level selection screen.
     this.controlLayer.addChild( new RectangularPushButton( {
@@ -502,6 +504,8 @@ define( function( require ) {
 
         // Set the state of the control panel/scoreboard.
         this.scoreboard.dimensionsIcon.setStyle( challenge.backgroundShape ? 'background' : 'composite' );
+        this.scoreboard.visibilityControls.gridControlVisible = challenge.toolSpec.gridControl;
+        this.scoreboard.visibilityControls.dimensionsControlVisible = challenge.toolSpec.dimensionsControl;
 
         // Create the carousel if present
         if ( challenge.userShapes !== null ) {
