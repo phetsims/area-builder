@@ -105,8 +105,8 @@ define( function( require ) {
         new Image( icon1a ),
         new Image( icon2a ),
         new Image( icon3a ),
-        new Image( icon4a ),
-        new Image( icon5a )
+        new Image( icon4a )
+//        new Image( icon5a )
       ],
       gameModel.bestScores,
       {
