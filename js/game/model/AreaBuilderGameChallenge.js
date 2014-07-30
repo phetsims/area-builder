@@ -23,11 +23,9 @@ define( function( require ) {
    * 'color' field.  This value can be null to signify no user shapes are present for the challenge.
    * @param {object} buildSpec Object that specifies what the user should build.  This is only used if this is a 'build
    * it' type of challenge, otherwise it should be null.  It should always have an 'area' field with a number, and can
-   * optionally have a 'perimeter' field with a number as well.
-   * @param {object} colorPrompt1 Object with a 'text' field and a 'color' field that is used when users need to build
-   * a two-tone area. Should be null if not used.
-   * @param {object} colorPrompt2 Object with a 'text' field and a 'color' field that is used when users need to build
-   * a two-tone area. Should be null if not used.
+   * optionally have a 'perimeter' field with a number as well.  It can also have a 'proportion' field if the user is
+   * to build an area with two colors of a specified proportion.  The 'proportion' field is an object that looks
+   * like this example: { color1: 'green', color2: 'blue', color1ProportionNumerator: 1, color1ProportionDenominator: 3 }.
    * @param {PerimeterShape} backgroundShape Shape that should appear on the board, null for challenges that don't
    * require such a shape.
    * @param {string} checkSpec Specifies what should be checked when the user pressed the 'Check' button.  Valid values
@@ -39,7 +37,7 @@ define( function( require ) {
    * challenge, i.e. one with just a check box to get the right answer.  TODO Remove this once game is working.
    * @constructor
    */
-  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, userShapes, buildSpec, colorPrompt1, colorPrompt2, backgroundShape, checkSpec, exampleBuildItSolution, fakeChallenge ) {
+  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, userShapes, buildSpec, backgroundShape, checkSpec, exampleBuildItSolution, fakeChallenge ) {
     // Verification
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
     // TODO: Maybe add some additional verification.
@@ -48,7 +46,7 @@ define( function( require ) {
     this.showNumberEntryPad = showNumberEntryPad;
     this.userShapes = userShapes;
     this.buildSpec = buildSpec;
-    this.colorPrompt1 = colorPrompt1;
+    this.colorPrompt1 = color1;
     this.colorPrompt2 = colorPrompt2;
     this.backgroundShape = backgroundShape;
     this.checkSpec = checkSpec;
@@ -76,12 +74,6 @@ define( function( require ) {
 
       // buildSpec
       { area: areaToBuild },
-
-      // colorPrompt1
-      null,
-
-      // colorPrompt2
-      null,
 
       // backgroundShape
       null,
@@ -115,12 +107,6 @@ define( function( require ) {
       // buildSpec
       { area: areaToBuild, perimeter: perimeterToBuild },
 
-      // colorPrompt1
-      null,
-
-      // colorPrompt2
-      null,
-
       // backgroundShape
       null,
 
@@ -153,12 +139,6 @@ define( function( require ) {
       // buildSpec
       null,
 
-      // colorPrompt1
-      null,
-
-      // colorPrompt2
-      null,
-
       // backgroundShape
       areaShape,
 
@@ -189,12 +169,6 @@ define( function( require ) {
       null,
 
       // buildSpec
-      null,
-
-      // colorPrompt1
-      null,
-
-      // colorPrompt2
       null,
 
       // backgroundShape
