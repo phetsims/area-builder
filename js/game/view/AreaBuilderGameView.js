@@ -57,7 +57,7 @@ define( function( require ) {
   var icon2a = require( 'image!AREA_BUILDER/icon-2-a.jpg' );
   var icon3a = require( 'image!AREA_BUILDER/icon-3-a.jpg' );
   var icon4a = require( 'image!AREA_BUILDER/icon-4-a.jpg' );
-  var icon5a = require( 'image!AREA_BUILDER/icon-5-a.jpg' );
+//  var icon5a = require( 'image!AREA_BUILDER/icon-5-a.jpg' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );

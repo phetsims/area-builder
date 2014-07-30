@@ -88,8 +88,6 @@ define( function( require ) {
     windowNode.addChild( scrollingNode );
 
     // Set up the scrolling functions.
-    var currentAnimation = null;
-    var currentPosition = 0;
     var targetPosition = new Property( 0 );
     var scrollDistance = maxChildWidth + 2 * MIN_INTER_ITEM_SPACING;
 
@@ -117,7 +115,5 @@ define( function( require ) {
 
   }
 
-  return inherit( Rectangle, HCarousel, {
-    //TODO prototypes
-  } );
+  return inherit( Rectangle, HCarousel );
 } );

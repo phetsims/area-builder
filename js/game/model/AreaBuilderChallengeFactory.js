@@ -648,7 +648,7 @@ define( function( require ) {
             generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge(),
             generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge()
           ] );
-          triangleChallenges.forEach( function( challenge ) { challengeSet.push( challenge ) } );
+          triangleChallenges.forEach( function( challenge ) { challengeSet.push( challenge ); } );
           challengeSet.push( generateLargeRectWithPieceMissingChallenge() );
           break;
 
