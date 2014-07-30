@@ -21,7 +21,7 @@ define( function( require ) {
    * @param {Array<Object>} userShapes An array of shape specification that describe the shapes that can be created and
    * manipulated by the user for this challenge.  Each shape specification is an object with a 'shape' field and a
    * 'color' field.  This value can be null to signify no user shapes are present for the challenge.
-   * @param {object} buildSpec Object that specifies what the user should build.  This is only used if this is a 'build
+   * @param {Object} buildSpec Object that specifies what the user should build.  This is only used if this is a 'build
    * it' type of challenge, otherwise it should be null.  It should always have an 'area' field with a number, and can
    * optionally have a 'perimeter' field with a number as well.  It can also have a 'proportion' field if the user is
    * to build an area with two colors of a specified proportion.  The 'proportion' field is an object that looks
@@ -127,7 +127,7 @@ define( function( require ) {
     );
   };
 
-  AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge = function( areaToBuild, PerimeterToBuild, color1, color2, color1Numerator, color1Denominator, userShapes, exampleSolution ) {
+  AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, color1, color2, color1Numerator, color1Denominator, userShapes, exampleSolution ) {
     return new AreaBuilderGameChallenge(
       // toolSpec
       {

@@ -14,12 +14,16 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -35,7 +39,7 @@ define( function( require ) {
   var TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
   var LARGE_FONT = new PhetFont( { size: 24 } ); // Font for single line text
   var SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
-  var TITLE_INDENT = 15;
+  var TITLE_INDENT = 10;
   var ANIMATION_TIME = 600; // In milliseconds
 
   /**
@@ -61,9 +65,12 @@ define( function( require ) {
       // Perimeter that the user should be building, if any.
       targetPerimeter: null,
 
-      // This flag controls whether the prompts are visible.  It should be toggled each time the prompts are updated
-      // for correct fade-in behavior.
-      promptsVisible: false,
+      // Proportion spec, null if no proportions shown, of the form used in the challenges if present.
+      targetProportions: null,
+
+      // This flag controls whether the prompts are visible (i.e. the target area, target perimeter, target
+      // proportions).  It should be toggled each time the prompts are updated for correct fade-in behavior.
+      showPrompts: false,
 
       // Spec for fractional area building problems.
       buildProportions: { numerator: 1, denominator: 1, color1: 'black', color2: 'white' }
@@ -107,31 +114,66 @@ define( function( require ) {
 
     Property.multilink( [ this.properties.targetAreaProperty, this.properties.targetPerimeterProperty ],
       function( targetArea, targetPerimeter ) {
-        // Update the text of both build prompts.  One will be set to a value, the other to an empty string.
+
         var buildPromptCenterX = ( title.width + width ) / 2;
         var areaPromptText = targetArea ? StringUtils.format( areaEqualsString, targetArea ) : '';
+
+        // Update the text of the area only prompt.
         areaOnlyPrompt.text = areaPromptText;
         areaPromptText.centerX = buildPromptCenterX;
+
+        // Update the area+perimeter prompt
         var perimeterPromptText = targetPerimeter ? StringUtils.format( perimeterEqualsString, targetPerimeter ) : '';
         areaAndPerimeterPrompt.text = areaPromptText + '\n' + perimeterPromptText;
         areaAndPerimeterPrompt.centerX = buildPromptCenterX;
         areaAndPerimeterPrompt.centerY = height / 2;
       } );
 
+    var targetProportionsPrompt = new Node();
+    this.addChild( targetProportionsPrompt );
+
+    this.properties.targetProportionsProperty.link( function( targetProportions ) {
+      targetProportionsPrompt.removeAllChildren();
+      if ( targetProportions ) {
+        var colorProportionsPrompt = new ColorProportionsPrompt( targetProportions.color1,
+          targetProportions.color2, targetProportions.color1ProportionNumerator,
+          targetProportions.color1ProportionDenominator );
+        colorProportionsPrompt.scale( height / colorProportionsPrompt.bounds.height * 0.9 );
+        colorProportionsPrompt.right = width - TITLE_INDENT;
+        colorProportionsPrompt.centerY = height / 2;
+        targetProportionsPrompt.addChild( colorProportionsPrompt );
+      }
+    } );
+
     // Control the visibility of the various prompts.  The active prompts fade in what this property becomes true,
     // and disappear instantly when this prompt goes false.
-    this.properties.promptsVisibleProperty.link( function( promptsVisible ) {
-      areaOnlyPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter === null ) && promptsVisible;
-      areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter !== null ) && promptsVisible;
-      if ( promptsVisible && ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) ) {
+    this.properties.showPromptsProperty.link( function( showPrompts ) {
+      areaOnlyPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter === null ) && showPrompts;
+      areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter !== null ) && showPrompts;
+      targetProportionsPrompt.visible = self.properties.targetProportions != null;
+      if ( showPrompts && ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible || targetProportionsPrompt.visible ) ) {
         // Move the title over to make room for the build prompt.
         new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
+
+        // Position the area and area+perimeter prompts
+        if ( targetProportionsPrompt.visible ) {
+          areaOnlyPrompt.centerX = ( title.width + TITLE_INDENT + targetProportionsPrompt.left ) / 2;
+        }
+        else {
+          areaOnlyPrompt.centerX = ( width + title.width + TITLE_INDENT ) / 2;
+        }
+        areaAndPerimeterPrompt.centerX = areaOnlyPrompt.centerX;
+
 
         // Fade in whatever prompts are currently set to be visible.
         if ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) {
           var promptToFadeIn = areaOnlyPrompt.visible ? areaOnlyPrompt : areaAndPerimeterPrompt;
           promptToFadeIn.opacity = 0;
           new TWEEN.Tween( promptToFadeIn ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
+        }
+        if ( targetProportionsPrompt.visible ) {
+          targetProportionsPrompt.opacity = 0;
+          new TWEEN.Tween( targetProportionsPrompt ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
         }
       }
       else {

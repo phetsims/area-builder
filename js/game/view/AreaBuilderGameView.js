@@ -57,7 +57,7 @@ define( function( require ) {
   var icon2a = require( 'image!AREA_BUILDER/icon-2-a.jpg' );
   var icon3a = require( 'image!AREA_BUILDER/icon-3-a.jpg' );
   var icon4a = require( 'image!AREA_BUILDER/icon-4-a.jpg' );
-//  var icon5a = require( 'image!AREA_BUILDER/icon-5-a.jpg' );
+  var icon5a = require( 'image!AREA_BUILDER/icon-5-a.jpg' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
@@ -105,8 +105,8 @@ define( function( require ) {
         new Image( icon1a ),
         new Image( icon2a ),
         new Image( icon3a ),
-        new Image( icon4a )
-//        new Image( icon5a )
+        new Image( icon4a ),
+        new Image( icon5a )
       ],
       gameModel.bestScores,
       {
@@ -290,7 +290,7 @@ define( function( require ) {
       }
 
       // Show the build prompts on the challenge prompt banner if they aren't shown already.
-      self.challengePromptBanner.properties.promptsVisible = true;
+      self.challengePromptBanner.properties.showPrompts = true;
     } );
 
     // Various other initialization
@@ -483,7 +483,12 @@ define( function( require ) {
           this.challengePromptBanner.properties.targetPerimeter = challenge.buildSpec.perimeter || null;
 
           // The prompts on the banner are initially invisible, and show up once the user adds a shape.
-          this.challengePromptBanner.properties.promptsVisible = false;
+          this.challengePromptBanner.properties.showPrompts = false;
+
+          if ( challenge.buildSpec.proportion ) {
+            // The the target proportions prompt.
+            this.challengePromptBanner.properties.targetProportions = challenge.buildSpec.proportion;
+          }
         }
         this.challengeView.removeAllChildren();
         if ( challenge.buildSpec ) {

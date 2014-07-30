@@ -392,7 +392,7 @@ define( function( require ) {
       while ( width * height < 8 || width * height > 36 ) {
         height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       }
-      var exampleSolution = createMonchromeRectangularSolutionSpec(
+      var exampleSolution = createMonochromeRectangularSolutionSpec(
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
         width,
@@ -437,9 +437,8 @@ define( function( require ) {
     var top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
 
     // Create a solution spec by merging specs for each of the rectangles together.
-    var solutionSpec = createMonchromeRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR );
-    solutionSpec = createMonchromeRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR ).concat(
-      createMonchromeRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
+    var solutionSpec = createMonochromeRectangularSolutionSpec( left, top, width1, height1, AreaBuilderSharedConstants.GREENISH_COLOR ).concat(
+      createMonochromeRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, AreaBuilderSharedConstants.GREENISH_COLOR ) );
 
     return( AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width1 * height1 + width2 * height2,
         2 * width1 + 2 * height1 + 2 * width2 + 2 * height2 - 2 * overlap, BASIC_RECTANGLES_SHAPE_KIT, solutionSpec ) );
@@ -454,18 +453,17 @@ define( function( require ) {
       // TODO: Only generates rectangular challenges at this point.
       // TODO: Also, difficulty is ignored.
 
-      var width = 0;
-      var height = 0;
+      var width, height;
 
       // Width can be any value from 3 to 8 excluding 7, see design doc.
-      while ( width === 0 || width === 7 ) {
+      do {
         width = _.random( 3, 8 );
-      }
+      } while ( width === 0 || width === 7 );
 
       // Choose the height based on the total area.
-      while ( width * height < 12 || width * height > 36 || height === 7 ) {
+      do {
         height = _.random( 3, 8 );
-      }
+      } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
       var exampleSolution = createMonochromeRectangularSolutionSpec(
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
