@@ -92,7 +92,7 @@ define( function( require ) {
         var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 
         // Create and add the new model element.
-        modelElement = new MovableShape( shape, AreaBuilderSharedConstants.GREENISH_COLOR, initialPosition );
+        modelElement = new MovableShape( shape, color, initialPosition );
         modelElement.userControlled = true;
         model.addUserCreatedMovableShape( modelElement );
       },
