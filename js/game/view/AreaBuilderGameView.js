@@ -14,6 +14,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var ChallengePromptBanner = require( 'AREA_BUILDER/game/view/ChallengePromptBanner' );
   var CheckBox = require( 'SUN/CheckBox' );
+  var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
@@ -39,6 +40,7 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var YouBuiltWindow = require( 'AREA_BUILDER/game/view/YouBuiltWindow' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
@@ -63,6 +65,7 @@ define( function( require ) {
   var BUTTON_FONT = new PhetFont( 18 );
   var BUTTON_FILL = '#F2E916';
   var INFO_BANNER_HEIGHT = 50; // Height of the prompt and solution banners, empirically determined.
+  var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 
   // TODO - Temporary stuff for supporting 'fake' challenges, remove when all challenges working.
   // Utility function
@@ -178,11 +181,15 @@ define( function( require ) {
     this.challengeLayer.addChild( this.solutionBanner );
 
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
-    this.buildPromptText = new MultiLineText( '',
-      {
-        font: new PhetFont( { size: 20, weight: 'bold' } )
-      } );
-    this.buildPromptPanel = new Panel( this.buildPromptText, {
+    this.goalText = new Text( '', { font: GOAL_PROMPT_FONT } );
+    this.buildPromptVBox = new VBox( {
+      children: [
+        new Text( yourGoalString, { font: GOAL_PROMPT_FONT } ),
+        this.goalText
+      ],
+      spacing: 20
+    } );
+    this.buildPromptPanel = new Panel( this.buildPromptVBox, {
       stroke: null,
       xMargin: 10,
       yMargin: 10
@@ -492,18 +499,29 @@ define( function( require ) {
         }
         this.challengeView.removeAllChildren();
         if ( challenge.buildSpec ) {
+          // Set up the prompt the will be shown over the shape placement board.
           var promptText = StringUtils.format( areaEqualsString, challenge.buildSpec.area );
           if ( challenge.buildSpec.perimeter ) {
             promptText += '   ' + StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter );
           }
-          this.buildPromptText.text = yourGoalString + '\n\n' + promptText + '\n\n' + buildItString;
+          this.goalText.text = promptText;
+          while ( this.buildPromptVBox.getChildrenCount() > 2 ) {
+            this.buildPromptVBox.removeChildAt( 2 );
+          }
+          if ( challenge.buildSpec.proportion ) {
+            var spec = challenge.buildSpec.proportion;
+            this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2,
+              spec.color1ProportionNumerator, spec.color1ProportionDenominator, { font: GOAL_PROMPT_FONT } ) );
+          }
+          this.buildPromptVBox.addChild( new Text( buildItString, GOAL_PROMPT_FONT ) );
+
+          // Center the panel over the shape board.
           this.buildPromptPanel.centerX = this.shapeBoard.centerX;
           this.buildPromptPanel.centerY = this.shapeBoard.centerY;
           this.buildPromptPanel.visible = true;
           this.buildPromptPanel.opacity = 1; // Necessary because the board is set to fade out elsewhere.
         }
         else {
-          this.buildPromptText.text = '';
           this.buildPromptPanel.visible = false;
         }
 

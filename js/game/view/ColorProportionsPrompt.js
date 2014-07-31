@@ -14,22 +14,19 @@ define( function( require ) {
   // strings
   var areString = require( 'string!AREA_BUILDER/are' );
 
-  // constants
-  var TEXT_FILL_COLOR = 'white';
-  var FONT = new PhetFont( { size: 18 } ); // Font for two-line text
-
-
   function ColorProportionsPrompt( color1, color2, color1ProportionNumerator, color1ProportionDenominator, options ) {
     Node.call( this );
 
+    options = _.extend( { font: new PhetFont( { size: 18 } ), textFill: 'black' }, options );
+
     var targetProportionsUpperText = new Text( color1ProportionNumerator + '/' + color1ProportionDenominator + ' ' + areString, {
-      font: FONT,
-      fill: TEXT_FILL_COLOR
+      font: options.font,
+      fill: options.textFill
     } );
     this.addChild( targetProportionsUpperText );
     var targetProportionsLowerText = new Text( ( color1ProportionDenominator - color1ProportionNumerator ) + '/' + color1ProportionDenominator + ' ' + areString, {
-      font: FONT,
-      fill: TEXT_FILL_COLOR,
+      font: options.font,
+      fill: options.textFill,
       top: targetProportionsUpperText.bottom + 5 // Offset empirically determined
     } );
     this.addChild( targetProportionsLowerText );

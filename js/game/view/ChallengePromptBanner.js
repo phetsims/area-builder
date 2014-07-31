@@ -137,7 +137,7 @@ define( function( require ) {
       if ( targetProportions ) {
         var colorProportionsPrompt = new ColorProportionsPrompt( targetProportions.color1,
           targetProportions.color2, targetProportions.color1ProportionNumerator,
-          targetProportions.color1ProportionDenominator );
+          targetProportions.color1ProportionDenominator, { textFill: 'white' } );
         colorProportionsPrompt.scale( height / colorProportionsPrompt.bounds.height * 0.9 );
         colorProportionsPrompt.right = width - TITLE_INDENT;
         colorProportionsPrompt.centerY = height / 2;
