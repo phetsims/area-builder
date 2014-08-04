@@ -165,18 +165,16 @@ define( function( require ) {
   function createTwoToneRectangleBuildKit( color1, color2 ) {
     var kit = [];
     BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
-      var modifiedKitElement = {
+      var color1Element = {
         shape: kitElement.shape,
         color: color1
       };
-      kit.push( modifiedKitElement )
-    } );
-    BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
-      var modifiedKitElement = {
+      kit.push( color1Element );
+      var color2Element = {
         shape: kitElement.shape,
         color: color2
       };
-      kit.push( modifiedKitElement )
+      kit.push( color2Element );
     } );
     return kit;
   }
@@ -660,12 +658,12 @@ define( function( require ) {
 
     var color1, color2;
     if ( Math.random() < 0.5 ) {
-      color1 = 'red';
-      color2 = 'blue';
+      color1 = AreaBuilderSharedConstants.PURPLISH_COLOR;
+      color2 = '#B44BB4';
     }
     else {
-      color1 = 'orange';
-      color2 = 'yellow';
+      color1 = AreaBuilderSharedConstants.ORANGISH_COLOR;
+      color2 = '#D16900';
     }
 
     var exampleSolution = createTwoColorRectangularSolutionSpec( 0, 0, width, height, color1, color2, 1 / fractionDenominator );
