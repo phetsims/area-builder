@@ -164,7 +164,6 @@ define( function( require ) {
         }
         areaAndPerimeterPrompt.centerX = areaOnlyPrompt.centerX;
 
-
         // Fade in whatever prompts are currently set to be visible.
         if ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) {
           var promptToFadeIn = areaOnlyPrompt.visible ? areaOnlyPrompt : areaAndPerimeterPrompt;

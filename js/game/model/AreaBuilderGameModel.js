@@ -169,18 +169,18 @@ define( function( require ) {
             break;
 
           case 'areaAndProportionConstructed':
-            var color1TargetProportion = challenge.buildSpec.proportion.color1ProportionNumerator / challenge.buildSpec.proportion.color1ProportionDenominator;
+            var color1TargetProportion = challenge.buildSpec.proportions.color1ProportionNumerator / challenge.buildSpec.proportions.color1ProportionDenominator;
             answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area &&
-                              this.testColorProportion( challenge.buildSpec.proportion.color1, color1TargetProportion ) &&
-                              this.testColorProportion( challenge.buildSpec.proportion.color2, 1 - color1TargetProportion );
+                              this.testColorProportion( challenge.buildSpec.proportions.color1, color1TargetProportion ) &&
+                              this.testColorProportion( challenge.buildSpec.proportions.color2, 1 - color1TargetProportion );
             break;
 
           case 'areaPerimeterAndProportionConstructed':
-            color1TargetProportion = challenge.buildSpec.proportion.color1ProportionNumerator / challenge.buildSpec.proportion.color1ProportionDenominator;
+            color1TargetProportion = challenge.buildSpec.proportions.color1ProportionNumerator / challenge.buildSpec.proportions.color1ProportionDenominator;
             answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area &&
                               challenge.buildSpec.perimeter === this.shapePlacementBoard.perimeter &&
-                              this.testColorProportion( challenge.buildSpec.proportion.color1, color1TargetProportion ) &&
-                              this.testColorProportion( challenge.buildSpec.proportion.color2, 1 - color1TargetProportion );
+                              this.testColorProportion( challenge.buildSpec.proportions.color1, color1TargetProportion ) &&
+                              this.testColorProportion( challenge.buildSpec.proportions.color2, 1 - color1TargetProportion );
             break;
 
           default:

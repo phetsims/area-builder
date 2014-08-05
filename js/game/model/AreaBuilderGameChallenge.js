@@ -23,8 +23,8 @@ define( function( require ) {
    * 'color' field.  This value can be null to signify no user shapes are present for the challenge.
    * @param {Object} buildSpec Object that specifies what the user should build.  This is only used if this is a 'build
    * it' type of challenge, otherwise it should be null.  It should always have an 'area' field with a number, and can
-   * optionally have a 'perimeter' field with a number as well.  It can also have a 'proportion' field if the user is
-   * to build an area with two colors of a specified proportion.  The 'proportion' field is an object that looks
+   * optionally have a 'perimeter' field with a number as well.  It can also have a 'proportions' field if the user is
+   * to build an area with two colors of a specified proportion.  The 'proportions' field is an object that looks
    * like this example: { color1: 'green', color2: 'blue', color1ProportionNumerator: 1, color1ProportionDenominator: 3 }.
    * @param {PerimeterShape} backgroundShape Shape that should appear on the board, null for challenges that don't
    * require such a shape.
@@ -100,7 +100,7 @@ define( function( require ) {
       // buildSpec
       {
         area: areaToBuild,
-        proportion: {
+        proportions: {
           color1: color1,
           color2: color2,
           color1ProportionNumerator: color1Numerator,
@@ -138,7 +138,7 @@ define( function( require ) {
       {
         area: areaToBuild,
         perimeter: perimeterToBuild,
-        proportion: {
+        proportions: {
           color1: color1,
           color2: color2,
           color1ProportionNumerator: color1Numerator,

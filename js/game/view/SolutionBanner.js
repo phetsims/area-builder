@@ -10,8 +10,10 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
@@ -47,7 +49,7 @@ define( function( require ) {
       mode: 'buildIt', // Challenge type being presented to user, valid values are 'buildIt' and 'findArea'.
       targetArea: null,
       targetPerimeter: null,
-      buildProportions: { numerator: 1, denominator: 1, color1: 'black', color2: 'white' }
+      targetProportions: null
     } );
 
     var title = new Text( '', { font: TITLE_FONT, fill: TEXT_FILL_COLOR, centerY: height / 2, left: TITLE_INDENT } );
@@ -69,8 +71,19 @@ define( function( require ) {
     } );
     this.addChild( areaAndPerimeterPrompt );
 
+    var targetProportionsPrompt = new Node();
+    this.addChild( targetProportionsPrompt );
+
     function updatePromptPositions() {
-      var promptCenterX = ( title.width + width ) / 2;
+      var promptCenterX;
+      if ( targetProportionsPrompt.getChildrenCount() > 0 ) {
+        targetProportionsPrompt.right = width - TITLE_INDENT;
+        targetProportionsPrompt.centerY = height / 2;
+        promptCenterX = ( title.width + TITLE_INDENT + targetProportionsPrompt.left ) / 2;
+      }
+      else {
+        promptCenterX = ( width + title.width + TITLE_INDENT ) / 2;
+      }
       areaOnlyPrompt.centerX = promptCenterX;
       areaAndPerimeterPrompt.centerX = promptCenterX;
       areaAndPerimeterPrompt.centerY = height / 2;
@@ -91,14 +104,27 @@ define( function( require ) {
       updatePromptPositions();
     } );
 
-    Property.multilink( [ this.properties.targetAreaProperty, this.properties.targetPerimeterProperty ],
-      function( targetArea, targetPerimeter ) {
+    // TODO: This works, but is not a great way to do it, since it causes multiple updates.  Replace at some point with
+    // TODO: a single constructor and handle it differently in the main view class.
+    Property.multilink( [ this.properties.targetAreaProperty, this.properties.targetPerimeterProperty, this.properties.targetProportionsProperty ],
+      function( targetArea, targetPerimeter, targetProportions ) {
 
-        // Update the text and position of both build prompts.
+        // Update the text of the textual prompts.
         var areaPromptText = targetArea ? StringUtils.format( areaEqualsString, targetArea ) : '';
         areaOnlyPrompt.text = areaPromptText;
         var perimeterPromptText = targetPerimeter ? StringUtils.format( perimeterEqualsString, targetPerimeter ) : '';
         areaAndPerimeterPrompt.text = areaPromptText + '\n' + perimeterPromptText;
+
+        // Update the proportions prompt.
+        targetProportionsPrompt.removeAllChildren();
+        if ( targetProportions !== null ) {
+          targetProportionsPrompt.addChild( new ColorProportionsPrompt(
+            targetProportions.color1,
+            targetProportions.color2,
+            targetProportions.color1ProportionNumerator,
+            targetProportions.color1ProportionDenominator,
+            { textFill: 'white' } ) );
+        }
 
         // Update the visibility of the prompts
         areaOnlyPrompt.visible = areaPromptText.length > 0 && perimeterPromptText.length === 0;

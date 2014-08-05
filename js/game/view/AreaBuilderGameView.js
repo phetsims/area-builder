@@ -402,7 +402,6 @@ define( function( require ) {
                        this.solutionBanner
                      ] );
 
-          this.solutionBanner.reset();
           this.answerFeedback.removeAllChildren();
           if ( challenge.buildSpec ) {
             if ( challenge.buildSpec.perimeter ) {
@@ -417,9 +416,11 @@ define( function( require ) {
           // Update the solution banner.
           this.solutionBanner.reset();
           if ( challenge.buildSpec ) {
+            // TODO: This is stupid (because of the way it evolved).  The solution banner should just be generated here instead of all these steps to update it.
             this.solutionBanner.properties.mode = 'buildIt';
             this.solutionBanner.properties.targetArea = challenge.buildSpec.area;
             this.solutionBanner.properties.targetPerimeter = challenge.buildSpec.perimeter || null;
+            this.solutionBanner.properties.targetProportions = challenge.buildSpec.proportions || null;
           }
           else {
             this.solutionBanner.properties.mode = 'findArea';
@@ -479,9 +480,9 @@ define( function( require ) {
           // The prompts on the banner are initially invisible, and show up once the user adds a shape.
           this.challengePromptBanner.properties.showPrompts = false;
 
-          if ( challenge.buildSpec.proportion ) {
+          if ( challenge.buildSpec.proportions ) {
             // The the target proportions prompt.
-            this.challengePromptBanner.properties.targetProportions = challenge.buildSpec.proportion;
+            this.challengePromptBanner.properties.targetProportions = challenge.buildSpec.proportions;
           }
         }
         this.challengeView.removeAllChildren();
@@ -495,8 +496,8 @@ define( function( require ) {
           while ( this.buildPromptVBox.getChildrenCount() > 2 ) {
             this.buildPromptVBox.removeChildAt( 2 );
           }
-          if ( challenge.buildSpec.proportion ) {
-            var spec = challenge.buildSpec.proportion;
+          if ( challenge.buildSpec.proportions ) {
+            var spec = challenge.buildSpec.proportions;
             this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2,
                                                                        spec.color1ProportionNumerator, spec.color1ProportionDenominator, { font: GOAL_PROMPT_FONT } ) );
           }
