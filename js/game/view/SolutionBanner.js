@@ -26,7 +26,7 @@ define( function( require ) {
   var solutionString = require( 'string!AREA_BUILDER/solution' );
 
   // constants
-  var BACKGROUND_FILL_COLOR = '#17BC00';
+  var BACKGROUND_FILL_COLOR = '#26B853';
   var TEXT_FILL_COLOR = 'white';
   var TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
   var LARGE_FONT = new PhetFont( { size: 24 } ); // Font for single line text
