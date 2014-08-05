@@ -88,7 +88,7 @@ define( function( require ) {
 
     // Private variables
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
-    this.residentShapes = new ObservableArray(); // @private
+    this.residentShapes = new ObservableArray(); // @public
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet

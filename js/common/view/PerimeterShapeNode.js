@@ -58,23 +58,24 @@ define( function( require ) {
     /**
      * @param {PerimeterShape} perimeterShapeProperty
      * @param {Number} unitSquareLength
-     * @param {String || Color} color
+     * @param {String || Color} fillColor
+     * @param {String || Color} perimeterColor
      * @param {Boolean} showDimensionsProperty
      * @param {object} options
      * @constructor
      */
-    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, color, showDimensionsProperty, options ) {
+    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, fillColor, perimeterColor, showDimensionsProperty, options ) {
 
       Node.call( this );
 
       options = _.extend( { showGrid: true }, options );
 
-      var perimeterShapeNode = new Path( null, { fill: color } );
+      var perimeterShapeNode = new Path( null, { fill: fillColor } );
       this.addChild( perimeterShapeNode );
       var gridLayer = new Node();
       this.addChild( gridLayer );
       var perimeterNode = new Path( null, {
-        stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
+        stroke: perimeterColor,
         lineWidth: 2
       } );
       this.addChild( perimeterNode );

@@ -9,10 +9,12 @@ define( function( require ) {
 
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Color = require( 'SCENERY/util/Color' );
   var PerimeterShapeNode = require( 'AREA_BUILDER/common/view/PerimeterShapeNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   /**
@@ -45,15 +47,43 @@ define( function( require ) {
       shapePlacementBoard.backgroundShapeProperty,
       shapePlacementBoard.unitSquareLength,
       AreaBuilderSharedConstants.BACKGROUND_SHAPE_COLOR,
+      Color.toColor( AreaBuilderSharedConstants.BACKGROUND_SHAPE_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       shapePlacementBoard.showDimensionsProperty,
       { showGrid: false }
     ) );
 
-    // Add the composite shape, which depicts the collection of all shapes added to the board.
+    // Monitor the shapes added by the user to the board and create an equivalent shape with no edges for each.  This
+    // may seem a little odd - why hide the shapes that the user placed and depict them with essentially the same
+    // thing minus the edge stroke?  The reason is that this makes layering and control of visual modes much easier.
+    var shapesLayer = new Node();
+    this.addChild( shapesLayer );
+    shapePlacementBoard.residentShapes.addItemAddedListener( function( addedShape ) {
+      if ( shapePlacementBoard.formComposite ) {
+        // Add a representation of the shape.
+        var representation = new Path( addedShape.shape, {
+          fill: addedShape.color,
+          left: addedShape.position.x,
+          top: addedShape.position.y
+        } );
+        shapesLayer.addChild( representation );
+
+        shapePlacementBoard.residentShapes.addItemRemovedListener( function removalListener( removedShape ) {
+          if ( removedShape === addedShape ) {
+            shapesLayer.removeChild( representation );
+            shapePlacementBoard.residentShapes.removeItemRemovedListener( removalListener );
+          }
+        } );
+      }
+    } );
+
+    // Add the perimeter shape, which depicts the exterior and interior perimeters formed by the placed shapes.
+    var perimeterColor = shapePlacementBoard.colorHandled === '*' ? 'black' :
+                         Color.toColor( shapePlacementBoard.colorHandled ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
     this.addChild( new PerimeterShapeNode(
       shapePlacementBoard.compositeShapeProperty,
       shapePlacementBoard.unitSquareLength,
-        shapePlacementBoard.colorHandled === '*' ? AreaBuilderSharedConstants.GREENISH_COLOR : shapePlacementBoard.colorHandled,
+      null,
+      perimeterColor,
       shapePlacementBoard.showDimensionsProperty
     ) );
   }
