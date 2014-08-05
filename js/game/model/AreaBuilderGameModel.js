@@ -43,7 +43,7 @@ define( function( require ) {
     this.shapePlacementBoard = new ShapePlacementBoard(
       BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
-      new Vector2( 200, 100 ),
+      new Vector2( 200, 80 ), // Position empirically determined
       '*', // Allow any color shape to be placed on the board
       this.showGridProperty,
       this.showDimensionsProperty
@@ -153,6 +153,7 @@ define( function( require ) {
 
         var answerIsCorrect = false;
         switch( challenge.checkSpec ) {
+
           case 'areaEntered':
             // This is a "find the area" style of challenge
             answerIsCorrect = this.areaGuess === challenge.backgroundShape.unitArea;

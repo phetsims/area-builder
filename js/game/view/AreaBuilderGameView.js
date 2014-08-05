@@ -66,6 +66,7 @@ define( function( require ) {
   var BUTTON_FILL = '#F2E916';
   var INFO_BANNER_HEIGHT = 50; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 18;
 
   /**
    * @param {AreaBuilderGameModel} gameModel
@@ -109,40 +110,12 @@ define( function( require ) {
     );
     this.rootNode.addChild( this.startGameLevelNode );
 
-    // Hook up the audio player to the sound settings.
-    this.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
-
-    // Add the scoreboard.
-    this.scoreboard = new AreaBuilderScoreboard(
-      gameModel.levelProperty,
-      gameModel.challengeIndexProperty,
-      gameModel.challengesPerProblemSet,
-      gameModel.scoreProperty,
-      gameModel.elapsedTimeProperty,
-      gameModel.simSpecificModel.showGridProperty,
-      gameModel.simSpecificModel.showDimensionsProperty,
-      { top: 100, left: 20 }
-    );
-    this.controlLayer.addChild( this.scoreboard );
-
-    // Control timer visibility on the scoreboard.
-    gameModel.timerEnabledProperty.linkAttribute( this.scoreboard.visibilityControls, 'timeVisible' );
-
-    // Add the button for returning to the level selection screen.
-    this.controlLayer.addChild( new RectangularPushButton( {
-      content: new Text( 'Start Over', { font: BUTTON_FONT } ),
-      listener: function() { gameModel.setChoosingLevelState(); },
-      baseColor: BUTTON_FILL,
-      left: this.scoreboard.left,
-      top: 20
-    } ) );
-
     // Set up the constant portions of the challenge view
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
     this.challengeLayer.addChild( this.shapeBoard );
     this.eraserButton = new EraserButton( {
       right: this.shapeBoard.right,
-      top: this.shapeBoard.bottom + 10,
+                                            top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
       listener: function() {
         gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( true );
       }
@@ -160,14 +133,41 @@ define( function( require ) {
     this.challengeLayer.addChild( this.answerFeedback );
     this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
       left: this.shapeBoard.left,
-      bottom: this.shapeBoard.top - 10
+      bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
     } );
     this.challengeLayer.addChild( this.challengePromptBanner );
     this.solutionBanner = new SolutionBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
       left: this.shapeBoard.left,
-      bottom: this.shapeBoard.top - 10
+      bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
     } );
     this.challengeLayer.addChild( this.solutionBanner );
+
+    // Add the scoreboard.
+    this.scoreboard = new AreaBuilderScoreboard(
+      gameModel.levelProperty,
+      gameModel.challengeIndexProperty,
+      gameModel.challengesPerProblemSet,
+      gameModel.scoreProperty,
+      gameModel.elapsedTimeProperty,
+      gameModel.simSpecificModel.showGridProperty,
+      gameModel.simSpecificModel.showDimensionsProperty,
+      { top: this.shapeBoard.top, right: this.shapeBoard.left - SPACE_AROUND_SHAPE_PLACEMENT_BOARD }
+    );
+    this.controlLayer.addChild( this.scoreboard );
+
+    // Control visibility of elapsed time indicator in the scoreboard.
+    this.model.timerEnabledProperty.link( function( timerEnabled ) {
+      self.scoreboard.visibilityControls.timeVisible = timerEnabled;
+    } );
+
+    // Add the button for returning to the level selection screen.
+    this.controlLayer.addChild( new RectangularPushButton( {
+                                                             content: new Text( 'Start Over', { font: BUTTON_FONT } ),
+                                                             listener: function() { gameModel.setChoosingLevelState(); },
+                                                             baseColor: BUTTON_FILL,
+                                                             left: this.scoreboard.left,
+                                                             top: this.solutionBanner.top
+                                                           } ) );
 
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
     this.goalText = new Text( '', { font: GOAL_PROMPT_FONT } );
@@ -526,7 +526,7 @@ define( function( require ) {
             // Add a scrolling carousel.
             this.shapeCarousel = new HCarousel( creatorNodes, {
               centerX: this.shapeBoard.centerX,
-              top: this.shapeBoard.bottom + 10,
+              top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
             } );
           }
@@ -535,7 +535,7 @@ define( function( require ) {
             var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
             this.shapeCarousel = new Panel( creatorNodeHBox, {
               centerX: this.shapeBoard.centerX,
-              top: this.shapeBoard.bottom + 10,
+              top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               xMargin: 50,
               yMargin: 15,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
