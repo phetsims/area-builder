@@ -36,9 +36,6 @@ define( function( require ) {
       showDimensions: false
     } );
 
-    // Temp property for 'fake' challenges.  TODO - Remove this when all challenges are working.
-    this.fakeCorrectAnswerProperty = new Property( false );
-
     // @public Value where the user's submission of area is stored.
     this.areaGuess = 0;
 
@@ -141,8 +138,6 @@ define( function( require ) {
 
       displayCorrectAnswer: function( challenge ) {
         var self = this;
-        // TODO - remove this when fake challenges are no longer needed.
-        this.fakeCorrectAnswerProperty.value = true;
         if ( challenge.buildSpec ) {
           this.clearShapePlacementBoard();
 
@@ -155,11 +150,6 @@ define( function( require ) {
       },
 
       checkAnswer: function( challenge ) {
-
-        // TODO: Remove this when fake challenges are removed.
-        if ( challenge.fakeChallenge ) {
-          return this.fakeCorrectAnswerProperty.value;
-        }
 
         var answerIsCorrect = false;
         switch( challenge.checkSpec ) {

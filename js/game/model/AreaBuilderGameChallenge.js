@@ -34,11 +34,9 @@ define( function( require ) {
    * @param {Array<Object>} exampleBuildItSolution An example solution for a build problem.  It consists of a list of
    * cell positions for unit squares and a color, e.g. { cellColumn: x, cellRow: y, color: 'blue' }.  This should be
    * null for challenges where no example solution needs to be shown.
-   * @param {boolean} fakeChallenge Indicates that everything else should be ignored and this is really just a fake
-   * challenge, i.e. one with just a check box to get the right answer.  TODO Remove this once game is working.
    * @constructor
    */
-  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, userShapes, buildSpec, backgroundShape, checkSpec, exampleBuildItSolution, fakeChallenge ) {
+  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, userShapes, buildSpec, backgroundShape, checkSpec, exampleBuildItSolution ) {
     // Verification
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
     // TODO: Maybe add some additional verification.
@@ -50,7 +48,6 @@ define( function( require ) {
     this.backgroundShape = backgroundShape;
     this.checkSpec = checkSpec;
     this.exampleBuildItSolution = exampleBuildItSolution;
-    this.fakeChallenge = fakeChallenge;
 
     // Non-parameterized fields.
     this.maxAttemptsAllowed = 2;
@@ -81,10 +78,7 @@ define( function( require ) {
       'areaConstructed',
 
       // exampleBuildItSolution
-      exampleSolution,
-
-      // fakeChallenge
-      false
+      exampleSolution
     );
   };
 
@@ -121,10 +115,7 @@ define( function( require ) {
       'areaAndProportionConstructed',
 
       // exampleBuildItSolution
-      exampleSolution,
-
-      // fakeChallenge
-      false
+      exampleSolution
     );
   };
 
@@ -162,10 +153,7 @@ define( function( require ) {
       'areaPerimeterAndProportionConstructed',
 
       // exampleBuildItSolution
-      exampleSolution,
-
-      // fakeChallenge
-      false
+      exampleSolution
     );
   };
 
@@ -194,10 +182,7 @@ define( function( require ) {
       'areaAndPerimeterConstructed',
 
       // exampleBuildItSolution
-      exampleSolution,
-
-      // fakeChallenge
-      false
+      exampleSolution
     );
   };
 
@@ -226,42 +211,7 @@ define( function( require ) {
       'areaEntered',
 
       // exampleBuildItSolution
-      null,
-
-      // fakeChallenge
-      false
-    );
-  };
-
-  AreaBuilderGameChallenge.createFakeChallenge = function() {
-    return new AreaBuilderGameChallenge(
-      // toolSpec
-      {
-        gridControl: true,
-        dimensionsControl: true,
-        decompositionToolControl: true
-      },
-
-      // showNumberEntryPad
-      false,
-
-      // userShapes
-      null,
-
-      // buildSpec
-      null,
-
-      // backgroundShape
-      null,
-
-      // checkSpec
-      'areaEntered',
-
-      // exampleBuildItSolution
-      null,
-
-      // fakeChallenge
-      true
+      null
     );
   };
 

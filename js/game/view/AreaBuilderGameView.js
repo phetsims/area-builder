@@ -67,17 +67,6 @@ define( function( require ) {
   var INFO_BANNER_HEIGHT = 50; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 
-  // TODO - Temporary stuff for supporting 'fake' challenges, remove when all challenges working.
-  // Utility function
-  function generateRandomColor() {
-    var r = Math.round( Math.random() * 255 );
-    var g = Math.round( Math.random() * 255 );
-    var b = Math.round( Math.random() * 255 );
-    return '#' + ( r * 256 * 256 + g * 256 + b ).toString( 16 );
-  }
-
-  // ---------- End of temp stuff for fake challenges ---------------
-
   /**
    * @param {AreaBuilderGameModel} gameModel
    * @constructor
@@ -422,11 +411,6 @@ define( function( require ) {
             this.youBuiltWindow.visible = true;
           }
 
-          // TODO: Remove once fake challenges go away.
-          if ( challenge.fakeChallenge ) {
-            this.model.simSpecificModel.fakeCorrectAnswer = true;
-          }
-
           // Update the solution banner.
           this.solutionBanner.reset();
           if ( challenge.buildSpec ) {
@@ -569,18 +553,6 @@ define( function( require ) {
         // Show the number entry control if this is a "find the area" style of challenge.
         this.numberEntryControl.visible = challenge.showNumberEntryPad;
         this.areaQuestionPrompt.visible = challenge.showNumberEntryPad;
-
-        // Preset the fake challenge if specified. TODO: Remove once fake challenges no longer exist.
-        if ( this.model.currentChallenge.fakeChallenge ) {
-          this.model.simSpecificModel.fakeCorrectAnswerProperty.reset();
-          this.challengeView.addChild( new CheckBox( new Text( 'Correct Answer', { font: new PhetFont( 20 ) } ),
-            this.model.simSpecificModel.fakeCorrectAnswerProperty, { left: 300, top: 200 } ) );
-          var color = generateRandomColor();
-          var coloredRectangle = new Rectangle( 0, 0, 40, 20, 0, 0, {
-            fill: color, stroke: 'black', left: 300, top: 150 } );
-          this.challengeView.addChild( coloredRectangle );
-          this.challengeView.addChild( new Text( color, { font: new PhetFont( 14 ), left: coloredRectangle.right + 50, centerY: coloredRectangle.centerY } ) );
-        }
       }
     },
 

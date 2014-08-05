@@ -1,8 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Model element that describes a shape in terms of 'perimeter points', both exterior and interior (so that holes can
- * be defined).  The shape is defined by straight lines drawn from each point to the next.
+ * Model element that describes a shape in terms of 'perimeter points', both exterior and interior.  The interior
+ * perimeters allow holes to be defined.  The shape is defined by straight lines drawn from each point to the next.
  */
 define( function( require ) {
   'use strict';
