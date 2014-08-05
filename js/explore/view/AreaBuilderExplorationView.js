@@ -36,6 +36,7 @@ define( function( require ) {
 
   // constants
   var CONTROL_INSET = 15;
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 18;
 
   // Map of colors used for the shapes to the mode where those shapes are visible
   var MAP_COLORS_TO_MODES = {};
@@ -79,17 +80,17 @@ define( function( require ) {
     var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.GREENISH_COLOR, model.leftShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.GREENISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      { centerX: leftBoardNode.centerX, bottom: leftBoardNode.top - 8 } );
+      { centerX: leftBoardNode.centerX, bottom: leftBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD } );
     backLayer.addChild( leftAreaAndPerimeterDisplay );
     var rightAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.rightShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.PURPLISH_COLOR, model.rightShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.PURPLISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      { centerX: rightBoardNode.centerX, bottom: rightBoardNode.top - 8 } );
+      { centerX: rightBoardNode.centerX, bottom: rightBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD } );
     backLayer.addChild( rightAreaAndPerimeterDisplay );
     var centerAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.centerShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.ORANGISH_COLOR, model.centerShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.ORANGISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      { centerX: centerBoardNode.centerX, bottom: centerBoardNode.top - 8 } );
+      { centerX: centerBoardNode.centerX, bottom: centerBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD } );
     backLayer.addChild( centerAreaAndPerimeterDisplay );
 
     // Add the bucket views
@@ -245,9 +246,9 @@ define( function( require ) {
     } ) );
 
     // Layout
-    controlPanel.top = centerBoardNode.bottom + 10;
+    controlPanel.top = centerBoardNode.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
     controlPanel.left = centerBoardNode.left;
-    switchPanel.top = centerBoardNode.bottom + 10;
+    switchPanel.top = centerBoardNode.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
     switchPanel.right = centerBoardNode.right;
   }
 
