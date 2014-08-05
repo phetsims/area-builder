@@ -688,12 +688,12 @@ define( function( require ) {
 
     var color1, color2;
     if ( Math.random() < 0.5 ) {
-      color1 = 'red';
-      color2 = 'blue';
+      color1 = AreaBuilderSharedConstants.PURPLISH_COLOR;
+      color2 = '#B44BB4';
     }
     else {
-      color1 = 'orange';
-      color2 = 'yellow';
+      color1 = AreaBuilderSharedConstants.ORANGISH_COLOR;
+      color2 = '#D16900';
     }
 
     // Determine what fraction to have the user build.
