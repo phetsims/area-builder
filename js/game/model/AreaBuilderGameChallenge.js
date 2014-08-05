@@ -29,7 +29,8 @@ define( function( require ) {
    * @param {PerimeterShape} backgroundShape Shape that should appear on the board, null for challenges that don't
    * require such a shape.
    * @param {string} checkSpec Specifies what should be checked when the user pressed the 'Check' button.  Valid values
-   * are 'areaConstructed', 'areaAndPerimeterConstructed', 'areaEntered'.
+   * are 'areaEntered', 'areaConstructed', 'areaAndPerimeterConstructed', 'areaAndProportionConstructed',
+   * 'areaPerimeterAndProportionConstructed'.
    * @param {Array<Object>} exampleBuildItSolution An example solution for a build problem.  It consists of a list of
    * cell positions for unit squares and a color, e.g. { cellColumn: x, cellRow: y, color: 'blue' }.  This should be
    * null for challenges where no example solution needs to be shown.
@@ -117,7 +118,7 @@ define( function( require ) {
       null,
 
       // checkSpec
-      'areaConstructed',
+      'areaAndProportionConstructed',
 
       // exampleBuildItSolution
       exampleSolution,
@@ -158,7 +159,7 @@ define( function( require ) {
       null,
 
       // checkSpec
-      'areaConstructed',
+      'areaPerimeterAndProportionConstructed',
 
       // exampleBuildItSolution
       exampleSolution,
@@ -190,7 +191,7 @@ define( function( require ) {
       null,
 
       // checkSpec
-      'areaConstructed',
+      'areaAndPerimeterConstructed',
 
       // exampleBuildItSolution
       exampleSolution,

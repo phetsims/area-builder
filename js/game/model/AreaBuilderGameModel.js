@@ -9,6 +9,7 @@ define( function( require ) {
 
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Color = require( 'SCENERY/util/Color' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -154,23 +155,65 @@ define( function( require ) {
       },
 
       checkAnswer: function( challenge ) {
-        var answerIsCorrect = false;
-        // TODO: Get rid of the following if clause when fake challenges are removed.
+
+        // TODO: Remove this when fake challenges are removed.
         if ( challenge.fakeChallenge ) {
-          answerIsCorrect = this.fakeCorrectAnswerProperty.value;
+          return this.fakeCorrectAnswerProperty.value;
         }
-        else if ( challenge.checkSpec === 'areaEntered' ) {
-          // This is a "find the area" style of challenge
-          answerIsCorrect = this.areaGuess === challenge.backgroundShape.unitArea;
-        }
-        else if ( challenge.checkSpec === 'areaConstructed' ) {
-          answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area;
-          if ( answerIsCorrect && challenge.buildSpec.perimeter ) {
-            answerIsCorrect = challenge.buildSpec.perimeter === this.shapePlacementBoard.perimeter;
-          }
+
+        var answerIsCorrect = false;
+        switch( challenge.checkSpec ) {
+          case 'areaEntered':
+            // This is a "find the area" style of challenge
+            answerIsCorrect = this.areaGuess === challenge.backgroundShape.unitArea;
+            break;
+
+          case 'areaConstructed':
+            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area;
+            break;
+
+          case 'areaAndPerimeterConstructed':
+            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area &&
+                              challenge.buildSpec.perimeter === this.shapePlacementBoard.perimeter;
+            break;
+
+          case 'areaAndProportionConstructed':
+            var color1TargetProportion = challenge.buildSpec.proportion.color1ProportionNumerator / challenge.buildSpec.proportion.color1ProportionDenominator;
+            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area &&
+                              this.testColorProportion( challenge.buildSpec.proportion.color1, color1TargetProportion ) &&
+                              this.testColorProportion( challenge.buildSpec.proportion.color2, 1 - color1TargetProportion );
+            break;
+
+          case 'areaPerimeterAndProportionConstructed':
+            color1TargetProportion = challenge.buildSpec.proportion.color1ProportionNumerator / challenge.buildSpec.proportion.color1ProportionDenominator;
+            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.area &&
+                              challenge.buildSpec.perimeter === this.shapePlacementBoard.perimeter &&
+                              this.testColorProportion( challenge.buildSpec.proportion.color1, color1TargetProportion ) &&
+                              this.testColorProportion( challenge.buildSpec.proportion.color2, 1 - color1TargetProportion );
+            break;
+
+          default:
+            assert && assert( false, 'Unhandled check spec' );
+            answerIsCorrect = false;
+            break;
         }
 
         return answerIsCorrect;
+      },
+
+      // Returns true if the proportion of the current shapes that are the provided color is equal to the provided
+      // proportion value, false otherwise.
+      testColorProportion: function( color, proportion ) {
+        var testColor = Color.toColor( color );
+        var colorCount = 0;
+        this.movableShapes.forEach( function( movableShape ) {
+          if ( testColor.equals( Color.toColor( movableShape.color ) ) ) {
+            colorCount++;
+          }
+        } );
+
+        // Compare proportions while accounting for floating point errors.
+        return ( Math.abs( proportion - colorCount / this.movableShapes.length ) ) < 1E-6;
       },
 
       /**
