@@ -657,14 +657,20 @@ define( function( require ) {
       fractionDenominator = _.random( 2, 5 );
     } while ( ( width * height ) % fractionDenominator !== 0 );
 
+    // TODO: Consolidate with other color pair stuff (one other place in this file).
     var color1, color2;
-    if ( Math.random() < 0.5 ) {
-      color1 = AreaBuilderSharedConstants.PURPLISH_COLOR;
-      color2 = '#B44BB4';
+    var colorRand = Math.random();
+    if ( colorRand < 0.33 ) {
+      color1 = AreaBuilderSharedConstants.GREENISH_COLOR;
+      color2 = '#1A7137';
+    }
+    else if ( colorRand < 0.67 ) {
+      color1 = AreaBuilderSharedConstants.ORANGISH_COLOR;
+      color2 = '#BE7943';
     }
     else {
-      color1 = AreaBuilderSharedConstants.ORANGISH_COLOR;
-      color2 = '#D16900';
+      color1 = AreaBuilderSharedConstants.PURPLISH_COLOR;
+      color2 = '#00AACC';
     }
 
     var exampleSolution = createTwoColorRectangularSolutionSpec(
@@ -697,13 +703,18 @@ define( function( require ) {
     } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
     var color1, color2;
-    if ( Math.random() < 0.5 ) {
-      color1 = AreaBuilderSharedConstants.PURPLISH_COLOR;
-      color2 = '#B44BB4';
+    var colorRand = Math.random();
+    if ( colorRand < 0.33 ) {
+      color1 = AreaBuilderSharedConstants.GREENISH_COLOR;
+      color2 = '#1A7137';
+    }
+    else if ( colorRand < 0.67 ) {
+      color1 = AreaBuilderSharedConstants.ORANGISH_COLOR;
+      color2 = '#BE7943';
     }
     else {
-      color1 = AreaBuilderSharedConstants.ORANGISH_COLOR;
-      color2 = '#D16900';
+      color1 = AreaBuilderSharedConstants.PURPLISH_COLOR;
+      color2 = '#00AACC';
     }
 
     // Determine what fraction to have the user build.
