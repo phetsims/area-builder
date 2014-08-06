@@ -13,7 +13,6 @@ define( function( require ) {
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var ChallengePromptBanner = require( 'AREA_BUILDER/game/view/ChallengePromptBanner' );
-  var CheckBox = require( 'SUN/CheckBox' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
@@ -23,12 +22,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
-  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
@@ -117,12 +114,12 @@ define( function( require ) {
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
     this.challengeLayer.addChild( this.shapeBoard );
     this.eraserButton = new EraserButton( {
-                                            right: this.shapeBoard.right,
-                                            top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
-                                            listener: function() {
-                                              gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( true );
-                                            }
-                                          } );
+      right: this.shapeBoard.right,
+      top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
+      listener: function() {
+        gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( true );
+      }
+    } );
     this.challengeLayer.addChild( this.eraserButton );
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
@@ -165,22 +162,22 @@ define( function( require ) {
 
     // Add the button for returning to the level selection screen.
     this.controlLayer.addChild( new RectangularPushButton( {
-                                                             content: new Text( 'Start Over', { font: BUTTON_FONT } ),
-                                                             listener: function() { gameModel.setChoosingLevelState(); },
-                                                             baseColor: BUTTON_FILL,
-                                                             left: this.scoreboard.left,
-                                                             top: this.solutionBanner.top
-                                                           } ) );
+      content: new Text( 'Start Over', { font: BUTTON_FONT } ),
+      listener: function() { gameModel.setChoosingLevelState(); },
+      baseColor: BUTTON_FILL,
+      left: this.scoreboard.left,
+      top: this.solutionBanner.top
+    } ) );
 
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
     this.goalText = new Text( '', { font: GOAL_PROMPT_FONT } );
     this.buildPromptVBox = new VBox( {
-                                       children: [
-                                         new Text( yourGoalString, { font: GOAL_PROMPT_FONT } ),
-                                         this.goalText
-                                       ],
-                                       spacing: 20
-                                     } );
+      children: [
+        new Text( yourGoalString, { font: GOAL_PROMPT_FONT } ),
+        this.goalText
+      ],
+      spacing: 20
+    } );
     this.buildPromptPanel = new Panel( this.buildPromptVBox, {
       stroke: null,
       xMargin: 10,
@@ -200,37 +197,37 @@ define( function( require ) {
       cornerRadius: 4
     };
     this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
-                                                                          listener: function() {
-                                                                            // Save the parameters of what the user has built, if they've built anything.
-                                                                            self.areaOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.area;
-                                                                            self.perimeterOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.perimeter;
+      listener: function() {
+        // Save the parameters of what the user has built, if they've built anything.
+        self.areaOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.area;
+        self.perimeterOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.perimeter;
 
-                                                                            // Submit the user's area guess, if there is one.
-                                                                            gameModel.simSpecificModel.areaGuess = self.numberEntryControl.value;
+        // Submit the user's area guess, if there is one.
+        gameModel.simSpecificModel.areaGuess = self.numberEntryControl.value;
 
-                                                                            // Check the answer.
-                                                                            gameModel.checkAnswer();
-                                                                          } }, buttonOptions ) );
+        // Check the answer.
+        gameModel.checkAnswer();
+      } }, buttonOptions ) );
     this.gameControlButtons.push( this.checkAnswerButton );
 
     this.nextButton = new TextPushButton( nextString, _.extend( {
-                                                                  listener: function() { gameModel.nextChallenge(); }
-                                                                }, buttonOptions ) );
+      listener: function() { gameModel.nextChallenge(); }
+    }, buttonOptions ) );
     this.gameControlButtons.push( this.nextButton );
 
     this.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
-                                                                          listener: function() { gameModel.tryAgain(); }
-                                                                        }, buttonOptions ) );
+      listener: function() { gameModel.tryAgain(); }
+    }, buttonOptions ) );
     this.gameControlButtons.push( this.tryAgainButton );
 
     this.showTheSolutionButton = new TextPushButton( showSolutionString, _.extend( {
-                                                                                     listener: function() { gameModel.displayCorrectAnswer(); }
-                                                                                   }, buttonOptions ) );
+      listener: function() { gameModel.displayCorrectAnswer(); }
+    }, buttonOptions ) );
     this.gameControlButtons.push( this.showTheSolutionButton );
 
     this.showASolutionButton = new TextPushButton( ASolutionString, _.extend( {
-                                                                                listener: function() { gameModel.displayCorrectAnswer(); }
-                                                                              }, buttonOptions ) );
+      listener: function() { gameModel.displayCorrectAnswer(); }
+    }, buttonOptions ) );
     this.gameControlButtons.push( this.showASolutionButton );
 
     var buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
@@ -253,12 +250,12 @@ define( function( require ) {
 
     // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
     this.faceWithPointsNode = new FaceWithPointsNode( {
-                                                        faceDiameter: 85,
-                                                        pointsAlignment: 'rightBottom',
-                                                        centerX: buttonCenterX,
-                                                        top: buttonBottom + 20,
-                                                        pointsFont: new PhetFont( { size: 20, weight: 'bold' } )
-                                                      } );
+      faceDiameter: 85,
+      pointsAlignment: 'rightBottom',
+      centerX: buttonCenterX,
+      top: buttonBottom + 20,
+      pointsFont: new PhetFont( { size: 20, weight: 'bold' } )
+    } );
     this.addChild( this.faceWithPointsNode );
 
     // Handle comings and goings of model shapes.
@@ -321,11 +318,11 @@ define( function( require ) {
           this.challengeLayer.pickable = null; // Pass through, prunes subtree, see Scenery documentation for details.
           this.presentChallenge();
           this.show( [
-                       this.scoreboard,
-                       this.checkAnswerButton,
-                       this.challengeView,
-                       this.challengePromptBanner
-                     ] );
+            this.scoreboard,
+            this.checkAnswerButton,
+            this.challengeView,
+            this.challengePromptBanner
+          ] );
           this.showChallengeGraphics();
           break;
 
@@ -395,12 +392,12 @@ define( function( require ) {
 
           // Show the appropriate nodes for this state.
           this.show( [
-                       this.scoreboard,
-                       this.nextButton,
-                       this.challengeView,
-                       this.answerFeedback,
-                       this.solutionBanner
-                     ] );
+            this.scoreboard,
+            this.nextButton,
+            this.challengeView,
+            this.answerFeedback,
+            this.solutionBanner
+          ] );
 
           this.answerFeedback.removeAllChildren();
           if ( challenge.buildSpec ) {
@@ -499,7 +496,7 @@ define( function( require ) {
           if ( challenge.buildSpec.proportions ) {
             var spec = challenge.buildSpec.proportions;
             this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2,
-                                                                       spec.color1ProportionNumerator, spec.color1ProportionDenominator, { font: GOAL_PROMPT_FONT } ) );
+              spec.color1ProportionNumerator, spec.color1ProportionDenominator, { font: GOAL_PROMPT_FONT } ) );
           }
           this.buildPromptVBox.addChild( new Text( buildItString, GOAL_PROMPT_FONT ) );
 

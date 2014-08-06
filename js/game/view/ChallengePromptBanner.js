@@ -18,12 +18,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Shape = require( 'KITE/Shape' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -150,7 +148,7 @@ define( function( require ) {
     this.properties.showPromptsProperty.link( function( showPrompts ) {
       areaOnlyPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter === null ) && showPrompts;
       areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter !== null ) && showPrompts;
-      targetProportionsPrompt.visible = self.properties.targetProportions != null;
+      targetProportionsPrompt.visible = self.properties.targetProportions !== null;
       if ( showPrompts && ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible || targetProportionsPrompt.visible ) ) {
         // Move the title over to make room for the build prompt.
         new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();

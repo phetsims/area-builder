@@ -9,8 +9,6 @@ define( function( require ) {
     'use strict';
 
     // modules
-    var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-    var Color = require( 'SCENERY/util/Color' );
     var Grid = require( 'AREA_BUILDER/common/view/Grid' );
     var inherit = require( 'PHET_CORE/inherit' );
     var Node = require( 'SCENERY/nodes/Node' );

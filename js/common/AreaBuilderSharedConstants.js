@@ -5,9 +5,9 @@ define( function( require ) {
 
   return {
     // Colors used for the various shapes
-    GREENISH_COLOR: '#34E16E',
-    PURPLISH_COLOR: '#E0B7E1',
-    ORANGISH_COLOR: '#FE8E5C',
+    GREENISH_COLOR: '#33E16E',
+    PURPLISH_COLOR: '#9D87C9',
+    ORANGISH_COLOR: '#E78B5D',
     PERIMETER_DARKEN_FACTOR: 0.6, // The amount that the perimeter colors are darkened from the main shape color
 
     // Velocity at which animated elements move
