@@ -92,21 +92,22 @@ define( function( require ) {
     var scrollDistance = maxChildWidth + 2 * MIN_INTER_ITEM_SPACING;
 
     function scrollRight() {
-      targetPosition.value += 1;
+      targetPosition.value += Math.min( -targetPosition.value, options.numVisibleAtOnce );
     }
 
     function scrollLeft() {
-      targetPosition.value -= 1;
+      var itemsToTheRight = children.length - ( targetPosition.value + options.numVisibleAtOnce );
+      targetPosition.value -= Math.min( itemsToTheRight, options.numVisibleAtOnce );
     }
 
     targetPosition.link( function( pos ) {
 
-      // Enable/disable the navigation buttons.
-      nextButton.enabled = pos > options.numVisibleAtOnce - children.length;
-      previousButton.enabled = pos < 0;
+      // Show/hide the navigation buttons.
+      nextButton.visible = pos > options.numVisibleAtOnce - children.length;
+      previousButton.visible = pos < 0;
 
       // Set up the animation to scroll to the next location.
-      new TWEEN.Tween( scrollingNode ).to( { left: targetPosition.value * scrollDistance }, 200 ).easing( TWEEN.Easing.Cubic.InOut ).start();
+      new TWEEN.Tween( scrollingNode ).to( { left: targetPosition.value * scrollDistance }, 400 ).easing( TWEEN.Easing.Cubic.InOut ).start();
     } );
 
     // Hook up the scrolling nodes to the buttons.
