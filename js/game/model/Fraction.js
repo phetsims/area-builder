@@ -38,8 +38,15 @@ define( function( require ) {
       return this.numerator + '/' + this.denominator;
     },
 
-    reduce: function() {
+    // @private, find the greatest common denominator using the classic algorithm
+    gcd: function( a, b ) {
+      return b === 0 ? a : this.gcd( b, a % b )
+    },
 
+    reduce: function() {
+      var gcd = this.gcd( this.numerator, this.denominator );
+      this.numerator = Math.round( this.numerator / gcd );
+      this.denominator = Math.round( this.denominator / gcd );
     }
   } );
 } );
