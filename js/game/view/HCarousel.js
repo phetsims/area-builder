@@ -13,14 +13,18 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
+  var RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
 
   // constants
   var ARROW_WIDTH = 12;
-  var ARROW_HEIGHT = 40;
-  var BUTTON_INSET = 5;
-  var MIN_INTER_ITEM_SPACING = 5;
-  var Y_MARGIN = 5;
+  var ARROW_HEIGHT = 20;
+  var BUTTON_X_MARGIN = 4;
+  var BUTTON_MIN_Y_MARGIN = 5;
+  var MIN_INTER_ITEM_SPACING = 10;
+  var CONTENT_Y_MARGIN = 5;
+  var CORNER_RADIUS = 4;
+  var BUTTON_BASE_COLOR = 'rgba( 200, 200, 200, 0.5 )';
 
   /**
    * @param {Array<Node>} children
@@ -28,6 +32,7 @@ define( function( require ) {
    * @constructor
    */
   function HCarousel( children, options ) {
+    Node.call( this );
 
     options = _.extend(
       {
@@ -45,43 +50,63 @@ define( function( require ) {
       maxChildHeight = Math.max( maxChildHeight, child.bounds.height );
     } );
 
+    var panelHeight = Math.max( ARROW_HEIGHT + 2 * BUTTON_MIN_Y_MARGIN, CONTENT_Y_MARGIN * 2 + maxChildHeight );
+
     // Create the buttons that will be used to scroll through the contents.
-    var iconOptions = { stroke: 'white', lineWidth: 4, lineCap: 'round' };
+    var iconOptions = { stroke: 'black', lineWidth: 3, lineCap: 'square' };
     var nextIcon = new Path( new Shape().moveTo( 0, 0 ).lineTo( ARROW_WIDTH, ARROW_HEIGHT / 2 ).lineTo( 0, ARROW_HEIGHT ), iconOptions );
     var previousIcon = new Path( new Shape().moveTo( ARROW_WIDTH, 0 ).lineTo( 0, ARROW_HEIGHT / 2 ).lineTo( ARROW_WIDTH, ARROW_HEIGHT ), iconOptions );
-    var previousButton = new RectangularPushButton( { content: previousIcon } );
-    var nextButton = new RectangularPushButton( { content: nextIcon } );
+    var nextButton = new RectangularPushButton( {
+      content: nextIcon,
+      xMargin: BUTTON_X_MARGIN,
+      buttonAppearanceStrategy: RectangularButtonView.flatAppearanceStrategy,
+      baseColor: BUTTON_BASE_COLOR,
+      cornerRadius: CORNER_RADIUS,
+      minHeight: panelHeight,
+      centerY: panelHeight / 2
+    } );
+    var previousButton = new RectangularPushButton( {
+      content: previousIcon,
+      xMargin: BUTTON_X_MARGIN,
+      buttonAppearanceStrategy: RectangularButtonView.flatAppearanceStrategy,
+      baseColor: BUTTON_BASE_COLOR,
+      cornerRadius: CORNER_RADIUS,
+      minHeight: panelHeight,
+      centerY: panelHeight / 2
+    } );
+
+    var buttonWidth = nextButton.width;  // Assume both buttons are the same width.
 
     // Construct the outer container
-    var panelWidth = BUTTON_INSET * 2 +
-                     previousButton.bounds.width +
-                     nextButton.bounds.width +
+    var panelWidth = buttonWidth * 2 +
                      MIN_INTER_ITEM_SPACING * 2 +
                      options.numVisibleAtOnce * maxChildWidth +
-                     ( options.numVisibleAtOnce - 1 ) * 2 * MIN_INTER_ITEM_SPACING;
-    var panelHeight = Math.max( BUTTON_INSET * 2 + previousButton.bounds.height, Y_MARGIN * 2 + maxChildHeight );
-    Rectangle.call( this, 0, 0, panelWidth, panelHeight, 4, 4, options );
+                     ( options.numVisibleAtOnce - 1 ) * MIN_INTER_ITEM_SPACING;
+    this.addChild( new Rectangle( 0, 0, panelWidth, panelHeight, CORNER_RADIUS, CORNER_RADIUS, {
+      fill: options.fill,
+      stroke: options.stroke,
+      lineWidth: options.lineWidth
+    } ) );
 
-    // Position and add the buttons
-    previousButton.left = BUTTON_INSET;
-    previousButton.centerY = panelHeight / 2;
-    this.addChild( previousButton );
-    nextButton.right = panelWidth - BUTTON_INSET;
-    nextButton.centerY = panelHeight / 2;
+    // Add the buttons.
     this.addChild( nextButton );
+    this.addChild( previousButton );
+
+    // Position the rightmost button to be at the right edge of the panel.
+    nextButton.right = panelWidth;
 
     // Add the content.  It is structured as a 'windowNode' that defines the clip area and a 'scrollingNode' that moves
     // beneath the clip window.
     var windowNode = new Node();
-    windowNode.clipArea = new Shape.rect( previousButton.right + MIN_INTER_ITEM_SPACING / 2,
-      0, nextButton.left - previousButton.right - MIN_INTER_ITEM_SPACING, panelHeight );
+    windowNode.clipArea = new Shape.rect( previousButton.right + MIN_INTER_ITEM_SPACING / 2, 0,
+        nextButton.left - previousButton.right - MIN_INTER_ITEM_SPACING, panelHeight );
     this.addChild( windowNode );
     var scrollingNode = new Rectangle( 0, 0,
-        BUTTON_INSET + previousButton.width + children.length * ( maxChildWidth + 2 * MIN_INTER_ITEM_SPACING),
+        buttonWidth + children.length * ( maxChildWidth + 2 * MIN_INTER_ITEM_SPACING),
       panelHeight, 0, 0, { fill: 'rgba( 0, 0, 0, 0)' }
     );
     children.forEach( function( child, index ) {
-      child.centerX = previousButton.right + MIN_INTER_ITEM_SPACING + maxChildWidth / 2 + index * ( maxChildWidth + 2 * MIN_INTER_ITEM_SPACING );
+      child.centerX = previousButton.right + MIN_INTER_ITEM_SPACING + maxChildWidth / 2 + index * ( maxChildWidth + MIN_INTER_ITEM_SPACING );
       child.centerY = panelHeight / 2;
       scrollingNode.addChild( child );
     } );
@@ -89,7 +114,7 @@ define( function( require ) {
 
     // Set up the scrolling functions.
     var targetPosition = new Property( 0 );
-    var scrollDistance = maxChildWidth + 2 * MIN_INTER_ITEM_SPACING;
+    var scrollDistance = maxChildWidth + MIN_INTER_ITEM_SPACING;
 
     function scrollRight() {
       targetPosition.value += Math.min( -targetPosition.value, options.numVisibleAtOnce );
@@ -114,7 +139,9 @@ define( function( require ) {
     nextButton.addListener( scrollLeft );
     previousButton.addListener( scrollRight );
 
+    // Pass options through to parent class.
+    this.mutate( options );
   }
 
-  return inherit( Rectangle, HCarousel );
+  return inherit( Node, HCarousel );
 } );
