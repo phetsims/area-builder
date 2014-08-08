@@ -371,6 +371,29 @@ define( function( require ) {
             this.challengePromptBanner
           ];
 
+          // If this is a 'build it' style of challenge, show the user what they built.
+          if ( challenge.buildSpec ) {
+            if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
+            }
+            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
+            }
+            else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaAndProportions( this.areaOfUserCreatedShape,
+                challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, this.color1Proportion );
+            }
+            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaPerimeterAndProportions( this.areaOfUserCreatedShape,
+                this.perimeterOfUserCreatedShape, challenge.buildSpec.proportions.color1,
+                challenge.buildSpec.proportions.color2, this.color1Proportion );
+            }
+            this.youBuiltWindow.centerY = this.shapeBoard.centerY;
+            this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
+            this.youBuiltWindow.visible = true;
+          }
+
+          // Show a slightly different button depending on the challenge type.
           if ( challenge.buildSpec ) {
             buttonsToShow.push( this.showASolutionButton );
           }
@@ -401,25 +424,8 @@ define( function( require ) {
             this.solutionBanner
           ] );
 
-          // Update the answer feedback
+          // Keep the 'You Built' window visible if this is a 'build it' style of challenge.
           if ( challenge.buildSpec ) {
-            if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
-            }
-            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
-            }
-            else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaAndProportions( this.areaOfUserCreatedShape,
-                challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, this.color1Proportion );
-            }
-            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaPerimeterAndProportions( this.areaOfUserCreatedShape,
-                this.perimeterOfUserCreatedShape, challenge.buildSpec.proportions.color1,
-                challenge.buildSpec.proportions.color2, this.color1Proportion );
-            }
-            this.youBuiltWindow.centerY = this.shapeBoard.centerY;
-            this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
             this.youBuiltWindow.visible = true;
           }
 
