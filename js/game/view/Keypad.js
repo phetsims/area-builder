@@ -22,9 +22,6 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
-  // constants
-  var REDDISH_COLOR_FOR_BACKSPACE_KEY = '#ff2000';
-
   /**
    * @param options {Object}
    * @constructor
@@ -76,13 +73,13 @@ define( function( require ) {
       close();
     var backspaceIcon = new Path( backspaceIconOutlineShape, {
       fill: options.keyColor,
-      stroke: REDDISH_COLOR_FOR_BACKSPACE_KEY,
+      stroke: 'black',
       lineWidth: 1.5,
       lineJoin: 'round'
     } );
     backspaceIcon.addChild( new Text( '\u00D7', {
       font: new PhetFont( { size: 12, weight: 'bold' } ),
-      fill: REDDISH_COLOR_FOR_BACKSPACE_KEY,
+      fill: 'black',
       centerX: backspaceIcon.width * 0.55,
       centerY: backspaceIcon.centerY
     } ) );
