@@ -126,8 +126,6 @@ define( function( require ) {
     this.challengeLayer.addChild( this.challengeView );
     this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 20 );
     this.challengeLayer.addChild( this.youBuiltWindow );
-    this.answerFeedback = new Node();
-    this.challengeLayer.addChild( this.answerFeedback );
     this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
       left: this.shapeBoard.left,
       bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
@@ -200,7 +198,7 @@ define( function( require ) {
         self.areaOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.area;
         self.perimeterOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.perimeter;
         var challenge = self.model.currentChallenge; // convenience var
-        if ( challenge.buildSpec.proportions ) {
+        if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
           self.color1Proportion = gameModel.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
         }
         else {
@@ -400,30 +398,30 @@ define( function( require ) {
             this.scoreboard,
             this.nextButton,
             this.challengeView,
-            this.answerFeedback,
             this.solutionBanner
           ] );
 
           // Update the answer feedback
-          this.answerFeedback.removeAllChildren();
-          if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
-            this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
+          if ( challenge.buildSpec ) {
+            if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
+            }
+            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
+            }
+            else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaAndProportions( this.areaOfUserCreatedShape,
+                challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, this.color1Proportion );
+            }
+            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
+              this.youBuiltWindow.setAreaPerimeterAndProportions( this.areaOfUserCreatedShape,
+                this.perimeterOfUserCreatedShape, challenge.buildSpec.proportions.color1,
+                challenge.buildSpec.proportions.color2, this.color1Proportion );
+            }
+            this.youBuiltWindow.centerY = this.shapeBoard.centerY;
+            this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
+            this.youBuiltWindow.visible = true;
           }
-          else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
-            this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
-          }
-          else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
-            this.youBuiltWindow.setAreaAndProportions( this.areaOfUserCreatedShape,
-              challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, this.color1Proportion );
-          }
-          else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
-            this.youBuiltWindow.setAreaPerimeterAndProportions( this.areaOfUserCreatedShape,
-              this.perimeterOfUserCreatedShape, challenge.buildSpec.proportions.color1,
-              challenge.buildSpec.proportions.color2, this.color1Proportion );
-          }
-          this.youBuiltWindow.centerY = this.shapeBoard.centerY;
-          this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
-          this.youBuiltWindow.visible = true;
 
           // Update the solution banner.
           this.solutionBanner.reset();
@@ -510,8 +508,8 @@ define( function( require ) {
           }
           if ( challenge.buildSpec.proportions ) {
             var spec = challenge.buildSpec.proportions;
-            this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2,
-              spec.color1ProportionNumerator, spec.color1ProportionDenominator, { font: GOAL_PROMPT_FONT } ) );
+            this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2, spec.color1Proportion,
+              { font: GOAL_PROMPT_FONT } ) );
           }
           this.buildPromptVBox.addChild( new Text( buildItString, GOAL_PROMPT_FONT ) );
 
@@ -580,7 +578,6 @@ define( function( require ) {
         this.startGameLevelNode,
         this.faceWithPointsNode,
         this.scoreboard,
-        this.answerFeedback,
         this.challengePromptBanner,
         this.solutionBanner,
         this.youBuiltWindow

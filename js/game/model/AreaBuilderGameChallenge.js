@@ -9,8 +9,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-
-  // modules
+  var Fraction = require( 'AREA_BUILDER/game/model/Fraction' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
 
   // TODO: Consider making the build spec into a separate class.
@@ -27,7 +26,7 @@ define( function( require ) {
    * it' type of challenge, otherwise it should be null.  It should always have an 'area' field with a number, and can
    * optionally have a 'perimeter' field with a number as well.  It can also have a 'proportions' field if the user is
    * to build an area with two colors of a specified proportion.  The 'proportions' field is an object that looks
-   * like this example: { color1: 'green', color2: 'blue', color1ProportionNumerator: 1, color1ProportionDenominator: 3 }.
+   * like this example: { color1: 'green', color2: 'blue', color1Proportion: { numerator: 1, denominator: 3 } }.
    * @param {PerimeterShape} backgroundShape Shape that should appear on the board, null for challenges that don't
    * require such a shape.
    * @param {string} checkSpec Specifies what should be checked when the user pressed the 'Check' button.  Valid values
@@ -105,8 +104,7 @@ define( function( require ) {
         proportions: {
           color1: color1,
           color2: color2,
-          color1ProportionNumerator: color1Numerator,
-          color1ProportionDenominator: color1Denominator
+          color1Proportion: new Fraction( color1Numerator, color1Denominator )
         }
       },
 
@@ -143,8 +141,7 @@ define( function( require ) {
         proportions: {
           color1: color1,
           color2: color2,
-          color1ProportionNumerator: color1Numerator,
-          color1ProportionDenominator: color1Denominator
+          color1Proportion: new Fraction( color1Numerator, color1Denominator )
         }
       },
 

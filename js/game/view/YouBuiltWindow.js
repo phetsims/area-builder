@@ -96,9 +96,9 @@ define( function( require ) {
     },
 
     // @public
-    setAreaAndProportions: function( area, color1, color2, proportion1 ) {
+    setAreaAndProportions: function( area, color1, color2, color1Proportion ) {
       this.setAreaOnly( area );
-      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, proportion1.numerator, proportion1.denominator, {
+      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, color1Proportion, {
         left: 0,
         top: this.areaTextNode.bottom + LINE_SPACING
       } );
@@ -106,13 +106,13 @@ define( function( require ) {
     },
 
     // @public
-    setAreaPerimeterAndProportions: function( area, perimeter, color1, color2, proportion1 ) {
+    setAreaPerimeterAndProportions: function( area, perimeter, color1, color2, color1Proportion ) {
 
       // area
       this.setAreaOnly( area );
 
       // proportions, which sit just below area so that it is clear that they go together
-      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, proportion1.numerator, proportion1.denominator, {
+      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, color1Proportion, {
         top: this.areaTextNode.bottom + LINE_SPACING
       } );
       this.contentNode.addChild( this.proportionsInfoNode );

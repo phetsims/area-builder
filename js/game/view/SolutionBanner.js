@@ -121,8 +121,7 @@ define( function( require ) {
           targetProportionsPrompt.addChild( new ColorProportionsPrompt(
             targetProportions.color1,
             targetProportions.color2,
-            targetProportions.color1ProportionNumerator,
-            targetProportions.color1ProportionDenominator,
+            targetProportions.color1Proportion,
             { textFill: 'white' } ) );
         }
 

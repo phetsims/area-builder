@@ -14,17 +14,17 @@ define( function( require ) {
   // strings
   var areString = require( 'string!AREA_BUILDER/are' );
 
-  function ColorProportionsPrompt( color1, color2, color1ProportionNumerator, color1ProportionDenominator, options ) {
+  function ColorProportionsPrompt( color1, color2, color1Proportion, options ) {
     Node.call( this );
 
     options = _.extend( { font: new PhetFont( { size: 18 } ), textFill: 'black' }, options );
 
-    var targetProportionsUpperText = new Text( color1ProportionNumerator + '/' + color1ProportionDenominator + ' ' + areString, {
+    var targetProportionsUpperText = new Text( color1Proportion.toString() + ' ' + areString, {
       font: options.font,
       fill: options.textFill
     } );
     this.addChild( targetProportionsUpperText );
-    var targetProportionsLowerText = new Text( ( color1ProportionDenominator - color1ProportionNumerator ) + '/' + color1ProportionDenominator + ' ' + areString, {
+    var targetProportionsLowerText = new Text( ( color1Proportion.denominator - color1Proportion.numerator ) + '/' + color1Proportion.denominator + ' ' + areString, {
       font: options.font,
       fill: options.textFill,
       top: targetProportionsUpperText.bottom + 5 // Offset empirically determined
