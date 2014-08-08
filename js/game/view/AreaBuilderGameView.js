@@ -185,6 +185,7 @@ define( function( require ) {
     // Define some variables for taking a snapshot of the user's solution.
     this.areaOfUserCreatedShape = 0;
     this.perimeterOfUserCreatedShape = 0;
+    this.color1Proportion = null;
 
     // Add and lay out the game control buttons.
     this.gameControlButtons = [];
@@ -198,6 +199,13 @@ define( function( require ) {
         // Save the parameters of what the user has built, if they've built anything.
         self.areaOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.area;
         self.perimeterOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.perimeter;
+        var challenge = self.model.currentChallenge; // convenience var
+        if ( challenge.buildSpec.proportions ) {
+          self.color1Proportion = gameModel.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
+        }
+        else {
+          self.color1Proportion = null;
+        }
 
         // Submit the user's area guess, if there is one.
         gameModel.simSpecificModel.areaGuess = self.numberEntryControl.value;
@@ -406,20 +414,12 @@ define( function( require ) {
           }
           else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
             this.youBuiltWindow.setAreaAndProportions( this.areaOfUserCreatedShape,
-              challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, {
-                numerator: challenge.buildSpec.proportions.color1ProportionNumerator,
-                denominator: challenge.buildSpec.proportions.color1ProportionDenominator
-              }
-            );
+              challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, this.color1Proportion );
           }
           else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
             this.youBuiltWindow.setAreaPerimeterAndProportions( this.areaOfUserCreatedShape,
               this.perimeterOfUserCreatedShape, challenge.buildSpec.proportions.color1,
-              challenge.buildSpec.proportions.color2, {
-                numerator: challenge.buildSpec.proportions.color1ProportionNumerator,
-                denominator: challenge.buildSpec.proportions.color1ProportionDenominator
-              }
-            );
+              challenge.buildSpec.proportions.color2, this.color1Proportion );
           }
           this.youBuiltWindow.centerY = this.shapeBoard.centerY;
           this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;

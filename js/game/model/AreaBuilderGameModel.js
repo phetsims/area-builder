@@ -191,8 +191,14 @@ define( function( require ) {
         return answerIsCorrect;
       },
 
-      // Returns true if the proportion of the current shapes that are the provided color is equal to the provided
-      // proportion value, false otherwise.
+      /**
+       * Returns true if the proportion of the current shapes that are the provided color is equal to the provided
+       * proportion value, false otherwise.
+       * @public
+       * @param color
+       * @param proportion
+       * @returns {boolean}
+       */
       testColorProportion: function( color, proportion ) {
         var testColor = Color.toColor( color );
         var colorCount = 0;
@@ -204,6 +210,15 @@ define( function( require ) {
 
         // Compare proportions while accounting for floating point errors.
         return ( Math.abs( proportion - colorCount / this.movableShapes.length ) ) < 1E-6;
+      },
+
+      /**
+       * Returns the proportion of the shapes on the board that are the same color as the provided value.
+       * @param color
+       */
+      getProportionOfColor: function( color ) {
+        // Pass through to the shape placement board.
+        return this.shapePlacementBoard.getProportionOfColor( color );
       },
 
       /**

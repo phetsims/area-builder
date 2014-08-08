@@ -8,6 +8,8 @@ define( function( require ) {
 
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
+  var Color = require( 'SCENERY/util/Color' );
+  var Fraction = require( 'AREA_BUILDER/game/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
@@ -117,6 +119,7 @@ define( function( require ) {
 
   return inherit( PropertySet, ShapePlacementBoard, {
 
+    // @private
     shapeOverlapsBoard: function( shape ) {
       var shapeBounds = new Bounds2( shape.position.x, shape.position.y, shape.position.x + shape.shape.bounds.getWidth(), shape.position.y + shape.shape.bounds.getHeight() );
       return this.bounds.intersectsBounds( shapeBounds );
@@ -202,7 +205,7 @@ define( function( require ) {
     /**
      * Add a shape directly the to specified cell.  This bypasses the placement process, and is generally used when
      * displaying solutions to challenges.
-     *
+     * @public
      * @param cellColumn
      * @param cellRow
      * @param movableShape
@@ -229,6 +232,24 @@ define( function( require ) {
           self.addResidentShape( movableShape, false );
         }
       } );
+    },
+
+    /**
+     * Get the proportion of placed shapes that match the provided color.
+     *
+     * @param color
+     */
+    getProportionOfColor: function( color ) {
+      var compareColor = Color.toColor( color );
+      var colorCount = 0;
+      this.residentShapes.forEach( function( movableShape ) {
+        if ( compareColor.equals( movableShape.color ) ) {
+          colorCount++;
+        }
+      } );
+      var proportion = new Fraction( colorCount, this.residentShapes.length );
+      proportion.reduce();
+      return proportion;
     },
 
     // @private, add a shape to the list of residents and make the other updates that go along with this.

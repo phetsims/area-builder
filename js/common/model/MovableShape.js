@@ -9,6 +9,7 @@ define( function( require ) {
 
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Shape = require( 'KITE/Shape' );
@@ -67,7 +68,7 @@ define( function( require ) {
 
     // Non-dynamic attributes
     this.shape = shape; // @public
-    this.color = color; // @public
+    this.color = Color.toColor( color ); // @public
 
     // Internal vars
     this.fading = false; // @private
