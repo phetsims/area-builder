@@ -124,10 +124,7 @@ define( function( require ) {
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
-    this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 20, 85, {
-      centerX: ( this.layoutBounds.width + this.shapeBoard.right ) / 2,
-      centerY: this.shapeBoard.centerY
-    } );
+    this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 20 );
     this.challengeLayer.addChild( this.youBuiltWindow );
     this.answerFeedback = new Node();
     this.challengeLayer.addChild( this.answerFeedback );
@@ -399,16 +396,34 @@ define( function( require ) {
             this.solutionBanner
           ] );
 
+          // Update the answer feedback
           this.answerFeedback.removeAllChildren();
-          if ( challenge.buildSpec ) {
-            if ( challenge.buildSpec.perimeter ) {
-              this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
-            }
-            else {
-              this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
-            }
-            this.youBuiltWindow.visible = true;
+          if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
+            this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
           }
+          else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
+            this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
+          }
+          else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
+            this.youBuiltWindow.setAreaAndProportions( this.areaOfUserCreatedShape,
+              challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, {
+                numerator: challenge.buildSpec.proportions.color1ProportionNumerator,
+                denominator: challenge.buildSpec.proportions.color1ProportionDenominator
+              }
+            );
+          }
+          else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
+            this.youBuiltWindow.setAreaPerimeterAndProportions( this.areaOfUserCreatedShape,
+              this.perimeterOfUserCreatedShape, challenge.buildSpec.proportions.color1,
+              challenge.buildSpec.proportions.color2, {
+                numerator: challenge.buildSpec.proportions.color1ProportionNumerator,
+                denominator: challenge.buildSpec.proportions.color1ProportionDenominator
+              }
+            );
+          }
+          this.youBuiltWindow.centerY = this.shapeBoard.centerY;
+          this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
+          this.youBuiltWindow.visible = true;
 
           // Update the solution banner.
           this.solutionBanner.reset();

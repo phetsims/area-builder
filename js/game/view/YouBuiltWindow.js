@@ -9,9 +9,11 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Panel = require( 'SUN/Panel' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -24,59 +26,101 @@ define( function( require ) {
   var X_MARGIN = 5;
   var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var VALUE_FONT = new PhetFont( { size: 18 } );
+  var LINE_SPACING = 5;
 
   /**
    * @param width
-   * @param height
    * @param options
    * @constructor
    */
-  function YouBuiltWindow( width, height, options ) {
-    Rectangle.call( this, 0, 0, width, height, 4, 4, { fill: '#F2E916', stroke: 'black' } );
+  function YouBuiltWindow( width, options ) {
+
+    options = _.extend( { fill: '#F2E916', stroke: 'black' }, options );
+
+    // content root
+    this.contentNode = new Node();
 
     // title
     var youBuiltText = new Text( youBuiltString, { font: TITLE_FONT } );
     youBuiltText.scale( Math.min( ( width - 2 * X_MARGIN ) / youBuiltText.width, 1 ) );
     youBuiltText.top = 5;
-    youBuiltText.centerX = width / 2;
-    this.addChild( youBuiltText );
+    this.contentNode.addChild( youBuiltText );
 
-    // text for area only
-    this.areaOnlyTextNode = new Text( StringUtils.format( areaEqualsString, 99 ), {
-      font: VALUE_FONT
-    } );
-    this.areaOnlyTextNode.scale( Math.min( ( width - 2 * X_MARGIN ) / this.areaOnlyTextNode.width, 1 ) );
-    this.areaOnlyTextNode.left = X_MARGIN;
-    this.areaOnlyTextNode.centerY = height * 0.6;
-    this.areaOnlyTextNode.visible = false;
-    this.addChild( this.areaOnlyTextNode );
+    // TODO: Scale everything below so that we're sure it will fit when translated.
 
-    // text for area and perimeter
-    this.areaAndPerimeterTextNode = new MultiLineText( StringUtils.format( areaEqualsString, 99 ) + '\n' + StringUtils.format( perimeterEqualsString, 999 ), {
+    // area text
+    this.areaTextNode = new Text( StringUtils.format( areaEqualsString, 99 ), {
       font: VALUE_FONT,
-      align: 'left'
+      top: youBuiltText.bottom + LINE_SPACING
     } );
-    this.areaAndPerimeterTextNode.scale( Math.min( ( width - 2 * X_MARGIN ) / this.areaAndPerimeterTextNode.width, 1 ) );
-    this.areaAndPerimeterTextNode.left = X_MARGIN;
-    this.areaAndPerimeterTextNode.centerY = height * 0.6;
-    this.areaAndPerimeterTextNode.visible = false;
-    this.addChild( this.areaAndPerimeterTextNode );
+    this.contentNode.addChild( this.areaTextNode );
 
-    this.mutate( options );
+    // perimeter text
+    this.perimeterTextNode = new Text( StringUtils.format( perimeterEqualsString, 99 ), {
+      font: VALUE_FONT,
+      top: this.areaTextNode.bottom + LINE_SPACING
+    } );
+    this.contentNode.addChild( this.perimeterTextNode );
+
+    // proportion info is initially set to null, added and removed when needed.
+    this.proportionsInfoNode = null;
+
+    // constructor - called here because content with no bounds doesn't work
+    Panel.call( this, this.contentNode, options );
   }
 
-  return inherit( Rectangle, YouBuiltWindow, {
-    setAreaOnly: function( area ) {
-      this.areaOnlyTextNode.text = StringUtils.format( areaEqualsString, area );
-      this.areaOnlyTextNode.visible = true;
-      this.areaAndPerimeterTextNode.visible = false;
+  return inherit( Panel, YouBuiltWindow, {
+
+    // @private
+    removeProportionInfo: function() {
+      if ( this.proportionsInfoNode !== null ) {
+        this.contentNode.removeChild( this.proportionsInfoNode );
+        this.proportionsInfoNode = null;
+      }
     },
 
+    // @public
+    setAreaOnly: function( area ) {
+      this.areaTextNode.text = StringUtils.format( areaEqualsString, area );
+      this.perimeterTextNode.visible = false;
+      this.removeProportionInfo();
+    },
+
+    // @public
     setAreaAndPerimeter: function( area, perimeter ) {
-      this.areaAndPerimeterTextNode.text = StringUtils.format( areaEqualsString, area ) + '\n' +
-                                           StringUtils.format( perimeterEqualsString, perimeter );
-      this.areaAndPerimeterTextNode.visible = true;
-      this.areaOnlyTextNode.visible = false;
+      this.areaTextNode.text = StringUtils.format( areaEqualsString, area );
+      this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, perimeter );
+      this.perimeterTextNode.top = this.areaTextNode.bottom + LINE_SPACING;
+      this.perimeterTextNode.visible = true;
+      this.removeProportionInfo();
+    },
+
+    // @public
+    setAreaAndProportions: function( area, color1, color2, proportion1 ) {
+      this.setAreaOnly( area );
+      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, proportion1.numerator, proportion1.denominator, {
+        left: 0,
+        top: this.areaTextNode.bottom + LINE_SPACING
+      } );
+      this.contentNode.addChild( this.proportionsInfoNode );
+    },
+
+    // @public
+    setAreaPerimeterAndProportions: function( area, perimeter, color1, color2, proportion1 ) {
+
+      // area
+      this.setAreaOnly( area );
+
+      // proportions, which sit just below area so that it is clear that they go together
+      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, proportion1.numerator, proportion1.denominator, {
+        top: this.areaTextNode.bottom + LINE_SPACING
+      } );
+      this.contentNode.addChild( this.proportionsInfoNode );
+
+      // perimeter, at the bottom
+      this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, perimeter );
+      this.perimeterTextNode.top = this.proportionsInfoNode.bottom + LINE_SPACING;
+      this.perimeterTextNode.visible = true;
     }
   } );
 } );

@@ -19,6 +19,10 @@ Another central concept is that of a perimeter shape, which is a shape that is
 defined by an ordered set of points, with straight lines being drawn between
 the points when depicting it in the view.
 
+In the game, there is a concept called the "build spec" that specifies what
+the user is supposed to build.  This is used in many places throughout the
+game.
+
 STYLE NOTES:
 For this simulation, the comments wrap at 120 characters.  This was generally done the same way for except in
 a few circumstances where it made the code less readable (in the author's opinion).
