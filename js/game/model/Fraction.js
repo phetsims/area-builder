@@ -41,7 +41,7 @@ define( function( require ) {
 
     // @private, find the greatest common denominator using the classic algorithm
     gcd: function( a, b ) {
-      return b === 0 ? a : this.gcd( b, a % b )
+      return b === 0 ? a : this.gcd( b, a % b );
     },
 
     reduce: function() {

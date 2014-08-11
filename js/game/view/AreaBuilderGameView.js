@@ -42,7 +42,6 @@ define( function( require ) {
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
   var areaQuestionString = require( 'string!AREA_BUILDER/areaQuestion' );
-  var buildItString = require( 'string!AREA_BUILDER/buildIt' );
   var checkString = require( 'string!VEGAS/check' );
   var nextString = require( 'string!VEGAS/next' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
@@ -526,23 +525,6 @@ define( function( require ) {
               font: GOAL_PROMPT_FONT
             } ) );
           }
-
-          //--------------------
-          /*
-           var areaPromptText = StringUtils.format( areaEqualsString, challenge.buildSpec.area );
-           if ( challenge.buildSpec.perimeter ) {
-           areaPromptText += '   ' + StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter );
-           }
-           while ( this.buildPromptVBox.getChildrenCount() > 2 ) {
-           this.buildPromptVBox.removeChildAt( 2 );
-           }
-           if ( challenge.buildSpec.proportions ) {
-           var spec = challenge.buildSpec.proportions;
-           this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2, spec.color1Proportion,
-           { font: GOAL_PROMPT_FONT } ) );
-           }
-           this.buildPromptVBox.addChild( new Text( buildItString, GOAL_PROMPT_FONT ) );
-           */
 
           // Center the panel over the shape board and make is visible.
           this.buildPromptPanel.centerX = this.shapeBoard.centerX;
