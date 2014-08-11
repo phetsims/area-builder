@@ -430,15 +430,12 @@ define( function( require ) {
           // Update the solution banner.
           this.solutionBanner.reset();
           if ( challenge.buildSpec ) {
-            // TODO: This is stupid (because of the way it evolved).  The solution banner should just be generated here instead of all these steps to update it.
             this.solutionBanner.properties.mode = 'buildIt';
-            this.solutionBanner.properties.targetArea = challenge.buildSpec.area;
-            this.solutionBanner.properties.targetPerimeter = challenge.buildSpec.perimeter || null;
-            this.solutionBanner.properties.targetProportions = challenge.buildSpec.proportions || null;
+            this.solutionBanner.properties.buildSpec = challenge.buildSpec;
           }
           else {
             this.solutionBanner.properties.mode = 'findArea';
-            this.solutionBanner.properties.targetArea = challenge.backgroundShape.unitArea;
+            this.solutionBanner.properties.findAreaValue = challenge.backgroundShape.unitArea;
           }
           this.showChallengeGraphics();
 

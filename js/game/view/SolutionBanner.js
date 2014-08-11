@@ -46,49 +46,21 @@ define( function( require ) {
 
     // @public These properties are the main API for this class, and they control what is and isn't shown on the banner.
     this.properties = new PropertySet( {
-      mode: 'buildIt', // Challenge type being presented to user, valid values are 'buildIt' and 'findArea'.
-      targetArea: null,
-      targetPerimeter: null,
-      targetProportions: null
+
+      // Challenge type being presented to user, valid values are 'buildIt' and 'findArea'.
+      mode: 'buildIt',
+
+      // Specification of what the user should have built.
+      buildSpec: null,
+
+      // Area value for the 'findArea' style of challenge
+      findAreaValue: null
     } );
 
     var title = new Text( '', { font: TITLE_FONT, fill: TEXT_FILL_COLOR, centerY: height / 2, left: TITLE_INDENT } );
     this.addChild( title );
 
-    var areaOnlyPrompt = new Text( '', {
-      font: LARGE_FONT,
-      fill: TEXT_FILL_COLOR,
-      centerY: height / 2,
-      centerX: width / 2
-    } );
-    this.addChild( areaOnlyPrompt );
-    var areaAndPerimeterPrompt = new MultiLineText( '', {
-      font: SMALLER_FONT,
-      fill: TEXT_FILL_COLOR,
-      align: 'left',
-      centerY: height / 2,
-      centerX: width / 2
-    } );
-    this.addChild( areaAndPerimeterPrompt );
-
-    var targetProportionsPrompt = new Node();
-    this.addChild( targetProportionsPrompt );
-
-    function updatePromptPositions() {
-      var promptCenterX;
-      if ( targetProportionsPrompt.getChildrenCount() > 0 ) {
-        targetProportionsPrompt.right = width - TITLE_INDENT;
-        targetProportionsPrompt.centerY = height / 2;
-        promptCenterX = ( title.width + TITLE_INDENT + targetProportionsPrompt.left ) / 2;
-      }
-      else {
-        promptCenterX = ( width + title.width + TITLE_INDENT ) / 2;
-      }
-      areaOnlyPrompt.centerX = promptCenterX;
-      areaAndPerimeterPrompt.centerX = promptCenterX;
-      areaAndPerimeterPrompt.centerY = height / 2;
-    }
-
+    // Update the title based on the problem type.
     this.properties.modeProperty.link( function( mode ) {
       switch( mode ) {
         case 'buildIt':
@@ -101,37 +73,107 @@ define( function( require ) {
           title.text = 'undefined';
           break;
       }
-      updatePromptPositions();
     } );
 
-    // TODO: This works, but is not a great way to do it, since it causes multiple updates.  Replace at some point with
-    // TODO: a single constructor and handle it differently in the main view class.
-    Property.multilink( [ this.properties.targetAreaProperty, this.properties.targetPerimeterProperty, this.properties.targetProportionsProperty ],
-      function( targetArea, targetPerimeter, targetProportions ) {
+    var findTheAreaPrompt = new Text( '', {
+      font: LARGE_FONT,
+      fill: TEXT_FILL_COLOR,
+      centerY: height / 2
+    } );
+    this.addChild( findTheAreaPrompt );
 
-        // Update the text of the textual prompts.
-        var areaPromptText = targetArea ? StringUtils.format( areaEqualsString, targetArea ) : '';
-        areaOnlyPrompt.text = areaPromptText;
-        var perimeterPromptText = targetPerimeter ? StringUtils.format( perimeterEqualsString, targetPerimeter ) : '';
-        areaAndPerimeterPrompt.text = areaPromptText + '\n' + perimeterPromptText;
+    // Update the area value for the 'find the area' style of challenge
+    this.properties.findAreaValueProperty.link( function( area ) {
+      findTheAreaPrompt.visible = area !== null;
+      if ( findTheAreaPrompt.visible ) {
+        findTheAreaPrompt.text = StringUtils.format( areaEqualsString, area );
+        findTheAreaPrompt.centerX = ( title.width + width - TITLE_INDENT ) / 2
+      }
+    } );
 
-        // Update the proportions prompt.
-        targetProportionsPrompt.removeAllChildren();
-        if ( targetProportions !== null ) {
-          targetProportionsPrompt.addChild( new ColorProportionsPrompt(
-            targetProportions.color1,
-            targetProportions.color2,
-            targetProportions.color1Proportion,
-            { textFill: 'white', multiLine: true } ) );
+    var buildPrompt = new Node();
+    this.addChild( buildPrompt );
+
+    // Update the prompt that describes what the user should have built.
+    this.properties.buildSpecProperty.link( function( buildSpec ) {
+      if ( buildSpec ) {
+        assert && assert( buildSpec.area, 'All build specs are assumed to have an area value.' );
+        var areaPrompt, perimeterPrompt, proportionsPrompt;
+
+        // TODO: There is some code consolidation that can be done below.
+
+        buildPrompt.removeAllChildren();
+        if ( !buildSpec.perimeter && !buildSpec.proportions ) {
+          // This is an area-only challenge.
+          buildPrompt.addChild( new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
+            font: LARGE_FONT,
+            fill: TEXT_FILL_COLOR,
+            align: 'left',
+            centerY: height / 2
+          } ) );
+        }
+        else if ( buildSpec.perimeter && !buildSpec.proportions ) {
+          // This is a perimeter+area challenge
+          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR
+          } );
+          perimeterPrompt = new Text( StringUtils.format( perimeterEqualsString, buildSpec.perimeter ), {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR
+          } );
+          buildPrompt.addChild( areaPrompt );
+          perimeterPrompt.top = areaPrompt.bottom;
+          buildPrompt.addChild( perimeterPrompt );
+        }
+        else if ( !buildSpec.perimeter && buildSpec.proportions ) {
+          // This is a area+proportions challenge
+          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ) + ',', {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR,
+            centerY: height / 2
+          } );
+          proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
+            buildSpec.proportions.color1Proportion, {
+              font: SMALLER_FONT,
+              textFill: TEXT_FILL_COLOR,
+              left: areaPrompt.right + 4,
+              centerY: areaPrompt.centerY
+            }
+          );
+          buildPrompt.addChild( areaPrompt );
+          buildPrompt.addChild( proportionsPrompt );
+        }
+        else if ( buildSpec.perimeter && buildSpec.proportions ) {
+          // This is a perimeter+area challenge
+          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.perimeter ) + ',', {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR
+          } );
+          proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
+            buildSpec.proportions.color1Proportion, {
+              font: SMALLER_FONT,
+              textFill: TEXT_FILL_COLOR,
+              left: areaPrompt.right + 4,
+              centerY: areaPrompt.centerY
+            }
+          );
+          perimeterPrompt = new Text( StringUtils.format( perimeterEqualsString, buildSpec.perimeter ), {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR,
+            centerX: proportionsPrompt.right / 2
+          } );
+          buildPrompt.addChild( areaPrompt );
+          buildPrompt.addChild( proportionsPrompt );
+          perimeterPrompt.top = areaPrompt.bottom;
+          buildPrompt.addChild( perimeterPrompt );
         }
 
-        // Update the visibility of the prompts
-        areaOnlyPrompt.visible = areaPromptText.length > 0 && perimeterPromptText.length === 0;
-        areaAndPerimeterPrompt.visible = areaPromptText.length > 0 && perimeterPromptText.length > 0;
-
-        // Center the prompts in the position to the right of the title.
-        updatePromptPositions();
-      } );
+        // Center the build prompt horizontally between the title and the right edge of the banner.
+        buildPrompt.centerX = ( title.width + width ) / 2;
+        buildPrompt.centerY = height / 2;
+      }
+    } );
 
     // Pass options through to parent class.
     this.mutate( options );
