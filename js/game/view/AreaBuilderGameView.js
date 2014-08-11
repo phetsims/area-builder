@@ -249,6 +249,15 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.areaQuestionPrompt );
 
+    // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In this
+    // case, we go ahead and make the state transition to the next state.
+    this.numberEntryControl.keypad.digitString.link( function( digitString ) {
+      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
+        assert && assert( digitString.length <= 1, 'Shouldn\'t reach this code with digit strings longer than 1' );
+        gameModel.tryAgain();
+      }
+    } );
+
     // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
     this.faceWithPointsNode = new FaceWithPointsNode( {
       faceDiameter: 85,
@@ -288,6 +297,12 @@ define( function( require ) {
 
       // Show the build prompts on the challenge prompt banner if they aren't shown already.
       self.challengePromptBanner.properties.showPrompts = true;
+
+      // If the game was in the state where it was prompting the user to try again, and the user started adding shapes
+      // without pressing the 'Try Again' button, go ahead and make the state change automatically.
+      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
+        gameModel.tryAgain();
+      }
     } );
 
     // Various other initialization
@@ -354,8 +369,7 @@ define( function( require ) {
           this.faceWithPointsNode.setPoints( this.model.score );
           this.faceWithPointsNode.visible = true;
 
-          // Disable interaction with the challenge elements.
-          this.challengeLayer.pickable = false;
+          this.numberEntryControl.armForNewEntry();
 
           break;
 

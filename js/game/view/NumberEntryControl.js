@@ -59,6 +59,9 @@ define( function( require ) {
     },
     clear: function() {
       this.keypad.clear();
+    },
+    armForNewEntry: function() {
+      this.keypad.armForNewEntry()
     }
   } );
 } );

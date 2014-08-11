@@ -44,6 +44,9 @@ define( function( require ) {
     // @public String of digits entered by the user
     this.digitString = new Property( '' );
 
+    // @private Flag used when arming the keypad to start over on the next key stroke.
+    this.armedForNewEntry = false;
+
     // Function for creating a number key
     function createNumberKey( number, doubleWide ) {
       var minWidth = doubleWide ? options.minButtonWidth * 2 + options.xSpacing : options.minButtonWidth;
@@ -55,7 +58,14 @@ define( function( require ) {
         xMargin: 5,
         yMargin: 5,
         listener: function() {
-          // Add the digit to the string, but limit the length and prevent leading zeros.
+
+          // If armed for new entry, clear the existing string.
+          if ( self.armedForNewEntry ) {
+            self.digitString.reset();
+            self.armedForNewEntry = false;
+          }
+
+          // Add the digit to the string, but limit the length and prevent multiple leading zeros.
           if ( self.digitString.value.length < options.maxDigits && !( self.digitString.value.length === 0 && number === 0 ) ) {
             self.digitString.value += number.toString();
           }
@@ -132,8 +142,16 @@ define( function( require ) {
   }
 
   return inherit( VBox, Keypad, {
+
+    // @public
     clear: function() {
       this.digitString.reset();
+    },
+
+
+    // @public Set the keypad such that any new digit entry will clear the existing string and start over.
+    armForNewEntry: function() {
+      this.armedForNewEntry = true;
     }
   } );
 } );
