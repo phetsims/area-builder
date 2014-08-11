@@ -64,6 +64,7 @@ define( function( require ) {
   var INFO_BANNER_HEIGHT = 50; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 18;
+  var YOUR_GOAL_TITLE = new Text( yourGoalString, { font: new PhetFont( { size: 24, weight: 'bold' } ) } );
 
   /**
    * @param {AreaBuilderGameModel} gameModel
@@ -165,11 +166,9 @@ define( function( require ) {
     } ) );
 
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
-    this.goalText = new Text( '', { font: GOAL_PROMPT_FONT } );
     this.buildPromptVBox = new VBox( {
       children: [
-        new Text( yourGoalString, { font: GOAL_PROMPT_FONT } ),
-        this.goalText
+        YOUR_GOAL_TITLE
       ],
       spacing: 20
     } );
@@ -484,42 +483,68 @@ define( function( require ) {
           this.shapeCarousel = null;
         }
 
-        // Set up the titles and prompts
         var challenge = this.model.currentChallenge; // Convenience var
+
+        // Set up the challenge prompt banner, which appears above the shape placement board.
         this.challengePromptBanner.properties.mode = challenge.buildSpec ? 'buildIt' : 'findArea';
         if ( challenge.buildSpec ) {
 
           // Set the prompt values.
-          this.challengePromptBanner.properties.targetArea = challenge.buildSpec.area;
-          this.challengePromptBanner.properties.targetPerimeter = challenge.buildSpec.perimeter || null;
+          this.challengePromptBanner.properties.buildSpec = challenge.buildSpec;
 
           // The prompts on the banner are initially invisible, and show up once the user adds a shape.
           this.challengePromptBanner.properties.showPrompts = false;
-
-          if ( challenge.buildSpec.proportions ) {
-            // The the target proportions prompt.
-            this.challengePromptBanner.properties.targetProportions = challenge.buildSpec.proportions;
-          }
         }
-        this.challengeView.removeAllChildren();
-        if ( challenge.buildSpec ) {
-          // Set up the prompt the will be shown over the shape placement board.
-          var promptText = StringUtils.format( areaEqualsString, challenge.buildSpec.area );
-          if ( challenge.buildSpec.perimeter ) {
-            promptText += '   ' + StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter );
-          }
-          this.goalText.text = promptText;
-          while ( this.buildPromptVBox.getChildrenCount() > 2 ) {
-            this.buildPromptVBox.removeChildAt( 2 );
-          }
-          if ( challenge.buildSpec.proportions ) {
-            var spec = challenge.buildSpec.proportions;
-            this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2, spec.color1Proportion,
-              { font: GOAL_PROMPT_FONT } ) );
-          }
-          this.buildPromptVBox.addChild( new Text( buildItString, GOAL_PROMPT_FONT ) );
 
-          // Center the panel over the shape board.
+        // If needed, set up the goal prompt that will initially appear over the shape placement board (in the z-order).
+        this.challengeView.removeAllChildren(); // TODO: Is this needed?  It may be vestigial.
+        if ( challenge.buildSpec ) {
+
+          this.buildPromptVBox.removeAllChildren();
+          this.buildPromptVBox.addChild( YOUR_GOAL_TITLE );
+          var areaGoalNode = new Text( StringUtils.format( areaEqualsString, challenge.buildSpec.area ), {
+            font: GOAL_PROMPT_FONT
+          } );
+          if ( challenge.buildSpec.proportions ) {
+            var areaPrompt = new Node();
+            areaPrompt.addChild( areaGoalNode );
+            areaGoalNode.text += ',';
+            areaPrompt.addChild( new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
+              challenge.buildSpec.proportions.color2, challenge.buildSpec.proportions.color1Proportion, {
+                font: GOAL_PROMPT_FONT,
+                left: areaGoalNode.width + 5
+              }
+            ) );
+            this.buildPromptVBox.addChild( areaPrompt );
+          }
+          else {
+            this.buildPromptVBox.addChild( areaGoalNode );
+          }
+
+          if ( challenge.buildSpec.perimeter ) {
+            this.buildPromptVBox.addChild( new Text( StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter ), {
+              font: GOAL_PROMPT_FONT
+            } ) );
+          }
+
+          //--------------------
+          /*
+           var areaPromptText = StringUtils.format( areaEqualsString, challenge.buildSpec.area );
+           if ( challenge.buildSpec.perimeter ) {
+           areaPromptText += '   ' + StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter );
+           }
+           while ( this.buildPromptVBox.getChildrenCount() > 2 ) {
+           this.buildPromptVBox.removeChildAt( 2 );
+           }
+           if ( challenge.buildSpec.proportions ) {
+           var spec = challenge.buildSpec.proportions;
+           this.buildPromptVBox.addChild( new ColorProportionsPrompt( spec.color1, spec.color2, spec.color1Proportion,
+           { font: GOAL_PROMPT_FONT } ) );
+           }
+           this.buildPromptVBox.addChild( new Text( buildItString, GOAL_PROMPT_FONT ) );
+           */
+
+          // Center the panel over the shape board and make is visible.
           this.buildPromptPanel.centerX = this.shapeBoard.centerX;
           this.buildPromptPanel.centerY = this.shapeBoard.centerY;
           this.buildPromptPanel.visible = true;

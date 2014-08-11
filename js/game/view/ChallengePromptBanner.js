@@ -16,7 +16,6 @@ define( function( require ) {
   // modules
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
@@ -57,14 +56,8 @@ define( function( require ) {
       // is being shown.
       mode: 'buildIt',
 
-      // Area that the user should be building, if any.
-      targetArea: null,
-
-      // Perimeter that the user should be building, if any.
-      targetPerimeter: null,
-
-      // Proportion spec, null if no proportions shown, of the form used in the challenges if present.
-      targetProportions: null,
+      // Specification for what the user should build, only relevant for the 'buildIt' challenges, null otherwise.
+      buildSpec: null,
 
       // This flag controls whether the prompts are visible (i.e. the target area, target perimeter, target
       // proportions).  It should be toggled each time the prompts are updated for correct fade-in behavior.
@@ -76,7 +69,6 @@ define( function( require ) {
 
     var title = new Text( '', { font: TITLE_FONT, fill: TEXT_FILL_COLOR, centerY: height / 2 } );
     this.addChild( title );
-    title.left = 20;
 
     this.properties.modeProperty.link( function( mode ) {
       switch( mode ) {
@@ -94,82 +86,101 @@ define( function( require ) {
       }
     } );
 
-    var areaOnlyPrompt = new Text( '', {
-      font: LARGE_FONT,
-      fill: TEXT_FILL_COLOR,
-      centerY: height / 2,
-      centerX: width / 2
-    } );
-    this.addChild( areaOnlyPrompt );
-    var areaAndPerimeterPrompt = new MultiLineText( '', {
-      font: SMALLER_FONT,
-      fill: TEXT_FILL_COLOR,
-      align: 'left',
-      centerY: height / 2,
-      centerX: width / 2
-    } );
-    this.addChild( areaAndPerimeterPrompt );
+    var buildPrompt = new Node();
+    this.addChild( buildPrompt );
 
-    Property.multilink( [ this.properties.targetAreaProperty, this.properties.targetPerimeterProperty ],
-      function( targetArea, targetPerimeter ) {
+    this.properties.buildSpecProperty.link( function( buildSpec ) {
+      if ( buildSpec ) {
+        assert && assert( buildSpec.area, 'All build specs are assumed to have an area value.' );
+        var areaPrompt, perimeterPrompt, proportionsPrompt;
 
-        var buildPromptCenterX = ( title.width + width ) / 2;
-        var areaPromptText = targetArea ? StringUtils.format( areaEqualsString, targetArea ) : '';
+        // TODO: There is some code consolidation that can be done below.
 
-        // Update the text of the area only prompt.
-        areaOnlyPrompt.text = areaPromptText;
-        areaPromptText.centerX = buildPromptCenterX;
+        buildPrompt.removeAllChildren();
+        if ( !buildSpec.perimeter && !buildSpec.proportions ) {
+          // This is an area-only challenge.
+          buildPrompt.addChild( new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
+            font: LARGE_FONT,
+            fill: TEXT_FILL_COLOR,
+            align: 'left',
+            centerY: height / 2
+          } ) );
+        }
+        else if ( buildSpec.perimeter && !buildSpec.proportions ) {
+          // This is a perimeter+area challenge
+          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR
+          } );
+          perimeterPrompt = new Text( StringUtils.format( perimeterEqualsString, buildSpec.perimeter ), {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR
+          } );
+          buildPrompt.addChild( areaPrompt );
+          perimeterPrompt.top = areaPrompt.bottom;
+          buildPrompt.addChild( perimeterPrompt );
+        }
+        else if ( !buildSpec.perimeter && buildSpec.proportions ) {
+          // This is a area+proportions challenge
+          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ) + ',', {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR,
+            centerY: height / 2
+          } );
+          proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
+            buildSpec.proportions.color1Proportion, {
+              font: SMALLER_FONT,
+              textFill: TEXT_FILL_COLOR,
+              left: areaPrompt.right + 4,
+              centerY: areaPrompt.centerY
+            }
+          );
+          buildPrompt.addChild( areaPrompt );
+          buildPrompt.addChild( proportionsPrompt );
+        }
+        else if ( buildSpec.perimeter && buildSpec.proportions ) {
+          // This is a perimeter+area challenge
+          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.perimeter ) + ',', {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR
+          } );
+          proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
+            buildSpec.proportions.color1Proportion, {
+              font: SMALLER_FONT,
+              textFill: TEXT_FILL_COLOR,
+              left: areaPrompt.right + 4,
+              centerY: areaPrompt.centerY
+            }
+          );
+          perimeterPrompt = new Text( StringUtils.format( perimeterEqualsString, buildSpec.perimeter ), {
+            font: SMALLER_FONT,
+            fill: TEXT_FILL_COLOR,
+            centerX: proportionsPrompt.right / 2
+          } );
+          buildPrompt.addChild( areaPrompt );
+          buildPrompt.addChild( proportionsPrompt );
+          perimeterPrompt.top = areaPrompt.bottom;
+          buildPrompt.addChild( perimeterPrompt );
+        }
 
-        // Update the area+perimeter prompt
-        var perimeterPromptText = targetPerimeter ? StringUtils.format( perimeterEqualsString, targetPerimeter ) : '';
-        areaAndPerimeterPrompt.text = areaPromptText + '\n' + perimeterPromptText;
-        areaAndPerimeterPrompt.centerX = buildPromptCenterX;
-        areaAndPerimeterPrompt.centerY = height / 2;
-      } );
-
-    var targetProportionsPrompt = new Node();
-    this.addChild( targetProportionsPrompt );
-
-    this.properties.targetProportionsProperty.link( function( targetProportions ) {
-      targetProportionsPrompt.removeAllChildren();
-      if ( targetProportions ) {
-        var colorProportionsPrompt = new ColorProportionsPrompt( targetProportions.color1,
-          targetProportions.color2, targetProportions.color1Proportion, { textFill: 'white' } );
-        colorProportionsPrompt.scale( height / colorProportionsPrompt.bounds.height * 0.9 );
-        colorProportionsPrompt.right = width - TITLE_INDENT;
-        colorProportionsPrompt.centerY = height / 2;
-        targetProportionsPrompt.addChild( colorProportionsPrompt );
+        // Center the build prompt horizontally between the title and the right edge of the banner.
+        buildPrompt.centerX = ( title.width + width ) / 2;
+        buildPrompt.centerY = height / 2;
       }
     } );
 
     // Control the visibility of the various prompts.  The active prompts fade in what this property becomes true,
     // and disappear instantly when this prompt goes false.
     this.properties.showPromptsProperty.link( function( showPrompts ) {
-      areaOnlyPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter === null ) && showPrompts;
-      areaAndPerimeterPrompt.visible = ( self.properties.targetArea !== null && self.properties.targetPerimeter !== null ) && showPrompts;
-      targetProportionsPrompt.visible = self.properties.targetProportions !== null;
-      if ( showPrompts && ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible || targetProportionsPrompt.visible ) ) {
+      buildPrompt.visible = self.properties.buildSpec !== null && showPrompts;
+      if ( showPrompts && buildPrompt.visible ) {
         // Move the title over to make room for the build prompt.
         new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
 
-        // Position the area and area+perimeter prompts
-        if ( targetProportionsPrompt.visible ) {
-          areaOnlyPrompt.centerX = ( title.width + TITLE_INDENT + targetProportionsPrompt.left ) / 2;
-        }
-        else {
-          areaOnlyPrompt.centerX = ( width + title.width + TITLE_INDENT ) / 2;
-        }
-        areaAndPerimeterPrompt.centerX = areaOnlyPrompt.centerX;
-
-        // Fade in whatever prompts are currently set to be visible.
-        if ( areaOnlyPrompt.visible || areaAndPerimeterPrompt.visible ) {
-          var promptToFadeIn = areaOnlyPrompt.visible ? areaOnlyPrompt : areaAndPerimeterPrompt;
-          promptToFadeIn.opacity = 0;
-          new TWEEN.Tween( promptToFadeIn ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
-        }
-        if ( targetProportionsPrompt.visible ) {
-          targetProportionsPrompt.opacity = 0;
-          new TWEEN.Tween( targetProportionsPrompt ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
+        // Fade in the build prompt if it is now set to be visible.
+        if ( buildPrompt.visible ) {
+          buildPrompt.opacity = 0;
+          new TWEEN.Tween( buildPrompt ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
         }
       }
       else {

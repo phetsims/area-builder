@@ -86,7 +86,7 @@ define( function( require ) {
     // Non-dynamic public values.
     this.unitSquareLength = unitSquareLength; // @public
     this.position = position; // @public
-    this.colorHandled = colorHandled; // @public
+    this.colorHandled = colorHandled === '*' ? colorHandled : Color.toColor( colorHandled ); // @public
 
     // Private variables
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
@@ -136,7 +136,7 @@ define( function( require ) {
       var self = this;
 
       // Only place the shape if it is of the correct color and is positioned so that it overlaps with the board.
-      if ( ( this.colorHandled !== '*' && movableShape.color !== this.colorHandled ) || !this.shapeOverlapsBoard( movableShape ) ) {
+      if ( ( this.colorHandled !== '*' && !movableShape.color.equals( this.colorHandled ) ) || !this.shapeOverlapsBoard( movableShape ) ) {
         return false;
       }
 

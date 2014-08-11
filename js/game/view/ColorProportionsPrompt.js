@@ -11,39 +11,52 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
 
-  // strings
-  var areString = require( 'string!AREA_BUILDER/are' );
+  // constants
+  var MULTI_LINE_SPACING = 5; // Empirically determined to look good
+  var SINGLE_LINE_SPACING = 8; // Empirically determined to look good
+  var PROMPT_TO_COLOR_SPACING = 4; // Empirically determined to look good
 
   function ColorProportionsPrompt( color1, color2, color1Proportion, options ) {
     Node.call( this );
 
-    options = _.extend( { font: new PhetFont( { size: 18 } ), textFill: 'black' }, options );
+    options = _.extend( {
+      font: new PhetFont( { size: 18 } ),
+      textFill: 'black',
+      multiLine: false
+    }, options );
 
-    var targetProportionsUpperText = new Text( color1Proportion.toString() + ' ' + areString, {
+    var color1ProportionText = new Text( color1Proportion.toString(), {
       font: options.font,
       fill: options.textFill
     } );
-    this.addChild( targetProportionsUpperText );
-    var targetProportionsLowerText = new Text( ( color1Proportion.denominator - color1Proportion.numerator ) + '/' + color1Proportion.denominator + ' ' + areString, {
+    this.addChild( color1ProportionText );
+    var color2ProportionText = new Text( ( color1Proportion.denominator - color1Proportion.numerator ) + '/' + color1Proportion.denominator, {
       font: options.font,
-      fill: options.textFill,
-      top: targetProportionsUpperText.bottom + 5 // Offset empirically determined
+      fill: options.textFill
     } );
-    this.addChild( targetProportionsLowerText );
-    var patchRadiusX = targetProportionsUpperText.bounds.height * 0.75;
-    var patchRadiusY = targetProportionsUpperText.bounds.height * 0.5;
-    var upperColorPatch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
+    this.addChild( color2ProportionText );
+    var patchRadiusX = color1ProportionText.bounds.height * 0.75;
+    var patchRadiusY = color1ProportionText.bounds.height * 0.5;
+    var color1Patch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
       fill: color1,
-      left: targetProportionsUpperText.right + 8,  // Offset empirically determined
-      centerY: targetProportionsUpperText.centerY
+      left: color1ProportionText.right + PROMPT_TO_COLOR_SPACING,
+      centerY: color1ProportionText.centerY
     } );
-    this.addChild( upperColorPatch );
-    var lowerColorPatch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
-      fill: color2,
-      left: upperColorPatch.left,
-      centerY: targetProportionsLowerText.centerY
+    this.addChild( color1Patch );
+
+    // Position the 2nd prompt based on whether or not the options specify multi-line.
+    if ( options.multiLine ) {
+      color2ProportionText.top = color1ProportionText.bottom + MULTI_LINE_SPACING;
+    }
+    else {
+      color2ProportionText.left = color1Patch.right + SINGLE_LINE_SPACING;
+    }
+
+    var color2ColorPatch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), { fill: color2,
+      left: color2ProportionText.right + PROMPT_TO_COLOR_SPACING,
+      centerY: color2ProportionText.centerY
     } );
-    this.addChild( lowerColorPatch );
+    this.addChild( color2ColorPatch );
 
     this.mutate( options );
   }

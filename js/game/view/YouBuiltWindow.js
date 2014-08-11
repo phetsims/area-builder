@@ -100,7 +100,8 @@ define( function( require ) {
       this.setAreaOnly( area );
       this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, color1Proportion, {
         left: 0,
-        top: this.areaTextNode.bottom + LINE_SPACING
+        top: this.areaTextNode.bottom + LINE_SPACING,
+        multiLine: true
       } );
       this.contentNode.addChild( this.proportionsInfoNode );
     },

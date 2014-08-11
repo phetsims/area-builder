@@ -3,8 +3,9 @@
 /**
  * Data structure for a fraction (possibly improper).
  *
- * @author Chris Malley (PixelZoom, Inc.)
  * @author John Blanco
+ * @author Chris Malley (PixelZoom, Inc.)
+ * @author Sam Reid
  */
 define( function( require ) {
   'use strict';
@@ -45,8 +46,8 @@ define( function( require ) {
 
     reduce: function() {
       var gcd = this.gcd( this.numerator, this.denominator );
-      this.numerator = Math.round( this.numerator / gcd );
-      this.denominator = Math.round( this.denominator / gcd );
+      this.numerator = gcd === 0 ? 0 : Math.round( this.numerator / gcd );
+      this.denominator = gcd === 0 ? 0 : Math.round( this.denominator / gcd );
     }
   } );
 } );
