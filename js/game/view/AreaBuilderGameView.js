@@ -249,13 +249,17 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.areaQuestionPrompt );
 
-    // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In this
-    // case, we go ahead and make the state transition to the next state.
     this.numberEntryControl.keypad.digitString.link( function( digitString ) {
+
+      // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
+      // this case, we go ahead and make the state transition to the next state.
       if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
         assert && assert( digitString.length <= 1, 'Shouldn\'t reach this code with digit strings longer than 1' );
         gameModel.tryAgain();
       }
+
+      // Update the state of the 'Check' button when the user enters new digits.
+      self.updatedCheckButtonEnabledState();
     } );
 
     // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
@@ -303,6 +307,9 @@ define( function( require ) {
       if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
         gameModel.tryAgain();
       }
+
+      // Make sure the check button is in the appropriate state.
+      self.updatedCheckButtonEnabledState();
     } );
 
     // Various other initialization
@@ -340,6 +347,7 @@ define( function( require ) {
             this.challengePromptBanner
           ] );
           this.showChallengeGraphics();
+          this.updatedCheckButtonEnabledState();
           break;
 
         case 'showingCorrectAnswerFeedback':
@@ -625,6 +633,17 @@ define( function( require ) {
     showChallengeGraphics: function() {
       this.challengeLayer.visible = true;
       this.controlLayer.visible = true;
+    },
+
+    updatedCheckButtonEnabledState: function() {
+      if ( this.model.currentChallenge ) {
+        if ( this.model.currentChallenge.checkSpec === 'areaEntered' ) {
+          this.checkAnswerButton.enabled = this.numberEntryControl.keypad.digitString.value.length > 0;
+        }
+        else {
+          this.checkAnswerButton.enabled = this.model.simSpecificModel.movableShapes.length > 0;
+        }
+      }
     },
 
     showLevelResultsNode: function() {
