@@ -747,6 +747,25 @@ define( function( require ) {
   // Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
 
+  // @private Use the provided generation function to create challenges until a unique one has been created.
+  function generateUniqueChallenge( generationFunction ) {
+    var challenge;
+    var uniqueChallengeGenerated = false;
+    var attempts = 0;
+    while ( !uniqueChallengeGenerated ) {
+      challenge = generationFunction();
+      attempts++;
+      uniqueChallengeGenerated = isChallengeUnique( challenge );
+      if ( attempts > 10 && !uniqueChallengeGenerated ) {
+        // Remove the oldest half of challenges.
+        challengeHistory = challengeHistory.slice( 0, challengeHistory.length / 2 + 1 );
+      }
+    }
+
+    challengeHistory.push( challenge );
+    return challenge;
+  }
+
   // No constructor - this is a static type.
   return  {
 
@@ -759,68 +778,67 @@ define( function( require ) {
      * @returns {Array}
      */
     generateChallengeSet: function( level, numChallenges ) {
-      challengeHistory = []; // TODO: This reset of the history array is temporary until more challenges are created, then it should be cleared 1/2 at a time when having trouble creating unique challenges.
       var challengeSet = [];
       var tempChallenge;
       switch( level ) {
         case 0:
-          _.times( 3, function() { challengeSet.push( generateBuildAreaChallenge() ); } );
-          _.times( 2, function() { challengeSet.push( generateRectangularFindAreaChallenge() ); } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );
+          _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateRectangularFindAreaChallenge ) ); } );
           challengeSet = _.shuffle( challengeSet );
-          challengeSet.push( generateLShapedFindAreaChallenge() );
+          challengeSet.push( generateUniqueChallenge( generateLShapedFindAreaChallenge ) );
           break;
 
         case 1:
-          _.times( 3, function() { challengeSet.push( generateBuildAreaAndPerimeterChallenge() ); } );
-          _.times( 3, function() { challengeSet.push( generateTwoRectangleBuildAreaAndPerimeterChallenge() ); } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaAndPerimeterChallenge ) ); } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateTwoRectangleBuildAreaAndPerimeterChallenge ) ) } );
           break;
 
         case 2:
-          challengeSet.push( generateUShapedFindAreaChallenge() );
-          challengeSet.push( generateOShapedFindAreaChallenge() );
-          challengeSet.push( generateShapeWithDiagonalFindAreaChallenge() );
+          challengeSet.push( generateUniqueChallenge( generateUShapedFindAreaChallenge ) );
+          challengeSet.push( generateUniqueChallenge( generateOShapedFindAreaChallenge ) );
+          challengeSet.push( generateUniqueChallenge( generateShapeWithDiagonalFindAreaChallenge ) );
           challengeSet = _.shuffle( challengeSet );
           var triangleChallenges = _.shuffle( [
-            generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge(),
-            generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge()
+            generateUniqueChallenge( generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge ),
+            generateUniqueChallenge( generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge )
           ] );
           triangleChallenges.forEach( function( challenge ) { challengeSet.push( challenge ); } );
-          challengeSet.push( generateLargeRectWithPieceMissingChallenge() );
+          challengeSet.push( generateUniqueChallenge( generateLargeRectWithPieceMissingChallenge ) );
           break;
 
         case 3:
           // For this level, the grid is disabled for all challenges and some different build kits are used.
-          tempChallenge = generateUShapedFindAreaChallenge();
+          tempChallenge = generateUniqueChallenge( generateUShapedFindAreaChallenge );
           tempChallenge.toolSpec.gridControl = false;
           tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
           challengeSet.push( tempChallenge );
-          tempChallenge = generateOShapedFindAreaChallenge();
+          tempChallenge = generateUniqueChallenge( generateOShapedFindAreaChallenge );
           tempChallenge.toolSpec.gridControl = false;
           tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
           challengeSet.push( tempChallenge );
-          tempChallenge = generateOShapedFindAreaChallenge();
+          tempChallenge = generateUniqueChallenge( generateOShapedFindAreaChallenge );
           tempChallenge.toolSpec.gridControl = false;
           tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
           challengeSet.push( tempChallenge );
-          tempChallenge = generateShapeWithDiagonalFindAreaChallenge();
+          tempChallenge = generateUniqueChallenge( generateShapeWithDiagonalFindAreaChallenge );
           tempChallenge.toolSpec.gridControl = false;
           tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
           challengeSet.push( tempChallenge );
           challengeSet = _.shuffle( challengeSet );
           // For the next challenge, choose randomly from the shapes that don't have diagonals.
-          tempChallenge = randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] )();
+          tempChallenge = generateUniqueChallenge( randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] ) );
           tempChallenge.toolSpec.gridControl = false;
           tempChallenge.userShapes = null;
           challengeSet.push( tempChallenge );
-          tempChallenge = generateShapeWithDiagonalFindAreaChallenge();
+          tempChallenge = generateUniqueChallenge( generateShapeWithDiagonalFindAreaChallenge );
           tempChallenge.toolSpec.gridControl = false;
           tempChallenge.userShapes = null;
           challengeSet.push( tempChallenge );
           break;
 
         case 4:
-          _.times( 3, function() { challengeSet.push( generateProportionalBuildAreaChallenge() ); } );
-          _.times( 3, function() { challengeSet.push( generateProportionalBuildAreaAndPerimeterChallenge() ); } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateProportionalBuildAreaChallenge ) ); } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateProportionalBuildAreaAndPerimeterChallenge ) ); } );
           break;
 
       }
