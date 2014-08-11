@@ -57,7 +57,7 @@ define( function( require ) {
       findAreaValue: null
     } );
 
-    var title = new Text( '', { font: TITLE_FONT, fill: TEXT_FILL_COLOR, centerY: height / 2, left: TITLE_INDENT } );
+    var title = new Text( '', { font: TITLE_FONT, fill: TEXT_FILL_COLOR, left: TITLE_INDENT } );
     this.addChild( title );
 
     // Update the title based on the problem type.
@@ -73,6 +73,7 @@ define( function( require ) {
           title.text = 'undefined';
           break;
       }
+      title.centerY = height / 2;
     } );
 
     var findTheAreaPrompt = new Text( '', {
@@ -96,43 +97,26 @@ define( function( require ) {
 
     // Update the prompt that describes what the user should have built.
     this.properties.buildSpecProperty.link( function( buildSpec ) {
+      buildPrompt.removeAllChildren();
       if ( buildSpec ) {
         assert && assert( buildSpec.area, 'All build specs are assumed to have an area value.' );
         var areaPrompt, perimeterPrompt, proportionsPrompt;
 
-        // TODO: There is some code consolidation that can be done below.
+        areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
+          font: buildSpec.perimeter || buildSpec.proportions ? SMALLER_FONT : LARGE_FONT,
+          fill: TEXT_FILL_COLOR
+        } );
+        buildPrompt.addChild( areaPrompt );
 
-        buildPrompt.removeAllChildren();
-        if ( !buildSpec.perimeter && !buildSpec.proportions ) {
-          // This is an area-only challenge.
-          buildPrompt.addChild( new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
-            font: LARGE_FONT,
-            fill: TEXT_FILL_COLOR,
-            align: 'left',
-            centerY: height / 2
-          } ) );
-        }
-        else if ( buildSpec.perimeter && !buildSpec.proportions ) {
-          // This is a perimeter+area challenge
-          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
-            font: SMALLER_FONT,
-            fill: TEXT_FILL_COLOR
-          } );
+        if ( buildSpec.perimeter ) {
           perimeterPrompt = new Text( StringUtils.format( perimeterEqualsString, buildSpec.perimeter ), {
             font: SMALLER_FONT,
             fill: TEXT_FILL_COLOR
           } );
-          buildPrompt.addChild( areaPrompt );
-          perimeterPrompt.top = areaPrompt.bottom;
           buildPrompt.addChild( perimeterPrompt );
         }
-        else if ( !buildSpec.perimeter && buildSpec.proportions ) {
-          // This is a area+proportions challenge
-          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ) + ',', {
-            font: SMALLER_FONT,
-            fill: TEXT_FILL_COLOR,
-            centerY: height / 2
-          } );
+
+        if ( buildSpec.proportions ) {
           proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
             buildSpec.proportions.color1Proportion, {
               font: SMALLER_FONT,
@@ -141,36 +125,22 @@ define( function( require ) {
               centerY: areaPrompt.centerY
             }
           );
-          buildPrompt.addChild( areaPrompt );
           buildPrompt.addChild( proportionsPrompt );
+
+          // Add a comma to the area prompt, since this is put just after it.
+          areaPrompt.text += ',';
         }
-        else if ( buildSpec.perimeter && buildSpec.proportions ) {
-          // This is a perimeter+area challenge
-          areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.perimeter ) + ',', {
-            font: SMALLER_FONT,
-            fill: TEXT_FILL_COLOR
-          } );
-          proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
-            buildSpec.proportions.color1Proportion, {
-              font: SMALLER_FONT,
-              textFill: TEXT_FILL_COLOR,
-              left: areaPrompt.right + 4,
-              centerY: areaPrompt.centerY
-            }
-          );
-          perimeterPrompt = new Text( StringUtils.format( perimeterEqualsString, buildSpec.perimeter ), {
-            font: SMALLER_FONT,
-            fill: TEXT_FILL_COLOR,
-            centerX: proportionsPrompt.right / 2
-          } );
-          buildPrompt.addChild( areaPrompt );
-          buildPrompt.addChild( proportionsPrompt );
+
+        // Layout
+        if ( perimeterPrompt && !proportionsPrompt ) {
           perimeterPrompt.top = areaPrompt.bottom;
-          buildPrompt.addChild( perimeterPrompt );
+        }
+        if ( proportionsPrompt ) {
+          proportionsPrompt.left = areaPrompt.right + 4;
         }
 
         // Center the build prompt horizontally between the title and the right edge of the banner.
-        buildPrompt.centerX = ( title.width + width ) / 2;
+        buildPrompt.centerX = ( title.width + width - TITLE_INDENT ) / 2;
         buildPrompt.centerY = height / 2;
       }
     } );
