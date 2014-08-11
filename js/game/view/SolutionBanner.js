@@ -122,7 +122,7 @@ define( function( require ) {
             targetProportions.color1,
             targetProportions.color2,
             targetProportions.color1Proportion,
-            { textFill: 'white' } ) );
+            { textFill: 'white', multiLine: true } ) );
         }
 
         // Update the visibility of the prompts
