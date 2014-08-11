@@ -114,7 +114,8 @@ define( function( require ) {
 
       // proportions, which sit just below area so that it is clear that they go together
       this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, color1Proportion, {
-        top: this.areaTextNode.bottom + LINE_SPACING
+        top: this.areaTextNode.bottom + LINE_SPACING,
+        multiLine: true
       } );
       this.contentNode.addChild( this.proportionsInfoNode );
 
