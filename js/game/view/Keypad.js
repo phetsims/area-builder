@@ -21,6 +21,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
+  var BackspaceIcon = require( 'SCENERY_PHET/BackspaceIcon' );
 
   /**
    * @param options {Object}
@@ -73,29 +74,9 @@ define( function( require ) {
       }, options ) );
     }
 
-    // backspace icon
-    var backspaceIconOutlineShape = new Shape().
-      moveTo( 0, 5 ).
-      lineTo( 5, 0 ).
-      lineTo( 15, 0 ).
-      lineTo( 15, 10 ).
-      lineTo( 5, 10 ).
-      close();
-    var backspaceIcon = new Path( backspaceIconOutlineShape, {
-      fill: options.keyColor,
-      stroke: 'black',
-      lineWidth: 1.5,
-      lineJoin: 'round'
-    } );
-    backspaceIcon.addChild( new Text( '\u00D7', {
-      font: new PhetFont( { size: 12, weight: 'bold' } ),
-      fill: 'black',
-      centerX: backspaceIcon.width * 0.55,
-      centerY: backspaceIcon.centerY
-    } ) );
-    backspaceIcon.scale( Math.min( options.minButtonWidth / backspaceIcon.width * 0.75, ( options.minButtonHeight * 0.65 ) / backspaceIcon.height ) );
-
     // backspace button
+    var backspaceIcon = new BackspaceIcon();
+    backspaceIcon.scale( Math.min( options.minButtonWidth / backspaceIcon.width * 0.7, ( options.minButtonHeight * 0.65 ) / backspaceIcon.height ) );
     var backspaceButton = new RectangularPushButton( {
       content: backspaceIcon,
       minWidth: options.minButtonWidth,
@@ -147,7 +128,6 @@ define( function( require ) {
     clear: function() {
       this.digitString.reset();
     },
-
 
     // @public Set the keypad such that any new digit entry will clear the existing string and start over.
     armForNewEntry: function() {
