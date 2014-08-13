@@ -146,6 +146,10 @@ define( function( require ) {
             self.addUnitSquareDirectlyToBoard( shapePlacementSpec.cellColumn, shapePlacementSpec.cellRow, shapePlacementSpec.color );
           } );
         }
+        else if ( challenge.checkSpec = 'areaEntered' ) {
+          // For 'find the area' challenges, we turn on the grid for the background shape when displaying the answer.
+          this.shapePlacementBoard.showGridOnBackgroundShape = true;
+        }
       },
 
       checkAnswer: function( challenge ) {
@@ -231,6 +235,7 @@ define( function( require ) {
 
         // Set the background shape.  If none is included, the value should be null, which will clear the shape.
         this.shapePlacementBoard.setBackgroundShape( challenge.backgroundShape, true );
+        this.shapePlacementBoard.showGridOnBackgroundShape = false;
 
         // Set the board to either form composite shapes or allow free placement.
         this.shapePlacementBoard.formComposite = challenge.backgroundShape === null;

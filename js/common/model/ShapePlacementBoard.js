@@ -79,8 +79,13 @@ define( function( require ) {
       compositeShape: new PerimeterShape( [], [], unitSquareLength ),
 
       // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
-      // other shapes.  The shape is positioned relative to this board, not in absolute model space.
-      backgroundShape: new PerimeterShape( [], [], unitSquareLength )
+      // other shapes.  The shape is positioned relative to this board, not in absolute model space.  It should be
+      // set through the method provided on this class rather than directly.
+      backgroundShape: new PerimeterShape( [], [], unitSquareLength ),
+
+      // @public Read/write value for controlling whether the background shape should show a grid when portrayed in the
+      // view.
+      showGridOnBackgroundShape: false
     } );
 
     // Non-dynamic public values.
@@ -870,8 +875,9 @@ define( function( require ) {
     },
 
     /**
-     * Set the background shape.  The shape should be positioned at 0, 0 and can be centered horizontally and
-     * vertically when placed on the board.
+     * Set the background shape.  The shape can optionally be centered horizontally and vertically when placed on the
+     * board.
+     *
      * @public
      * @param {PerimeterShape} perimeterShape The new background perimeterShape, or null to set no background
      * perimeterShape.

@@ -11,6 +11,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var PerimeterShapeNode = require( 'AREA_BUILDER/common/view/PerimeterShapeNode' );
+  var Property = require( 'AXON/Property' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -49,7 +50,7 @@ define( function( require ) {
       AreaBuilderSharedConstants.BACKGROUND_SHAPE_COLOR,
       Color.toColor( AreaBuilderSharedConstants.BACKGROUND_SHAPE_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       shapePlacementBoard.showDimensionsProperty,
-      { showGrid: false }
+      shapePlacementBoard.showGridOnBackgroundShapeProperty
     ) );
 
     // Monitor the shapes added by the user to the board and create an equivalent shape with no edges for each.  This
@@ -84,7 +85,8 @@ define( function( require ) {
       shapePlacementBoard.unitSquareLength,
       null,
       perimeterColor,
-      shapePlacementBoard.showDimensionsProperty
+      shapePlacementBoard.showDimensionsProperty,
+      new Property( true ) // grid on shape - always shown for the composite shape
     ) );
   }
 

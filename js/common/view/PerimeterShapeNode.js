@@ -59,14 +59,13 @@ define( function( require ) {
      * @param {String || Color} fillColor
      * @param {String || Color} perimeterColor
      * @param {Boolean} showDimensionsProperty
+     * @param {Boolean} showGridProperty
      * @param {object} options
      * @constructor
      */
-    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, fillColor, perimeterColor, showDimensionsProperty, options ) {
+    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, fillColor, perimeterColor, showDimensionsProperty, showGridProperty, options ) {
 
       Node.call( this );
-
-      options = _.extend( { showGrid: true }, options );
 
       var perimeterShapeNode = new Path( null, { fill: fillColor } );
       this.addChild( perimeterShapeNode );
@@ -79,9 +78,6 @@ define( function( require ) {
       this.addChild( perimeterNode );
       var dimensionsLayer = new Node();
       this.addChild( dimensionsLayer );
-
-      // Control visibility of the dimension indicators.
-      showDimensionsProperty.linkAttribute( dimensionsLayer, 'visible' );
 
       // Define function for updating the appearance of the perimeter shape.
       function update() {
@@ -117,18 +113,14 @@ define( function( require ) {
           perimeterShapeNode.setShape( mainShape );
           perimeterNode.setShape( mainShape );
 
-          // Add the grid
-          // TODO: Consider optimization where grid is only redrawn if bounds of shape changes.
-          if ( options.showGrid ) {
-            if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
-              var gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
-                  lineDash: [ 1, 4 ],
-                  stroke: 'black'
-                }
-              );
-              gridNode.clipArea = mainShape;
-              gridLayer.addChild( gridNode );
-            }
+          if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
+            var gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
+                lineDash: [ 1, 4 ],
+                stroke: 'black'
+              }
+            );
+            gridNode.clipArea = mainShape;
+            gridLayer.addChild( gridNode );
           }
 
           // Add the dimension labels for the perimeters, but only if there is only 1 exterior perimeter (multiple
@@ -199,6 +191,13 @@ define( function( require ) {
         }
       }
 
+      // Control visibility of the dimension indicators.
+      showDimensionsProperty.linkAttribute( dimensionsLayer, 'visible' );
+
+      // Control visibility of the grid.
+      showGridProperty.linkAttribute( gridLayer, 'visible' );
+
+      // Update the shape, grid, and dimensions if the perimeter shape itself changes.
       perimeterShapeProperty.link( function() {
         update();
       } );

@@ -32,8 +32,7 @@ define( function( require ) {
       maxPointsPerProblem: 2
     } );
 
-    PropertySet.call( this,
-      {
+    PropertySet.call( this, {
         soundEnabled: true,
         timerEnabled: false,
         level: 0, // Zero-based in the model, though levels appear to the user to start at 1.
