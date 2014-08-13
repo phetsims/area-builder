@@ -12,10 +12,8 @@ define( function( require ) {
   // modules
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
@@ -88,7 +86,7 @@ define( function( require ) {
       findTheAreaPrompt.visible = area !== null;
       if ( findTheAreaPrompt.visible ) {
         findTheAreaPrompt.text = StringUtils.format( areaEqualsString, area );
-        findTheAreaPrompt.centerX = ( title.width + width - TITLE_INDENT ) / 2
+        findTheAreaPrompt.centerX = ( title.width + width - TITLE_INDENT ) / 2;
       }
     } );
 

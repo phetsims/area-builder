@@ -9,7 +9,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Fraction = require( 'AREA_BUILDER/game/model/Fraction' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
 
   // TODO: Consider making the build spec into a separate class.

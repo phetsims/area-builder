@@ -717,7 +717,6 @@ define( function( require ) {
     }
 
     var factorPair = randomElement( factorPairs );
-    var perimeter = 2 * factorPair[ 0 ] + 2 * factorPair[ 1 ];
 
     // Assign one factor to width and one to height, but make sure it will fit on the shape board.
     var index = _.random( 0, 1 );
@@ -811,7 +810,7 @@ define( function( require ) {
 
         case 1:
           _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaAndPerimeterChallenge ) ); } );
-          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateTwoRectangleBuildAreaAndPerimeterChallenge ) ) } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateTwoRectangleBuildAreaAndPerimeterChallenge ) ); } );
           break;
 
         case 2:

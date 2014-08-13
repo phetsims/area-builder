@@ -61,7 +61,7 @@ define( function( require ) {
       this.keypad.clear();
     },
     armForNewEntry: function() {
-      this.keypad.armForNewEntry()
+      this.keypad.armForNewEntry();
     }
   } );
 } );
