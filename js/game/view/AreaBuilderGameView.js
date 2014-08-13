@@ -283,6 +283,13 @@ define( function( require ) {
       addedShape.userControlledProperty.link( function( userControlled ) {
         if ( userControlled ) {
           shapeView.moveToFront();
+
+          // If the game was in the state where it was prompting the user to try again, and the user started
+          // interacting with shapes without pressing the 'Try Again' button, go ahead and make the state change
+          // automatically.
+          if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
+            gameModel.tryAgain();
+          }
         }
       } );
 
@@ -301,12 +308,6 @@ define( function( require ) {
 
       // Show the build prompts on the challenge prompt banner if they aren't shown already.
       self.challengePromptBanner.properties.showPrompts = true;
-
-      // If the game was in the state where it was prompting the user to try again, and the user started adding shapes
-      // without pressing the 'Try Again' button, go ahead and make the state change automatically.
-      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
-        gameModel.tryAgain();
-      }
 
       // Make sure the check button is in the appropriate state.
       self.updatedCheckButtonEnabledState();
