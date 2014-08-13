@@ -125,14 +125,18 @@ define( function( require ) {
         }
 
         // Layout
-        if ( perimeterPrompt && !proportionsPrompt ) {
-          perimeterPrompt.top = areaPrompt.bottom;
-        }
         if ( proportionsPrompt ) {
           proportionsPrompt.left = areaPrompt.right + 4;
         }
+        if ( perimeterPrompt ) {
+          perimeterPrompt.top = areaPrompt.bottom;
+          if ( proportionsPrompt ) {
+            perimeterPrompt.centerX = ( areaPrompt.left + proportionsPrompt.right ) / 2;
+          }
+        }
 
-        // Center the build prompt horizontally between the title and the right edge of the banner.
+        // Center the build prompt horizontally between the title and the right edge of the banner, and vertically
+        // on the banner.
         buildPrompt.centerX = ( title.width + width - TITLE_INDENT ) / 2;
         buildPrompt.centerY = height / 2;
       }

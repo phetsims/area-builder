@@ -685,7 +685,7 @@ define( function( require ) {
 
     // Choose the fractional proportion.
     var fractionDenominator = randomElement( factors );
-    console.log( 'fractionDenominator = ' + fractionDenominator );
+//    console.log( 'fractionDenominator = ' + fractionDenominator );
     var color1FractionNumerator = _.random( 1, fractionDenominator - 1 );
     var color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
     color1Fraction.reduce();
@@ -718,11 +718,11 @@ define( function( require ) {
     // Identify the factor pairs.  Note that the range of this loop is based on the possible areas, and may need to be
     // modified if the selection of area values changes.
     var factorPairs = [];
-    console.log( '-------- creating factor pairs ----------------' );
+//    console.log( '-------- creating factor pairs ----------------' );
     for ( var i = 2; i < 6; i++ ) {
       if ( area % i === 0 && area / i < AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH ) {
         factorPairs.push( [ i, area / i ] );
-        console.log( 'added factor pair: ' + factorPairs[ factorPairs.length - 1 ] );
+//        console.log( 'added factor pair: ' + factorPairs[ factorPairs.length - 1 ] );
       }
     }
 
