@@ -10,6 +10,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  var Fraction = require( 'AREA_BUILDER/game/model/Fraction' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -665,21 +666,29 @@ define( function( require ) {
   function generateProportionalBuildAreaChallenge() {
     var width, height;
 
-    // Width can be any value from 3 to 8 excluding 7, see design doc.
-    do {
-      width = _.random( 3, 8 );
-    } while ( width === 0 || width === 7 );
+    height = _.random( 3, 6 );
+    if ( height === 3 ) {
+      width = _.random( 4, 8 );
+    }
+    else {
+      width = _.random( 2, 10 );
+    }
 
-    // Choose the height based on the total area.
-    do {
-      height = _.random( 3, 8 );
-    } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+    var area = width * height;
+    var factors = [];
+    for ( var i = 2; i < 10; i++ ) {
+      if ( area % i === 0 ) {
+        // This is a factor of the area.
+        factors.push( i );
+      }
+    }
 
     // Choose the fractional proportion.
-    var fractionDenominator;
-    do {
-      fractionDenominator = _.random( 2, 5 );
-    } while ( ( width * height ) % fractionDenominator !== 0 );
+    var fractionDenominator = randomElement( factors );
+    console.log( 'fractionDenominator = ' + fractionDenominator );
+    var color1FractionNumerator = _.random( 1, fractionDenominator - 1 );
+    var color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
+    color1Fraction.reduce();
 
     // Choose the colors for this challenge
     var colorPair = randomElement( COLOR_PAIRS );
@@ -692,30 +701,48 @@ define( function( require ) {
       height,
       colorPair.color1,
       colorPair.color2,
-        1 / fractionDenominator
+      color1Fraction.getValue()
     );
 
     var userShapes = createTwoToneRectangleBuildKit( colorPair.color1, colorPair.color2 );
 
     // Build the challenges from all the pieces.
     return AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge( width * height, colorPair.color1,
-      colorPair.color2, 1, fractionDenominator, userShapes, exampleSolution );
+      colorPair.color2, color1Fraction, userShapes, exampleSolution );
   }
 
   function generateProportionalBuildAreaAndPerimeterChallenge() {
 
-    var width = 0;
-    var height = 0;
+    var area = randomElement( [ 12, 16, 20, 24, 30, 32, 36 ] );
 
-    // Width can be any value from 3 to 8 excluding 7, see design doc.
-    do {
-      width = _.random( 3, 8 );
-    } while ( width === 0 || width === 7 );
+    // Identify the factor pairs.  Note that the range of this loop is based on the possible areas, and may need to be
+    // modified if the selection of area values changes.
+    var factorPairs = [];
+    console.log( '-------- creating factor pairs ----------------' );
+    for ( var i = 2; i < 6; i++ ) {
+      if ( area % i === 0 && area / i < AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH ) {
+        factorPairs.push( [ i, area / i ] );
+        console.log( 'added factor pair: ' + factorPairs[ factorPairs.length - 1 ] );
+      }
+    }
 
-    // Choose the height based on the total area.
-    do {
-      height = _.random( 3, 8 );
-    } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+    var factorPair = randomElement( factorPairs );
+    var perimeter = 2 * factorPair[ 0 ] + 2 * factorPair[ 1 ];
+
+    // Assign one factor to width and one to height, but make sure it will fit on the shape board.
+    var index = _.random( 0, 1 );
+    var width = factorPair[ index ];
+    var height = factorPair[ ( index + 1 ) % 2 ];
+    if ( height >= AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT || width >= AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH ) {
+      // Challenge doesn't fit well, so switch height and width.
+      var temp = width;
+      width = height;
+      height = temp;
+    }
+
+    // Should always fit by the time it reaches here.
+    assert && assert( height < AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT && width < AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH,
+      'Challenge doesn\'t fit on board, code should be modified so that this never happens.' );
 
     // Choose the colors for this challenge
     var colorPair = randomElement( COLOR_PAIRS );
@@ -723,8 +750,12 @@ define( function( require ) {
     // Determine what fraction to have the user build.
     var fractionDenominator;
     do {
-      fractionDenominator = _.random( 2, 5 );
-    } while ( ( width * height ) % fractionDenominator !== 0 );
+      fractionDenominator = _.random( 2, 9 );
+    } while ( area % fractionDenominator !== 0 );
+
+    var color1FractionNumerator = _.random( 1, fractionDenominator - 1 );
+    var color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
+    color1Fraction.reduce();
 
     // Create an example solution to present if the user doesn't get a correct answer.
     var exampleSolution = createTwoColorRectangularSolutionSpec(
@@ -734,13 +765,13 @@ define( function( require ) {
       height,
       colorPair.color1,
       colorPair.color2,
-        1 / fractionDenominator,
+      color1Fraction.getValue(),
       AreaBuilderSharedConstants.GREENISH_COLOR
     );
 
     // Create the challenge.
     return AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge( width * height,
-        2 * width + 2 * height, colorPair.color1, colorPair.color2, 1, fractionDenominator,
+      ( 2 * width + 2 * height ), colorPair.color1, colorPair.color2, color1Fraction,
       createTwoToneRectangleBuildKit( colorPair.color1, colorPair.color2 ), exampleSolution );
   }
 

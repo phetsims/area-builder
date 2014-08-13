@@ -83,7 +83,7 @@ define( function( require ) {
     );
   };
 
-  AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge = function( areaToBuild, color1, color2, color1Numerator, color1Denominator, userShapes, exampleSolution ) {
+  AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge = function( areaToBuild, color1, color2, color1Fraction, userShapes, exampleSolution ) {
     return new AreaBuilderGameChallenge(
       // toolSpec
       {
@@ -104,7 +104,7 @@ define( function( require ) {
         proportions: {
           color1: color1,
           color2: color2,
-          color1Proportion: new Fraction( color1Numerator, color1Denominator )
+          color1Proportion: color1Fraction
         }
       },
 
@@ -119,7 +119,7 @@ define( function( require ) {
     );
   };
 
-  AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, color1, color2, color1Numerator, color1Denominator, userShapes, exampleSolution ) {
+  AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge = function( areaToBuild, perimeterToBuild, color1, color2, color1Fraction, userShapes, exampleSolution ) {
     return new AreaBuilderGameChallenge(
       // toolSpec
       {
@@ -141,7 +141,7 @@ define( function( require ) {
         proportions: {
           color1: color1,
           color2: color2,
-          color1Proportion: new Fraction( color1Numerator, color1Denominator )
+          color1Proportion: color1Fraction
         }
       },
 
