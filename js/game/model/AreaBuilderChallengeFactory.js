@@ -469,13 +469,6 @@ define( function( require ) {
 
   function generateBuildAreaAndPerimeterChallenge() {
 
-    // Create a unique challenge
-    var challengeIsUnique = false;
-    var challenge;
-    while ( !challengeIsUnique ) {
-      // TODO: Only generates rectangular challenges at this point.
-      // TODO: Also, difficulty is ignored.
-
       var width, height;
 
       // Width can be any value from 3 to 8 excluding 7, see design doc.
@@ -495,11 +488,8 @@ define( function( require ) {
         height,
         AreaBuilderSharedConstants.GREENISH_COLOR
       );
-      challenge = AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width * height,
+    return AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width * height,
           2 * width + 2 * height, BASIC_RECTANGLES_SHAPE_KIT, exampleSolution );
-      challengeIsUnique = isChallengeUnique( challenge );
-    }
-    return challenge;
   }
 
   function generateRectangularFindAreaChallenge() {
