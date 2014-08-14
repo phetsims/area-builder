@@ -17,7 +17,7 @@ define( function( require ) {
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
 
   // constants
-  var ARROW_WIDTH = 12;
+  var ARROW_WIDTH = 7;
   var ARROW_HEIGHT = 20;
   var BUTTON_X_MARGIN = 4;
   var BUTTON_MIN_Y_MARGIN = 5;
