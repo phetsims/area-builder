@@ -9,7 +9,7 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var Color = require( 'SCENERY/util/Color' );
-  var Fraction = require( 'AREA_BUILDER/game/model/Fraction' );
+  var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
