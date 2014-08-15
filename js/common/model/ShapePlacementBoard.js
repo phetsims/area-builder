@@ -182,6 +182,7 @@ define( function( require ) {
       var animationCompleteListener = function( animating ) {
         assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
         if ( !animating ) {
+          // Move the shape from the incoming list to the resident list.
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.addResidentShape( movableShape, true );
         }
@@ -192,7 +193,6 @@ define( function( require ) {
           self.removeResidentShape( movableShape );
         };
         self.tagListener( removalListener );
-        removalListener.placementBoardRemovalListener = true;
         movableShape.userControlledProperty.once( removalListener );
       };
 
@@ -861,7 +861,6 @@ define( function( require ) {
           self.removeResidentShape( movableUnitSquare );
         };
         self.tagListener( removalListener );
-        removalListener.placementBoardRemovalListener = true;
         movableUnitSquare.userControlledProperty.once( removalListener );
 
         self.updateCellOccupation( movableUnitSquare, 'add' );
