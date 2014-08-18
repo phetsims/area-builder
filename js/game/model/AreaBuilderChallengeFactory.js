@@ -819,7 +819,6 @@ define( function( require ) {
         case 0:
           _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );
           _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateRectangularFindAreaChallenge ) ); } );
-          challengeSet = _.shuffle( challengeSet );
           challengeSet.push( generateUniqueChallenge( generateLShapedFindAreaChallenge ) );
           break;
 
