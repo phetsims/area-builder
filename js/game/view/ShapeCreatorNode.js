@@ -22,6 +22,7 @@ define( function( require ) {
   var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
 
@@ -42,8 +43,26 @@ define( function( require ) {
     var self = this;
 
     options = _.extend( {
-      gridSpacing: null
+
+      // Spacing of the grid, if any, that should be shown on the creator node.  Null indicates no grid.
+      gridSpacing: null,
+
+      // Max number of shapes that can be created by this node.
+      creationLimit: Number.POSITIVE_INFINITY
+
     }, options );
+
+    // parameter check
+    if ( options.creationLimit < Number.POSITIVE_INFINITY &&
+         ( shape.bounds.width != AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ||
+           shape.bounds.height != AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ) ) {
+      // The ability to set a creation limit ONLY works for unit squares.  The reason for this is that non-unit shapes
+      // are generally decomposed into unit squares when added to the placement board, so it's hard to track when they
+      // get returned to their origin.  It would be possible to do this, but the requirements of the sim at the time of
+      // this writing make it unnecessary.  So, if you're hitting this exception, the code may need to be revamped to
+      // support creation limits for shapes that are not unit squares.
+      throw new Error( 'Creation limit is only supported for unit squares.' );
+    }
 
     // Create the node that the user will click upon to add a model element to the view.
     var representation = new Path( shape, {
@@ -57,19 +76,26 @@ define( function( require ) {
     // Add grid if specified.
     if ( options.gridSpacing ) {
       var gridNode = new Grid(
-          representation.bounds.minX + BORDER_LINE_WIDTH / 2,
-          representation.bounds.minY + BORDER_LINE_WIDTH / 2,
-          representation.bounds.width - BORDER_LINE_WIDTH,
-          representation.bounds.height - BORDER_LINE_WIDTH,
+        ( representation.bounds.minX + BORDER_LINE_WIDTH / 2 ),
+        ( representation.bounds.minY + BORDER_LINE_WIDTH / 2 ),
+        ( representation.bounds.width - BORDER_LINE_WIDTH ),
+        ( representation.bounds.height - BORDER_LINE_WIDTH ),
         options.gridSpacing,
         { lineDash: [ 2, 4 ], stroke: 'black' }
       );
       this.addChild( gridNode );
     }
 
+    var createdCount = new Property( 0 ); // Used to track the number of shapes created and not returned.
+
+    // If the created count exceeds the max, make this node invisible (which also makes it unusable).
+    createdCount.link( function( numCreated ) {
+      self.visible = numCreated < options.creationLimit;
+    } );
+
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
     var parentScreen = null; // needed for coordinate transforms
-    var modelElement = null;
+    var movableShape = null;
     this.addInputListener( new SimpleDragHandler( {
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,
@@ -92,18 +118,34 @@ define( function( require ) {
         var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 
         // Create and add the new model element.
-        modelElement = new MovableShape( shape, color, initialPosition );
-        modelElement.userControlled = true;
-        model.addUserCreatedMovableShape( modelElement );
+        movableShape = new MovableShape( shape, color, initialPosition );
+        movableShape.userControlled = true;
+        model.addUserCreatedMovableShape( movableShape );
+
+        // If the creation count is limited, adjust the value and monitor the created shape for if/when it is returned.
+        if ( options.creationLimit < Number.POSITIVE_INFINITY ) {
+          // Use an IIFE to keep a reference of the movable shape in a closure.
+          (function() {
+            createdCount.value++;
+            var localRefToMovableShape = movableShape;
+            localRefToMovableShape.on( 'returnedHome', function returnedToOriginListener() {
+              if ( !localRefToMovableShape.userControlled ) {
+                // The shape has been returned to its origin.
+                createdCount.value--;
+                localRefToMovableShape.off( 'returnedHome', returnedToOriginListener );
+              }
+            } );
+          })();
+        }
       },
 
       translate: function( translationParams ) {
-        modelElement.setDestination( modelElement.position.plus( translationParams.delta ) );
+        movableShape.setDestination( movableShape.position.plus( translationParams.delta ) );
       },
 
       end: function( event, trail ) {
-        modelElement.userControlled = false;
-        modelElement = null;
+        movableShape.userControlled = false;
+        movableShape = null;
       }
     } ) );
 
