@@ -102,6 +102,9 @@ define( function( require ) {
         // Set up the model for the next challenge
         this.currentChallenge = this.challengeList[ this.challengeIndex ];
 
+        // Let the sim-specific model know that a new level is being started in case it needs to do any initialization.
+        this.simSpecificModel.startLevel();
+
         // Change to new game state.
         this.gameState = 'presentingInteractiveChallenge';
 

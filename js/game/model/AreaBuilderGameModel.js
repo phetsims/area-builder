@@ -135,6 +135,12 @@ define( function( require ) {
         this.shapePlacementBoard.releaseAllShapes( false );
       },
 
+      startLevel: function() {
+        // Clear the 'show dimensions' and 'show grid' flag at the beginning of each new level.
+        this.shapePlacementBoard.showDimensionsProperty.value = false;
+        this.shapePlacementBoard.showGridProperty.value = false;
+      },
+
       displayCorrectAnswer: function( challenge ) {
         var self = this;
         if ( challenge.buildSpec ) {
@@ -239,10 +245,6 @@ define( function( require ) {
 
         // Set the board to either form composite shapes or allow free placement.
         this.shapePlacementBoard.formComposite = challenge.backgroundShape === null;
-
-        // Clear the 'show dimensions' and 'show grid' flag for each new challenge.
-        this.shapePlacementBoard.showDimensionsProperty.value = false;
-        this.shapePlacementBoard.showGridProperty.value = false;
       },
 
       step: function( dt ) {
