@@ -567,9 +567,12 @@ define( function( require ) {
         if ( challenge.userShapes !== null ) {
           var creatorNodes = [];
           challenge.userShapes.forEach( function( userShapeSpec ) {
-            creatorNodes.push( new ShapeCreatorNode( userShapeSpec.shape, userShapeSpec.color, self.model.simSpecificModel, {
-              gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH
-            } ) );
+            var creatorNodeOptions = { gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH };
+            if ( userShapeSpec.creationLimit ) {
+              creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
+            }
+            creatorNodes.push( new ShapeCreatorNode( userShapeSpec.shape, userShapeSpec.color,
+              self.model.simSpecificModel, creatorNodeOptions ) );
           } );
           if ( creatorNodes.length > 4 ) {
             // Add a scrolling carousel.

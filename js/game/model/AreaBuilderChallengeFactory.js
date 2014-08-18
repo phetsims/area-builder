@@ -274,7 +274,7 @@ define( function( require ) {
     return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
   }
 
-  // @private Create a perimeter shape with a cutout in the top, bottom, left, or right side.
+  // Create a perimeter shape with a cutout in the top, bottom, left, or right side.
   function createUShapedPerimeterShape( x, y, width, height, sideWithCutout, cutoutWidth, cutoutHeight, cutoutOffset ) {
     var perimeterPoints = [ new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2() ];
 
@@ -390,7 +390,7 @@ define( function( require ) {
     return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
   }
 
-  // @private
+  // Test the challenge agains the history of recently generated challenges to see if it is unique.
   function isChallengeUnique( challenge ) {
     var challengeIsUnique = true;
     for ( var i = 0; i < challengeHistory.length; i++ ) {
@@ -431,8 +431,6 @@ define( function( require ) {
   /**
    * Generate a 'build it' area+perimeter challenge that consists of two connected rectangles.  See the design spec
    * for details.
-   *
-   * @private
    */
   function generateTwoRectangleBuildAreaAndPerimeterChallenge() {
 
@@ -469,27 +467,27 @@ define( function( require ) {
 
   function generateBuildAreaAndPerimeterChallenge() {
 
-      var width, height;
+    var width, height;
 
-      // Width can be any value from 3 to 8 excluding 7, see design doc.
-      do {
-        width = _.random( 3, 8 );
-      } while ( width === 0 || width === 7 );
+    // Width can be any value from 3 to 8 excluding 7, see design doc.
+    do {
+      width = _.random( 3, 8 );
+    } while ( width === 0 || width === 7 );
 
-      // Choose the height based on the total area.
-      do {
-        height = _.random( 3, 8 );
-      } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+    // Choose the height based on the total area.
+    do {
+      height = _.random( 3, 8 );
+    } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
-      var exampleSolution = createMonochromeRectangularSolutionSpec(
-        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
-        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
-        width,
-        height,
-        AreaBuilderSharedConstants.GREENISH_COLOR
-      );
+    var exampleSolution = createMonochromeRectangularSolutionSpec(
+      Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
+      Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
+      width,
+      height,
+      AreaBuilderSharedConstants.GREENISH_COLOR
+    );
     return AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width * height,
-          2 * width + 2 * height, BASIC_RECTANGLES_SHAPE_KIT, exampleSolution );
+        2 * width + 2 * height, BASIC_RECTANGLES_SHAPE_KIT, exampleSolution );
   }
 
   function generateRectangularFindAreaChallenge() {
@@ -708,11 +706,9 @@ define( function( require ) {
     // Identify the factor pairs.  Note that the range of this loop is based on the possible areas, and may need to be
     // modified if the selection of area values changes.
     var factorPairs = [];
-//    console.log( '-------- creating factor pairs ----------------' );
     for ( var i = 2; i < 6; i++ ) {
       if ( area % i === 0 && area / i < AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH ) {
         factorPairs.push( [ i, area / i ] );
-//        console.log( 'added factor pair: ' + factorPairs[ factorPairs.length - 1 ] );
       }
     }
 
@@ -767,7 +763,7 @@ define( function( require ) {
   // Challenge history, used to make sure unique challenges are generated.
   var challengeHistory = [];
 
-  // @private Use the provided generation function to create challenges until a unique one has been created.
+  // Use the provided generation function to create challenges until a unique one has been created.
   function generateUniqueChallenge( generationFunction ) {
     var challenge;
     var uniqueChallengeGenerated = false;
@@ -783,6 +779,25 @@ define( function( require ) {
     }
 
     challengeHistory.push( challenge );
+    return challenge;
+  }
+
+  // In the spec, level 4 has some unique requirements.  This function encapsulates these requirements, see the spec
+  // for details.
+  function makeLevel4SpecificModifications( challenge ) {
+    challenge.toolSpec.gridControl = false;
+    challenge.userShapes = [
+      {
+        shape: UNIT_SQUARE_SHAPE,
+        color: AreaBuilderSharedConstants.GREENISH_COLOR
+      }
+    ];
+
+    // Limit the number of shapes to the length of the larger side.  This encourages certain strategies.
+    assert && assert( challenge.backgroundShape.exteriorPerimeters.length === 1, 'Unexpected configuration for background shape.' );
+    var perimeterShape = new PerimeterShape( challenge.backgroundShape.exteriorPerimeters, [], UNIT_SQUARE_LENGTH );
+    challenge.userShapes[ 0 ].creationLimit = Math.max( perimeterShape.getWidth() / UNIT_SQUARE_LENGTH,
+        perimeterShape.getHeight() / UNIT_SQUARE_LENGTH );
     return challenge;
   }
 
@@ -828,22 +843,10 @@ define( function( require ) {
 
         case 3:
           // For this level, the grid is disabled for all challenges and some different build kits are used.
-          tempChallenge = generateUniqueChallenge( generateUShapedFindAreaChallenge );
-          tempChallenge.toolSpec.gridControl = false;
-          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
-          challengeSet.push( tempChallenge );
-          tempChallenge = generateUniqueChallenge( generateOShapedFindAreaChallenge );
-          tempChallenge.toolSpec.gridControl = false;
-          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
-          challengeSet.push( tempChallenge );
-          tempChallenge = generateUniqueChallenge( generateOShapedFindAreaChallenge );
-          tempChallenge.toolSpec.gridControl = false;
-          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
-          challengeSet.push( tempChallenge );
-          tempChallenge = generateUniqueChallenge( generateShapeWithDiagonalFindAreaChallenge );
-          tempChallenge.toolSpec.gridControl = false;
-          tempChallenge.userShapes = UNIT_SQUARE_ONLY_SHAPE_KIT;
-          challengeSet.push( tempChallenge );
+          challengeSet.push( makeLevel4SpecificModifications( generateUniqueChallenge( generateUShapedFindAreaChallenge ) ) );
+          challengeSet.push( makeLevel4SpecificModifications( generateUniqueChallenge( generateOShapedFindAreaChallenge ) ) );
+          challengeSet.push( makeLevel4SpecificModifications( generateUniqueChallenge( generateOShapedFindAreaChallenge ) ) );
+          challengeSet.push( makeLevel4SpecificModifications( generateUniqueChallenge( generateShapeWithDiagonalFindAreaChallenge ) ) );
           challengeSet = _.shuffle( challengeSet );
           // For the next challenge, choose randomly from the shapes that don't have diagonals.
           tempChallenge = generateUniqueChallenge( randomElement( [ generateLShapedFindAreaChallenge, generateUShapedFindAreaChallenge ] ) );
@@ -866,5 +869,4 @@ define( function( require ) {
       return challengeSet;
     }
   };
-} )
-;
+} );
