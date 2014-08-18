@@ -18,9 +18,8 @@ define( function( require ) {
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords
 
-  // TODO: Can I consolidate the creator nodes instead of just the shapes?  Seems like it should work, and would make
-  // TODO: the creator code much more compact.
-  var SQUARE_SHAPE = new Shape()
+  // Basic shapes used in the 'creator kits'.
+  var UNIT_SQUARE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
@@ -69,9 +68,10 @@ define( function( require ) {
     .lineTo( 0, 0 )
     .close();
 
+  // Shape kits that give the user things to create.
   var BASIC_RECTANGLES_SHAPE_KIT = [
     {
-      shape: SQUARE_SHAPE,
+      shape: UNIT_SQUARE_SHAPE,
       color: AreaBuilderSharedConstants.GREENISH_COLOR
     },
     {
@@ -90,7 +90,7 @@ define( function( require ) {
 
   var UNIT_SQUARE_ONLY_SHAPE_KIT = [
     {
-      shape: SQUARE_SHAPE,
+      shape: UNIT_SQUARE_SHAPE,
       color: AreaBuilderSharedConstants.GREENISH_COLOR
     }
   ];
@@ -101,7 +101,7 @@ define( function( require ) {
       color: AreaBuilderSharedConstants.GREENISH_COLOR
     },
     {
-      shape: SQUARE_SHAPE,
+      shape: UNIT_SQUARE_SHAPE,
       color: AreaBuilderSharedConstants.GREENISH_COLOR
     },
     {
