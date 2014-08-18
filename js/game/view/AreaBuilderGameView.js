@@ -303,6 +303,8 @@ define( function( require ) {
 
       // If the initial build prompt is visible, hide it.
       if ( self.buildPromptPanel.opacity === 1 ) {
+        // TODO: SR expressed a concern that this might have performance issues due to the way Tween works.  Consider
+        // using a function instead, see Seasons sim, PanelNode.js for an example.
         new TWEEN.Tween( self.buildPromptPanel ).to( { opacity: 0 }, 600 ).easing( TWEEN.Easing.Cubic.InOut ).start();
       }
 
