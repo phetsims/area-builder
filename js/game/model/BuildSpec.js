@@ -28,26 +28,26 @@ define( function( require ) {
     }
     if ( color1 !== null ) {
       assert && assert( typeof( color1Proportion ) === 'Fraction' && color2 !== null );
-      this.color1 = color1;
-      this.color2 = color2;
+      this.color1 = Color.toColor( color1 );
+      this.color2 = Color.toColor( color2 );
       this.color1Proportion = color1Proportion;
     }
   }
 
   return inherit( Object, BuildSpec, {}, {
-    areaOnlyBuildSpec: function( area ) {
+    areaOnly: function( area ) {
       return new BuildSpec( area, null, null, null, null );
     },
 
-    areaAndPerimeterBuildSpec: function( area, perimeter ) {
+    areaAndPerimeter: function( area, perimeter ) {
       return new BuildSpec( area, perimeter, null, null, null );
     },
 
-    areaAndProportionsBuildSpec: function( area, color1, color1Proportion, color2 ) {
+    areaAndProportions: function( area, color1, color1Proportion, color2 ) {
       return new BuildSpec( area, null, color1, color1Proportion, color2 );
     },
 
-    areaPerimeterAndProportionsBuildSpec: function( area, perimeter, color1, color1Proportion, color2 ) {
+    areaPerimeterAndProportions: function( area, perimeter, color1, color1Proportion, color2 ) {
       return new BuildSpec( area, perimeter, color1, color1Proportion, color2 );
     }
   } );

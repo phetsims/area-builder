@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
 
@@ -21,11 +22,7 @@ define( function( require ) {
    * @param {Array<Object>} userShapes An array of shape specification that describe the shapes that can be created and
    * manipulated by the user for this challenge.  Each shape specification is an object with a 'shape' field and a
    * 'color' field.  This value can be null to signify no user shapes are present for the challenge.
-   * @param {Object} buildSpec Object that specifies what the user should build.  This is only used if this is a 'build
-   * it' type of challenge, otherwise it should be null.  It should always have an 'area' field with a number, and can
-   * optionally have a 'perimeter' field with a number as well.  It can also have a 'proportions' field if the user is
-   * to build an area with two colors of a specified proportion.  The 'proportions' field is an object that looks
-   * like this example: { color1: 'green', color2: 'blue', color1Proportion: { numerator: 1, denominator: 3 } }.
+   * @param {BuildSpec} buildSpec Object that specifies what the user should build, see BuildSpec.js file for details.
    * @param {PerimeterShape} backgroundShape Shape that should appear on the board, null for challenges that don't
    * require such a shape.
    * @param {string} checkSpec Specifies what should be checked when the user pressed the 'Check' button.  Valid values
@@ -69,7 +66,7 @@ define( function( require ) {
       userShapes,
 
       // buildSpec
-      { area: areaToBuild },
+      BuildSpec.areaOnly( areaToBuild ),
 
       // backgroundShape
       null,
@@ -98,14 +95,7 @@ define( function( require ) {
       userShapes,
 
       // buildSpec
-      {
-        area: areaToBuild,
-        proportions: {
-          color1: color1,
-          color2: color2,
-          color1Proportion: color1Fraction
-        }
-      },
+      BuildSpec.areaAndProportions( areaToBuild, color1, color1Fraction, color2 ),
 
       // backgroundShape
       null,
@@ -134,15 +124,7 @@ define( function( require ) {
       userShapes,
 
       // buildSpec
-      {
-        area: areaToBuild,
-        perimeter: perimeterToBuild,
-        proportions: {
-          color1: color1,
-          color2: color2,
-          color1Proportion: color1Fraction
-        }
-      },
+      BuildSpec.areaPerimeterAndProportions( areaToBuild, perimeterToBuild, color1, color1Fraction, color2 ),
 
       // backgroundShape
       null,
@@ -171,7 +153,7 @@ define( function( require ) {
       userShapes,
 
       // buildSpec
-      { area: areaToBuild, perimeter: perimeterToBuild },
+      BuildSpec.areaAndPerimeter( areaToBuild, perimeterToBuild ),
 
       // backgroundShape
       null,
