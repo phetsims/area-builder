@@ -12,6 +12,7 @@ define( function( require ) {
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
   var ChallengePromptBanner = require( 'AREA_BUILDER/game/view/ChallengePromptBanner' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
@@ -358,6 +359,12 @@ define( function( require ) {
           // Show the appropriate nodes for this state.
           this.show( [ this.scoreboard, this.nextButton, this.challengeView, this.challengePromptBanner ] );
 
+          // For a 'build it' style challenge, show the window that describes what the user built.
+          if ( challenge.buildSpec ) {
+            this.updateYouBuiltWindow( challenge );
+            this.youBuiltWindow.visible = true;
+          }
+
           // Give the user the appropriate audio and visual feedback
           this.gameAudioPlayer.correctAnswer();
           this.faceWithPointsNode.smile();
@@ -396,23 +403,7 @@ define( function( require ) {
 
           // If this is a 'build it' style of challenge, show the user what they built.
           if ( challenge.buildSpec ) {
-            if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaOnly( this.areaOfUserCreatedShape );
-            }
-            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && !challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaAndPerimeter( this.areaOfUserCreatedShape, this.perimeterOfUserCreatedShape );
-            }
-            else if ( challenge.buildSpec.area && !challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaAndProportions( this.areaOfUserCreatedShape,
-                challenge.buildSpec.proportions.color1, challenge.buildSpec.proportions.color2, this.color1Proportion );
-            }
-            else if ( challenge.buildSpec.area && challenge.buildSpec.perimeter && challenge.buildSpec.proportions ) {
-              this.youBuiltWindow.setAreaPerimeterAndProportions( this.areaOfUserCreatedShape,
-                this.perimeterOfUserCreatedShape, challenge.buildSpec.proportions.color1,
-                challenge.buildSpec.proportions.color2, this.color1Proportion );
-            }
-            this.youBuiltWindow.centerY = this.shapeBoard.centerY;
-            this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
+            this.updateYouBuiltWindow( challenge );
             this.youBuiltWindow.visible = true;
           }
 
@@ -487,6 +478,20 @@ define( function( require ) {
         default:
           throw new Error( 'Unhandled game state' );
       }
+    },
+
+    // @private Update the window that depicts what the user has built.
+    updateYouBuiltWindow: function( challenge ) {
+      var userBuiltSpec = new BuildSpec(
+        this.areaOfUserCreatedShape,
+        challenge.buildSpec.perimeter ? this.perimeterOfUserCreatedShape : null,
+        challenge.buildSpec.proportions ? challenge.buildSpec.proportions.color1 : null,
+        challenge.buildSpec.proportions ? challenge.buildSpec.proportions.color2 : null,
+        challenge.buildSpec.proportions ? this.color1Proportion : null
+      );
+      this.youBuiltWindow.setBuildSpec( userBuiltSpec );
+      this.youBuiltWindow.centerY = this.shapeBoard.centerY;
+      this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
     },
 
     presentChallenge: function() {

@@ -95,7 +95,7 @@ define( function( require ) {
       userShapes,
 
       // buildSpec
-      BuildSpec.areaAndProportions( areaToBuild, color1, color1Fraction, color2 ),
+      BuildSpec.areaAndProportions( areaToBuild, color1, color2, color1Fraction ),
 
       // backgroundShape
       null,
@@ -124,7 +124,7 @@ define( function( require ) {
       userShapes,
 
       // buildSpec
-      BuildSpec.areaPerimeterAndProportions( areaToBuild, perimeterToBuild, color1, color1Fraction, color2 ),
+      BuildSpec.areaPerimeterAndProportions( areaToBuild, perimeterToBuild, color1, color2, color1Fraction ),
 
       // backgroundShape
       null,

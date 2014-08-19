@@ -1,8 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * A Scenery node that is used to show the user what their attempted solution was for a challenge, generally used when
- * they got it wrong.
+ * A Scenery node that is used to show the user what they constructed for a 'Build it' style of challenge.  It can be
+ * dynamically updated if needed.
  */
 define( function( require ) {
   'use strict';
@@ -28,20 +28,26 @@ define( function( require ) {
   var LINE_SPACING = 5;
 
   /**
-   * @param width
+   * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
+   * contents are added later when the build spec is set.
+   *
+   * @param maxWidth
    * @param options
    * @constructor
    */
-  function YouBuiltWindow( width, options ) {
+  function YouBuiltWindow( maxWidth, options ) {
 
     options = _.extend( { fill: '#F2E916', stroke: 'black' }, options );
 
     // content root
     this.contentNode = new Node();
 
+    // Keep a snapshot of the previous build spec so that we can only update the portions that need it.
+    this.previousBuildSpec = null;
+
     // title
     var youBuiltText = new Text( youBuiltString, { font: TITLE_FONT } );
-    youBuiltText.scale( Math.min( ( width - 2 * X_MARGIN ) / youBuiltText.width, 1 ) );
+    youBuiltText.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / youBuiltText.width, 1 ) );
     youBuiltText.top = 5;
     this.contentNode.addChild( youBuiltText );
 
@@ -71,57 +77,70 @@ define( function( require ) {
   return inherit( Panel, YouBuiltWindow, {
 
     // @private
-    removeProportionInfo: function() {
-      if ( this.proportionsInfoNode !== null ) {
-        this.contentNode.removeChild( this.proportionsInfoNode );
-        this.proportionsInfoNode = null;
+    proportionSpecsAreEqual: function( buildSpec1, buildSpec2 ) {
+
+      // If one of the build specs is null and the other isn't, they aren't equal.
+      if ( ( buildSpec1 === null && buildSpec2 !== null ) || ( buildSpec1 !== null && buildSpec2 === null ) ) {
+        return false;
       }
+
+      // If one has a proportions spec and the other doesn't, they aren't equal.
+      if ( ( buildSpec1.proportions && !buildSpec2.proportions ) || ( !buildSpec1.proportions && buildSpec2.proportions ) ) {
+        return false;
+      }
+
+      // If they both don't have a proportions spec, they are equal.
+      if ( !buildSpec1.proportions && !buildSpec2.proportions ) {
+        return true;
+      }
+
+      // At this point, both build specs appear to have proportions fields.  Verify that the fields are correct.
+      assert && assert( buildSpec1.proportions.color1 && buildSpec1.proportions.color2 && buildSpec1.proportions.color1Proportion,
+        'malformed proportions specification' );
+      assert && assert( buildSpec2.proportions.color1 && buildSpec2.proportions.color2 && buildSpec2.proportions.color1Proportion,
+        'malformed proportions specification' );
+
+      // Return true if all elements of both proportions specs match, false otherwise.
+      return ( buildSpec1.color1 === buildSpec2.color1 &&
+               buildSpec1.color2 === buildSpec2.color2 &&
+               buildSpec1.color1Proportion.equals( buildSpec2.color1Proportion ) );
     },
 
-    // @public
-    setAreaOnly: function( area ) {
-      this.areaTextNode.text = StringUtils.format( areaEqualsString, area );
-      this.perimeterTextNode.visible = false;
-      this.removeProportionInfo();
-    },
+    // @public Sets the build spec that is currently being portrayed in the window.
+    setBuildSpec: function( buildSpec ) {
 
-    // @public
-    setAreaAndPerimeter: function( area, perimeter ) {
-      this.areaTextNode.text = StringUtils.format( areaEqualsString, area );
-      this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, perimeter );
-      this.perimeterTextNode.top = this.areaTextNode.bottom + LINE_SPACING;
-      this.perimeterTextNode.visible = true;
-      this.removeProportionInfo();
-    },
+      // Set the area value, which is always shown.
+      this.areaTextNode.text = StringUtils.format( areaEqualsString, buildSpec.area );
 
-    // @public
-    setAreaAndProportions: function( area, color1, color2, color1Proportion ) {
-      this.setAreaOnly( area );
-      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, color1Proportion, {
-        left: 0,
-        top: this.areaTextNode.bottom + LINE_SPACING,
-        multiLine: true
-      } );
-      this.contentNode.addChild( this.proportionsInfoNode );
-    },
+      var rollingBottom = this.areaTextNode.bottom;
 
-    // @public
-    setAreaPerimeterAndProportions: function( area, perimeter, color1, color2, color1Proportion ) {
+      // If proportions have changed, update them.  They sit beneath the area in the layout so that it is clear that
+      // they go together.
+      if ( !this.proportionSpecsAreEqual( buildSpec, this.previousBuildSpec ) ) {
+        if ( this.proportionsInfoNode ) {
+          this.contentNode.removeChild( this.proportionsInfoNode );
+          this.proportionsInfoNode = null;
+        }
+        if ( buildSpec.proportions ) {
+          this.proportionsInfoNode = new ColorProportionsPrompt( buildSpec.proportions.color1,
+            buildSpec.proportions.color2, buildSpec.proportions.color1Proportion, {
+              top: rollingBottom + LINE_SPACING,
+              multiLine: true
+            } );
+          this.contentNode.addChild( this.proportionsInfoNode );
+          rollingBottom = this.proportionsInfoNode.bottom;
+        }
+      }
 
-      // area
-      this.setAreaOnly( area );
-
-      // proportions, which sit just below area so that it is clear that they go together
-      this.proportionsInfoNode = new ColorProportionsPrompt( color1, color2, color1Proportion, {
-        top: this.areaTextNode.bottom + LINE_SPACING,
-        multiLine: true
-      } );
-      this.contentNode.addChild( this.proportionsInfoNode );
-
-      // perimeter, at the bottom
-      this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, perimeter );
-      this.perimeterTextNode.top = this.proportionsInfoNode.bottom + LINE_SPACING;
-      this.perimeterTextNode.visible = true;
+      // If perimeter is specified, update it, otherwise hide it.
+      if ( buildSpec.perimeter ) {
+        this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
+        this.perimeterTextNode.visible = true;
+        this.perimeterTextNode.top = rollingBottom + LINE_SPACING;
+      }
+      else {
+        this.perimeterTextNode.visible = false;
+      }
     }
   } );
 } );

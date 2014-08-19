@@ -9,28 +9,30 @@ define( function( require ) {
 
   // modules
   var Color = require( 'SCENERY/util/Color' );
+  var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
 
   /**
    * @param {number} area
    * @param {number} perimeter
    * @param {Color || String} color1
-   * @param {Fraction} color1Proportion
    * @param {Color || String} color2
+   * @param {Fraction} color1Proportion
    * @constructor
    */
-  function BuildSpec( area, perimeter, color1, color1Proportion, color2 ) {
+  function BuildSpec( area, perimeter, color1, color2, color1Proportion ) {
     assert && assert( typeof( area) === 'number' );
     this.area = area;
     if ( perimeter !== null ) {
       assert && assert( typeof( perimeter ) === 'number' );
       this.perimeter = perimeter;
     }
-    if ( color1 !== null ) {
-      assert && assert( typeof( color1Proportion ) === 'Fraction' && color2 !== null );
-      this.color1 = Color.toColor( color1 );
-      this.color2 = Color.toColor( color2 );
-      this.color1Proportion = color1Proportion;
+    if ( color1 !== null && color1Proportion !== null && color2 !== null ) {
+      assert && assert( color1Proportion instanceof Fraction );
+      this.proportions = {};
+      this.proportions.color1 = Color.toColor( color1 );
+      this.proportions.color2 = Color.toColor( color2 );
+      this.proportions.color1Proportion = color1Proportion;
     }
   }
 
@@ -43,12 +45,12 @@ define( function( require ) {
       return new BuildSpec( area, perimeter, null, null, null );
     },
 
-    areaAndProportions: function( area, color1, color1Proportion, color2 ) {
-      return new BuildSpec( area, null, color1, color1Proportion, color2 );
+    areaAndProportions: function( area, color1, color2, color1Proportion ) {
+      return new BuildSpec( area, null, color1, color2, color1Proportion );
     },
 
-    areaPerimeterAndProportions: function( area, perimeter, color1, color1Proportion, color2 ) {
-      return new BuildSpec( area, perimeter, color1, color1Proportion, color2 );
+    areaPerimeterAndProportions: function( area, perimeter, color1, color2, color1Proportion ) {
+      return new BuildSpec( area, perimeter, color1, color2, color1Proportion );
     }
   } );
 } );
