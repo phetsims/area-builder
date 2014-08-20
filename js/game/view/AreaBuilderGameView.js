@@ -292,6 +292,17 @@ define( function( require ) {
             gameModel.tryAgain();
           }
         }
+        else {
+          // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
+          // given the opportunity to view a solution, and they just moved a piece, possibly attempting to adjust the
+          // solution that they proposed, update the 'you built' window.
+          if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' ) {
+            this.updateYouBuiltWindow( self.model.currentChallenge );
+          }
+
+        }
+
+
       } );
 
       // Add the removal listener for if and when this shape is removed from the model.
@@ -395,8 +406,10 @@ define( function( require ) {
           this.faceWithPointsNode.setPoints( this.model.score );
           this.faceWithPointsNode.visible = true;
 
-          // Set the keypad to allow the user to start entering a new value.
-          this.numberEntryControl.armForNewEntry();
+          if ( challenge.checkSpec === 'areaEntered' ) {
+            // Set the keypad to allow the user to start entering a new value.
+            this.numberEntryControl.armForNewEntry();
+          }
 
           break;
 
@@ -433,8 +446,11 @@ define( function( require ) {
           this.faceWithPointsNode.setPoints( this.model.score );
           this.faceWithPointsNode.visible = true;
 
-          // Disable interaction with the challenge elements.
-          this.challengeLayer.pickable = false;
+          // For 'built it' style challenges, the user can still interact while in this state in case they want to try
+          // to get it right.  In 'find the area' challenges, further interaction is disallowed.
+          if ( challenge.checkSpec === 'areaEntered' ) {
+            this.challengeLayer.pickable = false;
+          }
 
           break;
 
