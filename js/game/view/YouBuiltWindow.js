@@ -26,6 +26,8 @@ define( function( require ) {
   var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var VALUE_FONT = new PhetFont( { size: 18 } );
   var LINE_SPACING = 5;
+  var CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
+  var INCORRECT_ANSWER_BACKGROUND_COLOR = '#F2E916';
 
   /**
    * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
@@ -37,13 +39,13 @@ define( function( require ) {
    */
   function YouBuiltWindow( maxWidth, options ) {
 
-    options = _.extend( { fill: '#F2E916', stroke: 'black' }, options );
+    options = _.extend( { fill: INCORRECT_ANSWER_BACKGROUND_COLOR, stroke: 'black' }, options );
 
     // content root
     this.contentNode = new Node();
 
-    // Keep a snapshot of the previous build spec so that we can only update the portions that need it.
-    this.previousBuildSpec = null;
+    // Keep a snapshot of the currently portrayed build spec so that we can only update the portions that need it.
+    this.currentBuildSpec = null;
 
     // title
     var youBuiltText = new Text( youBuiltString, { font: TITLE_FONT } );
@@ -101,9 +103,9 @@ define( function( require ) {
         'malformed proportions specification' );
 
       // Return true if all elements of both proportions specs match, false otherwise.
-      return ( buildSpec1.color1 === buildSpec2.color1 &&
-               buildSpec1.color2 === buildSpec2.color2 &&
-               buildSpec1.color1Proportion.equals( buildSpec2.color1Proportion ) );
+      return ( buildSpec1.proportions.color1.equals( buildSpec2.proportions.color1 ) &&
+               buildSpec1.proportions.color2.equals( buildSpec2.proportions.color2 ) &&
+               buildSpec1.proportions.color1Proportion.equals( buildSpec2.proportions.color1Proportion ) );
     },
 
     // @public Sets the build spec that is currently being portrayed in the window.
@@ -116,7 +118,7 @@ define( function( require ) {
 
       // If proportions have changed, update them.  They sit beneath the area in the layout so that it is clear that
       // they go together.
-      if ( !this.proportionSpecsAreEqual( buildSpec, this.previousBuildSpec ) ) {
+      if ( !this.proportionSpecsAreEqual( buildSpec, this.currentBuildSpec ) ) {
         if ( this.proportionsInfoNode ) {
           this.contentNode.removeChild( this.proportionsInfoNode );
           this.proportionsInfoNode = null;
@@ -141,6 +143,19 @@ define( function( require ) {
       else {
         this.perimeterTextNode.visible = false;
       }
+
+      // Save a reference to this build spec.
+      this.currentBuildSpec = buildSpec;
+    },
+
+    /**
+     * Set the background color of this window based on whether or not the information being displayed is the correct
+     * answer.
+     *
+     * @param userAnswerIsCorrect
+     */
+    setColorBasedOnAnswerCorrectness: function( userAnswerIsCorrect ) {
+      this.background.fill = userAnswerIsCorrect ? CORRECT_ANSWER_BACKGROUND_COLOR : INCORRECT_ANSWER_BACKGROUND_COLOR;
     }
   } );
 } );

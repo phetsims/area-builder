@@ -52,7 +52,8 @@ define( function( require ) {
       color2ProportionText.left = color1Patch.right + SINGLE_LINE_SPACING;
     }
 
-    var color2ColorPatch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), { fill: color2,
+    var color2ColorPatch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
+      fill: color2,
       left: color2ProportionText.right + PROMPT_TO_COLOR_SPACING,
       centerY: color2ProportionText.centerY
     } );

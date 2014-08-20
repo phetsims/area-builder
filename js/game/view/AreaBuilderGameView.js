@@ -83,7 +83,7 @@ define( function( require ) {
     this.addChild( self.rootNode );
     this.rootNode.moveToBack();
 
-    // Add layers used to control game appearance.
+    // Add layers used to control game appearance. TODO: This needs to be revisited - which nodes go where and such - and possibly simplified.
     this.controlLayer = new Node();
     this.rootNode.addChild( this.controlLayer );
     this.challengeLayer = new Node();
@@ -318,7 +318,8 @@ define( function( require ) {
 
     // Various other initialization
     this.levelCompletedNode = null;
-    this.shapeCarousel = null;
+    this.shapeCarousel = new Node();
+    this.challengeLayer.addChild( this.shapeCarousel );
 
     // Hook up the update function for handling changes to game state.
     gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
@@ -348,7 +349,8 @@ define( function( require ) {
             this.scoreboard,
             this.checkAnswerButton,
             this.challengeView,
-            this.challengePromptBanner
+            this.challengePromptBanner,
+            this.shapeCarousel
           ] );
           this.showChallengeGraphics();
           this.updatedCheckButtonEnabledState();
@@ -379,14 +381,21 @@ define( function( require ) {
         case 'showingIncorrectAnswerFeedbackTryAgain':
 
           // Show the appropriate nodes for this state.
-          this.show( [ this.scoreboard, this.tryAgainButton, this.challengeView, this.challengePromptBanner ] );
+          this.show( [
+            this.scoreboard,
+            this.tryAgainButton,
+            this.challengeView,
+            this.challengePromptBanner,
+            this.shapeCarousel
+          ] );
 
-          // Give the user the appropriate feedback
+          // Give the user the appropriate feedback.
           this.gameAudioPlayer.wrongAnswer();
           this.faceWithPointsNode.grimace();
           this.faceWithPointsNode.setPoints( this.model.score );
           this.faceWithPointsNode.visible = true;
 
+          // Set the keypad to allow the user to start entering a new value.
           this.numberEntryControl.armForNewEntry();
 
           break;
@@ -398,7 +407,8 @@ define( function( require ) {
           var buttonsToShow = [
             this.scoreboard,
             this.challengeView,
-            this.challengePromptBanner
+            this.challengePromptBanner,
+            this.shapeCarousel
           ];
 
           // If this is a 'build it' style of challenge, show the user what they built.
@@ -482,6 +492,7 @@ define( function( require ) {
 
     // @private Update the window that depicts what the user has built.
     updateYouBuiltWindow: function( challenge ) {
+      assert && assert( challenge.buildSpec, 'This method should only be called for challenges that include a build spec.' );
       var userBuiltSpec = new BuildSpec(
         this.areaOfUserCreatedShape,
         challenge.buildSpec.perimeter ? this.perimeterOfUserCreatedShape : null,
@@ -490,6 +501,7 @@ define( function( require ) {
         challenge.buildSpec.proportions ? this.color1Proportion : null
       );
       this.youBuiltWindow.setBuildSpec( userBuiltSpec );
+      this.youBuiltWindow.setColorBasedOnAnswerCorrectness( userBuiltSpec.equals( challenge.buildSpec ) );
       this.youBuiltWindow.centerY = this.shapeBoard.centerY;
       this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
     },
@@ -504,10 +516,7 @@ define( function( require ) {
         // Clean up previous challenge.
         this.model.simSpecificModel.clearShapePlacementBoard();
         this.challengePromptBanner.reset();
-        if ( this.shapeCarousel !== null ) {
-          this.challengeLayer.removeChild( this.shapeCarousel );
-          this.shapeCarousel = null;
-        }
+        this.shapeCarousel.removeAllChildren();
 
         var challenge = this.model.currentChallenge; // Convenience var
 
@@ -581,24 +590,23 @@ define( function( require ) {
           } );
           if ( creatorNodes.length > 4 ) {
             // Add a scrolling carousel.
-            this.shapeCarousel = new HCarousel( creatorNodes, {
+            this.shapeCarousel.addChild( new HCarousel( creatorNodes, {
               centerX: this.shapeBoard.centerX,
               top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
-            } );
+            } ) );
           }
           else {
             // Add a non-scrolling panel
             var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
-            this.shapeCarousel = new Panel( creatorNodeHBox, {
+            this.shapeCarousel.addChild( new Panel( creatorNodeHBox, {
               centerX: this.shapeBoard.centerX,
               top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               xMargin: 50,
               yMargin: 15,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
-            } );
+            } ) );
           }
-          this.challengeLayer.addChild( this.shapeCarousel );
         }
 
         // Position the eraser button.
@@ -623,7 +631,8 @@ define( function( require ) {
         this.scoreboard,
         this.challengePromptBanner,
         this.solutionBanner,
-        this.youBuiltWindow
+        this.youBuiltWindow,
+        this.shapeCarousel
       ] );
     },
 

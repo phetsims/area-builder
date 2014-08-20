@@ -36,7 +36,41 @@ define( function( require ) {
     }
   }
 
-  return inherit( Object, BuildSpec, {}, {
+  return inherit( Object, BuildSpec, {
+    equals: function( that ) {
+
+      // Compare area, which should always be defined.
+      if ( this.area !== that.area ) {
+        return false;
+      }
+
+      // Compare perimeter
+      if ( this.perimeter && !that.perimeter ||
+           !this.perimeter && that.perimeter ||
+           this.perimeter !== that.perimeter ) {
+        return false;
+      }
+
+      // Compare proportions
+      if ( !this.proportions && !that.proportions ) {
+        // Neither defines proportions, so we're good.
+        return true;
+      }
+
+      if ( this.proportions && !that.proportions || !this.proportions && that.proportions ) {
+        // One defines proportions and the other doesn't, so they don't match.
+        return false;
+      }
+
+      // From here, if the proportion spec matches, the build specs are equal.
+      return ( this.proportions.color1.equals( that.proportions.color1 ) &&
+               this.proportions.color2.equals( that.proportions.color2 ) &&
+               this.proportions.color1Proportion.equals( that.proportions.color1Proportion ) );
+    }
+  }, {
+
+    // Static functions
+
     areaOnly: function( area ) {
       return new BuildSpec( area, null, null, null, null );
     },
