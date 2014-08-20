@@ -193,21 +193,7 @@ define( function( require ) {
     };
     this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
       listener: function() {
-        // Save the parameters of what the user has built, if they've built anything.
-        self.areaOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.area;
-        self.perimeterOfUserCreatedShape = gameModel.simSpecificModel.shapePlacementBoard.perimeter;
-        var challenge = self.model.currentChallenge; // convenience var
-        if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
-          self.color1Proportion = gameModel.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
-        }
-        else {
-          self.color1Proportion = null;
-        }
-
-        // Submit the user's area guess, if there is one.
-        gameModel.simSpecificModel.areaGuess = self.numberEntryControl.value;
-
-        // Check the answer.
+        self.updateUserAnswer();
         gameModel.checkAnswer();
       } }, buttonOptions ) );
     this.gameControlButtons.push( this.checkAnswerButton );
@@ -280,8 +266,8 @@ define( function( require ) {
       var shapeView = new ShapeView( addedShape );
       self.challengeLayer.addChild( shapeView );
 
-      // Move the shape to the front when grabbed by the user.
-      addedShape.userControlledProperty.link( function( userControlled ) {
+      // Add a listener that handles changes to the userControlled state.
+      var userControlledListener = function( userControlled ) {
         if ( userControlled ) {
           shapeView.moveToFront();
 
@@ -292,23 +278,14 @@ define( function( require ) {
             gameModel.tryAgain();
           }
         }
-        else {
-          // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
-          // given the opportunity to view a solution, and they just moved a piece, possibly attempting to adjust the
-          // solution that they proposed, update the 'you built' window.
-          if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' ) {
-            this.updateYouBuiltWindow( self.model.currentChallenge );
-          }
-
-        }
-
-
-      } );
+      };
+      addedShape.userControlledProperty.link( userControlledListener );
 
       // Add the removal listener for if and when this shape is removed from the model.
       gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
         if ( removedShape === addedShape ) {
           self.challengeLayer.removeChild( shapeView );
+          addedShape.userControlledProperty.unlink( userControlledListener );
           gameModel.simSpecificModel.movableShapes.removeItemRemovedListener( removalListener );
         }
       } );
@@ -325,6 +302,31 @@ define( function( require ) {
 
       // Make sure the check button is in the appropriate state.
       self.updatedCheckButtonEnabledState();
+    } );
+
+    gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function() {
+      // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being given
+      // the opportunity to view a solution, and the user just removed a piece, check if they now have the correct
+      // answer.
+      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' && !self.isAnyShapeMoving() ) {
+        self.model.checkAnswer();
+      }
+    } );
+
+
+    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function() {
+      // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
+      // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
+      // window.
+      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' ) {
+        self.updateUserAnswer();
+        self.updateYouBuiltWindow( self.model.currentChallenge );
+
+        // If the user has put all shapes away, check to see if they now have the correct answer.
+        if ( !self.isAnyShapeMoving() ) {
+          self.model.checkAnswer();
+        }
+      }
     } );
 
     // Various other initialization
@@ -521,6 +523,35 @@ define( function( require ) {
       this.youBuiltWindow.centerY = this.shapeBoard.centerY;
       this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
     },
+
+    // @private Grab a snapshot of whatever the user has built or entered
+    updateUserAnswer: function() {
+      // Save the parameters of what the user has built, if they've built anything.
+      this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.area;
+      this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.perimeter;
+      var challenge = this.model.currentChallenge; // convenience var
+      if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
+        this.color1Proportion = this.model.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
+      }
+      else {
+        this.color1Proportion = null;
+      }
+
+      // Submit the user's area guess, if there is one.
+      this.model.simSpecificModel.areaGuess = this.numberEntryControl.value;
+    },
+
+    // @private Returns true if any shape is animating or user controlled, false if not.
+    isAnyShapeMoving: function() {
+      for ( var i = 0; i < this.model.simSpecificModel.movableShapes.length; i++ ) {
+        if ( this.model.simSpecificModel.movableShapes.get( i ).animating ||
+             this.model.simSpecificModel.movableShapes.get( i ).userControlled ) {
+          return true;
+        }
+      }
+      return false;
+    },
+
 
     presentChallenge: function() {
 

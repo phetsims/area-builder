@@ -117,7 +117,7 @@ define( function( require ) {
       },
 
       getChallengeCurrentPointValue: function() {
-        return this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge;
+        return Math.max( this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge, 0 );
       },
 
       // Check the user's proposed answer.
@@ -136,7 +136,7 @@ define( function( require ) {
           }
           else {
             // User got it wrong at first, but got it right now.
-            pointsEarned = this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge;
+            pointsEarned = Math.max( this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge, 0 );
           }
           this.score = this.score + pointsEarned;
         }
