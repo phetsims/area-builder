@@ -30,7 +30,7 @@ define( function( require ) {
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
 
   // constants
-  var BACKGROUND_FILL_COLOR = '#0071BD';
+  var BACKGROUND_FILL_COLOR = '#1b1464';
   var TEXT_FILL_COLOR = 'white';
   var TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
   var LARGE_FONT = new PhetFont( { size: 24 } ); // Font for single line text
