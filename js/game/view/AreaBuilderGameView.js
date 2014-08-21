@@ -208,13 +208,20 @@ define( function( require ) {
     }, buttonOptions ) );
     this.gameControlButtons.push( this.tryAgainButton );
 
+    // Solution button for 'find the area' style of challenge, which has one specific answer.
     this.showTheSolutionButton = new TextPushButton( showSolutionString, _.extend( {
-      listener: function() { gameModel.displayCorrectAnswer(); }
+      listener: function() {
+        gameModel.displayCorrectAnswer();
+      }
     }, buttonOptions ) );
     this.gameControlButtons.push( this.showTheSolutionButton );
 
+    // Solution button for 'built it' style of challenge, which has many potential answers.
     this.showASolutionButton = new TextPushButton( ASolutionString, _.extend( {
-      listener: function() { gameModel.displayCorrectAnswer(); }
+      listener: function() {
+        self.okayToUpdateYouBuiltWindow = false;
+        gameModel.displayCorrectAnswer();
+      }
     }, buttonOptions ) );
     this.gameControlButtons.push( this.showASolutionButton );
 
@@ -318,7 +325,7 @@ define( function( require ) {
       // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
       // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
       // window.
-      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' ) {
+      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' && self.okayToUpdateYouBuiltWindow ) {
         self.updateUserAnswer();
         self.updateYouBuiltWindow( self.model.currentChallenge );
 
@@ -336,6 +343,10 @@ define( function( require ) {
 
     // Hook up the update function for handling changes to game state.
     gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
+
+    // Set up a flag to block updates of the 'You Built' window when showing the solution.  TODO: This is a bit of a
+    // hack, but it works.  This should be revisited to see if a cleaner approach can be devised.
+    this.okayToUpdateYouBuiltWindow = true;
   }
 
   return inherit( ScreenView, AreaBuilderGameView, {
@@ -367,6 +378,7 @@ define( function( require ) {
           ] );
           this.showChallengeGraphics();
           this.updatedCheckButtonEnabledState();
+          this.okayToUpdateYouBuiltWindow = true;
           break;
 
         case 'showingCorrectAnswerFeedback':
