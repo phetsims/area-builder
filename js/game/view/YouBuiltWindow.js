@@ -67,7 +67,6 @@ define( function( require ) {
       font: VALUE_FONT,
       top: this.areaTextNode.bottom + LINE_SPACING
     } );
-    this.contentNode.addChild( this.perimeterTextNode );
 
     // proportion info is initially set to null, added and removed when needed.
     this.proportionsInfoNode = null;
@@ -136,12 +135,13 @@ define( function( require ) {
 
       // If perimeter is specified, update it, otherwise hide it.
       if ( buildSpec.perimeter ) {
+        this.contentNode.addChild( this.perimeterTextNode );
         this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
         this.perimeterTextNode.visible = true;
         this.perimeterTextNode.top = rollingBottom + LINE_SPACING;
       }
-      else {
-        this.perimeterTextNode.visible = false;
+      else if ( this.contentNode.isChild( this.perimeterTextNode ) ) {
+        this.contentNode.removeChild( this.perimeterTextNode );
       }
 
       // Save a reference to this build spec.
