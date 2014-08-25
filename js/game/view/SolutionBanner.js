@@ -117,9 +117,9 @@ define( function( require ) {
         if ( buildSpec.proportions ) {
           proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
             buildSpec.proportions.color1Proportion, {
-              font: SMALLER_FONT,
+              font: new PhetFont( { size: 11 } ),
               textFill: TEXT_FILL_COLOR,
-              left: areaPrompt.right + 4,
+              left: areaPrompt.right + 7,
               centerY: areaPrompt.centerY
             }
           );

@@ -120,6 +120,8 @@ define( function( require ) {
             buildSpec.proportions.color2, buildSpec.proportions.color1Proportion, {
               top: rollingBottom + LINE_SPACING,
               multiLine: true
+            }, {
+              font: new PhetFont( 14 )
             } );
           this.contentNode.addChild( this.proportionsInfoNode );
           rollingBottom = this.proportionsInfoNode.bottom;

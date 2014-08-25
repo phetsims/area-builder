@@ -647,12 +647,14 @@ define( function( require ) {
             var areaPrompt = new Node();
             areaPrompt.addChild( areaGoalNode );
             areaGoalNode.text += ',';
-            areaPrompt.addChild( new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
+            var colorProportionsPrompt = new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
               challenge.buildSpec.proportions.color2, challenge.buildSpec.proportions.color1Proportion, {
-                font: GOAL_PROMPT_FONT,
-                left: areaGoalNode.width + 5
+                font: new PhetFont( { size: 16, weight: 'bold' } ),
+                left: areaGoalNode.width + 10,
+                centerY: areaGoalNode.centerY
               }
-            ) );
+            );
+            areaPrompt.addChild( colorProportionsPrompt );
             this.buildPromptVBox.addChild( areaPrompt );
           }
           else {

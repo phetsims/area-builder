@@ -4,6 +4,8 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Fraction = require( 'PHETCOMMON/model/Fraction' );
+  var FractionNode = require( 'AREA_BUILDER/game/view/FractionNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -25,37 +27,38 @@ define( function( require ) {
       multiLine: false
     }, options );
 
-    var color1ProportionText = new Text( color1Proportion.toString(), {
+    var color1FractionNode = new FractionNode( color1Proportion, {
       font: options.font,
-      fill: options.textFill
+      color: options.textFill
     } );
-    this.addChild( color1ProportionText );
-    var color2ProportionText = new Text( ( color1Proportion.denominator - color1Proportion.numerator ) + '/' + color1Proportion.denominator, {
+    this.addChild( color1FractionNode );
+    var color2Proportion = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
+    var color2FractionNode = new FractionNode( color2Proportion, {
       font: options.font,
-      fill: options.textFill
+      color: options.textFill
     } );
-    this.addChild( color2ProportionText );
-    var patchRadiusX = color1ProportionText.bounds.height * 0.75;
-    var patchRadiusY = color1ProportionText.bounds.height * 0.5;
+    this.addChild( color2FractionNode );
+    var patchRadiusX = color1FractionNode.bounds.height * 0.5;
+    var patchRadiusY = color1FractionNode.bounds.height * 0.35;
     var color1Patch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
       fill: color1,
-      left: color1ProportionText.right + PROMPT_TO_COLOR_SPACING,
-      centerY: color1ProportionText.centerY
+      left: color1FractionNode.right + PROMPT_TO_COLOR_SPACING,
+      centerY: color1FractionNode.centerY
     } );
     this.addChild( color1Patch );
 
     // Position the 2nd prompt based on whether or not the options specify multi-line.
     if ( options.multiLine ) {
-      color2ProportionText.top = color1ProportionText.bottom + MULTI_LINE_SPACING;
+      color2FractionNode.top = color1FractionNode.bottom + MULTI_LINE_SPACING;
     }
     else {
-      color2ProportionText.left = color1Patch.right + SINGLE_LINE_SPACING;
+      color2FractionNode.left = color1Patch.right + SINGLE_LINE_SPACING;
     }
 
     var color2ColorPatch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
       fill: color2,
-      left: color2ProportionText.right + PROMPT_TO_COLOR_SPACING,
-      centerY: color2ProportionText.centerY
+      left: color2FractionNode.right + PROMPT_TO_COLOR_SPACING,
+      centerY: color2FractionNode.centerY
     } );
     this.addChild( color2ColorPatch );
 
