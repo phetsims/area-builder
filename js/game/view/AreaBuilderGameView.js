@@ -324,7 +324,7 @@ define( function( require ) {
     } );
 
 
-    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function() {
+    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function( area ) {
       // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
       // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
       // window.

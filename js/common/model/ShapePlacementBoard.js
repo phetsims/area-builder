@@ -240,19 +240,24 @@ define( function( require ) {
     },
 
     /**
-     * Get the proportion of placed shapes that match the provided color.
+     * Get the proportion of area that match the provided color.
      *
      * @param color
      */
     getProportionOfColor: function( color ) {
+      var self = this;
       var compareColor = Color.toColor( color );
-      var colorCount = 0;
-      this.residentShapes.forEach( function( movableShape ) {
-        if ( compareColor.equals( movableShape.color ) ) {
-          colorCount++;
+      var totalArea = 0;
+      var areaOfSpecifiedColor = 0;
+      this.residentShapes.forEach( function( residentShape ) {
+        var areaOfShape = residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
+        totalArea += areaOfShape;
+        if ( compareColor.equals( residentShape.color ) ) {
+          areaOfSpecifiedColor += areaOfShape;
         }
       } );
-      var proportion = new Fraction( colorCount, this.residentShapes.length );
+
+      var proportion = new Fraction( areaOfSpecifiedColor, totalArea );
       proportion.reduce();
       return proportion;
     },
