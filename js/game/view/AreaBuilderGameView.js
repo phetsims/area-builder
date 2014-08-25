@@ -38,6 +38,7 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var YouBuiltWindow = require( 'AREA_BUILDER/game/view/YouBuiltWindow' );
+  var YouEnteredWindow = require( 'AREA_BUILDER/game/view/YouEnteredWindow' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
@@ -127,6 +128,8 @@ define( function( require ) {
     this.challengeLayer.addChild( this.challengeView );
     this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 20 );
     this.challengeLayer.addChild( this.youBuiltWindow );
+    this.youEnteredWindow = new YouEnteredWindow( this.layoutBounds.width - this.shapeBoard.right - 20 );
+    this.challengeLayer.addChild( this.youEnteredWindow );
     this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
       left: this.shapeBoard.left,
       bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
@@ -386,10 +389,14 @@ define( function( require ) {
           // Show the appropriate nodes for this state.
           this.show( [ this.scoreboard, this.nextButton, this.challengeView, this.challengePromptBanner ] );
 
-          // For a 'build it' style challenge, show the window that describes what the user built.
+          // Update the feedback window.
           if ( challenge.buildSpec ) {
             this.updateYouBuiltWindow( challenge );
             this.youBuiltWindow.visible = true;
+          }
+          else {
+            this.updateYouEnteredWindow( challenge );
+            this.youEnteredWindow.visible = true;
           }
 
           // Give the user the appropriate audio and visual feedback
@@ -438,10 +445,14 @@ define( function( require ) {
             this.shapeCarousel
           ];
 
-          // If this is a 'build it' style of challenge, show the user what they built.
+          // Update the feedback window.
           if ( challenge.buildSpec ) {
             this.updateYouBuiltWindow( challenge );
             this.youBuiltWindow.visible = true;
+          }
+          else {
+            this.updateYouEnteredWindow( challenge );
+            this.youEnteredWindow.visible = true;
           }
 
           // Show a slightly different button depending on the challenge type.
@@ -478,9 +489,12 @@ define( function( require ) {
             this.solutionBanner
           ] );
 
-          // Keep the 'You Built' window visible if this is a 'build it' style of challenge.
+          // Keep the appropriate feedback window visible.
           if ( challenge.buildSpec ) {
             this.youBuiltWindow.visible = true;
+          }
+          else {
+            this.youEnteredWindow.visible = true;
           }
 
           // Update the solution banner.
@@ -534,6 +548,15 @@ define( function( require ) {
       this.youBuiltWindow.setColorBasedOnAnswerCorrectness( userBuiltSpec.equals( challenge.buildSpec ) );
       this.youBuiltWindow.centerY = this.shapeBoard.centerY;
       this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
+    },
+
+    // @private Update the window that depicts what the user has entered using the keypad.
+    updateYouEnteredWindow: function( challenge ) {
+      assert && assert( challenge.checkSpec === 'areaEntered', 'This method should only be called for find-the-area style challenges.' );
+      this.youEnteredWindow.setValueEntered( this.model.simSpecificModel.areaGuess );
+      this.youEnteredWindow.setColorBasedOnAnswerCorrectness( challenge.backgroundShape.unitArea === this.model.simSpecificModel.areaGuess );
+      this.youEnteredWindow.centerY = this.shapeBoard.centerY;
+      this.youEnteredWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
     },
 
     // @private Grab a snapshot of whatever the user has built or entered
@@ -691,6 +714,7 @@ define( function( require ) {
         this.challengePromptBanner,
         this.solutionBanner,
         this.youBuiltWindow,
+        this.youEnteredWindow,
         this.shapeCarousel
       ] );
     },
