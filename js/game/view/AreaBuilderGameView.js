@@ -383,7 +383,8 @@ define( function( require ) {
             this.checkAnswerButton,
             this.challengeView,
             this.challengePromptBanner,
-            this.shapeCarousel
+            this.shapeCarousel,
+            this.eraserButton
           ] );
           if ( challenge.checkSpec === 'areaEntered' ) {
             this.show( [
@@ -432,7 +433,8 @@ define( function( require ) {
             this.tryAgainButton,
             this.challengeView,
             this.challengePromptBanner,
-            this.shapeCarousel
+            this.shapeCarousel,
+            this.eraserButton
           ] );
           if ( challenge.checkSpec === 'areaEntered' ) {
             this.show( [
@@ -456,34 +458,28 @@ define( function( require ) {
 
         case 'showingIncorrectAnswerFeedbackMoveOn':
 
-          // Show the appropriate nodes for this state.  The button for showing the correct answer varies a bit based
-          // on the type of challenge.
-          var buttonsToShow = [
+          // Show the appropriate nodes.
+          var nodesToShow = [
             this.scoreboard,
             this.challengeView,
             this.challengePromptBanner,
-            this.shapeCarousel
+            this.shapeCarousel,
+            this.eraserButton
           ];
 
-          // Update the feedback window.
+          // Handle the items that are different for the different challenge styles.
           if ( challenge.buildSpec ) {
+            nodesToShow.push( this.showASolutionButton );
             this.updateYouBuiltWindow( challenge );
-            this.youBuiltWindow.visible = true;
+            nodesToShow.push( this.youBuiltWindow );
           }
           else {
+            nodesToShow.push( this.showTheSolutionButton );
             this.updateYouEnteredWindow( challenge );
-            this.youEnteredWindow.visible = true;
+            nodesToShow.push( this.youEnteredWindow );
           }
 
-          // Show a slightly different button depending on the challenge type.
-          if ( challenge.buildSpec ) {
-            buttonsToShow.push( this.showASolutionButton );
-          }
-          else {
-            buttonsToShow.push( this.showTheSolutionButton );
-          }
-
-          this.show( buttonsToShow );
+          this.show( nodesToShow );
 
           // Give the user the appropriate feedback
           this.gameAudioPlayer.wrongAnswer();
@@ -736,7 +732,8 @@ define( function( require ) {
         this.areaQuestionPrompt,
         this.youBuiltWindow,
         this.youEnteredWindow,
-        this.shapeCarousel
+        this.shapeCarousel,
+        this.eraserButton
       ] );
     },
 
