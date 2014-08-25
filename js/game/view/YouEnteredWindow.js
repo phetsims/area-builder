@@ -47,7 +47,7 @@ define( function( require ) {
     // @public
     setValueEntered: function( valueEntered ) {
       this.valueEnteredNode.text = valueEntered.toString();
-      this.valueEnteredNode.centerX = this.centerX;
+      this.valueEnteredNode.centerX = this.titleNode.centerX;
     }
   } );
 } );

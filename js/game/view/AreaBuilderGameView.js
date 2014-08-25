@@ -379,6 +379,10 @@ define( function( require ) {
             this.challengePromptBanner,
             this.shapeCarousel
           ] );
+          if ( challenge.checkSpec === 'areaEntered' ) {
+            this.numberEntryControl.visible = true;
+            this.areaQuestionPrompt.visible = true;
+          }
           this.showChallengeGraphics();
           this.updatedCheckButtonEnabledState();
           this.okayToUpdateYouBuiltWindow = true;
@@ -420,6 +424,10 @@ define( function( require ) {
             this.challengePromptBanner,
             this.shapeCarousel
           ] );
+          if ( challenge.checkSpec === 'areaEntered' ) {
+            this.numberEntryControl.visible = true;
+            this.areaQuestionPrompt.visible = true;
+          }
 
           // Give the user the appropriate feedback.
           this.gameAudioPlayer.wrongAnswer();
@@ -696,10 +704,6 @@ define( function( require ) {
         if ( challenge.userShapes !== null && this.eraserButton.right + 10 >= this.shapeCarousel.left ) {
           this.eraserButton.right = this.shapeCarousel.left - 10;
         }
-
-        // Show the number entry control if this is a "find the area" style of challenge.
-        this.numberEntryControl.visible = challenge.showNumberEntryPad;
-        this.areaQuestionPrompt.visible = challenge.showNumberEntryPad;
       }
     },
 
@@ -713,6 +717,8 @@ define( function( require ) {
         this.scoreboard,
         this.challengePromptBanner,
         this.solutionBanner,
+        this.numberEntryControl,
+        this.areaQuestionPrompt,
         this.youBuiltWindow,
         this.youEnteredWindow,
         this.shapeCarousel
