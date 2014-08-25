@@ -347,8 +347,9 @@ define( function( require ) {
     // Hook up the update function for handling changes to game state.
     gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
 
-    // Set up a flag to block updates of the 'You Built' window when showing the solution.  TODO: This is a bit of a
-    // hack, but it works.  This should be revisited to see if a cleaner approach can be devised.
+    // Set up a flag to block updates of the 'You Built' window when showing the solution.  This is necessary because
+    // adding the shapes to the board in order to show the solution triggers updates of this window.  TODO: This is a
+    // bit of a hack, but it works.  This should be revisited to see if a cleaner approach can be devised.
     this.okayToUpdateYouBuiltWindow = true;
   }
 
