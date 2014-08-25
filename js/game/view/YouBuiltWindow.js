@@ -10,6 +10,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
+  var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
@@ -22,12 +23,7 @@ define( function( require ) {
   var youBuiltString = require( 'string!AREA_BUILDER/youBuilt' );
 
   // constants
-  var X_MARGIN = 5;
-  var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-  var VALUE_FONT = new PhetFont( { size: 18 } );
   var LINE_SPACING = 5;
-  var CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
-  var INCORRECT_ANSWER_BACKGROUND_COLOR = '#F2E916';
 
   /**
    * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
@@ -39,43 +35,40 @@ define( function( require ) {
    */
   function YouBuiltWindow( maxWidth, options ) {
 
-    options = _.extend( { fill: INCORRECT_ANSWER_BACKGROUND_COLOR, stroke: 'black' }, options );
-
-    // content root
-    this.contentNode = new Node();
+    FeedbackWindow.call( this, youBuiltString, maxWidth, options );
 
     // Keep a snapshot of the currently portrayed build spec so that we can only update the portions that need it.
     this.currentBuildSpec = null;
 
-    // title
-    var youBuiltText = new Text( youBuiltString, { font: TITLE_FONT } );
-    youBuiltText.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / youBuiltText.width, 1 ) );
-    youBuiltText.top = 5;
-    this.contentNode.addChild( youBuiltText );
-
-    // TODO: Scale everything below so that we're sure it will fit when translated.
-
     // area text
     this.areaTextNode = new Text( StringUtils.format( areaEqualsString, 99 ), {
-      font: VALUE_FONT,
-      top: youBuiltText.bottom + LINE_SPACING
+      font: FeedbackWindow.NORMAL_TEXT_FONT,
+      top: this.titleNode.bottom + LINE_SPACING
     } );
+    if ( this.areaTextNode.width + 2 * FeedbackWindow.X_MARGIN > maxWidth ) {
+      // Scale this text to fit in the window.  Not an issue in English, but could be needed in translated versions.
+      this.areaTextNode.scale( ( maxWidth - 2 * FeedbackWindow.X_MARGIN ) / this.areaTextNode.width );
+    }
     this.contentNode.addChild( this.areaTextNode );
 
     // perimeter text
     this.perimeterTextNode = new Text( StringUtils.format( perimeterEqualsString, 99 ), {
-      font: VALUE_FONT,
+      font: FeedbackWindow.NORMAL_TEXT_FONT,
       top: this.areaTextNode.bottom + LINE_SPACING
     } );
+    if ( this.perimeterTextNode.width + 2 * FeedbackWindow.X_MARGIN > maxWidth ) {
+      // Scale this text to fit in the window.  Not an issue in English, but could be needed in translated versions.
+      this.perimeterTextNode.scale( ( maxWidth - 2 * FeedbackWindow.X_MARGIN ) / this.perimeterTextNode.width );
+    }
 
     // proportion info is initially set to null, added and removed when needed.
     this.proportionsInfoNode = null;
 
-    // constructor - called here because content with no bounds doesn't work
-    Panel.call( this, this.contentNode, options );
+    // Handle options, mostly those relating to position.
+    this.mutate( options );
   }
 
-  return inherit( Panel, YouBuiltWindow, {
+  return inherit( FeedbackWindow, YouBuiltWindow, {
 
     // @private
     proportionSpecsAreEqual: function( buildSpec1, buildSpec2 ) {
@@ -146,16 +139,6 @@ define( function( require ) {
 
       // Save a reference to this build spec.
       this.currentBuildSpec = buildSpec;
-    },
-
-    /**
-     * Set the background color of this window based on whether or not the information being displayed is the correct
-     * answer.
-     *
-     * @param userAnswerIsCorrect
-     */
-    setColorBasedOnAnswerCorrectness: function( userAnswerIsCorrect ) {
-      this.background.fill = userAnswerIsCorrect ? CORRECT_ANSWER_BACKGROUND_COLOR : INCORRECT_ANSWER_BACKGROUND_COLOR;
     }
   } );
 } );

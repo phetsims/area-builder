@@ -19,6 +19,7 @@ define( function( require ) {
   // constants
   var X_MARGIN = 5;
   var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+  var NORMAL_TEXT_FONT = new PhetFont( { size: 18 } );
   var CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
   var INCORRECT_ANSWER_BACKGROUND_COLOR = '#F2E916';
 
@@ -47,8 +48,9 @@ define( function( require ) {
     this.titleNode.top = 5;
     this.contentNode.addChild( this.titleNode );
 
-    // super constructor - called here because content with no bounds doesn't work
-    Panel.call( this, this.contentNode, options );
+    // Invoke super constructor - called here because content with no bounds doesn't work.  This does not pass through
+    // position options, that needs to be handled in descendant classes.
+    Panel.call( this, this.contentNode, { fill: options.fill, stroke: options.stroke } );
   }
 
   return inherit( Panel, FeedbackWindow, {
@@ -65,7 +67,8 @@ define( function( require ) {
     },
     {
       // Statics
-      X_MARGIN: X_MARGIN
+      X_MARGIN: X_MARGIN,
+      NORMAL_TEXT_FONT: NORMAL_TEXT_FONT
     }
   );
 } );
