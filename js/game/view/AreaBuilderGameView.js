@@ -364,14 +364,19 @@ define( function( require ) {
 
       // Show the nodes appropriate to the state
       switch( gameState ) {
+
         case 'choosingLevel':
+
           this.show( [ this.startGameLevelNode ] );
           this.hideChallenge();
           break;
 
         case 'presentingInteractiveChallenge':
+
           this.challengeLayer.pickable = null; // Pass through, prunes subtree, see Scenery documentation for details.
           this.presentChallenge();
+
+          // Show the appropriate nodes for this state.
           this.show( [
             this.scoreboard,
             this.checkAnswerButton,
@@ -380,12 +385,16 @@ define( function( require ) {
             this.shapeCarousel
           ] );
           if ( challenge.checkSpec === 'areaEntered' ) {
-            this.numberEntryControl.visible = true;
-            this.areaQuestionPrompt.visible = true;
+            this.show( [
+              this.numberEntryControl,
+              this.areaQuestionPrompt
+            ] );
           }
           this.showChallengeGraphics();
+
           this.updatedCheckButtonEnabledState();
           this.okayToUpdateYouBuiltWindow = true;
+
           break;
 
         case 'showingCorrectAnswerFeedback':
@@ -425,8 +434,10 @@ define( function( require ) {
             this.shapeCarousel
           ] );
           if ( challenge.checkSpec === 'areaEntered' ) {
-            this.numberEntryControl.visible = true;
-            this.areaQuestionPrompt.visible = true;
+            this.show( [
+              this.numberEntryControl,
+              this.areaQuestionPrompt
+            ] );
           }
 
           // Give the user the appropriate feedback.
@@ -523,6 +534,7 @@ define( function( require ) {
           break;
 
         case 'showingLevelResults':
+
           if ( this.model.score === this.model.maxPossibleScore ) {
             this.gameAudioPlayer.gameOverPerfectScore();
           }
