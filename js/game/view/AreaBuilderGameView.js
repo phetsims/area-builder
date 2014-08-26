@@ -462,14 +462,14 @@ define( function( require ) {
           var nodesToShow = [
             this.scoreboard,
             this.challengeView,
-            this.challengePromptBanner,
-            this.shapeCarousel,
-            this.eraserButton
+            this.challengePromptBanner
           ];
 
           // Handle the items that are different for the different challenge styles.
           if ( challenge.buildSpec ) {
             nodesToShow.push( this.showASolutionButton );
+            nodesToShow.push( this.shapeCarousel );
+            nodesToShow.push( this.eraserButton );
             this.updateYouBuiltWindow( challenge );
             nodesToShow.push( this.youBuiltWindow );
           }
