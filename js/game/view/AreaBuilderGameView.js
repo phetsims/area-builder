@@ -340,9 +340,10 @@ define( function( require ) {
     } );
 
     // Various other initialization
-    this.levelCompletedNode = null;
-    this.shapeCarousel = new Node();
-    this.challengeLayer.addChild( this.shapeCarousel );
+    this.levelCompletedNode = null; // @private
+    this.shapeCarousel = new Node(); // @private
+    this.challengeLayer.addChild( this.shapeCarousel ); // @private
+    this.clearDimensionsControlOnNextChallenge = false; // @private
 
     // Hook up the update function for handling changes to game state.
     gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
@@ -362,6 +363,7 @@ define( function( require ) {
       this.hideAllGameNodes();
 
       var challenge = this.model.currentChallenge; // convenience var
+      var nodesToShow;
 
       // Show the nodes appropriate to the state
       switch( gameState ) {
@@ -377,92 +379,109 @@ define( function( require ) {
           this.challengeLayer.pickable = null; // Pass through, prunes subtree, see Scenery documentation for details.
           this.presentChallenge();
 
-          // Show the appropriate nodes for this state.
-          this.show( [
+          // Make a list of the nodes to be shown in this state.
+          nodesToShow = [
             this.scoreboard,
             this.checkAnswerButton,
             this.challengeView,
             this.challengePromptBanner,
             this.shapeCarousel,
             this.eraserButton
-          ] );
-          if ( challenge.checkSpec === 'areaEntered' ) {
-            this.show( [
-              this.numberEntryControl,
-              this.areaQuestionPrompt
-            ] );
-          }
-          this.showChallengeGraphics();
+          ];
 
+          // Add the nodes that are only shown for certain challenge types.
+          if ( challenge.checkSpec === 'areaEntered' ) {
+            nodesToShow.push( this.numberEntryControl );
+            nodesToShow.push( this.areaQuestionPrompt );
+          }
+
+          this.show( nodesToShow );
+          this.showChallengeGraphics();
           this.updatedCheckButtonEnabledState();
           this.okayToUpdateYouBuiltWindow = true;
+
+          if ( this.clearDimensionsControlOnNextChallenge ) {
+            this.model.simSpecificModel.showDimensions = false;
+            this.clearDimensionsControlOnNextChallenge = false;
+          }
 
           break;
 
         case 'showingCorrectAnswerFeedback':
 
-          // Show the appropriate nodes for this state.
-          this.show( [ this.scoreboard, this.nextButton, this.challengeView, this.challengePromptBanner ] );
+          // Make a list of the nodes to be shown in this state.
+          nodesToShow = [
+            this.scoreboard,
+            this.nextButton,
+            this.challengeView,
+            this.challengePromptBanner,
+            this.faceWithPointsNode
+          ];
 
-          // Update the feedback window.
+          // Update and show the nodes that vary based on the challenge type.
           if ( challenge.buildSpec ) {
             this.updateYouBuiltWindow( challenge );
-            this.youBuiltWindow.visible = true;
+            nodesToShow.push( this.youBuiltWindow );
           }
           else {
             this.updateYouEnteredWindow( challenge );
-            this.youEnteredWindow.visible = true;
+            nodesToShow.push( this.youEnteredWindow );
           }
 
           // Give the user the appropriate audio and visual feedback
           this.gameAudioPlayer.correctAnswer();
           this.faceWithPointsNode.smile();
           this.faceWithPointsNode.setPoints( this.model.getChallengeCurrentPointValue() );
-          this.faceWithPointsNode.visible = true;
 
           // Disable interaction with the challenge elements.
           this.challengeLayer.pickable = false;
+
+          // Make the nodes visible
+          this.show( nodesToShow );
 
           break;
 
         case 'showingIncorrectAnswerFeedbackTryAgain':
 
-          // Show the appropriate nodes for this state.
-          this.show( [
+          // Make a list of the nodes to be shown in this state.
+          nodesToShow = [
             this.scoreboard,
             this.tryAgainButton,
             this.challengeView,
             this.challengePromptBanner,
             this.shapeCarousel,
-            this.eraserButton
-          ] );
+            this.eraserButton,
+            this.faceWithPointsNode
+          ];
+
           if ( challenge.checkSpec === 'areaEntered' ) {
-            this.show( [
-              this.numberEntryControl,
-              this.areaQuestionPrompt
-            ] );
+            nodesToShow.push( this.numberEntryControl );
+            nodesToShow.push( this.areaQuestionPrompt );
           }
 
           // Give the user the appropriate feedback.
           this.gameAudioPlayer.wrongAnswer();
           this.faceWithPointsNode.grimace();
           this.faceWithPointsNode.setPoints( this.model.score );
-          this.faceWithPointsNode.visible = true;
 
           if ( challenge.checkSpec === 'areaEntered' ) {
             // Set the keypad to allow the user to start entering a new value.
             this.numberEntryControl.armForNewEntry();
           }
 
+          // Show the nodes
+          this.show( nodesToShow );
+
           break;
 
         case 'showingIncorrectAnswerFeedbackMoveOn':
 
-          // Show the appropriate nodes.
-          var nodesToShow = [
+          // Make a list of the nodes to be shown in this state.
+          nodesToShow = [
             this.scoreboard,
             this.challengeView,
-            this.challengePromptBanner
+            this.challengePromptBanner,
+            this.faceWithPointsNode
           ];
 
           // Handle the items that are different for the different challenge styles.
@@ -485,7 +504,6 @@ define( function( require ) {
           this.gameAudioPlayer.wrongAnswer();
           this.faceWithPointsNode.grimace();
           this.faceWithPointsNode.setPoints( this.model.score );
-          this.faceWithPointsNode.visible = true;
 
           // For 'built it' style challenges, the user can still interact while in this state in case they want to try
           // to get it right.  In 'find the area' challenges, further interaction is disallowed.
@@ -493,24 +511,27 @@ define( function( require ) {
             this.challengeLayer.pickable = false;
           }
 
+          // Show the nodes.
+          this.show( nodesToShow );
+
           break;
 
         case 'displayingCorrectAnswer':
 
-          // Show the appropriate nodes for this state.
-          this.show( [
+          // Make a list of the nodes to be shown in this state.
+          nodesToShow = [
             this.scoreboard,
             this.nextButton,
             this.challengeView,
             this.solutionBanner
-          ] );
+          ];
 
           // Keep the appropriate feedback window visible.
           if ( challenge.buildSpec ) {
-            this.youBuiltWindow.visible = true;
+            nodesToShow.push( this.youBuiltWindow );
           }
           else {
-            this.youEnteredWindow.visible = true;
+            nodesToShow.push( this.youEnteredWindow );
           }
 
           // Update the solution banner.
@@ -527,6 +548,15 @@ define( function( require ) {
 
           // Disable interaction with the challenge elements.
           this.challengeLayer.pickable = false;
+
+          // If the challenge included a perimeter spec, turn on dimensions so that the perimeter is more obvious.
+          if ( challenge.buildSpec && challenge.buildSpec.perimeter && !this.model.simSpecificModel.showDimensions ) {
+            this.model.simSpecificModel.showDimensions = true;
+            this.clearDimensionsControlOnNextChallenge = true;
+          }
+
+          // Show the nodes.
+          this.show( nodesToShow );
 
           break;
 

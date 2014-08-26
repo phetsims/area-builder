@@ -130,7 +130,9 @@ define( function( require ) {
 
       // If perimeter is specified, update it, otherwise hide it.
       if ( buildSpec.perimeter ) {
-        this.contentNode.addChild( this.perimeterTextNode );
+        if ( !this.contentNode.isChild( this.perimeterTextNode ) ) {
+          this.contentNode.addChild( this.perimeterTextNode );
+        }
         this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
         this.perimeterTextNode.visible = true;
         this.perimeterTextNode.top = rollingBottom + LINE_SPACING;
