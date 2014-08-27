@@ -65,6 +65,8 @@ define( function( require ) {
     var self = this;
     var i;
 
+    options = _.extend( {}, options ); // Make sure options is defined.
+
     // @public, read only
     this.fillColor = options.fillColor || null;
 

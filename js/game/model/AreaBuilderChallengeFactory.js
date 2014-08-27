@@ -267,7 +267,7 @@ define( function( require ) {
     );
   }
 
-  function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing, color ) {
+  function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing, fillColor ) {
     assert && assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
 
     var perimeterPoints = [
@@ -661,7 +661,7 @@ define( function( require ) {
     var holeYOffset = _.random( 1, height - holeHeight - 1 );
     var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
-        holeYOffset * UNIT_SQUARE_LENGTH );
+        holeYOffset * UNIT_SQUARE_LENGTH, chooseColorForFindAreaShape() );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
   }
