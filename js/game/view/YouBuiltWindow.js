@@ -130,7 +130,6 @@ define( function( require ) {
         this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
         this.perimeterTextNode.visible = true;
         this.perimeterTextNode.top = ( this.proportionsInfoNode ? this.proportionsInfoNode.bottom : this.areaTextNode.bottom ) + LINE_SPACING;
-        ;
       }
       else if ( this.contentNode.isChild( this.perimeterTextNode ) ) {
         this.contentNode.removeChild( this.perimeterTextNode );
