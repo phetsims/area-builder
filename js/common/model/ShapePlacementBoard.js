@@ -7,6 +7,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Color = require( 'SCENERY/util/Color' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
@@ -62,6 +63,8 @@ define( function( require ) {
     this.showGridProperty = showGridProperty;
     this.showDimensionsProperty = showDimensionsProperty;
 
+    var compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
+
     PropertySet.call( this, {
       // @public Read/Write value that controls whether the placement board moves individual shapes that are added to
       // the board such that they form a single, contiguous, composite shape, or if it just snaps them to the grid. The
@@ -76,12 +79,15 @@ define( function( require ) {
 
       // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by
       // all of the individual shapes placed on the board by the user.
-      compositeShape: new PerimeterShape( [], [], unitSquareLength ),
+      compositeShape: new PerimeterShape( [], [], unitSquareLength, {
+        fillColor: compositeShapeFillColor,
+        edgeColor: compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+      } ),
 
       // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
       // other shapes.  The shape is positioned relative to this board, not in absolute model space.  It should be
       // set through the method provided on this class rather than directly.
-      backgroundShape: new PerimeterShape( [], [], unitSquareLength ),
+      backgroundShape: new PerimeterShape( [], [], unitSquareLength, { fillColor: 'black' } ),
 
       // @public Read/write value for controlling whether the background shape should show a grid when portrayed in the
       // view.
@@ -724,7 +730,10 @@ define( function( require ) {
         // work done in the view.
         if ( !( this.perimeterListsEqual( exteriorPerimeters, this.compositeShape.exteriorPerimeters ) &&
                 this.perimeterListsEqual( interiorPerimeters, this.compositeShape.interiorPerimeters ) ) ) {
-          this.compositeShape = new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitSquareLength );
+          this.compositeShape = new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitSquareLength, {
+            fillColor: this.compositeShape.fillColor,
+            edgeColor: this.compositeShape.edgeColor
+          } );
         }
       }
     },

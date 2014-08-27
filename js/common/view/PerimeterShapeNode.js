@@ -9,6 +9,7 @@ define( function( require ) {
     'use strict';
 
     // modules
+    var Color = require( 'SCENERY/util/Color' );
     var Grid = require( 'AREA_BUILDER/common/view/Grid' );
     var inherit = require( 'PHET_CORE/inherit' );
     var Node = require( 'SCENERY/nodes/Node' );
@@ -17,6 +18,10 @@ define( function( require ) {
     var Shape = require( 'KITE/Shape' );
     var Text = require( 'SCENERY/nodes/Text' );
     var Vector2 = require( 'DOT/Vector2' );
+
+    // constants
+    var DEFAULT_PERIMETER_COLOR = new Color( 'black' );
+    var EDGE_DARKENING_FACTOR = 0.6;
 
     // Utility function for identifying a perimeter segment with no bends.
     function identifySegment( perimeterPoints, startIndex ) {
@@ -54,27 +59,22 @@ define( function( require ) {
     }
 
     /**
-     * @param {PerimeterShape} perimeterShapeProperty
+     * @param {Property<PerimeterShape>} perimeterShapeProperty
      * @param {Number} unitSquareLength
-     * @param {String || Color} fillColor
-     * @param {String || Color} perimeterColor
      * @param {Boolean} showDimensionsProperty
      * @param {Boolean} showGridProperty
      * @param {object} options
      * @constructor
      */
-    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, fillColor, perimeterColor, showDimensionsProperty, showGridProperty, options ) {
+    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, showDimensionsProperty, showGridProperty, options ) {
 
       Node.call( this );
 
-      var perimeterShapeNode = new Path( null, { fill: fillColor } );
+      var perimeterShapeNode = new Path();
       this.addChild( perimeterShapeNode );
       var gridLayer = new Node();
       this.addChild( gridLayer );
-      var perimeterNode = new Path( null, {
-        stroke: perimeterColor,
-        lineWidth: 2
-      } );
+      var perimeterNode = new Path( null, { lineWidth: 2 } );
       this.addChild( perimeterNode );
       var dimensionsLayer = new Node();
       this.addChild( dimensionsLayer );
@@ -82,9 +82,15 @@ define( function( require ) {
       // Define function for updating the appearance of the perimeter shape.
       function update() {
         var i;
-        var mainShape = new Shape();
+
+        // Update the colors
+        assert && assert( perimeterShapeProperty.value.fillColor || perimeterShapeProperty.value.edgeColor,
+          'PerimeterShape can\'t have null values for both the fill and the edge.' );
+        perimeterShapeNode.fill = perimeterShapeProperty.value.fillColor;
+        perimeterNode.stroke = perimeterShapeProperty.value.edgeColor;
 
         // Define the shape of the outer perimeter.
+        var mainShape = new Shape();
         perimeterShapeProperty.value.exteriorPerimeters.forEach( function( exteriorPerimeters ) {
           mainShape.moveToPoint( exteriorPerimeters[ 0 ] );
           for ( i = 1; i < exteriorPerimeters.length; i++ ) {

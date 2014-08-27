@@ -10,6 +10,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  var Color = require( 'SCENERY/util/Color' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Shape = require( 'KITE/Shape' );
@@ -130,7 +131,7 @@ define( function( require ) {
   var COLOR_PAIRS = [
     {
       color1: AreaBuilderSharedConstants.GREENISH_COLOR,
-      color2: '#1A7137 '
+      color2: '#1A7137'
     },
     {
       color1: AreaBuilderSharedConstants.PURPLISH_COLOR,
@@ -149,6 +150,9 @@ define( function( require ) {
       color2: '#AA548D'
     }
   ];
+
+  // List of colors for the shape in the 'find the area' challenges.
+  var FIND_THE_AREA_SHAPE_COLORS = [ '#1A7137', '#634F8C', '#A95327', '#277DA9', '#AA548D' ];
 
   // -------------- private functions ---------------------------
 
@@ -170,6 +174,11 @@ define( function( require ) {
       }
     }
     return solutionSpec;
+  }
+
+  // Choose a color for shape in a 'find the area' challenge
+  function chooseColorForFindAreaShape() {
+    return new Color( randomElement( FIND_THE_AREA_SHAPE_COLORS ) );
   }
 
   // Create a solution spec (a.k.a. an example solution) for a two-tone challenge
@@ -232,7 +241,7 @@ define( function( require ) {
     return reflectedPoints;
   }
 
-  function createRectangularPerimeterShape( x, y, width, height ) {
+  function createRectangularPerimeterShape( x, y, width, height, fillColor ) {
     return new PerimeterShape(
       // Exterior perimeters
       [
@@ -248,11 +257,17 @@ define( function( require ) {
       [],
 
       // Unit size
-      UNIT_SQUARE_LENGTH
+      UNIT_SQUARE_LENGTH,
+
+      // color
+      {
+        fillColor: fillColor,
+        edgeColor: fillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+      }
     );
   }
 
-  function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing ) {
+  function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing, color ) {
     assert && assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
 
     var perimeterPoints = [
@@ -271,11 +286,15 @@ define( function( require ) {
       perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
     }
 
-    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH, {
+        fillColor: fillColor,
+        edgeColor: fillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+      }
+    );
   }
 
   // Create a perimeter shape with a cutout in the top, bottom, left, or right side.
-  function createUShapedPerimeterShape( x, y, width, height, sideWithCutout, cutoutWidth, cutoutHeight, cutoutOffset ) {
+  function createUShapedPerimeterShape( x, y, width, height, sideWithCutout, cutoutWidth, cutoutHeight, cutoutOffset, fillColor ) {
     var perimeterPoints = [ new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2() ];
 
     if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
@@ -305,10 +324,13 @@ define( function( require ) {
       }
     }
 
-    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH, {
+      fillColor: fillColor,
+      edgeColor: fillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+    } );
   }
 
-  function createPerimeterShapeWithHole( x, y, width, height, holeWidth, holeHeight, holeXOffset, holeYOffset ) {
+  function createPerimeterShapeWithHole( x, y, width, height, holeWidth, holeHeight, holeXOffset, holeYOffset, fillColor ) {
     var exteriorPerimeterPoints = [
       new Vector2( x, y ),
       new Vector2( x + width, y ),
@@ -323,10 +345,13 @@ define( function( require ) {
       new Vector2( x + holeXOffset + holeWidth, y + holeYOffset )
     ];
 
-    return new PerimeterShape( [ exteriorPerimeterPoints ], [ interiorPerimeterPoints ], UNIT_SQUARE_LENGTH );
+    return new PerimeterShape( [ exteriorPerimeterPoints ], [ interiorPerimeterPoints ], UNIT_SQUARE_LENGTH, {
+      fillColor: fillColor,
+      edgeColor: fillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+    } );
   }
 
-  function createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( x, y, edgeLength, cornerPosition ) {
+  function createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( x, y, edgeLength, cornerPosition, fillColor ) {
     var perimeterPoints = [ new Vector2( x, y ), new Vector2( x + edgeLength, y ), new Vector2( x, y + edgeLength ) ];
     if ( cornerPosition === 'rightTop' || cornerPosition === 'rightBottom' ) {
       perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
@@ -335,10 +360,13 @@ define( function( require ) {
       perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
     }
 
-    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH, {
+      fillColor: fillColor,
+      edgeColor: fillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+    } );
   }
 
-  function createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( x, y, hypotenuseLength, cornerPosition ) {
+  function createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( x, y, hypotenuseLength, cornerPosition, fillColor ) {
     var perimeterPoints;
     if ( cornerPosition === 'centerTop' || cornerPosition === 'centerBottom' ) {
       perimeterPoints = [ new Vector2( x, y ), new Vector2( x + hypotenuseLength, y ),
@@ -363,10 +391,13 @@ define( function( require ) {
       perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
     }
 
-    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH, {
+      fillColor: fillColor,
+      edgeColor: fillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+    } );
   }
 
-  function createShapeWithDiagonalAndMissingCorner( x, y, width, height, diagonalPosition, diagonalSquareLength, cutWidth, cutHeight ) {
+  function createShapeWithDiagonalAndMissingCorner( x, y, width, height, diagonalPosition, diagonalSquareLength, cutWidth, cutHeight, fillColor ) {
     assert && assert( width - diagonalSquareLength >= cutWidth && height - diagonalSquareLength >= cutHeight, 'Invalid parameters' );
 
     var perimeterPoints = [];
@@ -387,7 +418,10 @@ define( function( require ) {
       perimeterPoints = flipPerimeterPointsVertically( perimeterPoints );
     }
 
-    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH );
+    return new PerimeterShape( [ perimeterPoints ], [], UNIT_SQUARE_LENGTH, {
+      fillColor: fillColor,
+      edgeColor: fillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+    } );
   }
 
   // Test the challenge agains the history of recently generated challenges to see if it is unique.
@@ -496,7 +530,8 @@ define( function( require ) {
       width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
     } while ( width * height < 16 || width * height > 36 );
-    var perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH );
+    var perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      chooseColorForFindAreaShape() );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
   }
@@ -511,7 +546,7 @@ define( function( require ) {
     var missingHeight = _.random( 1, height - 1 );
     var missingCorner = randomElement( ['leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
     var perimeterShape = createLShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
-      missingCorner, missingWidth * UNIT_SQUARE_LENGTH, missingHeight * UNIT_SQUARE_LENGTH );
+      missingCorner, missingWidth * UNIT_SQUARE_LENGTH, missingHeight * UNIT_SQUARE_LENGTH, chooseColorForFindAreaShape() );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
   }
@@ -535,7 +570,8 @@ define( function( require ) {
       cutoutOffset = _.random( 1, width - cutoutWidth - 1 );
     }
     var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
-      sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH, cutoutOffset * UNIT_SQUARE_LENGTH );
+      sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH,
+        cutoutOffset * UNIT_SQUARE_LENGTH, chooseColorForFindAreaShape() );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
   }
@@ -552,7 +588,7 @@ define( function( require ) {
     var holeYOffset = _.random( 1, height - holeHeight - 1 );
     var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
-        holeYOffset * UNIT_SQUARE_LENGTH );
+        holeYOffset * UNIT_SQUARE_LENGTH, chooseColorForFindAreaShape() );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
   }
@@ -565,7 +601,7 @@ define( function( require ) {
           AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 ) );
     } while ( edgeLength % 2 !== 0 );
     var perimeterShape = createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( 0, 0,
-        edgeLength * UNIT_SQUARE_LENGTH, cornerPosition );
+        edgeLength * UNIT_SQUARE_LENGTH, cornerPosition, chooseColorForFindAreaShape() );
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, RECTANGLES_AND_TRIANGLES_SHAPE_KIT );
   }
 
@@ -583,7 +619,7 @@ define( function( require ) {
       hypotenuseLength = _.random( 2, maxHypotenuse );
     } while ( hypotenuseLength % 2 !== 0 );
     var perimeterShape = createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( 0, 0,
-        hypotenuseLength * UNIT_SQUARE_LENGTH, cornerPosition );
+        hypotenuseLength * UNIT_SQUARE_LENGTH, cornerPosition, chooseColorForFindAreaShape() );
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, RECTANGLES_AND_TRIANGLES_SHAPE_KIT );
   }
 
@@ -603,7 +639,8 @@ define( function( require ) {
       cutoutOffset = _.random( 1, width - cutoutWidth - 1 );
     }
     var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
-      sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH, cutoutOffset * UNIT_SQUARE_LENGTH );
+      sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH,
+        cutoutOffset * UNIT_SQUARE_LENGTH, chooseColorForFindAreaShape() );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
   }
@@ -646,7 +683,7 @@ define( function( require ) {
 
     var perimeterShape = createShapeWithDiagonalAndMissingCorner( 0, 0, width * UNIT_SQUARE_LENGTH,
         height * UNIT_SQUARE_LENGTH, diagonalPosition, diagonalSquareLength * UNIT_SQUARE_LENGTH,
-        cutWidth * UNIT_SQUARE_LENGTH, cutHeight * UNIT_SQUARE_LENGTH );
+        cutWidth * UNIT_SQUARE_LENGTH, cutHeight * UNIT_SQUARE_LENGTH, chooseColorForFindAreaShape() );
 
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, RECTANGLES_AND_TRIANGLES_SHAPE_KIT );
   }

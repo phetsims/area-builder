@@ -58,11 +58,18 @@ define( function( require ) {
    * points. Each interior perimeter must be fully contained within an exterior perimeter.
    * @param {Number} unitLength The unit length (i.e. the width or height of a unit square) of the unit sizes that
    * this shape should be constructed from.
+   * @param {Object} options
    * @constructor
    */
-  function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength ) {
+  function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength, options ) {
     var self = this;
     var i;
+
+    // @public, read only
+    this.fillColor = options.fillColor || null;
+
+    // @public, read only
+    this.edgeColor = options.edgeColor || null;
 
     // @public, read only
     this.exteriorPerimeters = exteriorPerimeters;
@@ -116,7 +123,10 @@ define( function( require ) {
           interiorPerimeters[ index ].push( point.plusXY( x, y ) );
         } );
       } );
-      return new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitLength );
+      return new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitLength, {
+        fillColor: this.fillColor,
+        edgeColor: this.edgeColor
+      } );
     },
 
     getWidth: function() {

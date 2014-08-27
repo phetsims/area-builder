@@ -44,14 +44,13 @@ define( function( require ) {
     shapePlacementBoard.showGridProperty.linkAttribute( grid, 'visible' );
 
     // Monitor the background shape and add/remove/update it as it changes.
-    board.addChild( new PerimeterShapeNode(
+    this.backgroundShape = new PerimeterShapeNode(
       shapePlacementBoard.backgroundShapeProperty,
       shapePlacementBoard.unitSquareLength,
-      AreaBuilderSharedConstants.BACKGROUND_SHAPE_COLOR,
-      Color.toColor( AreaBuilderSharedConstants.BACKGROUND_SHAPE_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       shapePlacementBoard.showDimensionsProperty,
       shapePlacementBoard.showGridOnBackgroundShapeProperty
-    ) );
+    );
+    board.addChild( this.backgroundShape );
 
     // Monitor the shapes added by the user to the board and create an equivalent shape with no edges for each.  This
     // may seem a little odd - why hide the shapes that the user placed and depict them with essentially the same
@@ -83,12 +82,11 @@ define( function( require ) {
     this.addChild( new PerimeterShapeNode(
       shapePlacementBoard.compositeShapeProperty,
       shapePlacementBoard.unitSquareLength,
-      null,
-      perimeterColor,
       shapePlacementBoard.showDimensionsProperty,
       new Property( true ) // grid on shape - always shown for the composite shape
     ) );
   }
 
-  return inherit( Node, ShapePlacementBoardNode );
+  return inherit( Node, ShapePlacementBoardNode, {
+  } );
 } );
