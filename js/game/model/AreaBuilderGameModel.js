@@ -152,7 +152,7 @@ define( function( require ) {
             self.addUnitSquareDirectlyToBoard( shapePlacementSpec.cellColumn, shapePlacementSpec.cellRow, shapePlacementSpec.color );
           } );
         }
-        else if ( challenge.checkSpec = 'areaEntered' ) {
+        else if ( challenge.checkSpec === 'areaEntered' ) {
           // For 'find the area' challenges, we turn on the grid for the background shape when displaying the answer.
           this.shapePlacementBoard.showGridOnBackgroundShape = true;
         }

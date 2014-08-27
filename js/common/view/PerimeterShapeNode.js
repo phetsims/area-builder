@@ -9,7 +9,6 @@ define( function( require ) {
     'use strict';
 
     // modules
-    var Color = require( 'SCENERY/util/Color' );
     var Grid = require( 'AREA_BUILDER/common/view/Grid' );
     var inherit = require( 'PHET_CORE/inherit' );
     var Node = require( 'SCENERY/nodes/Node' );
@@ -18,10 +17,6 @@ define( function( require ) {
     var Shape = require( 'KITE/Shape' );
     var Text = require( 'SCENERY/nodes/Text' );
     var Vector2 = require( 'DOT/Vector2' );
-
-    // constants
-    var DEFAULT_PERIMETER_COLOR = new Color( 'black' );
-    var EDGE_DARKENING_FACTOR = 0.6;
 
     // Utility function for identifying a perimeter segment with no bends.
     function identifySegment( perimeterPoints, startIndex ) {

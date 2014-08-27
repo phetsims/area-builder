@@ -8,8 +8,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Color = require( 'SCENERY/util/Color' );
   var PerimeterShapeNode = require( 'AREA_BUILDER/common/view/PerimeterShapeNode' );
   var Property = require( 'AXON/Property' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -77,8 +75,6 @@ define( function( require ) {
     } );
 
     // Add the perimeter shape, which depicts the exterior and interior perimeters formed by the placed shapes.
-    var perimeterColor = shapePlacementBoard.colorHandled === '*' ? 'black' :
-                         Color.toColor( shapePlacementBoard.colorHandled ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
     this.addChild( new PerimeterShapeNode(
       shapePlacementBoard.compositeShapeProperty,
       shapePlacementBoard.unitSquareLength,

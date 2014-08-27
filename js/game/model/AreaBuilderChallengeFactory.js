@@ -89,13 +89,6 @@ define( function( require ) {
     }
   ];
 
-  var UNIT_SQUARE_ONLY_SHAPE_KIT = [
-    {
-      shape: UNIT_SQUARE_SHAPE,
-      color: AreaBuilderSharedConstants.GREENISH_COLOR
-    }
-  ];
-
   var RECTANGLES_AND_TRIANGLES_SHAPE_KIT = [
     {
       shape: HORIZONTAL_DOUBLE_SQUARE_SHAPE,

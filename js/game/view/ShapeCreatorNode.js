@@ -54,8 +54,8 @@ define( function( require ) {
 
     // parameter check
     if ( options.creationLimit < Number.POSITIVE_INFINITY &&
-         ( shape.bounds.width != AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ||
-           shape.bounds.height != AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ) ) {
+         ( shape.bounds.width !== AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ||
+           shape.bounds.height !== AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ) ) {
       // The ability to set a creation limit ONLY works for unit squares.  The reason for this is that non-unit shapes
       // are generally decomposed into unit squares when added to the placement board, so it's hard to track when they
       // get returned to their origin.  It would be possible to do this, but the requirements of the sim at the time of

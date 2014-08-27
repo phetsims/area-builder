@@ -10,7 +10,6 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings

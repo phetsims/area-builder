@@ -11,7 +11,6 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
-  var Text = require( 'SCENERY/nodes/Text' );
 
   // constants
   var MULTI_LINE_SPACING = 5; // Empirically determined to look good
