@@ -51,8 +51,7 @@ define( function( require ) {
 
     // perimeter text
     this.perimeterTextNode = new Text( StringUtils.format( perimeterEqualsString, 99 ), {
-      font: FeedbackWindow.NORMAL_TEXT_FONT,
-      top: this.areaTextNode.bottom + LINE_SPACING
+      font: FeedbackWindow.NORMAL_TEXT_FONT
     } );
     if ( this.perimeterTextNode.width + 2 * FeedbackWindow.X_MARGIN > maxWidth ) {
       // Scale this text to fit in the window.  Not an issue in English, but could be needed in translated versions.
@@ -104,8 +103,6 @@ define( function( require ) {
       // Set the area value, which is always shown.
       this.areaTextNode.text = StringUtils.format( areaEqualsString, buildSpec.area );
 
-      var rollingBottom = this.areaTextNode.bottom;
-
       // If proportions have changed, update them.  They sit beneath the area in the layout so that it is clear that
       // they go together.
       if ( !this.proportionSpecsAreEqual( buildSpec, this.currentBuildSpec ) ) {
@@ -116,13 +113,12 @@ define( function( require ) {
         if ( buildSpec.proportions ) {
           this.proportionsInfoNode = new ColorProportionsPrompt( buildSpec.proportions.color1,
             buildSpec.proportions.color2, buildSpec.proportions.color1Proportion, {
-              top: rollingBottom + LINE_SPACING,
+              top: this.areaTextNode.bottom + LINE_SPACING,
               multiLine: true
             }, {
               font: new PhetFont( 14 )
             } );
           this.contentNode.addChild( this.proportionsInfoNode );
-          rollingBottom = this.proportionsInfoNode.bottom;
         }
       }
 
@@ -133,7 +129,8 @@ define( function( require ) {
         }
         this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
         this.perimeterTextNode.visible = true;
-        this.perimeterTextNode.top = rollingBottom + LINE_SPACING;
+        this.perimeterTextNode.top = ( this.proportionsInfoNode ? this.proportionsInfoNode.bottom : this.areaTextNode.bottom ) + LINE_SPACING;
+        ;
       }
       else if ( this.contentNode.isChild( this.perimeterTextNode ) ) {
         this.contentNode.removeChild( this.perimeterTextNode );
