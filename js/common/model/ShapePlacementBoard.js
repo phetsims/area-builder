@@ -63,7 +63,9 @@ define( function( require ) {
     this.showGridProperty = showGridProperty;
     this.showDimensionsProperty = showDimensionsProperty;
 
-    var compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
+    // Set the initial fill and edge colors for the composite shape.  These can be changed if needed.
+    this.compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
+    this.compositeShapeEdgeColor = this.compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
     PropertySet.call( this, {
       // @public Read/Write value that controls whether the placement board moves individual shapes that are added to
@@ -80,8 +82,8 @@ define( function( require ) {
       // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by
       // all of the individual shapes placed on the board by the user.
       compositeShape: new PerimeterShape( [], [], unitSquareLength, {
-        fillColor: compositeShapeFillColor,
-        edgeColor: compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR )
+        fillColor: this.compositeShapeFillColor,
+        edgeColor: this.compositeShapeEdgeColor
       } ),
 
       // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
@@ -731,8 +733,8 @@ define( function( require ) {
         if ( !( this.perimeterListsEqual( exteriorPerimeters, this.compositeShape.exteriorPerimeters ) &&
                 this.perimeterListsEqual( interiorPerimeters, this.compositeShape.interiorPerimeters ) ) ) {
           this.compositeShape = new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitSquareLength, {
-            fillColor: this.compositeShape.fillColor,
-            edgeColor: this.compositeShape.edgeColor
+            fillColor: this.compositeShapeFillColor,
+            edgeColor: this.compositeShapeEdgeColor
           } );
         }
       }
@@ -879,6 +881,11 @@ define( function( require ) {
 
         self.updateCellOccupation( movableUnitSquare, 'add' );
       } );
+    },
+
+    setCompositeShapeColorScheme: function( fillColor, edgeColor ) {
+      this.compositeShapeFillColor = fillColor;
+      this.compositeShapeEdgeColor = edgeColor;
     },
 
     // Update perimeter points, placement locations, total area, and total perimeter.

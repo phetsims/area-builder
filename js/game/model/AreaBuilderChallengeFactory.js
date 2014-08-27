@@ -703,7 +703,6 @@ define( function( require ) {
 
     // Choose the fractional proportion.
     var fractionDenominator = randomElement( factors );
-//    console.log( 'fractionDenominator = ' + fractionDenominator );
     var color1FractionNumerator = _.random( 1, fractionDenominator - 1 );
     var color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
     color1Fraction.reduce();
