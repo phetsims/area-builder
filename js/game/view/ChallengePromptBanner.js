@@ -90,12 +90,15 @@ define( function( require ) {
     this.addChild( buildPrompt );
 
     this.properties.buildSpecProperty.link( function( buildSpec ) {
+
+      // The build spec has changed, so update everything in the window other than the title.
       buildPrompt.removeAllChildren();
       if ( buildSpec ) {
         assert && assert( buildSpec.area, 'All build specs are assumed to have an area value.' );
-        var areaPrompt, perimeterPrompt, proportionsPrompt;
+        var perimeterPrompt;
+        var proportionsPrompt;
 
-        areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
+        var areaPrompt = new Text( StringUtils.format( areaEqualsString, buildSpec.area ), {
           font: buildSpec.perimeter || buildSpec.proportions ? SMALLER_FONT : LARGE_FONT,
           fill: TEXT_FILL_COLOR
         } );
@@ -113,9 +116,7 @@ define( function( require ) {
           proportionsPrompt = new ColorProportionsPrompt( buildSpec.proportions.color1, buildSpec.proportions.color2,
             buildSpec.proportions.color1Proportion, {
               font: new PhetFont( { size: 11 } ),
-              textFill: TEXT_FILL_COLOR,
-              left: areaPrompt.right + 7,
-              centerY: areaPrompt.centerY
+              textFill: TEXT_FILL_COLOR
             }
           );
           buildPrompt.addChild( proportionsPrompt );
@@ -125,14 +126,13 @@ define( function( require ) {
         }
 
         // Layout
-        if ( proportionsPrompt ) {
-          proportionsPrompt.left = areaPrompt.right + 4;
-        }
         if ( perimeterPrompt ) {
-          perimeterPrompt.top = areaPrompt.bottom;
-          if ( proportionsPrompt ) {
-            perimeterPrompt.centerX = ( areaPrompt.left + proportionsPrompt.right ) / 2;
-          }
+          areaPrompt.centerY = height * 0.28; // multiplier empirically determined
+          perimeterPrompt.centerY = height * 0.72; // multiplier empirically determined
+        }
+        if ( proportionsPrompt ) {
+          proportionsPrompt.left = areaPrompt.right + 8; // spacing empirically determined
+          proportionsPrompt.centerY = areaPrompt.centerY;
         }
 
         // Center the build prompt horizontally between the title and the right edge of the banner, and vertically

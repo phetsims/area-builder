@@ -62,9 +62,9 @@ define( function( require ) {
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
   var BUTTON_FILL = '#F2E916';
-  var INFO_BANNER_HEIGHT = 50; // Height of the prompt and solution banners, empirically determined.
+  var INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 18;
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 10;
   var YOUR_GOAL_TITLE = new Text( yourGoalString, { font: new PhetFont( { size: 24, weight: 'bold' } ) } );
 
   /**
@@ -150,7 +150,7 @@ define( function( require ) {
       gameModel.elapsedTimeProperty,
       gameModel.simSpecificModel.showGridProperty,
       gameModel.simSpecificModel.showDimensionsProperty,
-      { top: this.shapeBoard.top, right: this.shapeBoard.left - SPACE_AROUND_SHAPE_PLACEMENT_BOARD }
+      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, top: this.shapeBoard.top }
     );
     this.controlLayer.addChild( this.scoreboard );
 

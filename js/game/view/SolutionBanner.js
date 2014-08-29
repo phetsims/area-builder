@@ -130,14 +130,13 @@ define( function( require ) {
         }
 
         // Layout
-        if ( proportionsPrompt ) {
-          proportionsPrompt.left = areaPrompt.right + 4;
-        }
         if ( perimeterPrompt ) {
-          perimeterPrompt.top = areaPrompt.bottom;
-          if ( proportionsPrompt ) {
-            perimeterPrompt.centerX = ( areaPrompt.left + proportionsPrompt.right ) / 2;
-          }
+          areaPrompt.centerY = height * 0.28; // multiplier empirically determined
+          perimeterPrompt.centerY = height * 0.72; // multiplier empirically determined
+        }
+        if ( proportionsPrompt ) {
+          proportionsPrompt.left = areaPrompt.right + 8; // spacing empirically determined
+          proportionsPrompt.centerY = areaPrompt.centerY;
         }
 
         // Center the build prompt horizontally between the title and the right edge of the banner.
