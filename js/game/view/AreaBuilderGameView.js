@@ -705,6 +705,7 @@ define( function( require ) {
 
         // Set the state of the control panel/scoreboard.
         this.scoreboard.dimensionsIcon.setStyle( challenge.backgroundShape ? 'single' : 'composite' );
+        this.scoreboard.dimensionsIcon.setSingleRectColor( challenge.backgroundShape ? challenge.backgroundShape.fillColor : null );
         this.scoreboard.visibilityControls.gridControlVisible = challenge.toolSpec.gridControl;
         this.scoreboard.visibilityControls.dimensionsControlVisible = challenge.toolSpec.dimensionsControl;
 

@@ -3,7 +3,7 @@
 /**
  * A Scenery node that depicts a basic shape with its dimensions labeled, intended for use in control panels.  This
  * supports two different styles, one that looks like a composite shapes that the user creates, and one that looks like
- * the background shapes used in the 'find the area' challenges.
+ * the solid shapes used in the 'find the area' challenges.
  */
 define( function( require ) {
   'use strict';
@@ -22,34 +22,34 @@ define( function( require ) {
   var SQUARE_LENGTH = 10; // in screen coordinates
   var LABEL_FONT = new PhetFont( 10 );
   var COMPOSITE_FILL_COLOR = AreaBuilderSharedConstants.GREENISH_COLOR;
-  var STROKE_COLOR = Color.toColor( COMPOSITE_FILL_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+  var COMPOSITE_STROKE_COLOR = Color.toColor( COMPOSITE_FILL_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+  var DEFAULT_SINGLE_RECT_COLOR = new Color( AreaBuilderSharedConstants.PURPLISH_COLOR );
+  var DEFAULT_SINGLE_RECT_STROKE = DEFAULT_SINGLE_RECT_COLOR.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
+  /**
+   * @param options
+   * @constructor
+   */
   function DimensionsIcon( options ) {
     Node.call( this );
 
     // Create the composite shape out from a collection of squares.
     this.compositeNode = new Node();
-    this.compositeNode.addChild( new Rectangle( 0, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: STROKE_COLOR } ) );
-    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: STROKE_COLOR } ) );
-    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH * 2, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: STROKE_COLOR } ) );
-    this.compositeNode.addChild( new Rectangle( 0, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: STROKE_COLOR } ) );
-    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: STROKE_COLOR } ) );
-    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH * 2, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: STROKE_COLOR } ) );
+    this.compositeNode.addChild( new Rectangle( 0, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: COMPOSITE_STROKE_COLOR } ) );
+    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: COMPOSITE_STROKE_COLOR } ) );
+    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH * 2, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: COMPOSITE_STROKE_COLOR } ) );
+    this.compositeNode.addChild( new Rectangle( 0, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: COMPOSITE_STROKE_COLOR } ) );
+    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: COMPOSITE_STROKE_COLOR } ) );
+    this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH * 2, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: COMPOSITE_STROKE_COLOR } ) );
     this.addChild( this.compositeNode );
 
-    // Create the background node
+    // Create the single rectangle node
     var singleRectNodeWidth = SQUARE_LENGTH * 3;
     var singleRectNodeHeight = SQUARE_LENGTH * 2;
-    var singleRectNodeGradient = new LinearGradient( 0, 0, singleRectNodeWidth, singleRectNodeHeight ).
-      addColorStop( 0, '#FF0000' ).
-      addColorStop( 0.5, '#CC33FF' ).
-      addColorStop( 1.0, '#0000FF' );
-
-    this.singleRectNode = new Node();
-    this.singleRectNode.addChild( new Rectangle( 0, 0, singleRectNodeWidth, singleRectNodeHeight, 0, 0, {
-      stroke: STROKE_COLOR,
-      fill: singleRectNodeGradient
-    } ) );
+    this.singleRectNode = new Rectangle( 0, 0, singleRectNodeWidth, singleRectNodeHeight, 0, 0, {
+      fill: DEFAULT_SINGLE_RECT_COLOR,
+      stroke: DEFAULT_SINGLE_RECT_STROKE
+    } );
     this.addChild( this.singleRectNode );
 
     // Label some of the sides.  This is valid for both modes.
@@ -66,6 +66,7 @@ define( function( require ) {
   }
 
   return inherit( Node, DimensionsIcon, {
+
     setStyle: function( style ) {
       assert && assert( style === 'single' || style === 'composite' );
       switch( style ) {
@@ -78,6 +79,12 @@ define( function( require ) {
           this.singleRectNode.visible = true;
           break;
       }
+    },
+
+    setSingleRectColor: function( color ) {
+      this.singleRectNode.fill = color;
+      this.singleRectNode.stroke = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
     }
+
   } );
 } );
