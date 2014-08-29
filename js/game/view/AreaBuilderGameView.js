@@ -126,9 +126,9 @@ define( function( require ) {
     // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
     this.challengeView = new Node();
     this.challengeLayer.addChild( this.challengeView );
-    this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 20 );
+    this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
     this.challengeLayer.addChild( this.youBuiltWindow );
-    this.youEnteredWindow = new YouEnteredWindow( this.layoutBounds.width - this.shapeBoard.right - 20 );
+    this.youEnteredWindow = new YouEnteredWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
     this.challengeLayer.addChild( this.youEnteredWindow );
     this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
       left: this.shapeBoard.left,

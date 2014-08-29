@@ -17,7 +17,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
 
   // constants
-  var X_MARGIN = 5;
+  var X_MARGIN = 8;
   var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var NORMAL_TEXT_FONT = new PhetFont( { size: 18 } );
   var CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
@@ -34,7 +34,11 @@ define( function( require ) {
    */
   function FeedbackWindow( title, maxWidth, options ) {
 
-    options = _.extend( { fill: INCORRECT_ANSWER_BACKGROUND_COLOR, stroke: 'black' }, options );
+    options = _.extend( {
+      fill: INCORRECT_ANSWER_BACKGROUND_COLOR,
+      stroke: 'black',
+      xMargin: X_MARGIN
+    }, options );
 
     // make the max width available to descendant classes
     this.maxWidth = maxWidth; // @protected
@@ -49,8 +53,8 @@ define( function( require ) {
     this.contentNode.addChild( this.titleNode );
 
     // Invoke super constructor - called here because content with no bounds doesn't work.  This does not pass through
-    // position options, that needs to be handled in descendant classes.
-    Panel.call( this, this.contentNode, { fill: options.fill, stroke: options.stroke } );
+    // position options - that needs to be handled in descendant classes.
+    Panel.call( this, this.contentNode, { fill: options.fill, stroke: options.stroke, xMargin: options.xMargin } );
   }
 
   return inherit( Panel, FeedbackWindow, {
