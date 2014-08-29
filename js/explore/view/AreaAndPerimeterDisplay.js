@@ -49,9 +49,9 @@ define( function( require ) {
 
     this.addChild( new AccordionBox( contentNode, {
       title: valuesString,
-      titlePosition: 'left',
+      titleAlign: 'left',
       font: DISPLAY_FONT,
-      contentPosition: 'left',
+      contentAlign: 'left',
       fill: 'white',
       showTitleWhenOpen: false,
       contentXMargin: 8,
