@@ -384,15 +384,17 @@ define( function( require ) {
             this.scoreboard,
             this.checkAnswerButton,
             this.challengeView,
-            this.challengePromptBanner,
-            this.shapeCarousel,
-            this.eraserButton
+            this.challengePromptBanner
           ];
 
-          // Add the nodes that are only shown for certain challenge types.
+          // Add the nodes that are only shown for certain challenge types or under certain conditions.
           if ( challenge.checkSpec === 'areaEntered' ) {
             nodesToShow.push( this.numberEntryControl );
             nodesToShow.push( this.areaQuestionPrompt );
+          }
+          if ( challenge.userShapes ) {
+            nodesToShow.push( this.shapeCarousel );
+            nodesToShow.push( this.eraserButton );
           }
 
           this.show( nodesToShow );
@@ -418,7 +420,7 @@ define( function( require ) {
             this.faceWithPointsNode
           ];
 
-          // Update and show the nodes that vary based on the challenge type.
+          // Update and show the nodes that vary based on the challenge configurations.
           if ( challenge.buildSpec ) {
             this.updateYouBuiltWindow( challenge );
             nodesToShow.push( this.youBuiltWindow );
@@ -449,14 +451,17 @@ define( function( require ) {
             this.tryAgainButton,
             this.challengeView,
             this.challengePromptBanner,
-            this.shapeCarousel,
-            this.eraserButton,
             this.faceWithPointsNode
           ];
 
+          // Add the nodes whose visibility varies based on the challenge configuration.
           if ( challenge.checkSpec === 'areaEntered' ) {
             nodesToShow.push( this.numberEntryControl );
             nodesToShow.push( this.areaQuestionPrompt );
+          }
+          if ( challenge.userShapes ) {
+            nodesToShow.push( this.shapeCarousel );
+            nodesToShow.push( this.eraserButton );
           }
 
           // Give the user the appropriate feedback.
@@ -484,13 +489,15 @@ define( function( require ) {
             this.faceWithPointsNode
           ];
 
-          // Handle the items that are different for the different challenge styles.
+          // Add the nodes whose visibility varies based on the challenge configuration.
           if ( challenge.buildSpec ) {
             nodesToShow.push( this.showASolutionButton );
-            nodesToShow.push( this.shapeCarousel );
-            nodesToShow.push( this.eraserButton );
             this.updateYouBuiltWindow( challenge );
             nodesToShow.push( this.youBuiltWindow );
+            if ( challenge.userShapes ) {
+              nodesToShow.push( this.shapeCarousel );
+              nodesToShow.push( this.eraserButton );
+            }
           }
           else {
             nodesToShow.push( this.solutionButton );
