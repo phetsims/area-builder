@@ -53,7 +53,7 @@ define( function( require ) {
       font: DISPLAY_FONT,
       contentAlign: 'left',
       fill: 'white',
-      showTitleWhenOpen: false,
+      showTitleWhenExpanded: false,
       contentXMargin: 8,
       contentYMargin: 4
     } ) );
