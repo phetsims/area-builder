@@ -23,7 +23,7 @@ define( function( require ) {
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
   var aSolutionString = require( 'string!AREA_BUILDER/aSolutionColon' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
-  var solutionString = require( 'string!AREA_BUILDER/solution' );
+  var solutionString = require( 'string!AREA_BUILDER/solutionColon' );
 
   // constants
   var BACKGROUND_FILL_COLOR = '#fbb03b';

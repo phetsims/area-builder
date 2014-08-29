@@ -18,6 +18,6 @@
   "areaEquals": "Area = {0}",
   "perimeterEquals": "Perimeter = {0}",
   "chooseYourLevel": "Choose Your Level!",
-  "showSolution": "Show Solution",
-  "solution": "Solution:"
+  "solutionColon": "Solution:",
+  "solution": "Solution"
 }

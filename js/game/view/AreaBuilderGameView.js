@@ -48,7 +48,7 @@ define( function( require ) {
   var nextString = require( 'string!VEGAS/next' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
   var ASolutionString = require( 'string!AREA_BUILDER/aSolution' );
-  var showSolutionString = require( 'string!AREA_BUILDER/showSolution' );
+  var solutionString = require( 'string!AREA_BUILDER/solution' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
 
@@ -212,12 +212,12 @@ define( function( require ) {
     this.gameControlButtons.push( this.tryAgainButton );
 
     // Solution button for 'find the area' style of challenge, which has one specific answer.
-    this.showTheSolutionButton = new TextPushButton( showSolutionString, _.extend( {
+    this.solutionButton = new TextPushButton( solutionString, _.extend( {
       listener: function() {
         gameModel.displayCorrectAnswer();
       }
     }, buttonOptions ) );
-    this.gameControlButtons.push( this.showTheSolutionButton );
+    this.gameControlButtons.push( this.solutionButton );
 
     // Solution button for 'built it' style of challenge, which has many potential answers.
     this.showASolutionButton = new TextPushButton( ASolutionString, _.extend( {
@@ -493,7 +493,7 @@ define( function( require ) {
             nodesToShow.push( this.youBuiltWindow );
           }
           else {
-            nodesToShow.push( this.showTheSolutionButton );
+            nodesToShow.push( this.solutionButton );
             this.updateYouEnteredWindow( challenge );
             nodesToShow.push( this.youEnteredWindow );
           }
