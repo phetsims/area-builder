@@ -14,7 +14,7 @@ define( function( require ) {
 
   // constants
   var MULTI_LINE_SPACING = 5; // Empirically determined to look good
-  var SINGLE_LINE_SPACING = 8; // Empirically determined to look good
+  var SINGLE_LINE_SPACING = 12; // Empirically determined to look good
   var PROMPT_TO_COLOR_SPACING = 4; // Empirically determined to look good
 
   function ColorProportionsPrompt( color1, color2, color1Proportion, options ) {
