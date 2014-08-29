@@ -48,9 +48,8 @@ define( function( require ) {
     } );
 
     this.addChild( new AccordionBox( contentNode, {
-      title: valuesString,
+      titleNode: new Text( valuesString, { font: DISPLAY_FONT } ),
       titleAlign: 'left',
-      font: DISPLAY_FONT,
       contentAlign: 'left',
       fill: 'white',
       showTitleWhenExpanded: false,
