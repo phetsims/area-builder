@@ -9,14 +9,19 @@ define( function( require ) {
     'use strict';
 
     // modules
+    var Bounds2 = require( 'DOT/Bounds2' );
     var Grid = require( 'AREA_BUILDER/common/view/Grid' );
     var inherit = require( 'PHET_CORE/inherit' );
+    var Matrix3 = require( 'DOT/Matrix3' );
     var Node = require( 'SCENERY/nodes/Node' );
     var Path = require( 'SCENERY/nodes/Path' );
     var PhetFont = require( 'SCENERY_PHET/PhetFont' );
     var Shape = require( 'KITE/Shape' );
     var Text = require( 'SCENERY/nodes/Text' );
     var Vector2 = require( 'DOT/Vector2' );
+
+    // constants
+    var CLIP_EVERYTHING = Shape.rect( 0, 0, 0.0001, 0.0001 );
 
     // Utility function for identifying a perimeter segment with no bends.
     function identifySegment( perimeterPoints, startIndex ) {
@@ -55,20 +60,25 @@ define( function( require ) {
 
     /**
      * @param {Property<PerimeterShape>} perimeterShapeProperty
+     * @param {Number} maxWidth
+     * @param {Number} maxHeight
      * @param {Number} unitSquareLength
      * @param {Boolean} showDimensionsProperty
      * @param {Boolean} showGridProperty
      * @param {object} options
      * @constructor
      */
-    function PerimeterShapeNode( perimeterShapeProperty, unitSquareLength, showDimensionsProperty, showGridProperty, options ) {
+    function PerimeterShapeNode( perimeterShapeProperty, maxBounds, unitSquareLength, showDimensionsProperty, showGridProperty, options ) {
 
       Node.call( this );
 
       var perimeterShapeNode = new Path();
       this.addChild( perimeterShapeNode );
-      var gridLayer = new Node();
-      this.addChild( gridLayer );
+      var grid = new Grid( maxBounds.minX, maxBounds.minY, maxBounds.width, maxBounds.height, unitSquareLength, {
+        lineDash: [ 1, 4 ],
+        stroke: 'black'
+      } );
+      this.addChild( grid );
       var perimeterNode = new Path( null, { lineWidth: 2 } );
       this.addChild( perimeterNode );
       var dimensionsLayer = new Node();
@@ -95,10 +105,11 @@ define( function( require ) {
           mainShape.close();
         } );
 
-        gridLayer.removeAllChildren();
+        // Make sure the shape fits within its specified bounds.
+        assert && assert( maxBounds.contains( mainShape.bounds ) );
+
         dimensionsLayer.removeAllChildren();
 
-        // Add in the shape of any interior spaces.
         if ( !mainShape.bounds.isEmpty() ) {
           perimeterShapeNode.visible = true;
           perimeterNode.visible = true;
@@ -114,15 +125,7 @@ define( function( require ) {
           perimeterShapeNode.setShape( mainShape );
           perimeterNode.setShape( mainShape );
 
-          if ( mainShape.bounds.width >= 2 * unitSquareLength || mainShape.bounds.height >= 2 * unitSquareLength ) {
-            var gridNode = new Grid( mainShape.bounds.minX, mainShape.bounds.minY, mainShape.bounds.width, mainShape.bounds.height, unitSquareLength, {
-                lineDash: [ 1, 4 ],
-                stroke: 'black'
-              }
-            );
-            gridNode.clipArea = mainShape;
-            gridLayer.addChild( gridNode );
-          }
+//          grid.clipArea = mainShape;
 
           // Add the dimension labels for the perimeters, but only if there is only 1 exterior perimeter (multiple
           // interior perimeters if fine).
@@ -189,6 +192,7 @@ define( function( require ) {
         else {
           perimeterShapeNode.visible = false;
           perimeterNode.visible = false;
+//          grid.clipArea = CLIP_EVERYTHING;
         }
       }
 
@@ -196,7 +200,7 @@ define( function( require ) {
       showDimensionsProperty.linkAttribute( dimensionsLayer, 'visible' );
 
       // Control visibility of the grid.
-      showGridProperty.linkAttribute( gridLayer, 'visible' );
+      showGridProperty.linkAttribute( grid, 'visible' );
 
       // Update the shape, grid, and dimensions if the perimeter shape itself changes.
       perimeterShapeProperty.link( function() {

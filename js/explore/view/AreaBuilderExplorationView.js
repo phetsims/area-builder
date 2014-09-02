@@ -74,6 +74,7 @@ define( function( require ) {
     var rightBoardNode = new ShapePlacementBoardNode( model.rightShapePlacementBoard );
     backLayer.addChild( rightBoardNode );
     var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
+    window.centerBoardNode = centerBoardNode;
     backLayer.addChild( centerBoardNode );
 
     // Add the area and perimeter displays
