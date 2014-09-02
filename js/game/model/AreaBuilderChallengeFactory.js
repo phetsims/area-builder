@@ -432,26 +432,22 @@ define( function( require ) {
   function generateBuildAreaChallenge() {
 
     // Create a unique challenge
-    var challengeIsUnique = false;
     var challenge;
-    while ( !challengeIsUnique ) {
-      // TODO: Only generates rectangular challenges at this point.
-      // TODO: Also, difficulty is ignored.
-      var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height = 0;
-      while ( width * height < 8 || width * height > 36 ) {
-        height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
-      }
-      var exampleSolution = createMonochromeRectangularSolutionSpec(
-        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
-        Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
-        width,
-        height,
-        AreaBuilderSharedConstants.GREENISH_COLOR
-      );
-      challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, BASIC_RECTANGLES_SHAPE_KIT, exampleSolution );
-      challengeIsUnique = isChallengeUnique( challenge );
+    // TODO: Only generates rectangular challenges at this point.
+    // TODO: Also, difficulty is ignored.
+    var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+    var height = 0;
+    while ( width * height < 8 || width * height > 36 ) {
+      height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     }
+    var exampleSolution = createMonochromeRectangularSolutionSpec(
+      Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
+      Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
+      width,
+      height,
+      AreaBuilderSharedConstants.GREENISH_COLOR
+    );
+    challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, BASIC_RECTANGLES_SHAPE_KIT, exampleSolution );
     return challenge;
   }
 
