@@ -27,9 +27,9 @@ define( function( require ) {
     // Create and add the board itself.
     var board = new Rectangle( shapePlacementBoard.position.x, shapePlacementBoard.position.y,
       shapePlacementBoard.size.width, shapePlacementBoard.size.height, 0, 0, {
-      fill: 'white',
-      stroke: 'black'
-    } );
+        fill: 'white',
+        stroke: 'black'
+      } );
     this.addChild( board );
 
     // Create and add the grid
@@ -56,11 +56,6 @@ define( function( require ) {
       shapePlacementBoard.showGridOnBackgroundShapeProperty
     );
     this.addChild( this.backgroundShape );
-
-    // TODO: Temp for testing --------------
-    this.addChild( Rectangle.bounds( this.backgroundShape.bounds, { fill: 'rgba( 0, 0, 255, 0.5 )' } ) );// TODO: Temp for testing --------------
-    // End of temp for testing --------------
-
 
     // Monitor the shapes added by the user to the board and create an equivalent shape with no edges for each.  This
     // may seem a little odd - why hide the shapes that the user placed and depict them with essentially the same
@@ -95,11 +90,6 @@ define( function( require ) {
       shapePlacementBoard.showDimensionsProperty,
       new Property( true ) // grid on shape - always shown for the composite shape
     ) );
-    // TODO: Temp for testing --------------
-//    this.addChild( Rectangle.bounds( tempRef.bounds, { fill: 'rgba( 255, 0, 0, 0.5 )' } ) );// TODO: Temp for testing --------------
-    this.addChild( Rectangle.bounds( this.localBounds, { fill: 'rgba( 255, 0, 0, 0.5 )' } ) );// TODO: Temp for testing --------------
-    // End of temp for testing --------------
-
   }
 
   return inherit( Node, ShapePlacementBoardNode, {

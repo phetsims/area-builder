@@ -12,16 +12,13 @@ define( function( require ) {
     var Bounds2 = require( 'DOT/Bounds2' );
     var Grid = require( 'AREA_BUILDER/common/view/Grid' );
     var inherit = require( 'PHET_CORE/inherit' );
-    var Matrix3 = require( 'DOT/Matrix3' );
     var Node = require( 'SCENERY/nodes/Node' );
     var Path = require( 'SCENERY/nodes/Path' );
     var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+    var Property = require( 'AXON/Property' );
     var Shape = require( 'KITE/Shape' );
     var Text = require( 'SCENERY/nodes/Text' );
     var Vector2 = require( 'DOT/Vector2' );
-
-    // constants
-    var CLIP_EVERYTHING = Shape.rect( 0, 0, 0.0001, 0.0001 );
 
     // Utility function for identifying a perimeter segment with no bends.
     function identifySegment( perimeterPoints, startIndex ) {
@@ -70,6 +67,8 @@ define( function( require ) {
     function PerimeterShapeNode( perimeterShapeProperty, maxBounds, unitSquareLength, showDimensionsProperty, showGridProperty, options ) {
 
       Node.call( this );
+
+      var perimeterDefinesViableShapeProperty = new Property( false );
 
       var perimeterShapeNode = new Path();
       this.addChild( perimeterShapeNode );
@@ -124,7 +123,7 @@ define( function( require ) {
           perimeterShapeNode.setShape( mainShape );
           perimeterNode.setShape( mainShape );
 
-//          grid.clipArea = mainShape;
+          grid.clipArea = mainShape;
 
           // Add the dimension labels for the perimeters, but only if there is only 1 exterior perimeter (multiple
           // interior perimeters if fine).
@@ -187,11 +186,12 @@ define( function( require ) {
               dimensionsLayer.addChild( dimensionLabel );
             } );
           }
+          perimeterDefinesViableShapeProperty.value = true;
         }
         else {
           perimeterShapeNode.visible = false;
           perimeterNode.visible = false;
-//          grid.clipArea = CLIP_EVERYTHING;
+          perimeterDefinesViableShapeProperty.value = false;
         }
       }
 
@@ -199,7 +199,9 @@ define( function( require ) {
       showDimensionsProperty.linkAttribute( dimensionsLayer, 'visible' );
 
       // Control visibility of the grid.
-      showGridProperty.linkAttribute( grid, 'visible' );
+      Property.multilink( [ showGridProperty, perimeterDefinesViableShapeProperty ], function( showGrid, perimeterDefinesViableShape ) {
+        grid.visible = showGrid && perimeterDefinesViableShape;
+      } );
 
       // Update the shape, grid, and dimensions if the perimeter shape itself changes.
       perimeterShapeProperty.link( function() {
