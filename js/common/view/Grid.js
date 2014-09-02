@@ -9,8 +9,8 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Line = require( 'SCENERY/nodes/Line' );
-  var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Shape = require( 'KITE/Shape' );
 
   /**
    * @param {Number} x
@@ -18,31 +18,26 @@ define( function( require ) {
    * @param {Number} width
    * @param {Number} height
    * @param {Number} spacing
-   * @param {Object} lineOptions
-   * @param {Object} nodeOptions
+   * @param {Object} options
    * @constructor
    */
-  function Grid( x, y, width, height, spacing, lineOptions, nodeOptions ) {
-    Node.call( this );
+  function Grid( x, y, width, height, spacing, options ) {
+    var gridShape = new Shape();
 
-    lineOptions = _.extend( {
-      // defaults
-      lineWidth: 1,
-      stroke: 'gray'
-    }, lineOptions );
-
-    // Add the lines
+    // Add the vertical lines
     for ( var i = x + spacing; i < x + width; i += spacing ) {
-      // Add a vertical line
-      this.addChild( new Line( i, y, i, y + height, lineOptions ) );
-    }
-    for ( i = y + spacing; i < y + height; i += spacing ) {
-      // Add a horizontal line
-      this.addChild( new Line( x, i, x + width, i, lineOptions ) );
+      gridShape.moveTo( i, y );
+      gridShape.lineTo( i, y + height );
     }
 
-    this.mutate( nodeOptions );
+    // Add the horizontal lines
+    for ( i = y + spacing; i < y + height; i += spacing ) {
+      gridShape.moveTo( x, i );
+      gridShape.lineTo( x + width, i );
+    }
+
+    Path.call( this, gridShape, options );
   }
 
-  return inherit( Node, Grid );
+  return inherit( Path, Grid );
 } );

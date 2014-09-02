@@ -35,7 +35,8 @@ define( function( require ) {
     board.top = shapePlacementBoard.position.y;
 
     // Create and add the grid
-    var grid = new Grid( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height, shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
+    var grid = new Grid( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height,
+      shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
     board.addChild( grid );
 
     // Track and update the grid visibility
