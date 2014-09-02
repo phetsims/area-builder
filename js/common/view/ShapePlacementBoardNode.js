@@ -25,20 +25,17 @@ define( function( require ) {
     Node.call( this );
 
     // Create and add the board itself.
-    var board = new Rectangle( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height, 0, 0, {
+    var board = new Rectangle( shapePlacementBoard.position.x, shapePlacementBoard.position.y,
+      shapePlacementBoard.size.width, shapePlacementBoard.size.height, 0, 0, {
       fill: 'white',
       stroke: 'black'
     } );
     this.addChild( board );
 
-    // Set the position
-    board.left = shapePlacementBoard.position.x;
-    board.top = shapePlacementBoard.position.y;
-
     // Create and add the grid
-    var grid = new Grid( 0, 0, shapePlacementBoard.size.width, shapePlacementBoard.size.height,
+    var grid = new Grid( shapePlacementBoard.position.x, shapePlacementBoard.position.y, shapePlacementBoard.size.width, shapePlacementBoard.size.height,
       shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
-    board.addChild( grid );
+    this.addChild( grid );
 
     // Track and update the grid visibility
     shapePlacementBoard.showGridProperty.linkAttribute( grid, 'visible' );
@@ -58,7 +55,7 @@ define( function( require ) {
       shapePlacementBoard.showDimensionsProperty,
       shapePlacementBoard.showGridOnBackgroundShapeProperty
     );
-    board.addChild( this.backgroundShape );
+    this.addChild( this.backgroundShape );
 
     // TODO: Temp for testing --------------
     this.addChild( Rectangle.bounds( this.backgroundShape.bounds, { fill: 'rgba( 0, 0, 255, 0.5 )' } ) );// TODO: Temp for testing --------------
