@@ -121,7 +121,7 @@ define( function( require ) {
         } );
 
         // Hide all dimension labels in the pool, they will be shown later if used.
-        textNodePool.forEach( function( textNode ) { textNode.visible = false } );
+        textNodePool.forEach( function( textNode ) { textNode.visible = false; } );
 
         if ( !mainShape.bounds.isEmpty() ) {
 
