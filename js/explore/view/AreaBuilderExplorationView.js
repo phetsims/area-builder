@@ -60,9 +60,7 @@ define( function( require ) {
     this.addChild( backLayer );
     var creatorLayer = new Node();
     this.addChild( creatorLayer );
-    var compositeShapesLayer = new Node();
-    this.addChild( compositeShapesLayer );
-    var movableShapesLayer = new Node();
+    var movableShapesLayer = new Node( { layerSplit: true } );
     this.addChild( movableShapesLayer );
     var bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );
