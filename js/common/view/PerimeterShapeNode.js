@@ -213,7 +213,6 @@ define( function( require ) {
                 labelPositionOffset.rotate( Math.PI );
               }
               dimensionLabel.center = segmentLabelInfo.position.plus( labelPositionOffset );
-              dimensionsLayer.addChild( dimensionLabel );
             } );
           }
           perimeterDefinesViableShapeProperty.value = true;
