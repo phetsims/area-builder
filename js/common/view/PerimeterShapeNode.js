@@ -19,6 +19,9 @@ define( function( require ) {
     var Text = require( 'SCENERY/nodes/Text' );
     var Vector2 = require( 'DOT/Vector2' );
 
+    // constants
+    var DIMENSION_LABEL_FONT = new PhetFont( 14 );
+
     // Utility function for identifying a perimeter segment with no bends.
     function identifySegment( perimeterPoints, startIndex ) {
 
@@ -164,7 +167,7 @@ define( function( require ) {
 
             // Create the labels and place them on the matching segement, just outside of the shape.
             segmentLabelsInfo.forEach( function( segmentLabelInfo ) {
-              var dimensionLabel = new Text( segmentLabelInfo.length, { font: new PhetFont( 14 ) } );
+              var dimensionLabel = new Text( segmentLabelInfo.length, { font: DIMENSION_LABEL_FONT } );
               var labelPositionOffset = new Vector2();
               // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
               // containment testing unreliable if there is an edge on the same line as the containment test.  As a
