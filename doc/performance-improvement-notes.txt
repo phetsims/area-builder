@@ -1,0 +1,19 @@
+This document is mostly for an internal development record.  It captures notes
+on the effort to improve performance prior to publication.
+
+9/3/2014
+
+Published version 1.0.0.dev.16 as a performance baseline.  The main issues at
+this point are:
+1. Animation for showing solutions for 'built it' style game challenges is a
+bit chunky in high performance environments (Win7 + Chrome 37) and intolerably
+slow in lower-performance environments, such as on iPad 2.
+2. Dragging of single squares gets progressively slower as more shapes are
+added to the board on some platforms.  The effect is not nearly as bad on
+Win7+Chrome or Win7 + IE - in fact it's hard to even notice, but it can be
+seen on Win7+Firefox.  On OSX on a Macbook Pro (Dirac was the actual machine I
+used to test it), the effect wasn't noticeable on Chrome, but was definitely
+there on Safari. The test is to go to the first screen, build a 3x3 stack of
+shapes in the lower right corner, then pull a shape from the bucket and
+release it at the upper left corner of the board.
+
