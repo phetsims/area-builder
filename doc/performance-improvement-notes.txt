@@ -45,11 +45,12 @@ avg: 1277.3
 
 Second optimization: Have a pool of text nodes whose value and visibility is set instead of adding/removing nodes with
 each update.
-trial #1: 1136.0 ms in animationLoop
-trial #2: 1065.6 ms in animationLoop
-trial #3: 1120.8 ms in animationLoop
-avg: 1107.5 ms
-~26% improvement total
+trial #1: 1041.0 ms in animationLoop
+trial #2: 927.8 ms in animationLoop
+trial #3: 954.7 ms in animationLoop
+avg: 974.5 ms
+~35% improvement total
+This is great - almost as much as getting rid of the feature altogether.  I'm psyched.
 
 
 
