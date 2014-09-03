@@ -120,6 +120,9 @@ define( function( require ) {
           mainShape.close();
         } );
 
+        // Hide all dimension labels in the pool, they will be shown later if used.
+        textNodePool.forEach( function( textNode ) { textNode.visible = false } );
+
         if ( !mainShape.bounds.isEmpty() ) {
 
           // Make sure the shape fits within its specified bounds.
@@ -183,14 +186,10 @@ define( function( require ) {
               _.times( segmentLabelsInfo.length - textNodePool.length, addDimensionLabelNode );
             }
 
-            // Set the label visibility.
-            textNodePool.forEach( function( textNode, index ) {
-              textNode.visible = index < segmentLabelsInfo.length;
-            } );
-
             // Get labels from the pool and place them on each segment, just outside of the shape.
             segmentLabelsInfo.forEach( function( segmentLabelInfo, segmentIndex ) {
               var dimensionLabel = textNodePool[ segmentIndex ];
+              dimensionLabel.visible = true;
               dimensionLabel.text = segmentLabelInfo.unitLength;
               var labelPositionOffset = new Vector2();
               // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
