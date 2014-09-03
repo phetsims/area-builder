@@ -51,7 +51,7 @@ define( function( require ) {
    */
   function AreaBuilderExplorationView( model ) {
 
-    ScreenView.call( this );
+    ScreenView.call( this, { renderer: 'svg' } );
 
     // TODO: There is a lot of opportunity for consolidation below.
 
