@@ -72,7 +72,7 @@ define( function( require ) {
 
       var perimeterShapeNode = new Path();
       this.addChild( perimeterShapeNode );
-      var grid = new Grid( maxBounds.minX, maxBounds.minY, maxBounds.width, maxBounds.height, unitSquareLength, {
+      var grid = new Grid( maxBounds, unitSquareLength, {
         lineDash: [ 1, 4 ],
         stroke: 'black'
       } );
@@ -103,14 +103,18 @@ define( function( require ) {
           mainShape.close();
         } );
 
-        // Make sure the shape fits within its specified bounds.
-        assert && assert( maxBounds.contains( mainShape.bounds ) );
-
         dimensionsLayer.removeAllChildren();
 
         if ( !mainShape.bounds.isEmpty() ) {
+
+          // Make sure the shape fits within its specified bounds.
+          assert && assert( maxBounds.containsBounds( mainShape.bounds ) );
+
+          // Turn on visibility of the perimeter and the interior fill.
           perimeterShapeNode.visible = true;
           perimeterNode.visible = true;
+
+          // Handling any interior perimeters, a.k.a. holes, in the shape.
           perimeterShapeProperty.value.interiorPerimeters.forEach( function( interiorPerimeter ) {
             mainShape.moveToPoint( interiorPerimeter[ 0 ] );
             for ( i = 1; i < interiorPerimeter.length; i++ ) {

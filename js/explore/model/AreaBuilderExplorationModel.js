@@ -86,21 +86,21 @@ define( function( require ) {
     // TODO: The bucket positions are hokey here because the implementation
     // TODO: assumes an inverted Y direction.  The common code should be made
     // TODO: to work with this if the buckets are retained in the UI design.
-    var bucketYPos = -( self.leftShapePlacementBoard.position.y + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING );
+    var bucketYPos = -( self.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING );
     this.leftBucket = new Bucket( {
-      position: new Vector2( self.leftShapePlacementBoard.position.x + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
+      position: new Vector2( self.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
       baseColor: '#000080',
       caption: '',
       size: BUCKET_SIZE
     } );
     this.rightBucket = new Bucket( {
-      position: new Vector2( self.rightShapePlacementBoard.position.x + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
+      position: new Vector2( self.rightShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
       baseColor: '#000080',
       caption: '',
       size: BUCKET_SIZE
     } );
     this.centerBucket = new Bucket( {
-      position: new Vector2( self.centerShapePlacementBoard.position.x + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
+      position: new Vector2( self.centerShapePlacementBoard.bounds.minX + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
       baseColor: '#000080',
       caption: '',
       size: BUCKET_SIZE

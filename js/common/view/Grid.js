@@ -13,27 +13,24 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
 
   /**
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} width
-   * @param {Number} height
+   * @param {Bounds2} bounds
    * @param {Number} spacing
    * @param {Object} options
    * @constructor
    */
-  function Grid( x, y, width, height, spacing, options ) {
+  function Grid( bounds, spacing, options ) {
     var gridShape = new Shape();
 
     // Add the vertical lines
-    for ( var i = x + spacing; i < x + width; i += spacing ) {
-      gridShape.moveTo( i, y );
-      gridShape.lineTo( i, y + height );
+    for ( var i = bounds.minX + spacing; i < bounds.minX + bounds.width; i += spacing ) {
+      gridShape.moveTo( i, bounds.minY );
+      gridShape.lineTo( i, bounds.minY + bounds.height );
     }
 
     // Add the horizontal lines
-    for ( i = y + spacing; i < y + height; i += spacing ) {
-      gridShape.moveTo( x, i );
-      gridShape.lineTo( x + width, i );
+    for ( i = bounds.minY + spacing; i < bounds.minY + bounds.height; i += spacing ) {
+      gridShape.moveTo( bounds.minX, i );
+      gridShape.lineTo( bounds.minX + bounds.width, i );
     }
 
     Path.call( this, gridShape, options );

@@ -25,32 +25,20 @@ define( function( require ) {
     Node.call( this );
 
     // Create and add the board itself.
-    var board = new Rectangle( shapePlacementBoard.position.x, shapePlacementBoard.position.y,
-      shapePlacementBoard.size.width, shapePlacementBoard.size.height, 0, 0, {
-        fill: 'white',
-        stroke: 'black'
-      } );
+    var board = Rectangle.bounds( shapePlacementBoard.bounds, { fill: 'white', stroke: 'black' } );
     this.addChild( board );
 
     // Create and add the grid
-    var grid = new Grid( shapePlacementBoard.position.x, shapePlacementBoard.position.y, shapePlacementBoard.size.width, shapePlacementBoard.size.height,
-      shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
+    var grid = new Grid( shapePlacementBoard.bounds, shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
     this.addChild( grid );
 
     // Track and update the grid visibility
     shapePlacementBoard.showGridProperty.linkAttribute( grid, 'visible' );
 
-    var placementBoardBounds = new Bounds2(
-      shapePlacementBoard.position.x,
-      shapePlacementBoard.position.y,
-      ( shapePlacementBoard.position.x + shapePlacementBoard.size.width ),
-      ( shapePlacementBoard.position.y + shapePlacementBoard.size.height )
-    );
-
     // Monitor the background shape and add/remove/update it as it changes.
     this.backgroundShape = new PerimeterShapeNode(
       shapePlacementBoard.backgroundShapeProperty,
-      placementBoardBounds,
+      shapePlacementBoard.bounds,
       shapePlacementBoard.unitSquareLength,
       shapePlacementBoard.showDimensionsProperty,
       shapePlacementBoard.showGridOnBackgroundShapeProperty
@@ -85,7 +73,7 @@ define( function( require ) {
     var tempRef;
     this.addChild( tempRef = new PerimeterShapeNode(
       shapePlacementBoard.compositeShapeProperty,
-      placementBoardBounds,
+      shapePlacementBoard.bounds,
       shapePlacementBoard.unitSquareLength,
       shapePlacementBoard.showDimensionsProperty,
       new Property( true ) // grid on shape - always shown for the composite shape

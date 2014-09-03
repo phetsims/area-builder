@@ -51,14 +51,7 @@ define( function( require ) {
     this.addChild( representation );
 
     // Add the grid
-    representation.addChild( new Grid(
-        representation.bounds.minX + BORDER_LINE_WIDTH / 2,
-        representation.bounds.minY + BORDER_LINE_WIDTH / 2,
-        representation.bounds.width - BORDER_LINE_WIDTH,
-        representation.bounds.height - BORDER_LINE_WIDTH,
-      UNIT_LENGTH,
-      { lineDash: [ 2, 4 ], stroke: 'black' }
-    ) );
+    representation.addChild( new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), UNIT_LENGTH, { lineDash: [ 2, 4 ], stroke: 'black' } ) );
 
     // Move the shape as the model representation moves
     movableShape.positionProperty.link( function( position ) {

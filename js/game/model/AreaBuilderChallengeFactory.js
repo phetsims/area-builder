@@ -435,8 +435,10 @@ define( function( require ) {
     var challenge;
     // TODO: Only generates rectangular challenges at this point.
     // TODO: Also, difficulty is ignored.
-    var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-    var height = 0;
+//    var width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+//    var height = 0;
+    var width = 6;
+    var height = 6;
     while ( width * height < 8 || width * height > 36 ) {
       height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     }
@@ -842,7 +844,8 @@ define( function( require ) {
       var tempChallenge;
       switch( level ) {
         case 0:
-          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );
+//          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );
+          _.times( 3, function() { challengeSet.push( generateBuildAreaChallenge() ); } );
           _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateRectangularFindAreaChallenge ) ); } );
           challengeSet.push( generateUniqueChallenge( generateLShapedFindAreaChallenge ) );
           break;

@@ -75,14 +75,7 @@ define( function( require ) {
 
     // Add grid if specified.
     if ( options.gridSpacing ) {
-      var gridNode = new Grid(
-        ( representation.bounds.minX + BORDER_LINE_WIDTH / 2 ),
-        ( representation.bounds.minY + BORDER_LINE_WIDTH / 2 ),
-        ( representation.bounds.width - BORDER_LINE_WIDTH ),
-        ( representation.bounds.height - BORDER_LINE_WIDTH ),
-        options.gridSpacing,
-        { lineDash: [ 2, 4 ], stroke: 'black' }
-      );
+      var gridNode = new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), options.gridSpacing, { lineDash: [ 2, 4 ], stroke: 'black' } );
       this.addChild( gridNode );
     }
 

@@ -50,7 +50,7 @@ define( function( require ) {
    * @param {Dimension2} size
    * @param {Number} unitSquareLength
    * @param {Vector2} position
-   * @param {String || Color || '*'} colorHandled, can be wildcard string for all colors
+   * @param {String || Color} colorHandled A string or Color object, can be wildcard string ('*') for all colors
    * @param {Property<Boolean>} showGridProperty
    * @param {Property<Boolean>} showDimensionsProperty
    * @constructor
@@ -98,18 +98,14 @@ define( function( require ) {
 
     // Non-dynamic public values.
     this.unitSquareLength = unitSquareLength; // @public
-    this.position = position; // @public
+    this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @public
     this.colorHandled = colorHandled === '*' ? colorHandled : Color.toColor( colorHandled ); // @public
 
     // Private variables
-    this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @private
     this.residentShapes = new ObservableArray(); // @public
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
-
-    // Non-dynamic properties that are externally visible
-    this.size = size; // @public
 
     // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
     // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
@@ -356,8 +352,8 @@ define( function( require ) {
      * @param operation
      */
     updateCellOccupation: function( movableShape, operation ) {
-      var xIndex = Math.round( ( movableShape.destination.x - this.position.x ) / this.unitSquareLength );
-      var yIndex = Math.round( ( movableShape.destination.y - this.position.y ) / this.unitSquareLength );
+      var xIndex = Math.round( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
+      var yIndex = Math.round( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
       // Mark all cells occupied by this shape.
       for ( var row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
         for ( var column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
@@ -418,8 +414,8 @@ define( function( require ) {
 
       // Get the closest point in cell coordinates.
       var normalizedStartingPoint = new Vector2(
-          Math.floor( ( point.x - this.position.x ) / this.unitSquareLength ) - levelsRemoved,
-          Math.floor( ( point.y - this.position.y ) / this.unitSquareLength ) - levelsRemoved
+          Math.floor( ( point.x - this.bounds.minX ) / this.unitSquareLength ) - levelsRemoved,
+          Math.floor( ( point.y - this.bounds.minY ) / this.unitSquareLength ) - levelsRemoved
       );
 
       var squareSize = ( levelsRemoved + 1 ) * 2;
@@ -563,7 +559,7 @@ define( function( require ) {
     },
 
     cellToModelCoords: function( column, row ) {
-      return new Vector2( column * this.unitSquareLength + this.position.x, row * this.unitSquareLength + this.position.y );
+      return new Vector2( column * this.unitSquareLength + this.bounds.minX, row * this.unitSquareLength + this.bounds.minY );
     },
 
     cellToModelVector: function( v ) {
@@ -571,7 +567,7 @@ define( function( require ) {
     },
 
     modelToCellCoords: function( x, y ) {
-      return new Vector2( ( x - this.position.x ) / this.unitSquareLength, ( y - this.position.y ) / this.unitSquareLength );
+      return new Vector2( ( x - this.bounds.minX ) / this.unitSquareLength, ( y - this.bounds.minY ) / this.unitSquareLength );
     },
 
     modelToCellVector: function( v ) {
@@ -909,9 +905,11 @@ define( function( require ) {
       }
       else {
         assert && assert( perimeterShape instanceof PerimeterShape, 'Background perimeterShape must be a PerimeterShape.' );
+        assert && assert( perimeterShape.getWidth() % this.unitSquareLength === 0 && perimeterShape.getHeight() % this.unitSquareLength === 0,
+          'Background shape width and height must be integer multiples of the unit square size.' );
         if ( centered ) {
-          var xOffset = Math.floor( ( ( this.size.width - perimeterShape.getWidth() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
-          var yOffset = Math.floor( ( ( this.size.height - perimeterShape.getHeight() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          var xOffset = this.bounds.minX + Math.floor( ( ( this.bounds.width - perimeterShape.getWidth() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          var yOffset = this.bounds.minY + Math.floor( ( ( this.bounds.height - perimeterShape.getHeight() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
           this.backgroundShape = perimeterShape.translated( xOffset, yOffset );
         }
         else {
