@@ -17,3 +17,44 @@ there on Safari. The test is to go to the first screen, build a 3x3 stack of
 shapes in the lower right corner, then pull a shape from the bucket and
 release it at the upper left corner of the board.
 
+Three trials of showing solution for area of 36, no query parameters, version 1.0.0-dev.16, requireJS version, grid and
+dimensions turned off:
+trial #1: 1565.4 ms in animationLoop
+trial #2: 1468.5 ms in animationLoop
+trial #3: 1441.6 ms in animationLoop
+avg: 1497.8
+
+When I drill down in this, it looks like a lot of time is being spent in PerimeterShapeNode.update, and much of the time
+in that function is spent creating and adding the text, almost certainly for the dimensions indicators.
+
+Experiment: Try just not having the dimensions indicators at all, see how the performance improves qualitatively and
+quantitatively.
+Result: It is decidedly smoother on Win7+Chrome.  Better on iPad, but not great.  Might be acceptable.
+trial #1: 968.2 ms in animationLoop
+trial #2: 905.9 ms in animationLoop
+trial #3: 922.4 ms in animationLoop
+avg: 932.2
+~38% improvement by not having dimension labels at all (which, of course, we can't do)
+
+First optimization (easy one) a fixed font instead of recreating each time.
+trial #1: 1316.5 ms in animationLoop
+trial #2: 1235.3 ms in animationLoop
+trial #3: 1280.2 ms in animationLoop
+avg: 1277.3
+~15% improvement over original
+
+Second optimization: Have a pool of text nodes whose value and visibility is set instead of adding/removing nodes with
+each update.
+trial #1: 1136.0 ms in animationLoop
+trial #2: 1065.6 ms in animationLoop
+trial #3: 1120.8 ms in animationLoop
+avg: 1107.5 ms
+~26% improvement total
+
+
+
+
+
+
+
+

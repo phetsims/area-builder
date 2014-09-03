@@ -20,7 +20,7 @@ define( function( require ) {
     var Vector2 = require( 'DOT/Vector2' );
 
     // constants
-    var DIMENSION_LABEL_FONT = new PhetFont( 14 );
+    var DIMENSION_LABEL_FONT = new PhetFont( { size: 14 } );
 
     // Utility function for identifying a perimeter segment with no bends.
     function identifySegment( perimeterPoints, startIndex ) {
@@ -72,6 +72,8 @@ define( function( require ) {
 
       var perimeterDefinesViableShapeProperty = new Property( false );
 
+      // Set up the shape, edge, and grid, which will be updated as the perimeter changes.  The order in which these
+      // are added is important for proper layering.
       var perimeterShapeNode = new Path();
       this.addChild( perimeterShapeNode );
       var grid = new Grid( maxBounds, unitSquareLength, {
@@ -83,6 +85,19 @@ define( function( require ) {
       this.addChild( perimeterNode );
       var dimensionsLayer = new Node();
       this.addChild( dimensionsLayer );
+
+      // Create a pool of text nodes that will be used to portray the dimension values.  This is done as a performance
+      // optimization, since changing text nodes is more efficient that recreating them on each update.
+      var textNodePool = [];
+
+      function addDimensionLabelNode() {
+        var textNode = new Text( '', { font: DIMENSION_LABEL_FONT, centerX: maxBounds.centerX, centerY: maxBounds.centerY } );
+        textNode.visible = false;
+        textNodePool.push( textNode );
+        dimensionsLayer.addChild( textNode );
+      }
+
+      _.times( 16, addDimensionLabelNode ); // Initial size empirically chosen, can be adjusted if needed.
 
       // Define function for updating the appearance of the perimeter shape.
       function update() {
@@ -104,8 +119,6 @@ define( function( require ) {
           mainShape.lineToPoint( exteriorPerimeters[ 0 ] );
           mainShape.close();
         } );
-
-        dimensionsLayer.removeAllChildren();
 
         if ( !mainShape.bounds.isEmpty() ) {
 
@@ -150,7 +163,7 @@ define( function( require ) {
                 segment = identifySegment( perimeterToLabel, segment.endIndex );
                 // Only label segments that have integer lengths.
                 var segmentLabelInfo = {
-                  length: perimeterToLabel[ segment.startIndex ].distance( perimeterToLabel[ segment.endIndex ] ) / unitSquareLength,
+                  unitLength: perimeterToLabel[ segment.startIndex ].distance( perimeterToLabel[ segment.endIndex ] ) / unitSquareLength,
                   position: new Vector2( ( perimeterToLabel[ segment.startIndex ].x + perimeterToLabel[ segment.endIndex ].x ) / 2,
                       ( perimeterToLabel[ segment.startIndex ].y + perimeterToLabel[ segment.endIndex ].y ) / 2 ),
                   edgeAngle: Math.atan2( perimeterToLabel[ segment.endIndex ].y - perimeterToLabel[ segment.startIndex ].y,
@@ -159,15 +172,26 @@ define( function( require ) {
                 };
 
                 // Only include the labels that are integer values.
-                if ( Math.round( segmentLabelInfo.length ) === segmentLabelInfo.length ) {
+                if ( Math.round( segmentLabelInfo.unitLength ) === segmentLabelInfo.unitLength ) {
                   segmentLabelsInfo.push( segmentLabelInfo );
                 }
               } while ( segment.endIndex !== 0 );
             } );
 
-            // Create the labels and place them on the matching segement, just outside of the shape.
-            segmentLabelsInfo.forEach( function( segmentLabelInfo ) {
-              var dimensionLabel = new Text( segmentLabelInfo.length, { font: DIMENSION_LABEL_FONT } );
+            // Make sure that there are enough labels in the pool.
+            if ( segmentLabelsInfo.length > textNodePool.length ) {
+              _.times( segmentLabelsInfo.length - textNodePool.length, addDimensionLabelNode );
+            }
+
+            // Set the label visibility.
+            textNodePool.forEach( function( textNode, index ) {
+              textNode.visible = index < segmentLabelsInfo.length;
+            } );
+
+            // Get labels from the pool and place them on each segment, just outside of the shape.
+            segmentLabelsInfo.forEach( function( segmentLabelInfo, segmentIndex ) {
+              var dimensionLabel = textNodePool[ segmentIndex ];
+              dimensionLabel.text = segmentLabelInfo.unitLength;
               var labelPositionOffset = new Vector2();
               // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
               // containment testing unreliable if there is an edge on the same line as the containment test.  As a
