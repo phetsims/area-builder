@@ -35,11 +35,20 @@ define( function( require ) {
     var self = this;
     this.color = movableShape.color; // @public
 
+    // Set up the mouse and touch areas for this node so that this can still be grabbed when invisible.
+    this.touchArea = movableShape.shape;
+    this.mouseArea = movableShape.shape;
+
+    // Set up a root node whose visibility and opacity will be manipulated below.
+    var rootNode = new Node();
+    this.addChild( rootNode );
+
     // Create the shadow
     var shadow = new Path( movableShape.shape, {
-      fill: SHADOW_COLOR
+      fill: SHADOW_COLOR,
+      leftTop: SHADOW_OFFSET
     } );
-    this.addChild( shadow );
+    rootNode.addChild( shadow );
 
     // Create the primary representation
     var representation = new Path( movableShape.shape, {
@@ -48,22 +57,32 @@ define( function( require ) {
       lineWidth: 1,
       lineJoin: 'round'
     } );
-    this.addChild( representation );
+    rootNode.addChild( representation );
 
     // Add the grid
     representation.addChild( new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), UNIT_LENGTH, { lineDash: [ 2, 4 ], stroke: 'black' } ) );
 
-    // Move the shape as the model representation moves
+    // Move this node as the model representation moves
     movableShape.positionProperty.link( function( position ) {
-      representation.leftTop = position;
-      shadow.leftTop = position.plus( SHADOW_OFFSET );
+      self.leftTop = position;
     } );
 
-    // Derive the opacity of the shape from multiple properties on the model element.  Because the composite shape is
-    // used to depict the overall shape when a shape is on the placement board, this element is invisible (opacity set
-    // to zero) unless it is user controlled, animating, or fading.
-    var mainShapeOpacityProperty = new DerivedProperty(
-      [ movableShape.userControlledProperty, movableShape.animatingProperty, movableShape.fadeProportionProperty, movableShape.invisibleWhenStillProperty ],
+    // Because a composite shape is often used to depict the overall shape when a shape is on the placement board, this
+    // element may become invisible unless it is user controlled, animating, or fading.
+    var visibleProperty = new DerivedProperty( [
+        movableShape.userControlledProperty,
+        movableShape.animatingProperty,
+        movableShape.fadeProportionProperty,
+        movableShape.invisibleWhenStillProperty ],
+      function( userControlled, animating, fadeProportion, invisibleWhenStill ) {
+        return ( userControlled || animating || fadeProportion > 0 || !invisibleWhenStill );
+      } );
+
+    // Opacity is also a derived property.
+    var opacityProperty = new DerivedProperty( [
+        movableShape.userControlledProperty,
+        movableShape.animatingProperty,
+        movableShape.fadeProportionProperty ],
       function( userControlled, animating, fadeProportion, invisibleWhenStill ) {
         if ( userControlled || animating ) {
           // The shape is either being dragged by the user or is moving to a location, so should be fully opaque.
@@ -73,20 +92,21 @@ define( function( require ) {
           // The shape is fading away.
           return 1 - fadeProportion;
         }
-        else if ( !invisibleWhenStill ) {
+        else {
           // The shape is not controlled by the user, animated, or fading, so it is most likely placed on the board.
-          // It is set to be visible in this situation.  Return a value that makes it slightly transparent so that the
-          // user can see any shapes that may be behind it on the board.
+          // If it is visible, it will be translucent, since some of the games use shapes in this state to place over
+          // other shapes for comparative purposes.
           return OPACITY_OF_TRANSLUCENT_SHAPES;
         }
-        else {
-          // The shape should be fully transparent.
-          return 0;
-        }
-      } );
+      }
+    );
 
-    mainShapeOpacityProperty.link( function( opacity ) {
-      self.opacity = opacity;
+    opacityProperty.link( function( opacity ) {
+      rootNode.opacity = opacity;
+    } );
+
+    visibleProperty.link( function( visible ) {
+      rootNode.visible = visible;
     } );
 
     var shadowVisibilityProperty = new DerivedProperty(
