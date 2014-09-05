@@ -717,7 +717,7 @@ define( function( require ) {
 
     var userShapes = createTwoToneRectangleBuildKit( colorPair.color1, colorPair.color2 );
 
-    // Build the challenges from all the pieces.
+    // Build the challenge from all the pieces.
     return AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge( width * height, colorPair.color1,
       colorPair.color2, color1Fraction, userShapes, exampleSolution );
   }
