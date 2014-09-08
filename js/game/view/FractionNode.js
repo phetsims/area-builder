@@ -48,7 +48,5 @@ define( function( require ) {
     denominatorNode.top = fractionBarNode.bottom;
   }
 
-  return inherit( Node, FractionNode, {
-    //TODO prototypes
-  } );
+  return inherit( Node, FractionNode );
 } );
