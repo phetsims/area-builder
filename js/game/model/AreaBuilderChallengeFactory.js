@@ -14,6 +14,7 @@ define( function( require ) {
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Shape = require( 'KITE/Shape' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -675,31 +676,46 @@ define( function( require ) {
     return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, RECTANGLES_AND_TRIANGLES_SHAPE_KIT );
   }
 
-  function generateProportionalBuildAreaChallenge() {
+  function generateEasyProportionalBuildAreaChallenge() {
+    return generateProportionalBuildAreaChallenge( 'easy', false );
+  }
+
+  function generateHarderProportionalBuildAreaChallenge() {
+    return generateProportionalBuildAreaChallenge( 'harder', false );
+  }
+
+  function generateProportionalBuildAreaChallenge( difficulty, includePerimeter ) {
+    assert && assert( difficulty === 'easy' || difficulty === 'harder' );
     var width, height;
 
-    height = _.random( 3, 6 );
-    if ( height === 3 ) {
-      width = _.random( 4, 8 );
-    }
-    else {
-      width = _.random( 2, 10 );
-    }
-
-    var area = width * height;
-    var factors = [];
-    for ( var i = 2; i < 10; i++ ) {
-      if ( area % i === 0 ) {
-        // This is a factor of the area.
-        factors.push( i );
+    do {
+      height = _.random( 3, 6 );
+      if ( height === 3 ) {
+        width = _.random( 4, 8 );
       }
-    }
+      else {
+        width = _.random( 2, 10 );
+      }
+
+      var minFactor = difficulty === 'easy' ? 2 : 5;
+      var maxFactor = difficulty === 'easy' ? 4 : 9;
+
+      var area = width * height;
+      var factors = [];
+      for ( var i = minFactor; i <= maxFactor; i++ ) {
+        if ( area % i === 0 ) {
+          // This is a factor of the area.
+          factors.push( i );
+        }
+      }
+    } while ( factors.length === 0 );
 
     // Choose the fractional proportion.
     var fractionDenominator = randomElement( factors );
-    var color1FractionNumerator = _.random( 1, fractionDenominator - 1 );
+    do {
+      var color1FractionNumerator = _.random( 1, fractionDenominator - 1 );
+    } while ( Util.gcd( color1FractionNumerator, fractionDenominator ) > 1 );
     var color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
-    color1Fraction.reduce();
 
     // Choose the colors for this challenge
     var colorPair = randomElement( COLOR_PAIRS );
@@ -718,22 +734,47 @@ define( function( require ) {
     var userShapes = createTwoToneRectangleBuildKit( colorPair.color1, colorPair.color2 );
 
     // Build the challenge from all the pieces.
-    return AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge( width * height, colorPair.color1,
-      colorPair.color2, color1Fraction, userShapes, exampleSolution );
+    if ( includePerimeter ) {
+      var challenge = AreaBuilderGameChallenge.createTwoToneBuildAreaAndPerimeterChallenge( width * height,
+        ( 2 * width + 2 * height ), colorPair.color1, colorPair.color2, color1Fraction, userShapes, exampleSolution );
+    }
+    else {
+      challenge = AreaBuilderGameChallenge.createTwoToneBuildAreaChallenge( width * height, colorPair.color1,
+        colorPair.color2, color1Fraction, userShapes, exampleSolution );
+
+    }
+    return challenge;
   }
 
-  function generateProportionalBuildAreaAndPerimeterChallenge() {
+  function generateEasyProportionalBuildAreaAndPerimeterChallenge() {
+    return generateProportionalBuildAreaChallenge( 'easy', true );
+  }
 
-    var area = randomElement( [ 12, 16, 20, 24, 30, 32, 36 ] );
+  function generateHarderProportionalBuildAreaAndPerimeterChallenge() {
+    return generateProportionalBuildAreaChallenge( 'harder', true );
+  }
 
-    // Identify the factor pairs.  Note that the range of this loop is based on the possible areas, and may need to be
-    // modified if the selection of area values changes.
+  // TODO: This is unused as of this writing, but keep it around until the level 5 behavior is approved.  Should be
+  // done around 9/12/2014, so if it is currently much later than that, this can be blown away.
+  function generateProportionalBuildAreaAndPerimeterChallenge( difficulty ) {
+    assert && assert( difficulty === 'easy' || difficulty === 'harder' );
+
+    var area;
     var factorPairs = [];
-    for ( var i = 2; i < 6; i++ ) {
-      if ( area % i === 0 && area / i < AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH ) {
-        factorPairs.push( [ i, area / i ] );
+
+    do {
+      area = randomElement( [ 12, 16, 20, 24, 30, 32, 36 ] );
+
+      // Identify the factor pairs.  Note that the range of this loop is based on the possible areas, and may need to
+      // be modified if the selection of area values changes.
+      var minFactor = difficulty === 'easy' ? 2 : 5;
+      var maxFactor = difficulty === 'easy' ? 4 : 9;
+      for ( var i = minFactor; i <= maxFactor; i++ ) {
+        if ( area % i === 0 && area / i < AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH ) {
+          factorPairs.push( [ i, area / i ] );
+        }
       }
-    }
+    } while ( factorPairs.length === 0 );
 
     var factorPair = randomElement( factorPairs );
 
@@ -882,8 +923,10 @@ define( function( require ) {
           break;
 
         case 4:
-          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateProportionalBuildAreaChallenge ) ); } );
-          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateProportionalBuildAreaAndPerimeterChallenge ) ); } );
+          challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaChallenge ) );
+          _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaChallenge ) ); } );
+          _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaAndPerimeterChallenge ) ); } );
+          challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) );
           break;
 
       }
