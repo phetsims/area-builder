@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  var AreaBuilderGameControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderGameControlPanel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
@@ -51,6 +52,7 @@ define( function( require ) {
   var solutionString = require( 'string!AREA_BUILDER/solution' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
+  var startOverString = require( 'string!AREA_BUILDER/startOver' );
 
   // images
   var icon1a = require( 'image!AREA_BUILDER/icon-1-a.jpg' );
@@ -148,11 +150,17 @@ define( function( require ) {
       gameModel.challengesPerProblemSet,
       gameModel.scoreProperty,
       gameModel.elapsedTimeProperty,
-      gameModel.simSpecificModel.showGridProperty,
-      gameModel.simSpecificModel.showDimensionsProperty,
-      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, top: this.shapeBoard.top }
+      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, top: this.shapeBoard.top + 5 }
     );
     this.controlLayer.addChild( this.scoreboard );
+
+    // Add the control panel
+    this.controlPanel = new AreaBuilderGameControlPanel(
+      gameModel.simSpecificModel.showGridProperty,
+      gameModel.simSpecificModel.showDimensionsProperty,
+      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, bottom: this.shapeBoard.bottom }
+    );
+    this.controlLayer.addChild( this.controlPanel );
 
     // Control visibility of elapsed time indicator in the scoreboard.
     this.model.timerEnabledProperty.link( function( timerEnabled ) {
@@ -161,11 +169,11 @@ define( function( require ) {
 
     // Add the button for returning to the level selection screen.
     this.controlLayer.addChild( new RectangularPushButton( {
-      content: new Text( 'Start Over', { font: BUTTON_FONT } ),
+      content: new Text( startOverString, { font: BUTTON_FONT } ),
       listener: function() { gameModel.setChoosingLevelState(); },
       baseColor: BUTTON_FILL,
-      left: this.scoreboard.left,
-      top: this.solutionBanner.top
+      centerX: this.scoreboard.centerX,
+      centerY: this.solutionBanner.centerY
     } ) );
 
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
@@ -382,6 +390,7 @@ define( function( require ) {
           // Make a list of the nodes to be shown in this state.
           nodesToShow = [
             this.scoreboard,
+            this.controlPanel,
             this.checkAnswerButton,
             this.challengeView,
             this.challengePromptBanner
@@ -414,6 +423,7 @@ define( function( require ) {
           // Make a list of the nodes to be shown in this state.
           nodesToShow = [
             this.scoreboard,
+            this.controlPanel,
             this.nextButton,
             this.challengeView,
             this.challengePromptBanner,
@@ -448,6 +458,7 @@ define( function( require ) {
           // Make a list of the nodes to be shown in this state.
           nodesToShow = [
             this.scoreboard,
+            this.controlPanel,
             this.tryAgainButton,
             this.challengeView,
             this.challengePromptBanner,
@@ -484,6 +495,7 @@ define( function( require ) {
           // Make a list of the nodes to be shown in this state.
           nodesToShow = [
             this.scoreboard,
+            this.controlPanel,
             this.challengeView,
             this.challengePromptBanner,
             this.faceWithPointsNode
@@ -528,6 +540,7 @@ define( function( require ) {
           // Make a list of the nodes to be shown in this state.
           nodesToShow = [
             this.scoreboard,
+            this.controlPanel,
             this.nextButton,
             this.challengeView,
             this.solutionBanner
@@ -710,11 +723,11 @@ define( function( require ) {
           this.buildPromptPanel.visible = false;
         }
 
-        // Set the state of the control panel/scoreboard.
-        this.scoreboard.dimensionsIcon.setStyle( challenge.backgroundShape ? 'single' : 'composite' );
-        this.scoreboard.dimensionsIcon.setSingleRectColor( challenge.backgroundShape ? challenge.backgroundShape.fillColor : null );
-        this.scoreboard.visibilityControls.gridControlVisible = challenge.toolSpec.gridControl;
-        this.scoreboard.visibilityControls.dimensionsControlVisible = challenge.toolSpec.dimensionsControl;
+        // Set the state of the control panel.
+        this.controlPanel.dimensionsIcon.setStyle( challenge.backgroundShape ? 'single' : 'composite' );
+        this.controlPanel.dimensionsIcon.setSingleRectColor( challenge.backgroundShape ? challenge.backgroundShape.fillColor : null );
+        this.controlPanel.visibilityControls.gridControlVisible = challenge.toolSpec.gridControl;
+        this.controlPanel.visibilityControls.dimensionsControlVisible = challenge.toolSpec.dimensionsControl;
 
         // Create the carousel if present
         if ( challenge.userShapes !== null ) {
@@ -764,6 +777,7 @@ define( function( require ) {
         this.startGameLevelNode,
         this.faceWithPointsNode,
         this.scoreboard,
+        this.controlPanel,
         this.challengePromptBanner,
         this.solutionBanner,
         this.numberEntryControl,
