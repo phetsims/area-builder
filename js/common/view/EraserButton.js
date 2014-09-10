@@ -9,7 +9,7 @@ define( function( require ) {
   var PushButton = require( 'SUN/buttons/RectangularPushButton' );
 
   // images
-  var eraserImage = require( 'image!AREA_BUILDER/eraser.png' );
+  var eraserImage = require( 'image!SCENERY_PHET/eraser.png' );
 
   // constants
   var ERASER_WIDTH = 20;  // width of eraser, used for scaling, the aspect ratio will determine height
