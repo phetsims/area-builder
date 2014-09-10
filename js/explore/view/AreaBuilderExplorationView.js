@@ -242,7 +242,12 @@ define( function( require ) {
       right: this.layoutBounds.width - CONTROL_INSET,
       bottom: this.layoutBounds.height - CONTROL_INSET,
       lineWidth: 1,
-      listener: function() { model.reset(); }
+      listener: function() {
+        leftAreaAndPerimeterDisplay.reset();
+        rightAreaAndPerimeterDisplay.reset();
+        centerAreaAndPerimeterDisplay.reset();
+        model.reset();
+      }
     } ) );
 
     // Layout

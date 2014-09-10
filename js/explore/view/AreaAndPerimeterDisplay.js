@@ -8,6 +8,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
@@ -47,6 +48,7 @@ define( function( require ) {
       perimeterReadout.right = readoutsRightEdge;
     } );
 
+    this.accordonBoxExpanded = new Property( true );
     this.addChild( new AccordionBox( contentNode, {
       titleNode: new Text( valuesString, { font: DISPLAY_FONT } ),
       titleAlign: 'left',
@@ -54,11 +56,16 @@ define( function( require ) {
       fill: 'white',
       showTitleWhenExpanded: false,
       contentXMargin: 8,
-      contentYMargin: 4
+      contentYMargin: 4,
+      expandedProperty: this.accordonBoxExpanded
     } ) );
 
     this.mutate( options );
   }
 
-  return inherit( Node, AreaAndPerimeterDisplay );
+  return inherit( Node, AreaAndPerimeterDisplay, {
+    reset: function() {
+      this.accordonBoxExpanded.reset();
+    }
+  } );
 } );
