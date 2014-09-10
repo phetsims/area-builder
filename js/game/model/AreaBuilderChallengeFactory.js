@@ -418,11 +418,40 @@ define( function( require ) {
     } );
   }
 
-  // Test the challenge agains the history of recently generated challenges to see if it is unique.
+  // Return a value that indicates whether two challenges are similar, used when generating challenges that are
+  // distinct enough to keep the game interesting.
+  function isChallengeSimilar( challenge1, challenge2 ) {
+    if ( challenge1.buildSpec && challenge2.buildSpec ) {
+      if ( challenge1.buildSpec.proportions && challenge1.buildSpec.proportions ) {
+        if ( challenge1.buildSpec.proportions.color1Proportion.denominator === challenge2.buildSpec.proportions.color1Proportion.denominator ) {
+          if ( challenge1.buildSpec.perimeter && challenge2.buildSpec.perimeter || !challenge1.buildSpec.perimeter && !challenge2.buildSpec.perimeter ) {
+            return true;
+          }
+        }
+      }
+      else if ( !challenge1.buildSpec.proportions && !challenge1.buildSpec.proportions ) {
+        if ( challenge1.buildSpec.area === challenge2.buildSpec.area ) {
+          return true;
+        }
+      }
+    }
+    else {
+      if ( challenge1.backgroundShape && challenge2.backgroundShape ) {
+        if ( challenge1.backgroundShape.unitArea === challenge2.backgroundShape.unitArea ) {
+          return true;
+        }
+      }
+    }
+
+    // If we got to here, the challenges are not similar.
+    return false;
+  }
+
+  // Test the challenge against the history of recently generated challenges to see if it is unique.
   function isChallengeUnique( challenge ) {
     var challengeIsUnique = true;
     for ( var i = 0; i < challengeHistory.length; i++ ) {
-      if ( challenge.basicallyEquals( challengeHistory[ i ] ) ) {
+      if ( isChallengeSimilar( challenge, challengeHistory[ i ] ) ) {
         challengeIsUnique = false;
         break;
       }

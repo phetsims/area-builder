@@ -195,20 +195,5 @@ define( function( require ) {
     );
   };
 
-  return inherit( Object, AreaBuilderGameChallenge, {
-    /**
-     * Compares two challenges and returns true if the are basically equal, meaning that the parts that are significant
-     * when presenting a challenge to the user are the same.
-     *
-     * @param challenge
-     * @returns {boolean}
-     */
-    basicallyEquals: function( challenge ) {
-      // Note: This doesn't compare everything, but it is enough for the sim's purposes.
-      return this.showNumberEntryPad === challenge.showNumberEntryPad &&
-             _.isEqual( this.buildSpec, challenge.buildSpec ) &&
-             _.isEqual( this.backgroundShape, challenge.backgroundShape ) &&
-             this.checkSpec === challenge.checkSpec;
-    }
-  } );
+  return inherit( Object, AreaBuilderGameChallenge );
 } );
