@@ -7,16 +7,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Checkbox = require( 'SUN/Checkbox' );
-  var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
   var GameTimer = require( 'VEGAS/GameTimer' );
-  var Grid = require( 'AREA_BUILDER/common/view/Grid' );
-  var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PropertySet = require( 'AXON/PropertySet' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );

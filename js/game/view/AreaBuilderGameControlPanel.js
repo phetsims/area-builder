@@ -12,26 +12,14 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var Checkbox = require( 'SUN/Checkbox' );
   var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
-  var GameTimer = require( 'VEGAS/GameTimer' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
-  var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PropertySet = require( 'AXON/PropertySet' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
-  // strings
-  var levelString = require( 'string!AREA_BUILDER/level' );
-  var scoreString = require( 'string!VEGAS/label.score' );
-  var timeString = require( 'string!VEGAS/label.time' );
-  var currentChallengeString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
-
   // constants
-  var MIN_WIDTH = 150; // in screen coords, empirically determined
   var BACKGROUND_COLOR = AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR;
   var PANEL_OPTIONS = { fill: BACKGROUND_COLOR, yMargin: 10, xMargin: 20 };
 
@@ -68,9 +56,7 @@ define( function( require ) {
     // Add/remove the grid visibility control.
     this.visibilityControls.gridControlVisibleProperty.link( function( gridControlVisible ) {
       if ( gridControlVisible && !vBox.isChild( gridCheckbox ) ) {
-        // Insert after time if times is shown, after score if not.
-        var insertAfter = vBox.isChild( elapsedTimeIndicator ) ? vBox.indexOfChild( elapsedTimeIndicator ) : vBox.indexOfChild( scoreIndicator );
-        vBox.insertChild( insertAfter + 1, gridCheckbox );
+        vBox.insertChild( 0, gridCheckbox );
       }
       else if ( !gridControlVisible && vBox.isChild( gridCheckbox ) ) {
         vBox.removeChild( gridCheckbox );
