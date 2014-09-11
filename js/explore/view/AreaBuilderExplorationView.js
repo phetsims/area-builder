@@ -55,65 +55,87 @@ define( function( require ) {
 
     // TODO: There is a lot of opportunity for consolidation below.
 
-    // Create the nodes needed for the desired layering
-    var backLayer = new Node();
-    this.addChild( backLayer );
-    var creatorLayer = new Node();
-    this.addChild( creatorLayer );
-    var movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
-    this.addChild( movableShapesLayer );
-    var bucketFrontLayer = new Node();
-    this.addChild( bucketFrontLayer );
-    var topControlsLayer = new Node();
-    this.addChild( topControlsLayer );
+    // Create the node hierarchy for the single placement board view
+    var singleBoardRoot = new Node();
+    this.addChild( singleBoardRoot );
+    var singleBoardBackLayer = new Node();
+    singleBoardRoot.addChild( singleBoardBackLayer );
+    var singleBoardCreatorLayer = new Node();
+    singleBoardRoot.addChild( singleBoardCreatorLayer );
+    var singleBoardMovableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
+    singleBoardRoot.addChild( singleBoardMovableShapesLayer );
+    var singleBoardBucketFrontLayer = new Node();
+    singleBoardRoot.addChild( singleBoardBucketFrontLayer );
+    var singleBoardControlsLayer = new Node();
+    singleBoardRoot.addChild( singleBoardControlsLayer );
+
+    // Create the node hierarchy for the dual placement board view
+    var dualBoardRoot = new Node();
+    this.addChild( dualBoardRoot );
+    var dualBoardBackLayer = new Node();
+    dualBoardRoot.addChild( dualBoardBackLayer );
+    var dualBoardCreatorLayer = new Node();
+    dualBoardRoot.addChild( dualBoardCreatorLayer );
+    var dualBoardMovableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
+    dualBoardRoot.addChild( dualBoardMovableShapesLayer );
+    var dualBoardBucketFrontLayer = new Node();
+    dualBoardRoot.addChild( dualBoardBucketFrontLayer );
+    var dualBoardControlsLayer = new Node();
+    dualBoardRoot.addChild( dualBoardControlsLayer );
 
     // Add the shape placement boards
     var leftBoardNode = new ShapePlacementBoardNode( model.leftShapePlacementBoard );
-    backLayer.addChild( leftBoardNode );
+    dualBoardBackLayer.addChild( leftBoardNode );
     var rightBoardNode = new ShapePlacementBoardNode( model.rightShapePlacementBoard );
-    backLayer.addChild( rightBoardNode );
+    dualBoardBackLayer.addChild( rightBoardNode );
     var centerBoardNode = new ShapePlacementBoardNode( model.centerShapePlacementBoard );
     window.centerBoardNode = centerBoardNode;
-    backLayer.addChild( centerBoardNode );
+    singleBoardBackLayer.addChild( centerBoardNode );
 
     // Add the area and perimeter displays
     var leftAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.leftShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.GREENISH_COLOR, model.leftShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.GREENISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       { centerX: leftBoardNode.centerX, bottom: leftBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD } );
-    backLayer.addChild( leftAreaAndPerimeterDisplay );
+    dualBoardBackLayer.addChild( leftAreaAndPerimeterDisplay );
     var rightAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.rightShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.PURPLISH_COLOR, model.rightShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.PURPLISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       { centerX: rightBoardNode.centerX, bottom: rightBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD } );
-    backLayer.addChild( rightAreaAndPerimeterDisplay );
+    dualBoardBackLayer.addChild( rightAreaAndPerimeterDisplay );
     var centerAreaAndPerimeterDisplay = new AreaAndPerimeterDisplay( model.centerShapePlacementBoard.areaProperty,
       AreaBuilderSharedConstants.ORANGISH_COLOR, model.centerShapePlacementBoard.perimeterProperty,
       Color.toColor( AreaBuilderSharedConstants.ORANGISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       { centerX: centerBoardNode.centerX, bottom: centerBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD } );
-    backLayer.addChild( centerAreaAndPerimeterDisplay );
+    singleBoardBackLayer.addChild( centerAreaAndPerimeterDisplay );
 
     // Add the bucket views
     var invertIdentityTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( Vector2.ZERO, Vector2.ZERO, 1 );
     var leftBucketFront = new BucketFront( model.leftBucket, invertIdentityTransform );
     leftBucketFront.addChild( new PaperAirplaneNode( { right: leftBucketFront.width * 0.35, top: leftBucketFront.height * 0.3 } ) );
-    bucketFrontLayer.addChild( leftBucketFront );
+    dualBoardBucketFrontLayer.addChild( leftBucketFront );
     var leftBucketHole = new BucketHole( model.leftBucket, invertIdentityTransform );
-    backLayer.addChild( leftBucketHole );
+    dualBoardBackLayer.addChild( leftBucketHole );
     var rightBucketFront = new BucketFront( model.rightBucket, invertIdentityTransform );
     rightBucketFront.addChild( new PaperAirplaneNode( { right: rightBucketFront.width * 0.35, top: rightBucketFront.height * 0.3 } ) );
-    bucketFrontLayer.addChild( rightBucketFront );
+    dualBoardBucketFrontLayer.addChild( rightBucketFront );
     var rightBucketHole = new BucketHole( model.rightBucket, invertIdentityTransform );
-    backLayer.addChild( rightBucketHole );
+    dualBoardBackLayer.addChild( rightBucketHole );
     var centerBucketFront = new BucketFront( model.centerBucket, invertIdentityTransform );
     centerBucketFront.addChild( new PaperAirplaneNode( { right: centerBucketFront.width * 0.35, top: centerBucketFront.height * 0.3 } ) );
-    bucketFrontLayer.addChild( centerBucketFront );
+    singleBoardBucketFrontLayer.addChild( centerBucketFront );
     var centerBucketHole = new BucketHole( model.centerBucket, invertIdentityTransform );
-    backLayer.addChild( centerBucketHole );
+    singleBoardBackLayer.addChild( centerBucketHole );
 
     // Add the creator nodes.
     model.rectangleCreators.forEach( function( rectangleCreator ) {
-      creatorLayer.addChild( new RectangleCreatorNode( rectangleCreator ) );
+      var rectangleCreatorNode = new RectangleCreatorNode( rectangleCreator );
+      if ( model.centerShapePlacementBoard.colorHandled.equals( Color.toColor( rectangleCreator.color ) ) ) {
+        singleBoardCreatorLayer.addChild( rectangleCreatorNode );
+      }
+      else {
+        dualBoardCreatorLayer.addChild( rectangleCreatorNode );
+      }
     } );
 
     // Add the clear buttons TODO: add undo button.
@@ -122,24 +144,25 @@ define( function( require ) {
       top: leftBucketFront.bottom + 5,
       listener: function() { model.leftShapePlacementBoard.releaseAllShapes( true ); }
     } );
-    topControlsLayer.addChild( leftBoardClearButton );
+    dualBoardControlsLayer.addChild( leftBoardClearButton );
     var rightBoardClearButton = new EraserButton( {
       right: rightBucketFront.right - 3,
       top: rightBucketFront.bottom + 5,
       listener: function() { model.rightShapePlacementBoard.releaseAllShapes( true ); }
     } );
-    topControlsLayer.addChild( rightBoardClearButton );
+    dualBoardControlsLayer.addChild( rightBoardClearButton );
     var centerBoardClearButton = new EraserButton( {
       right: centerBucketFront.right - 3,
       top: centerBucketFront.bottom + 5,
       listener: function() { model.centerShapePlacementBoard.releaseAllShapes( true ); }
     } );
-    topControlsLayer.addChild( centerBoardClearButton );
+    singleBoardControlsLayer.addChild( centerBoardClearButton );
 
     // Handle the comings and goings of movable shapes.
     model.movableShapes.addItemAddedListener( function( addedShape ) {
       // Create and add the view representation for this shape.
       var shapeNode = new ShapeView( addedShape );
+      var movableShapesLayer = model.boardDisplayMode === 'single' ? singleBoardMovableShapesLayer : dualBoardMovableShapesLayer;
       movableShapesLayer.addChild( shapeNode );
 
       // Move the shape to the front when grabbed by the user.
@@ -160,33 +183,8 @@ define( function( require ) {
 
     // Control which board(s), bucket(s), and shapes are visible.
     model.boardDisplayModeProperty.link( function( boardDisplayMode ) {
-      leftBoardNode.visible = boardDisplayMode === 'dual';
-      leftBoardClearButton.visible = boardDisplayMode === 'dual';
-      leftAreaAndPerimeterDisplay.visible = leftBoardNode.visible;
-      leftBucketFront.visible = boardDisplayMode === 'dual';
-      leftBucketHole.visible = boardDisplayMode === 'dual';
-      rightBoardNode.visible = boardDisplayMode === 'dual';
-      rightBoardClearButton.visible = boardDisplayMode === 'dual';
-      rightAreaAndPerimeterDisplay.visible = rightBoardNode.visible;
-      rightBucketFront.visible = boardDisplayMode === 'dual';
-      rightBucketHole.visible = boardDisplayMode === 'dual';
-      centerBoardNode.visible = boardDisplayMode === 'single';
-      centerBoardClearButton.visible = boardDisplayMode === 'single';
-      centerAreaAndPerimeterDisplay.visible = centerBoardNode.visible;
-      centerBucketFront.visible = boardDisplayMode === 'single';
-      centerBucketHole.visible = boardDisplayMode === 'single';
-      movableShapesLayer.children.forEach( function( shapeNode ) {
-        // TODO: This works, but I'm not crazy about the idea of mapping
-        // TODO: color to visibility - it seems indirect and brittle.  Keep
-        // TODO: thinking about this and maybe replace with something better.
-        assert && assert( shapeNode instanceof ShapeView, 'Only shapes should be on the shape layer' );
-        shapeNode.visible = ( boardDisplayMode === MAP_COLORS_TO_MODES[ shapeNode.color ] );
-      } );
-      creatorLayer.children.forEach( function( creatorNode ) {
-        // TODO: Same deal as above vis a vis color.
-        assert && assert( creatorNode instanceof RectangleCreatorNode, 'Only creator nodes should be on the creator node layer' );
-        creatorNode.visible = ( boardDisplayMode === MAP_COLORS_TO_MODES[ creatorNode.color ] );
-      } );
+      dualBoardRoot.visible = boardDisplayMode === 'dual';
+      singleBoardRoot.visible = boardDisplayMode === 'single';
     } );
 
     // Create and add the control panel
@@ -224,6 +222,7 @@ define( function( require ) {
     );
     this.addChild( switchPanel );
 
+    // Create and add the common control panel.
     var controlPanel = new Panel(
       new VBox( {
         children: [
@@ -237,7 +236,7 @@ define( function( require ) {
     this.addChild( controlPanel );
 
     // Add the reset button.
-    backLayer.addChild( new ResetAllButton( {
+    this.addChild( new ResetAllButton( {
       radius: 22,
       right: this.layoutBounds.width - CONTROL_INSET,
       bottom: this.layoutBounds.height - CONTROL_INSET,
@@ -250,7 +249,7 @@ define( function( require ) {
       }
     } ) );
 
-    // Layout
+    // Final layout adjustments
     controlPanel.top = centerBoardNode.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
     controlPanel.left = centerBoardNode.left;
     switchPanel.top = centerBoardNode.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
