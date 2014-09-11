@@ -387,7 +387,7 @@ define( function( require ) {
     },
 
     /**
-     * Convenience function that handles out of bounds case by simply returning false (unoccupied).
+     * Convenience function for finding out whether a cell is occupied that handles out of bounds case (returns false).
      * @private
      * @param column
      * @param row
@@ -399,6 +399,25 @@ define( function( require ) {
       else {
         return this.cells[ column ][ row ].occupiedBy !== null;
       }
+    },
+
+    /**
+     * Function that returns true if a cell is occupied or if an incoming shape is heading for it.
+     * @private
+     * @param column
+     * @param row
+     */
+    isCellOccupiedNowOrSoon: function( column, row ) {
+      if ( this.isCellOccupied( column, row ) ) {
+        return true;
+      }
+      for ( var i = 0; i < this.incomingShapes.length; i++ ) {
+        var targetCell = this.modelToCellVector( this.incomingShapes[ i ].destination );
+        if ( targetCell.x === column && targetCell.y === row ) {
+          return true;
+        }
+      }
+      return false;
     },
 
     /**
@@ -450,21 +469,21 @@ define( function( require ) {
       var row;
       var column;
 
-      // Return false if the shape goes off the board.
+      // Return false if the shape would go off the board if placed at this location.
       if ( normalizedLocation.x < 0 || normalizedLocation.x + normalizedWidth > this.numColumns ||
            normalizedLocation.y < 0 || normalizedLocation.y + normalizedHeight > this.numRows ) {
         return false;
       }
 
-      // If there are no other shapes on the board, any location is valid.
+      // If there are no other shapes on the board, any location on the board is valid.
       if ( this.residentShapes.length === 0 ) {
         return true;
       }
 
-      // Return false if this shape overlaps any existing shapes.
+      // Return false if this shape overlaps any previously placed shapes.
       for ( row = 0; row < normalizedHeight; row++ ) {
         for ( column = 0; column < normalizedWidth; column++ ) {
-          if ( this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row ) ) {
+          if ( this.isCellOccupiedNowOrSoon( normalizedLocation.x + column, normalizedLocation.y + row ) ) {
             return false;
           }
         }
@@ -475,15 +494,15 @@ define( function( require ) {
         return true;
       }
 
-      // This position is only valid if the shape will share an edge with an already placed shape, since the
-      // 'formComposite' mode is enabled.
+      // This position is only valid if the shape will share an edge with an already placed shape or an incoming shape,
+      // since the 'formComposite' mode is enabled.
       for ( row = 0; row < normalizedHeight; row++ ) {
         for ( column = 0; column < normalizedWidth; column++ ) {
           if (
-            this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row - 1 ) ||
-            this.isCellOccupied( normalizedLocation.x + column - 1, normalizedLocation.y + row ) ||
-            this.isCellOccupied( normalizedLocation.x + column + 1, normalizedLocation.y + row ) ||
-            this.isCellOccupied( normalizedLocation.x + column, normalizedLocation.y + row + 1 )
+            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column, normalizedLocation.y + row - 1 ) ||
+            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column - 1, normalizedLocation.y + row ) ||
+            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column + 1, normalizedLocation.y + row ) ||
+            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column, normalizedLocation.y + row + 1 )
             ) {
             return true;
           }
