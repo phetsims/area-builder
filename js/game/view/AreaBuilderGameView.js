@@ -60,7 +60,7 @@ define( function( require ) {
   var BUTTON_FILL = '#F2E916';
   var INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 10;
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
   var YOUR_GOAL_TITLE = new Text( yourGoalString, { font: new PhetFont( { size: 24, weight: 'bold' } ) } );
 
   /**
