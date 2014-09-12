@@ -451,7 +451,7 @@ define( function( require ) {
   // distinct enough to keep the game interesting.
   function isChallengeSimilar( challenge1, challenge2 ) {
     if ( challenge1.buildSpec && challenge2.buildSpec ) {
-      if ( challenge1.buildSpec.proportions && challenge1.buildSpec.proportions ) {
+      if ( challenge1.buildSpec.proportions && challenge2.buildSpec.proportions ) {
         if ( challenge1.buildSpec.proportions.color1Proportion.denominator === challenge2.buildSpec.proportions.color1Proportion.denominator ) {
           if ( challenge1.buildSpec.perimeter && challenge2.buildSpec.perimeter || !challenge1.buildSpec.perimeter && !challenge2.buildSpec.perimeter ) {
             return true;
