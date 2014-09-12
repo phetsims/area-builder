@@ -343,8 +343,9 @@ define( function( require ) {
 
     // Various other initialization
     this.levelCompletedNode = null; // @private
-    this.shapeCarousel = new Node(); // @private
-    this.challengeLayer.addChild( this.shapeCarousel ); // @private
+    this.shapeCarouselRoot = new Node(); // @private
+    this.shapeCarouselTop = this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
+    this.challengeLayer.addChild( this.shapeCarouselRoot );
     this.clearDimensionsControlOnNextChallenge = false; // @private
 
     // Hook up the update function for handling changes to game state.
@@ -396,7 +397,7 @@ define( function( require ) {
             nodesToShow.push( this.areaQuestionPrompt );
           }
           if ( challenge.userShapes ) {
-            nodesToShow.push( this.shapeCarousel );
+            nodesToShow.push( this.shapeCarouselRoot );
             nodesToShow.push( this.eraserButton );
           }
 
@@ -465,7 +466,7 @@ define( function( require ) {
             nodesToShow.push( this.areaQuestionPrompt );
           }
           if ( challenge.userShapes ) {
-            nodesToShow.push( this.shapeCarousel );
+            nodesToShow.push( this.shapeCarouselRoot );
             nodesToShow.push( this.eraserButton );
           }
 
@@ -501,7 +502,7 @@ define( function( require ) {
             this.updateYouBuiltWindow( challenge );
             nodesToShow.push( this.youBuiltWindow );
             if ( challenge.userShapes ) {
-              nodesToShow.push( this.shapeCarousel );
+              nodesToShow.push( this.shapeCarouselRoot );
               nodesToShow.push( this.eraserButton );
             }
           }
@@ -659,7 +660,7 @@ define( function( require ) {
         // Clean up previous challenge.
         this.model.simSpecificModel.clearShapePlacementBoard();
         this.challengePromptBanner.reset();
-        this.shapeCarousel.removeAllChildren();
+        this.shapeCarouselRoot.removeAllChildren();
 
         var challenge = this.model.currentChallenge; // Convenience var
 
@@ -707,7 +708,7 @@ define( function( require ) {
             } ) );
           }
 
-          // Center the panel over the shape board and make is visible.
+          // Center the panel over the shape board and make it visible.
           this.buildPromptPanel.centerX = this.shapeBoard.centerX;
           this.buildPromptPanel.centerY = this.shapeBoard.centerY;
           this.buildPromptPanel.visible = true;
@@ -736,18 +737,18 @@ define( function( require ) {
           } );
           if ( creatorNodes.length > 4 ) {
             // Add a scrolling carousel.
-            this.shapeCarousel.addChild( new HCarousel( creatorNodes, {
+            this.shapeCarouselRoot.addChild( new HCarousel( creatorNodes, {
               centerX: this.shapeBoard.centerX,
-              top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
+              top: this.shapeCarouselTop,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
             } ) );
           }
           else {
             // Add a non-scrolling panel
             var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
-            this.shapeCarousel.addChild( new Panel( creatorNodeHBox, {
+            this.shapeCarouselRoot.addChild( new Panel( creatorNodeHBox, {
               centerX: this.shapeBoard.centerX,
-              top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
+              top: this.shapeCarouselTop,
               xMargin: 50,
               yMargin: 15,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
@@ -757,8 +758,8 @@ define( function( require ) {
 
         // Position the eraser button.
         this.eraserButton.left = this.shapeBoard.left;
-        if ( challenge.userShapes !== null && this.eraserButton.right + 10 >= this.shapeCarousel.left ) {
-          this.eraserButton.right = this.shapeCarousel.left - 10;
+        if ( challenge.userShapes !== null && this.eraserButton.right + 10 >= this.shapeCarouselRoot.left ) {
+          this.eraserButton.right = this.shapeCarouselRoot.left - 10;
         }
       }
     },
@@ -778,7 +779,7 @@ define( function( require ) {
         this.areaQuestionPrompt,
         this.youBuiltWindow,
         this.youEnteredWindow,
-        this.shapeCarousel,
+        this.shapeCarouselRoot,
         this.eraserButton
       ] );
     },
