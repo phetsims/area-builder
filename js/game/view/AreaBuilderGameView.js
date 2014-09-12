@@ -18,6 +18,7 @@ define( function( require ) {
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
+  var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var HCarousel = require( 'AREA_BUILDER/game/view/HCarousel' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -53,13 +54,6 @@ define( function( require ) {
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
   var startOverString = require( 'string!AREA_BUILDER/startOver' );
-
-  // images
-  var icon1a = require( 'image!AREA_BUILDER/icon-1-a.jpg' );
-  var icon2a = require( 'image!AREA_BUILDER/icon-2-a.jpg' );
-  var icon3a = require( 'image!AREA_BUILDER/icon-3-a.jpg' );
-  var icon4a = require( 'image!AREA_BUILDER/icon-4-a.jpg' );
-  var icon5a = require( 'image!AREA_BUILDER/icon-5-a.jpg' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
@@ -99,11 +93,11 @@ define( function( require ) {
       gameModel.timerEnabledProperty,
       gameModel.soundEnabledProperty,
       [
-        new Image( icon1a ),
-        new Image( icon2a ),
-        new Image( icon3a ),
-        new Image( icon4a ),
-        new Image( icon5a )
+        GameIconFactory.createIcon( 1 ),
+        GameIconFactory.createIcon( 2 ),
+        GameIconFactory.createIcon( 3 ),
+        GameIconFactory.createIcon( 4 ),
+        GameIconFactory.createIcon( 5 )
       ],
       gameModel.bestScores,
       {

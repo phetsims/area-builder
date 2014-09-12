@@ -7,7 +7,6 @@ define( function( require ) {
     // Colors used for the various shapes
     GREENISH_COLOR: '#33E16E',
     PURPLISH_COLOR: '#9D87C9',
-//    ORANGISH_COLOR: '#E78B5D',
     ORANGISH_COLOR: '#FFA64D',
     PERIMETER_DARKEN_FACTOR: 0.6, // The amount that the perimeter colors are darkened from the main shape color
 
