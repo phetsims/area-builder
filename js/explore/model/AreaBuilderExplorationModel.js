@@ -24,7 +24,7 @@ define( function( require ) {
   var UNIT_SQUARE_SIZE = new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
   var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 9, UNIT_SQUARE_LENGTH * 8 );
   var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 19, UNIT_SQUARE_LENGTH * 8 );
-  var PLAY_AREA_WIDTH = 768; // Based on default size in ScreenView.js
+  var PLAY_AREA_WIDTH = AreaBuilderSharedConstants.LAYOUT_BOUNDS.width;
   var SPACE_BETWEEN_PLACEMENT_BOARDS = 35;
   var BOARD_Y_POS = 80; // Empirically determined from looking at the layout
   var BUCKET_SIZE = new Dimension2( 100, 50 );

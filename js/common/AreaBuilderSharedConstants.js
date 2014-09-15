@@ -3,7 +3,14 @@
 define( function( require ) {
   'use strict';
 
+  // modules
+  var ScreenView = require( 'JOIST/ScreenView' );
+
+
   return {
+    // Layout bounds used throughout the simulation for laying out the screens.
+    LAYOUT_BOUNDS: ScreenView.UPDATED_LAYOUT_BOUNDS,
+
     // Colors used for the various shapes
     GREENISH_COLOR: '#33E16E',
     PURPLISH_COLOR: '#9D87C9',

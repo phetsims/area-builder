@@ -51,7 +51,7 @@ define( function( require ) {
    */
   function AreaBuilderExplorationView( model ) {
 
-    ScreenView.call( this, { renderer: 'svg' } );
+    ScreenView.call( this, { renderer: 'svg', layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
 
     // TODO: There is a lot of opportunity for consolidation below.
 

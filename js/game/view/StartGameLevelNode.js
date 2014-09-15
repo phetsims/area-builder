@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LevelStartButton = require( 'VEGAS/LevelStartButton' );
@@ -52,7 +53,8 @@ define( function( require ) {
       highlightedButtonBackgroundColor: 'rgb( 224, 255, 122 )',
       numButtonRows: 1, // For layout
       controlsInset: 12,
-      size: new Dimension2( 768, 504 )
+//      size: new Dimension2( 768, 504 )
+      size: AreaBuilderSharedConstants.LAYOUT_BOUNDS
     }, options );
 
     // Verify parameters

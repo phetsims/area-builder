@@ -68,7 +68,7 @@ define( function( require ) {
    * @constructor
    */
   function AreaBuilderGameView( gameModel ) {
-    ScreenView.call( this, { renderer: 'svg' } );
+    ScreenView.call( this, { renderer: 'svg', layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
     var self = this;
     self.model = gameModel;
 
