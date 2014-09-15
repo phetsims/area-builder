@@ -146,7 +146,7 @@ define( function( require ) {
       gameModel.challengesPerProblemSet,
       gameModel.scoreProperty,
       gameModel.elapsedTimeProperty,
-      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, top: this.shapeBoard.top + 5 }
+      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, top: this.shapeBoard.top }
     );
     this.controlLayer.addChild( this.scoreboard );
 
