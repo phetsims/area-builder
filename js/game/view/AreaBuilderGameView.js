@@ -566,8 +566,11 @@ define( function( require ) {
           // Disable interaction with the challenge elements.
           this.challengeLayer.pickable = false;
 
-          // If the challenge included a perimeter spec, turn on dimensions so that the perimeter is more obvious.
-          if ( challenge.buildSpec && challenge.buildSpec.perimeter && !this.model.simSpecificModel.showDimensions ) {
+          // If the challenge is a 'find the area' challenge or a 'build it' challenge that included a perimeter spec,
+          // turn on dimensions so that the answer is perhaps more obvious.
+          if ( challenge.checkSpec === 'areaEntered' ||
+               challenge.checkSpec === 'areaAndPerimeterConstructed' ||
+               challenge.checkSpec === 'areaPerimeterAndProportionConstructed' ) {
             this.model.simSpecificModel.showDimensions = true;
             this.clearDimensionsControlOnNextChallenge = true;
           }
