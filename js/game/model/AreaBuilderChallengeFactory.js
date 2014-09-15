@@ -123,7 +123,13 @@ define( function( require ) {
 
   // Color chooser, used for selecting randomized colors for 'find the area' challenges.
   var COLOR_CHOOSER = {
-    colorList: _.shuffle( [ new Color( '#1A7137' ), new Color( '#634F8C' ), new Color( '#A95327' ), new Color( '#277DA9' ), new Color( '#AA548D' ) ] ),
+    colorList: _.shuffle( [
+      new Color( AreaBuilderSharedConstants.DARK_GREEN_COLOR ),
+      new Color( AreaBuilderSharedConstants.DARK_PURPLE_COLOR ),
+      new Color( AreaBuilderSharedConstants.ORANGE_BROWN_COLOR ),
+      new Color( AreaBuilderSharedConstants.DARK_BLUE_COLOR ),
+      new Color( AreaBuilderSharedConstants.PURPLE_PINK_COLOR )
+    ] ),
     index: 0,
     nextColor: function() {
       if ( this.index >= this.colorList.length ) {
@@ -147,23 +153,23 @@ define( function( require ) {
     colorPairList: _.shuffle( [
       {
         color1: AreaBuilderSharedConstants.GREENISH_COLOR,
-        color2: '#1A7137'
+        color2: AreaBuilderSharedConstants.DARK_GREEN_COLOR
       },
       {
         color1: AreaBuilderSharedConstants.PURPLISH_COLOR,
-        color2: '#634F8C'
+        color2: AreaBuilderSharedConstants.DARK_PURPLE_COLOR
       },
       {
         color1: AreaBuilderSharedConstants.ORANGISH_COLOR,
-        color2: '#A95327'
+        color2: AreaBuilderSharedConstants.ORANGE_BROWN_COLOR
       },
       {
-        color1: '#5DB9E7',  // Bluish
-        color2: '#277DA9'
+        color1: AreaBuilderSharedConstants.PALE_BLUE_COLOR,
+        color2: AreaBuilderSharedConstants.DARK_BLUE_COLOR
       },
       {
-        color1: '#E88DC9', // Pinkish
-        color2: '#AA548D'
+        color1: AreaBuilderSharedConstants.PINKISH_COLOR,
+        color2: AreaBuilderSharedConstants.PURPLE_PINK_COLOR
       }
     ] ),
     index: 0,

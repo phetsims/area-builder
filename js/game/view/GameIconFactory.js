@@ -90,7 +90,7 @@ define( function( require ) {
           break;
 
         case 4:
-          color = '#A95327';
+          color = AreaBuilderSharedConstants.ORANGE_BROWN_COLOR;
           occupiedCells = [
             new Vector2( 5, 1 ),
             new Vector2( 2, 2 ),
@@ -110,7 +110,7 @@ define( function( require ) {
           break;
 
         case 5:
-          color = '#1A7137';
+          color = AreaBuilderSharedConstants.DARK_GREEN_COLOR;
           occupiedCells = [
             new Vector2( 2, 1 ),
             new Vector2( 3, 1 ),
