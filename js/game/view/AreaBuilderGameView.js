@@ -114,7 +114,7 @@ define( function( require ) {
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
     this.challengeLayer.addChild( this.shapeBoard );
     this.eraserButton = new EraserButton( {
-      right: this.shapeBoard.right,
+      right: this.shapeBoard.left,
       top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
       listener: function() {
         gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( true );
@@ -756,12 +756,6 @@ define( function( require ) {
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
             } ) );
           }
-        }
-
-        // Position the eraser button.
-        this.eraserButton.left = this.shapeBoard.left;
-        if ( challenge.userShapes !== null && this.eraserButton.right + 10 >= this.shapeCarouselRoot.left ) {
-          this.eraserButton.right = this.shapeCarouselRoot.left - 10;
         }
       }
     },
