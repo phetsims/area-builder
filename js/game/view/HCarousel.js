@@ -28,7 +28,7 @@ define( function( require ) {
 
   /**
    * @param {Array<Node>} children
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function HCarousel( children, options ) {

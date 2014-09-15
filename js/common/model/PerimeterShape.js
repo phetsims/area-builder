@@ -58,7 +58,7 @@ define( function( require ) {
    * points. Each interior perimeter must be fully contained within an exterior perimeter.
    * @param {Number} unitLength The unit length (i.e. the width or height of a unit square) of the unit sizes that
    * this shape should be constructed from.
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength, options ) {

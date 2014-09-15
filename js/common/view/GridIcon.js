@@ -21,7 +21,7 @@ define( function( require ) {
    * @param {Number} cellLength
    * @param {String} shapeFillColor
    * @param {Array<Vector2>} occupiedCells
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function GridIcon( columns, rows, cellLength, shapeFillColor, occupiedCells, options ) {

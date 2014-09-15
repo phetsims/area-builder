@@ -34,7 +34,7 @@ define( function( require ) {
    * @param {String || Color} color
    * TODO: Pass in just the creator function instead of the whole model.
    * @param {Object} model A model that supports adding shapes.
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function ShapeCreatorNode( shape, color, model, options ) {

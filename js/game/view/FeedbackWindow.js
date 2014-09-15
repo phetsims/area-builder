@@ -29,7 +29,7 @@ define( function( require ) {
    *
    * @param {String} title
    * @param {Number} maxWidth
-   * @param {object} options
+   * @param {Object} [options]
    * @constructor
    */
   function FeedbackWindow( title, maxWidth, options ) {

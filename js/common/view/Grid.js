@@ -15,7 +15,7 @@ define( function( require ) {
   /**
    * @param {Bounds2} bounds
    * @param {Number} spacing
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function Grid( bounds, spacing, options ) {

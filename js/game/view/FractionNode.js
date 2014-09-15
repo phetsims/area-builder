@@ -12,7 +12,7 @@ define( function( require ) {
 
   /**
    * @param {Fraction} fraction
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function FractionNode( fraction, options ) {

@@ -35,7 +35,7 @@ define( function( require ) {
    * should be the same, length of array must match number of levels.
    * @param {Array} scores - Current scores, used to decide which stars to
    * illuminate on the level start buttons, length must match number of levels.
-   * @param {Object} options - See code below for options and default values.
+   * @param {Object} [options] - See code below for options and default values.
    * @constructor
    */
   function StartGameLevelNode( startLevelFunction, resetFunction, timerEnabledProperty, soundEnabledProperty, iconNodes, scores, options ) {

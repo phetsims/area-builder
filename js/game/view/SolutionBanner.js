@@ -36,7 +36,7 @@ define( function( require ) {
   /**
    * @param {Number} width
    * @param {Number} height
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function SolutionBanner( width, height, options ) {
