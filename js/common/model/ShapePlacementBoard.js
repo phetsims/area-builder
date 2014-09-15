@@ -567,16 +567,6 @@ define( function( require ) {
       }
     },
 
-    // @private util TODO: check if still used, delete if not.
-    addIfNotRedundant: function( position, positionList ) {
-      for ( var i = 0; i < positionList.length; i++ ) {
-        if ( positionList[i].equals( position ) ) {
-          return;
-        }
-      }
-      positionList.push( position );
-    },
-
     cellToModelCoords: function( column, row ) {
       return new Vector2( column * this.unitSquareLength + this.bounds.minX, row * this.unitSquareLength + this.bounds.minY );
     },
