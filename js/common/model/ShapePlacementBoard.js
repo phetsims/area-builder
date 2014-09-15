@@ -225,9 +225,9 @@ define( function( require ) {
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
       movableShape.invisibleWhenStill = this.formComposite;
 
-      movableShape.setDestination( this.cellToModelCoords( cellColumn, cellRow ), true );
-      // TODO: Would it work to add it directly to the resident shape list?  Try it.
+      // Add the shape by putting it on the list of incoming shapes and setting its destination.
       this.incomingShapes.push( movableShape );
+      movableShape.setDestination( this.cellToModelCoords( cellColumn, cellRow ), true );
 
       // The remaining code in this function assumes that the shape is animating to the new location, and will cause
       // odd results if it isn't, so we check it here.
