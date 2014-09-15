@@ -911,10 +911,13 @@ define( function( require ) {
           break;
 
         case 4:
-          challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaChallenge ) );
-          _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaChallenge ) ); } );
-          _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaAndPerimeterChallenge ) ); } );
-          challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaChallenge ) ); } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaChallenge ) ); } );
+          break;
+
+        case 5:
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaAndPerimeterChallenge ) ); } );
+          _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) ); } );
           break;
 
       }

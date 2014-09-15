@@ -97,13 +97,15 @@ define( function( require ) {
         GameIconFactory.createIcon( 2 ),
         GameIconFactory.createIcon( 3 ),
         GameIconFactory.createIcon( 4 ),
-        GameIconFactory.createIcon( 5 )
+        GameIconFactory.createIcon( 5 ),
+        GameIconFactory.createIcon( 6 )
       ],
       gameModel.bestScores,
       {
         numStarsOnButtons: gameModel.challengesPerProblemSet,
         perfectScore: gameModel.maxPossibleScore,
-        numLevels: gameModel.numberOfLevels
+        numLevels: gameModel.numberOfLevels,
+        numButtonRows: 2
       }
     );
     this.rootNode.addChild( this.startGameLevelNode );

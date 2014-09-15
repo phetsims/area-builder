@@ -27,7 +27,7 @@ define( function( require ) {
     this.simSpecificModel = simSpecificModel; // @public
 
     options = _.extend( {
-      numberOfLevels: 5,
+      numberOfLevels: 6,
       challengesPerProblemSet: 6,
       maxPointsPerProblem: 2
     } );
