@@ -55,7 +55,7 @@ define( function( require ) {
         lineWidth: options.shapeLineWidth,
         left: occupiedCell.x * cellLength,
         top: occupiedCell.y * cellLength
-      } ) )
+      } ) );
     } );
 
     // Pass options through to the parent class.

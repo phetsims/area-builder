@@ -21,7 +21,6 @@ define( function( require ) {
   var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var HCarousel = require( 'AREA_BUILDER/game/view/HCarousel' );
-  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
