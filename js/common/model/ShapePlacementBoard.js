@@ -586,7 +586,8 @@ define( function( require ) {
     },
 
     modelToCellCoords: function( x, y ) {
-      return new Vector2( ( x - this.bounds.minX ) / this.unitSquareLength, ( y - this.bounds.minY ) / this.unitSquareLength );
+      return new Vector2( Math.round( ( x - this.bounds.minX ) / this.unitSquareLength ),
+        Math.round( ( y - this.bounds.minY ) / this.unitSquareLength ) );
     },
 
     modelToCellVector: function( v ) {
