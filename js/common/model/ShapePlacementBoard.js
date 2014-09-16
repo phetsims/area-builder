@@ -588,7 +588,6 @@ define( function( require ) {
       vector.setXY( Math.round( vector.x ), Math.round( vector.y ) );
     },
 
-    //TODO: May be unused, remove if so.
     createShapeFromPerimeterPoints: function( perimeterPoints ) {
       var perimeterShape = new Shape();
       perimeterShape.moveToPoint( perimeterPoints[ 0 ] );

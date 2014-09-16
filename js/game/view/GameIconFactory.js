@@ -46,7 +46,7 @@ define( function( require ) {
           break;
 
         case 2:
-          color = AreaBuilderSharedConstants.PURPLISH_COLOR;
+          color = AreaBuilderSharedConstants.ORANGE_BROWN_COLOR;
           occupiedCells = [
             new Vector2( 2, 1 ),
             new Vector2( 3, 1 ),
@@ -90,7 +90,7 @@ define( function( require ) {
           break;
 
         case 4:
-          color = AreaBuilderSharedConstants.ORANGE_BROWN_COLOR;
+          color = AreaBuilderSharedConstants.DARK_GREEN_COLOR;
           occupiedCells = [
             new Vector2( 5, 1 ),
             new Vector2( 2, 2 ),
@@ -110,7 +110,7 @@ define( function( require ) {
           break;
 
         case 5:
-          color = AreaBuilderSharedConstants.PINKISH_COLOR;
+          color = AreaBuilderSharedConstants.PURPLISH_COLOR;
           occupiedCells = [
             new Vector2( 2, 1 ),
             new Vector2( 3, 1 ),
@@ -132,7 +132,7 @@ define( function( require ) {
           break;
 
         case 6:
-          color = AreaBuilderSharedConstants.PALE_BLUE_COLOR;
+          color = AreaBuilderSharedConstants.PINKISH_COLOR;
           occupiedCells = [
             new Vector2( 2, 1 ),
             new Vector2( 3, 1 ),

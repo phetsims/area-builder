@@ -124,11 +124,11 @@ define( function( require ) {
   // Color chooser, used for selecting randomized colors for 'find the area' challenges.
   var COLOR_CHOOSER = {
     colorList: _.shuffle( [
-      new Color( AreaBuilderSharedConstants.DARK_GREEN_COLOR ),
-      new Color( AreaBuilderSharedConstants.DARK_PURPLE_COLOR ),
-      new Color( AreaBuilderSharedConstants.ORANGE_BROWN_COLOR ),
-      new Color( AreaBuilderSharedConstants.DARK_BLUE_COLOR ),
-      new Color( AreaBuilderSharedConstants.PURPLE_PINK_COLOR )
+      new Color( AreaBuilderSharedConstants.PALE_BLUE_COLOR ),
+      new Color( AreaBuilderSharedConstants.PINKISH_COLOR ),
+      new Color( AreaBuilderSharedConstants.PURPLISH_COLOR ),
+      new Color( AreaBuilderSharedConstants.ORANGISH_COLOR ),
+      new Color( AreaBuilderSharedConstants.DARK_GREEN_COLOR )
     ] ),
     index: 0,
     nextColor: function() {
@@ -158,10 +158,6 @@ define( function( require ) {
       {
         color1: AreaBuilderSharedConstants.PURPLISH_COLOR,
         color2: AreaBuilderSharedConstants.DARK_PURPLE_COLOR
-      },
-      {
-        color1: AreaBuilderSharedConstants.ORANGISH_COLOR,
-        color2: AreaBuilderSharedConstants.ORANGE_BROWN_COLOR
       },
       {
         color1: AreaBuilderSharedConstants.PALE_BLUE_COLOR,
