@@ -42,7 +42,7 @@ define( function( require ) {
     this.shapePlacementBoard = new ShapePlacementBoard(
       BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
-      new Vector2( ( AreaBuilderSharedConstants.LAYOUT_BOUNDS.width - BOARD_SIZE.width ) * 0.55, 90 ), // Position empirically determined
+      new Vector2( ( AreaBuilderSharedConstants.LAYOUT_BOUNDS.width - BOARD_SIZE.width ) * 0.55, 85 ), // Position empirically determined
       '*', // Allow any color shape to be placed on the board
       this.showGridProperty,
       this.showDimensionsProperty

@@ -104,7 +104,8 @@ define( function( require ) {
         numStarsOnButtons: gameModel.challengesPerProblemSet,
         perfectScore: gameModel.maxPossibleScore,
         numLevels: gameModel.numberOfLevels,
-        numButtonRows: 2
+        numButtonRows: 2,
+        controlsInset: 20
       }
     );
     this.rootNode.addChild( this.startGameLevelNode );

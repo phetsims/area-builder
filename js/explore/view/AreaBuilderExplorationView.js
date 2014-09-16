@@ -37,13 +37,7 @@ define( function( require ) {
 
   // constants
   var CONTROL_INSET = 15;
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 18;
-
-  // Map of colors used for the shapes to the mode where those shapes are visible
-  var MAP_COLORS_TO_MODES = {};
-  MAP_COLORS_TO_MODES[ AreaBuilderSharedConstants.GREENISH_COLOR ] = 'dual';
-  MAP_COLORS_TO_MODES[ AreaBuilderSharedConstants.PURPLISH_COLOR ] = 'dual';
-  MAP_COLORS_TO_MODES[ AreaBuilderSharedConstants.ORANGISH_COLOR ] = 'single';
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
 
   /**
    * @param {AreaBuilderExplorationModel} model
@@ -215,7 +209,7 @@ define( function( require ) {
     var switchPanel = new Panel(
       new VBox( {
         children: [
-          new ABSwitch( model.boardDisplayModeProperty, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 40, 20 ) } )
+          new ABSwitch( model.boardDisplayModeProperty, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 36, 18 ) } )
         ],
         spacing: 10
       } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
@@ -237,7 +231,7 @@ define( function( require ) {
 
     // Add the reset button.
     this.addChild( new ResetAllButton( {
-      radius: 22,
+      radius: 20,
       right: this.layoutBounds.width - CONTROL_INSET,
       bottom: this.layoutBounds.height - CONTROL_INSET,
       lineWidth: 1,

@@ -17,7 +17,7 @@ define( function( require ) {
   var perimeterString = require( 'string!AREA_BUILDER/perimeter' );
 
   // constants
-  var DISPLAY_FONT = new PhetFont( 16 );
+  var DISPLAY_FONT = new PhetFont( 14 );
 
   function AreaAndPerimeterDisplay( areaProperty, areaTextColor, perimeterProperty, perimeterTextColor, options ) {
     Node.call( this );

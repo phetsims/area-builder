@@ -5,11 +5,12 @@ define( function( require ) {
 
   // modules
   var ScreenView = require( 'JOIST/ScreenView' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
 
   return {
     // Layout bounds used throughout the simulation for laying out the screens.
-    LAYOUT_BOUNDS: ScreenView.UPDATED_LAYOUT_BOUNDS,
+    LAYOUT_BOUNDS: new Bounds2( 0, 0, 768, 464 ),
 
     // Colors used for the various shapes
     GREENISH_COLOR: '#33E16E',
@@ -30,6 +31,6 @@ define( function( require ) {
     // Various other constants
     CONTROL_PANEL_BACKGROUND_COLOR: 'rgb( 254, 241, 233 )',
 
-    UNIT_SQUARE_LENGTH: 35 // In screen coordinates, used in several places
+    UNIT_SQUARE_LENGTH: 32 // In screen coordinates, used in several places
   };
 } );
