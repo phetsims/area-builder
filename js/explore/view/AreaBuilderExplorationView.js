@@ -21,7 +21,9 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
+  var ExploreIcon = require( 'AREA_BUILDER/explore/view/ExploreIcon' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
@@ -181,35 +183,35 @@ define( function( require ) {
       singleBoardRoot.visible = boardDisplayMode === 'single';
     } );
 
-    // Create and add the control panel
-    // TODO: These icons are temporary until we work some things out.
-    var twoRectIcon = new Node();
-    var iconRectOptions = { fill: 'white', stroke: 'black' };
-    twoRectIcon.addChild( new Rectangle( 0, 0, 24, 24, 0, 0, iconRectOptions ) );
-    twoRectIcon.addChild( new Rectangle( 26, 0, 24, 24, 0, 0, iconRectOptions ) );
-    var greenFill = AreaBuilderSharedConstants.GREENISH_COLOR;
-    var greenStroke = Color.toColor( greenFill ).darkerColor( 0.6 );
-    twoRectIcon.addChild( new Rectangle( 6, 6, 6, 6, 0, 0, { fill: greenFill, stroke: greenStroke } ) );
-    twoRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: greenFill, stroke: greenStroke } ) );
-    twoRectIcon.addChild( new Rectangle( 12, 12, 6, 6, 0, 0, { fill: greenFill, stroke: greenStroke } ) );
-    var purpleFill = AreaBuilderSharedConstants.PURPLISH_COLOR;
-    var purpleStroke = Color.toColor( purpleFill ).darkerColor( 0.6 );
-    twoRectIcon.addChild( new Rectangle( 32, 6, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
-    twoRectIcon.addChild( new Rectangle( 38, 6, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
-    twoRectIcon.addChild( new Rectangle( 32, 12, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
-    twoRectIcon.addChild( new Rectangle( 38, 12, 6, 6, 0, 0, { fill: purpleFill, stroke: purpleStroke } ) );
-    var oneRectIcon = new Rectangle( 0, 0, 24, 24, 0, 0, iconRectOptions );
-    var orangeFill = AreaBuilderSharedConstants.ORANGISH_COLOR;
-    var orangeStroke = Color.toColor( orangeFill ).darkerColor( 0.6 );
-    oneRectIcon.addChild( new Rectangle( 12, 6, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
-    oneRectIcon.addChild( new Rectangle( 6, 12, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
-    oneRectIcon.addChild( new Rectangle( 12, 12, 6, 6, 0, 0, { fill: orangeFill, stroke: orangeStroke } ) );
+    // Create the icons used on the A-B switch
+    var dualBoardIcon = new HBox( {
+        children: [
+          new ExploreIcon( AreaBuilderSharedConstants.GREENISH_COLOR, 6, [
+            new Vector2( 0, 0 ),
+            new Vector2( 1, 0 ),
+            new Vector2( 1, 1 )
+          ] ),
+          new ExploreIcon( AreaBuilderSharedConstants.PURPLISH_COLOR, 6, [
+            new Vector2( 0, 0 ),
+            new Vector2( 0, 1 ),
+            new Vector2( 1, 0 ),
+            new Vector2( 1, 1 )
+          ] )
+        ],
+        spacing: 3
+      }
+    );
+    var singleBoardIcon = new ExploreIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
+      new Vector2( 0, 1 ),
+      new Vector2( 1, 0 ),
+      new Vector2( 1, 1 )
+    ] );
 
     // Create and add the panel that contains the ABSwitch.
     var switchPanel = new Panel(
       new VBox( {
         children: [
-          new ABSwitch( model.boardDisplayModeProperty, 'single', oneRectIcon, 'dual', twoRectIcon, { switchSize: new Dimension2( 36, 18 ) } )
+          new ABSwitch( model.boardDisplayModeProperty, 'single', singleBoardIcon, 'dual', dualBoardIcon, { switchSize: new Dimension2( 36, 18 ) } )
         ],
         spacing: 10
       } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
