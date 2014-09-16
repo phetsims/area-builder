@@ -15,13 +15,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PropertySet = require( 'AXON/PropertySet' );
-  var RectangleCreator = require( 'AREA_BUILDER/explore/model/RectangleCreator' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
-  var UNIT_SQUARE_SIZE = new Dimension2( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
   var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 9, UNIT_SQUARE_LENGTH * 8 );
   var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 19, UNIT_SQUARE_LENGTH * 8 );
   var PLAY_AREA_WIDTH = AreaBuilderSharedConstants.LAYOUT_BOUNDS.width;
@@ -29,16 +27,6 @@ define( function( require ) {
   var BOARD_Y_POS = 75; // Empirically determined from looking at the layout
   var BUCKET_SIZE = new Dimension2( 90, 45 );
   var BOARD_TO_BUCKET_Y_SPACING = 45;
-  var INITIAL_NUM_SQUARES_OF_EACH_COLOR = 5;
-  var INITIAL_OFFSET_POSITIONS = [
-    // Offsets used for initial position of shape, relative to bucket hole center.  Empirically determined.
-    new Vector2( -20 - UNIT_SQUARE_LENGTH / 2, 0 - UNIT_SQUARE_LENGTH / 2 ),
-    new Vector2( -10 - UNIT_SQUARE_LENGTH / 2, -2 - UNIT_SQUARE_LENGTH / 2 ),
-    new Vector2( 9 - UNIT_SQUARE_LENGTH / 2, 1 - UNIT_SQUARE_LENGTH / 2 ),
-    new Vector2( 18 - UNIT_SQUARE_LENGTH / 2, 3 - UNIT_SQUARE_LENGTH / 2 ),
-    new Vector2( 3 - UNIT_SQUARE_LENGTH / 2, 5 - UNIT_SQUARE_LENGTH / 2 )
-  ];
-  assert && assert( INITIAL_OFFSET_POSITIONS.length === INITIAL_NUM_SQUARES_OF_EACH_COLOR, 'Must have initial offsets for all shapes' );
 
   function AreaBuilderExplorationModel() {
     var self = this;
@@ -104,54 +92,48 @@ define( function( require ) {
       size: BUCKET_SIZE,
       invertY: true
     } );
-
-    function placeShape( shape ) {
-      var shapePlaced = false;
-      for ( var i = 0; i < self.shapePlacementBoards.length && !shapePlaced; i++ ) {
-        shapePlaced = self.shapePlacementBoards[i].placeShape( shape );
-      }
-      if ( !shapePlaced ) {
-        shape.goHome( true );
-      }
-    }
-
-    // Function for adding new movable elements to this model
-    function addModelElement( shape ) {
-      self.movableShapes.push( shape );
-      shape.userControlledProperty.link( function( userControlled ) {
-        if ( !userControlled ) {
-          placeShape( shape );
-        }
-      } );
-
-      // TODO: This doesn't feel quite right and should be revisited later in the evolution of this simulation.  It is
-      // relying on the shape to return to its origin and not be user controlled in order to remove it from the model.
-      // It may make more sense to have an explicit 'freed' or 'dismissed' signal or something of that nature.
-      shape.on( 'returnedHome', function() {
-        if ( !shape.userControlled ) {
-          // The shape has been returned to the bucket.
-          self.movableShapes.remove( shape );
-        }
-      } );
-    }
-
-    // Create the creator elements, which sit in the buckets and listen for user clicks and subsequently add the
-    // movable elements to the model.
-    this.rectangleCreators = [];
-    _.times( INITIAL_NUM_SQUARES_OF_EACH_COLOR, function( index ) {
-      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, self.leftBucket.position.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
-        AreaBuilderSharedConstants.GREENISH_COLOR, addModelElement ) );
-      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, self.rightBucket.position.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
-        AreaBuilderSharedConstants.PURPLISH_COLOR, addModelElement ) );
-      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, self.centerBucket.position.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
-        AreaBuilderSharedConstants.ORANGISH_COLOR, addModelElement ) );
-    } );
   }
 
   return inherit( PropertySet, AreaBuilderExplorationModel, {
 
     step: function( dt ) {
       this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );
+    },
+
+    placeShape: function( shape ) {
+      var shapePlaced = false;
+      for ( var i = 0; i < this.shapePlacementBoards.length && !shapePlaced; i++ ) {
+        shapePlaced = this.shapePlacementBoards[i].placeShape( shape );
+      }
+      if ( !shapePlaced ) {
+        shape.goHome( true );
+      }
+    },
+
+    /**
+     * Function for adding new movable shapes to this model when the user creates them, generally by clicking on some
+     * some sort of creator node.
+     * @public
+     * @param movableShape
+     */
+    addUserCreatedMovableShape: function( movableShape ) {
+      var self = this;
+      this.movableShapes.push( movableShape );
+      movableShape.userControlledProperty.link( function( userControlled ) {
+        if ( !userControlled ) {
+          self.placeShape( movableShape );
+        }
+      } );
+
+      // TODO: This doesn't feel quite right and should be revisited later in the evolution of this simulation.  It is
+      // relying on the shape to return to its origin and not be user controlled in order to remove it from the model.
+      // It may make more sense to have an explicit 'freed' or 'dismissed' signal or something of that nature.
+      movableShape.on( 'returnedHome', function() {
+        if ( !movableShape.userControlled ) {
+          // The shape has been returned to the bucket.
+          self.movableShapes.remove( movableShape );
+        }
+      } );
     },
 
     // Resets all model elements

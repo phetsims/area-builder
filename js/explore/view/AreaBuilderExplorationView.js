@@ -28,10 +28,10 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PaperAirplaneNode = require( 'SCENERY_PHET/PaperAirplaneNode' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var RectangleCreatorNode = require( 'AREA_BUILDER/explore/view/RectangleCreatorNode' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var Shape = require( 'KITE/Shape' );
+  var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -40,6 +40,15 @@ define( function( require ) {
   // constants
   var CONTROL_INSET = 15;
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
+  var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
+  var SHAPE_CREATOR_OFFSET_POSITIONS = [
+    // Offsets used for initial position of shape, relative to bucket hole center.  Empirically determined.
+    new Vector2( -20 - UNIT_SQUARE_LENGTH / 2, 0 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( -10 - UNIT_SQUARE_LENGTH / 2, -2 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( 9 - UNIT_SQUARE_LENGTH / 2, 1 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( 18 - UNIT_SQUARE_LENGTH / 2, 3 - UNIT_SQUARE_LENGTH / 2 ),
+    new Vector2( 3 - UNIT_SQUARE_LENGTH / 2, 5 - UNIT_SQUARE_LENGTH / 2 )
+  ];
 
   /**
    * @param {AreaBuilderExplorationModel} model
@@ -124,14 +133,20 @@ define( function( require ) {
     singleBoardBackLayer.addChild( centerBucketHole );
 
     // Add the creator nodes.
-    model.rectangleCreators.forEach( function( rectangleCreator ) {
-      var rectangleCreatorNode = new RectangleCreatorNode( rectangleCreator );
-      if ( model.centerShapePlacementBoard.colorHandled.equals( Color.toColor( rectangleCreator.color ) ) ) {
-        singleBoardCreatorLayer.addChild( rectangleCreatorNode );
-      }
-      else {
-        dualBoardCreatorLayer.addChild( rectangleCreatorNode );
-      }
+    var rectangleShape = new Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
+    SHAPE_CREATOR_OFFSET_POSITIONS.forEach( function( offset ) {
+      singleBoardCreatorLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.ORANGISH_COLOR, model, {
+        left: centerBucketHole.centerX + offset.x,
+        top: centerBucketHole.centerY + offset.y
+      } ) );
+      dualBoardCreatorLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.GREENISH_COLOR, model, {
+        left: leftBucketHole.centerX + offset.x,
+        top: leftBucketHole.centerY + offset.y
+      } ) );
+      dualBoardCreatorLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.PURPLISH_COLOR, model, {
+        left: rightBucketHole.centerX + offset.x,
+        top: rightBucketHole.centerY + offset.y
+      } ) );
     } );
 
     // Add the clear buttons

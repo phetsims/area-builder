@@ -4,9 +4,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var ScreenView = require( 'JOIST/ScreenView' );
   var Bounds2 = require( 'DOT/Bounds2' );
-
 
   return {
     // Layout bounds used throughout the simulation for laying out the screens.
