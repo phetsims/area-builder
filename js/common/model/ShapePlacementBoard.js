@@ -192,12 +192,7 @@ define( function( require ) {
         }
 
         // Set up a listener to remove this shape when the user grabs is.
-        var removalListener = function( userControlled ) {
-          assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
-          self.removeResidentShape( movableShape );
-        };
-        self.tagListener( removalListener );
-        movableShape.userControlledProperty.once( removalListener );
+        self.addRemovalListener( movableShape );
       };
 
       // Tag the listener so that it can be removed without firing if needed, such as when the board is cleared due to
@@ -605,7 +600,7 @@ define( function( require ) {
         for ( var i = 1; i < perimeterPoints.length; i++ ) {
           perimeterShape.lineToPoint( perimeterPoints[i] );
         }
-        perimeterShape.close(); //TODO: Check with JO that multiple close operations are reasonable on the same shape.
+        perimeterShape.close();
       } );
       return perimeterShape;
     },
@@ -857,7 +852,7 @@ define( function( require ) {
     /**
      * Replace one of the composite shapes that currently resides on this board with a set of unit squares.  This is
      * generally done when a composite shape was placed on the board but we now want it treated as a bunch of smaller
-     * unitSquares instead.
+     * unit squares instead.
      *
      * @param originalShape
      * @param unitSquares Pieces that comprise the original shape, MUST BE CORRECTLY LOCATED since this method does not
@@ -875,17 +870,22 @@ define( function( require ) {
       unitSquares.forEach( function( movableUnitSquare ) {
         self.residentShapes.push( movableUnitSquare );
 
-        // Set up a listener to remove this shape when the user grabs is.
-        // TODO: This code was cut and pasted from another portion of this file.  If kept, should be consolidated.
-        var removalListener = function( userControlled ) {
-          assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
-          self.removeResidentShape( movableUnitSquare );
-        };
-        self.tagListener( removalListener );
-        movableUnitSquare.userControlledProperty.once( removalListener );
+        // Set up a listener to remove this shape when the user grabs it.
+        this.addRemovalListener( movableUnitSquare );
 
+        // Make some state updates.
         self.updateCellOccupation( movableUnitSquare, 'add' );
       } );
+    },
+
+    addRemovalListener: function( movableShape ) {
+      var self = this;
+      var removalListener = function( userControlled ) {
+        assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
+        self.removeResidentShape( movableShape );
+      };
+      this.tagListener( removalListener );
+      movableShape.userControlledProperty.once( removalListener );
     },
 
     setCompositeShapeColorScheme: function( fillColor, edgeColor ) {
