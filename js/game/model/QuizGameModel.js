@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Framework for a quiz style game, where the user is presented with various 'challenges' which must be answered and
+ * Framework for a quiz style game where the user is presented with various 'challenges' which must be answered and
  * for which they get points.  The game has multiple levels.
  *
  * @author John Blanco
@@ -15,10 +15,10 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
 
   /**
-   * TODO: doc this once it's stable
-   * @param challengeFactory
-   * @param simSpecificModel
-   * @param options
+   * @param {Object} challengeFactory - Factory object that is used to create challenges, examine usage for details.
+   * @param {Object} simSpecificModel - Model containing the elements of the game that are unique to this sim, used to
+   * delegate certain actions.  Look through code for usage details.
+   * @param {Object} options
    * @constructor
    */
   function QuizGameModel( challengeFactory, simSpecificModel, options ) {
@@ -28,8 +28,8 @@ define( function( require ) {
 
     options = _.extend( {
       numberOfLevels: 6,
-      challengesPerProblemSet: 6,
-      maxPointsPerProblem: 2
+      challengesPerSet: 6,
+      maxPointsPerChallenge: 2
     } );
 
     PropertySet.call( this, {
@@ -48,9 +48,9 @@ define( function( require ) {
     );
 
     this.numberOfLevels = options.numberOfLevels; // @public
-    this.challengesPerProblemSet = options.challengesPerProblemSet; // @public
-    this.maxPointsPerProblem = options.maxPointsPerProblem; // @public
-    this.maxPossibleScore = options.challengesPerProblemSet * options.maxPointsPerProblem; // @public
+    this.challengesPerSet = options.challengesPerSet; // @public
+    this.maxPointsPerChallenge = options.maxPointsPerChallenge; // @public
+    this.maxPossibleScore = options.challengesPerSet * options.maxPointsPerChallenge; // @public
 
     // @private Wall time at which current level was started.
     thisModel.gameStartTime = 0;
@@ -97,7 +97,7 @@ define( function( require ) {
         this.restartGameTimer();
 
         // Create the list of challenges.
-        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerProblemSet );
+        this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerSet );
 
         // Set up the model for the next challenge
         this.currentChallenge = this.challengeList[ this.challengeIndex ];
@@ -117,7 +117,7 @@ define( function( require ) {
       },
 
       getChallengeCurrentPointValue: function() {
-        return Math.max( this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge, 0 );
+        return Math.max( this.maxPointsPerChallenge - this.incorrectGuessesOnCurrentChallenge, 0 );
       },
 
       // Check the user's proposed answer.
@@ -132,11 +132,11 @@ define( function( require ) {
           this.gameState = 'showingCorrectAnswerFeedback';
           if ( this.incorrectGuessesOnCurrentChallenge === 0 ) {
             // User got it right the first time.
-            pointsEarned = this.maxPointsPerProblem;
+            pointsEarned = this.maxPointsPerChallenge;
           }
           else {
             // User got it wrong at first, but got it right now.
-            pointsEarned = Math.max( this.maxPointsPerProblem - this.incorrectGuessesOnCurrentChallenge, 0 );
+            pointsEarned = Math.max( this.maxPointsPerChallenge - this.incorrectGuessesOnCurrentChallenge, 0 );
           }
           this.score = this.score + pointsEarned;
         }

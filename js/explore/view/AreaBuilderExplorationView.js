@@ -134,7 +134,7 @@ define( function( require ) {
       }
     } );
 
-    // Add the clear buttons TODO: add undo button.
+    // Add the clear buttons
     var leftBoardClearButton = new EraserButton( {
       right: leftBucketFront.right - 3,
       top: leftBucketFront.bottom + 5,

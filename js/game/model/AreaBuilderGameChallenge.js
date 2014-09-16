@@ -12,8 +12,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
 
-  // TODO: Consider making the build spec into a separate class.
-
   /**
    * @param {object} toolSpec An object that specifies which tools are available to the user.  It should have three
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether

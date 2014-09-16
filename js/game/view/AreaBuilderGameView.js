@@ -101,7 +101,7 @@ define( function( require ) {
       ],
       gameModel.bestScores,
       {
-        numStarsOnButtons: gameModel.challengesPerProblemSet,
+        numStarsOnButtons: gameModel.challengesPerSet,
         perfectScore: gameModel.maxPossibleScore,
         numLevels: gameModel.numberOfLevels,
         numButtonRows: 2,
@@ -143,7 +143,7 @@ define( function( require ) {
     this.scoreboard = new AreaBuilderScoreboard(
       gameModel.levelProperty,
       gameModel.challengeIndexProperty,
-      gameModel.challengesPerProblemSet,
+      gameModel.challengesPerSet,
       gameModel.scoreProperty,
       gameModel.elapsedTimeProperty,
       { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, top: this.shapeBoard.top }
@@ -821,7 +821,7 @@ define( function( require ) {
         this.model.level,
         this.model.score,
         this.model.maxPossibleScore,
-        this.model.challengesPerProblemSet,
+        this.model.challengesPerSet,
         this.model.timerEnabled,
         this.model.elapsedTime,
         this.model.bestTimes[ this.model.level ],
