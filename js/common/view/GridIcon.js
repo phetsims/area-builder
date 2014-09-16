@@ -62,7 +62,5 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Node, GridIcon, {
-    //TODO prototypes
-  } );
+  return inherit( Node, GridIcon );
 } );

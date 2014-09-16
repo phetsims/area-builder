@@ -871,7 +871,7 @@ define( function( require ) {
         self.residentShapes.push( movableUnitSquare );
 
         // Set up a listener to remove this shape when the user grabs it.
-        this.addRemovalListener( movableUnitSquare );
+        self.addRemovalListener( movableUnitSquare );
 
         // Make some state updates.
         self.updateCellOccupation( movableUnitSquare, 'add' );

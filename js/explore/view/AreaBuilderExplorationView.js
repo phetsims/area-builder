@@ -106,21 +106,21 @@ define( function( require ) {
     singleBoardBackLayer.addChild( centerAreaAndPerimeterDisplay );
 
     // Add the bucket views
-    var invertIdentityTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( Vector2.ZERO, Vector2.ZERO, 1 );
-    var leftBucketFront = new BucketFront( model.leftBucket, invertIdentityTransform );
+    var identityTransform = ModelViewTransform2.createIdentity();
+    var leftBucketFront = new BucketFront( model.leftBucket, identityTransform );
     leftBucketFront.addChild( new PaperAirplaneNode( { right: leftBucketFront.width * 0.35, top: leftBucketFront.height * 0.3 } ) );
     dualBoardBucketFrontLayer.addChild( leftBucketFront );
-    var leftBucketHole = new BucketHole( model.leftBucket, invertIdentityTransform );
+    var leftBucketHole = new BucketHole( model.leftBucket, identityTransform );
     dualBoardBackLayer.addChild( leftBucketHole );
-    var rightBucketFront = new BucketFront( model.rightBucket, invertIdentityTransform );
+    var rightBucketFront = new BucketFront( model.rightBucket, identityTransform );
     rightBucketFront.addChild( new PaperAirplaneNode( { right: rightBucketFront.width * 0.35, top: rightBucketFront.height * 0.3 } ) );
     dualBoardBucketFrontLayer.addChild( rightBucketFront );
-    var rightBucketHole = new BucketHole( model.rightBucket, invertIdentityTransform );
+    var rightBucketHole = new BucketHole( model.rightBucket, identityTransform );
     dualBoardBackLayer.addChild( rightBucketHole );
-    var centerBucketFront = new BucketFront( model.centerBucket, invertIdentityTransform );
+    var centerBucketFront = new BucketFront( model.centerBucket, identityTransform );
     centerBucketFront.addChild( new PaperAirplaneNode( { right: centerBucketFront.width * 0.35, top: centerBucketFront.height * 0.3 } ) );
     singleBoardBucketFrontLayer.addChild( centerBucketFront );
-    var centerBucketHole = new BucketHole( model.centerBucket, invertIdentityTransform );
+    var centerBucketHole = new BucketHole( model.centerBucket, identityTransform );
     singleBoardBackLayer.addChild( centerBucketHole );
 
     // Add the creator nodes.

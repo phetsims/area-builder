@@ -43,7 +43,6 @@ define( function( require ) {
   function AreaBuilderExplorationModel() {
     var self = this;
 
-    // TODO: If a bunch of properties are added, consider making this extend PropertySet
     PropertySet.call( this, {
       showGrids: true, // @public
       showDimensions: false, // @public
@@ -83,27 +82,27 @@ define( function( require ) {
     self.shapePlacementBoards = [ self.leftShapePlacementBoard, self.rightShapePlacementBoard, self.centerShapePlacementBoard ];
 
     // Create the buckets that will hold the shapes.
-    // TODO: The bucket positions are hokey here because the implementation
-    // TODO: assumes an inverted Y direction.  The common code should be made
-    // TODO: to work with this if the buckets are retained in the UI design.
-    var bucketYPos = -( self.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING );
+    var bucketYPos = self.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
     this.leftBucket = new Bucket( {
       position: new Vector2( self.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
       baseColor: '#000080',
       caption: '',
-      size: BUCKET_SIZE
+      size: BUCKET_SIZE,
+      invertY: true
     } );
     this.rightBucket = new Bucket( {
       position: new Vector2( self.rightShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
       baseColor: '#000080',
       caption: '',
-      size: BUCKET_SIZE
+      size: BUCKET_SIZE,
+      invertY: true
     } );
     this.centerBucket = new Bucket( {
       position: new Vector2( self.centerShapePlacementBoard.bounds.minX + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
       baseColor: '#000080',
       caption: '',
-      size: BUCKET_SIZE
+      size: BUCKET_SIZE,
+      invertY: true
     } );
 
     function placeShape( shape ) {
@@ -137,18 +136,15 @@ define( function( require ) {
       } );
     }
 
-    // Create the creator elements, which sit in the buckets and listen for
-    // user clicks and subsequently add the movable elements to the model.
+    // Create the creator elements, which sit in the buckets and listen for user clicks and subsequently add the
+    // movable elements to the model.
     this.rectangleCreators = [];
-    var compensatedLeftBucketPos = new Vector2( self.leftBucket.position.x, -self.leftBucket.position.y );
-    var compensatedRightBucketPos = new Vector2( self.rightBucket.position.x, -self.rightBucket.position.y );
-    var compensatedCenterBucketPos = new Vector2( self.centerBucket.position.x, -self.centerBucket.position.y );
     _.times( INITIAL_NUM_SQUARES_OF_EACH_COLOR, function( index ) {
-      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, compensatedLeftBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
+      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, self.leftBucket.position.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
         AreaBuilderSharedConstants.GREENISH_COLOR, addModelElement ) );
-      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, compensatedRightBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
+      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, self.rightBucket.position.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
         AreaBuilderSharedConstants.PURPLISH_COLOR, addModelElement ) );
-      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, compensatedCenterBucketPos.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
+      self.rectangleCreators.push( new RectangleCreator( UNIT_SQUARE_SIZE, self.centerBucket.position.plus( INITIAL_OFFSET_POSITIONS[ index ] ),
         AreaBuilderSharedConstants.ORANGISH_COLOR, addModelElement ) );
     } );
   }
