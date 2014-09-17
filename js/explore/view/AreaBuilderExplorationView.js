@@ -27,7 +27,6 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
-  var PaperAirplaneNode = require( 'SCENERY_PHET/PaperAirplaneNode' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var Shape = require( 'KITE/Shape' );
@@ -113,17 +112,14 @@ define( function( require ) {
     // Add the bucket views
     var identityTransform = ModelViewTransform2.createIdentity();
     var leftBucketFront = new BucketFront( model.leftBucket, identityTransform );
-    leftBucketFront.addChild( new PaperAirplaneNode( { right: leftBucketFront.width * 0.35, top: leftBucketFront.height * 0.3 } ) );
     dualBoardBucketFrontLayer.addChild( leftBucketFront );
     var leftBucketHole = new BucketHole( model.leftBucket, identityTransform );
     dualBoardBackLayer.addChild( leftBucketHole );
     var rightBucketFront = new BucketFront( model.rightBucket, identityTransform );
-    rightBucketFront.addChild( new PaperAirplaneNode( { right: rightBucketFront.width * 0.35, top: rightBucketFront.height * 0.3 } ) );
     dualBoardBucketFrontLayer.addChild( rightBucketFront );
     var rightBucketHole = new BucketHole( model.rightBucket, identityTransform );
     dualBoardBackLayer.addChild( rightBucketHole );
     var centerBucketFront = new BucketFront( model.centerBucket, identityTransform );
-    centerBucketFront.addChild( new PaperAirplaneNode( { right: centerBucketFront.width * 0.35, top: centerBucketFront.height * 0.3 } ) );
     singleBoardBucketFrontLayer.addChild( centerBucketFront );
     var centerBucketHole = new BucketHole( model.centerBucket, identityTransform );
     singleBoardBackLayer.addChild( centerBucketHole );
@@ -133,19 +129,19 @@ define( function( require ) {
     SHAPE_CREATOR_OFFSET_POSITIONS.forEach( function( offset ) {
       singleBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.ORANGISH_COLOR,
         model.addUserCreatedMovableShape.bind( model ), {
-        left: centerBucketHole.centerX + offset.x,
-        top: centerBucketHole.centerY + offset.y
-      } ) );
+          left: centerBucketHole.centerX + offset.x,
+          top: centerBucketHole.centerY + offset.y
+        } ) );
       dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.GREENISH_COLOR,
         model.addUserCreatedMovableShape.bind( model ), {
-        left: leftBucketHole.centerX + offset.x,
-        top: leftBucketHole.centerY + offset.y
-      } ) );
+          left: leftBucketHole.centerX + offset.x,
+          top: leftBucketHole.centerY + offset.y
+        } ) );
       dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.PURPLISH_COLOR,
         model.addUserCreatedMovableShape.bind( model ), {
-        left: rightBucketHole.centerX + offset.x,
-        top: rightBucketHole.centerY + offset.y
-      } ) );
+          left: rightBucketHole.centerX + offset.x,
+          top: rightBucketHole.centerY + offset.y
+        } ) );
     } );
 
     // Add the clear buttons
