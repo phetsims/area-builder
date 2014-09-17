@@ -59,7 +59,7 @@ define( function( require ) {
       buildSpec: null,
 
       // This flag controls whether the prompts are visible (i.e. the target area, target perimeter, target
-      // proportions).  It should be toggled each time the prompts are updated for correct fade-in behavior.
+      // proportions).  It should be toggled each time the prompts are updated for correct animation behavior.
       showPrompts: false,
 
       // Spec for fractional area building problems.

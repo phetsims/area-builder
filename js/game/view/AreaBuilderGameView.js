@@ -79,7 +79,7 @@ define( function( require ) {
     this.addChild( self.rootNode );
     this.rootNode.moveToBack();
 
-    // Add layers used to control game appearance. TODO: This needs to be revisited - which nodes go where and such - and possibly simplified.
+    // Add layers used to control game appearance.
     this.controlLayer = new Node();
     this.rootNode.addChild( this.controlLayer );
     this.challengeLayer = new Node();
@@ -121,9 +121,6 @@ define( function( require ) {
       }
     } );
     this.challengeLayer.addChild( this.eraserButton );
-    // TODO: Do I need a separate challengeView?  Or just do it all on challengeLayer?
-    this.challengeView = new Node();
-    this.challengeLayer.addChild( this.challengeView );
     this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
     this.challengeLayer.addChild( this.youBuiltWindow );
     this.youEnteredWindow = new YouEnteredWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
@@ -306,9 +303,12 @@ define( function( require ) {
 
       // If the initial build prompt is visible, hide it.
       if ( self.buildPromptPanel.opacity === 1 ) {
-        // TODO: SR expressed a concern that this might have performance issues due to the way Tween works.  Consider
         // using a function instead, see Seasons sim, PanelNode.js for an example.
-        new TWEEN.Tween( self.buildPromptPanel ).to( { opacity: 0 }, 600 ).easing( TWEEN.Easing.Cubic.InOut ).start();
+        new TWEEN.Tween( { opacity: self.buildPromptPanel.opacity } )
+          .to( { opacity: 0}, 500 )
+          .easing( TWEEN.Easing.Cubic.InOut )
+          .onUpdate( function() { self.buildPromptPanel.opacity = this.opacity; } )
+          .start();
       }
 
       // Show the build prompts on the challenge prompt banner if they aren't shown already.
@@ -389,7 +389,6 @@ define( function( require ) {
             this.scoreboard,
             this.controlPanel,
             this.checkAnswerButton,
-            this.challengeView,
             this.challengePromptBanner
           ];
 
@@ -422,7 +421,6 @@ define( function( require ) {
             this.scoreboard,
             this.controlPanel,
             this.nextButton,
-            this.challengeView,
             this.challengePromptBanner,
             this.faceWithPointsNode
           ];
@@ -457,7 +455,6 @@ define( function( require ) {
             this.scoreboard,
             this.controlPanel,
             this.tryAgainButton,
-            this.challengeView,
             this.challengePromptBanner,
             this.faceWithPointsNode
           ];
@@ -493,7 +490,6 @@ define( function( require ) {
           nodesToShow = [
             this.scoreboard,
             this.controlPanel,
-            this.challengeView,
             this.challengePromptBanner,
             this.faceWithPointsNode
           ];
@@ -539,7 +535,6 @@ define( function( require ) {
             this.scoreboard,
             this.controlPanel,
             this.nextButton,
-            this.challengeView,
             this.solutionBanner
           ];
 
@@ -654,7 +649,7 @@ define( function( require ) {
       return false;
     },
 
-
+    // Present the challenge to the user and set things up so that they can submit their answer.
     presentChallenge: function() {
 
       var self = this;
@@ -681,7 +676,6 @@ define( function( require ) {
         }
 
         // If needed, set up the goal prompt that will initially appear over the shape placement board (in the z-order).
-        this.challengeView.removeAllChildren(); // TODO: Is this needed?  It may be vestigial.
         if ( challenge.buildSpec ) {
 
           this.buildPromptVBox.removeAllChildren();
@@ -764,8 +758,7 @@ define( function( require ) {
       }
     },
 
-    // Utility method for hiding all of the game nodes whose visibility changes
-    // during the course of a challenge.
+    // Utility method for hiding all of the game nodes whose visibility changes during the course of a challenge.
     hideAllGameNodes: function() {
       this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
       this.setNodeVisibility( false, [
@@ -818,7 +811,7 @@ define( function( require ) {
       var thisScreen = this;
 
       // Set a new "level completed" node based on the results.
-      thisScreen.levelCompletedNode = new LevelCompletedNode(
+      var levelCompletedNode = new LevelCompletedNode(
         this.model.level,
         this.model.score,
         this.model.maxPossibleScore,
@@ -829,8 +822,8 @@ define( function( require ) {
         thisScreen.model.newBestTime,
         function() {
           thisScreen.model.gameState = 'choosingLevel';
-          thisScreen.rootNode.removeChild( thisScreen.levelCompletedNode );
-          thisScreen.levelCompletedNode = null;
+          thisScreen.rootNode.removeChild( levelCompletedNode );
+          levelCompletedNode = null;
         },
         {
           center: thisScreen.layoutBounds.center
@@ -838,7 +831,7 @@ define( function( require ) {
       );
 
       // Add the node.
-      this.rootNode.addChild( thisScreen.levelCompletedNode );
+      this.rootNode.addChild( levelCompletedNode );
     }
   } );
 } );
