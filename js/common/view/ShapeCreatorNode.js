@@ -3,12 +3,6 @@
 /**
  * Type that represents a node that can be clicked upon to create new movable shapes in the model.
  *
- * TODO: Look at consolidating this with the creator nodes used in the 'Explore' screen.  They are separate as of this
- * writing but do pretty much the same thing.  The difficulty in doing this at first was that the creator node on
- * the first screen relied upon a model element, and we didn't want one in this case, since the nodes will be going on
- * a carousel.  I'm not sure why I did it that way in the explore view actually, since it doesn't seem important to
- * have a creator node in the model.
- *
  * @author John Blanco
  */
 define( function( require ) {
