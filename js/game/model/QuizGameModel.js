@@ -183,7 +183,7 @@ define( function( require ) {
       },
 
       tryAgain: function() {
-        // TODO: May need hooks for restoring to original state, if that is necessary.
+        this.simSpecificModel.tryAgain();
         this.gameState = 'presentingInteractiveChallenge';
       },
 

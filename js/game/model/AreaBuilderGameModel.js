@@ -201,6 +201,11 @@ define( function( require ) {
         return answerIsCorrect;
       },
 
+      // Called from main model so that this model can do what it needs to in order to give the user another chance.
+      tryAgain: function() {
+        // Nothing needs to be reset in this model to allow the user to try again.
+      },
+
       /**
        * Returns true if the proportion of the current shapes that are the provided color is equal to the provided
        * proportion value, false otherwise.
