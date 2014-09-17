@@ -16,7 +16,6 @@ define( function( require ) {
    * @param {object} toolSpec An object that specifies which tools are available to the user.  It should have three
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether
    * the user is allowed to control these things for this challenge.
-   * @param {boolean} showNumberEntryPad Flag that controls whether key pad is present in this challenge.
    * @param {Array<Object>} userShapes An array of shape specification that describe the shapes that can be created and
    * manipulated by the user for this challenge.  Each shape specification is an object with a 'shape' field and a
    * 'color' field.  This value can be null to signify no user shapes are present for the challenge.
@@ -31,13 +30,12 @@ define( function( require ) {
    * null for challenges where no example solution needs to be shown.
    * @constructor
    */
-  function AreaBuilderGameChallenge( toolSpec, showNumberEntryPad, userShapes, buildSpec, backgroundShape, checkSpec, exampleBuildItSolution ) {
+  function AreaBuilderGameChallenge( toolSpec, userShapes, buildSpec, backgroundShape, checkSpec, exampleBuildItSolution ) {
     // Verification
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
     // TODO: Maybe add some additional verification.
 
     this.toolSpec = toolSpec;
-    this.showNumberEntryPad = showNumberEntryPad;
     this.userShapes = userShapes;
     this.buildSpec = buildSpec;
     this.backgroundShape = backgroundShape;
@@ -56,9 +54,6 @@ define( function( require ) {
         dimensionsControl: true,
         decompositionToolControl: true
       },
-
-      // showNumberEntryPad
-      false,
 
       // userShapes
       userShapes,
@@ -86,9 +81,6 @@ define( function( require ) {
         decompositionToolControl: true
       },
 
-      // showNumberEntryPad
-      false,
-
       // userShapes
       userShapes,
 
@@ -114,9 +106,6 @@ define( function( require ) {
         dimensionsControl: true,
         decompositionToolControl: true
       },
-
-      // showNumberEntryPad
-      false,
 
       // userShapes
       userShapes,
@@ -144,9 +133,6 @@ define( function( require ) {
         decompositionToolControl: true
       },
 
-      // showNumberEntryPad
-      false,
-
       // userShapes
       userShapes,
 
@@ -172,9 +158,6 @@ define( function( require ) {
         dimensionsControl: true,
         decompositionToolControl: true
       },
-
-      // showNumberEntryPad
-      true,
 
       // userShapes
       userShapes,
