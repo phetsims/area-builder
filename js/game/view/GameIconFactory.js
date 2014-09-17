@@ -16,7 +16,7 @@ define( function( require ) {
   var NUM_ROWS = 9;
   var CELL_LENGTH = 3;
   var GRID_ICON_OPTIONS = {
-    gridStroke: '#eeeeee',
+    gridStroke: '#dddddd',
     gridLineWidth: 0.25,
     shapeLineWidth: 0.25
   };
