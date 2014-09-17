@@ -65,8 +65,6 @@ define( function( require ) {
     this.addChild( singleBoardRoot );
     var singleBoardBackLayer = new Node();
     singleBoardRoot.addChild( singleBoardBackLayer );
-    var singleBoardCreatorLayer = new Node();
-    singleBoardRoot.addChild( singleBoardCreatorLayer );
     var singleBoardMovableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
     singleBoardRoot.addChild( singleBoardMovableShapesLayer );
     var singleBoardBucketFrontLayer = new Node();
@@ -79,8 +77,6 @@ define( function( require ) {
     this.addChild( dualBoardRoot );
     var dualBoardBackLayer = new Node();
     dualBoardRoot.addChild( dualBoardBackLayer );
-    var dualBoardCreatorLayer = new Node();
-    dualBoardRoot.addChild( dualBoardCreatorLayer );
     var dualBoardMovableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
     dualBoardRoot.addChild( dualBoardMovableShapesLayer );
     var dualBoardBucketFrontLayer = new Node();
@@ -132,18 +128,18 @@ define( function( require ) {
     var centerBucketHole = new BucketHole( model.centerBucket, identityTransform );
     singleBoardBackLayer.addChild( centerBucketHole );
 
-    // Add the creator nodes.
+    // Add the creator nodes.  These must be added after the bucket holes for proper layering.
     var rectangleShape = new Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
     SHAPE_CREATOR_OFFSET_POSITIONS.forEach( function( offset ) {
-      singleBoardCreatorLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.ORANGISH_COLOR, model, {
+      singleBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.ORANGISH_COLOR, model, {
         left: centerBucketHole.centerX + offset.x,
         top: centerBucketHole.centerY + offset.y
       } ) );
-      dualBoardCreatorLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.GREENISH_COLOR, model, {
+      dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.GREENISH_COLOR, model, {
         left: leftBucketHole.centerX + offset.x,
         top: leftBucketHole.centerY + offset.y
       } ) );
-      dualBoardCreatorLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.PURPLISH_COLOR, model, {
+      dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.PURPLISH_COLOR, model, {
         left: rightBucketHole.centerX + offset.x,
         top: rightBucketHole.centerY + offset.y
       } ) );
