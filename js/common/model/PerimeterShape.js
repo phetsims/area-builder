@@ -12,6 +12,9 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+  var FLOATING_POINT_ERR_TOLERANCE = 1e-6;
+
   // Utility function to compute the unit area of a perimeter shape.
   function calculateUnitArea( shape, unitLength ) {
 
@@ -19,7 +22,8 @@ define( function( require ) {
       return 0;
     }
 
-    assert && assert( shape.bounds.width % unitLength === 0 && shape.bounds.height % unitLength === 0,
+    assert && assert( shape.bounds.width % unitLength < FLOATING_POINT_ERR_TOLERANCE &&
+                      shape.bounds.height % unitLength < FLOATING_POINT_ERR_TOLERANCE,
       'Error: This method will only work with shapes that have bounds of unit width and height.'
     );
 

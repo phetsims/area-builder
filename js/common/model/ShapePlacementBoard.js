@@ -408,7 +408,10 @@ define( function( require ) {
       }
       for ( var i = 0; i < this.incomingShapes.length; i++ ) {
         var targetCell = this.modelToCellVector( this.incomingShapes[ i ].destination );
-        if ( targetCell.x === column && targetCell.y === row ) {
+        var normalizedWidth = Math.round( this.incomingShapes[ i ].shape.bounds.width / this.unitSquareLength );
+        var normalizedHeight = Math.round( this.incomingShapes[ i ].shape.bounds.height / this.unitSquareLength );
+        if ( column >= targetCell.x && column < targetCell.x + normalizedWidth &&
+             row >= targetCell.y && row < targetCell.y + normalizedHeight ) {
           return true;
         }
       }
@@ -459,8 +462,8 @@ define( function( require ) {
      */
     isValidToPlace: function( movableShape, location ) {
       var normalizedLocation = this.modelToCellVector( location );
-      var normalizedWidth = movableShape.shape.bounds.width / this.unitSquareLength;
-      var normalizedHeight = movableShape.shape.bounds.height / this.unitSquareLength;
+      var normalizedWidth = Math.round( movableShape.shape.bounds.width / this.unitSquareLength );
+      var normalizedHeight = Math.round( movableShape.shape.bounds.height / this.unitSquareLength );
       var row;
       var column;
 
