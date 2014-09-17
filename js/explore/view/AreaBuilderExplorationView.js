@@ -131,15 +131,18 @@ define( function( require ) {
     // Add the creator nodes.  These must be added after the bucket holes for proper layering.
     var rectangleShape = new Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
     SHAPE_CREATOR_OFFSET_POSITIONS.forEach( function( offset ) {
-      singleBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.ORANGISH_COLOR, model, {
+      singleBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.ORANGISH_COLOR,
+        model.addUserCreatedMovableShape.bind( model ), {
         left: centerBucketHole.centerX + offset.x,
         top: centerBucketHole.centerY + offset.y
       } ) );
-      dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.GREENISH_COLOR, model, {
+      dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.GREENISH_COLOR,
+        model.addUserCreatedMovableShape.bind( model ), {
         left: leftBucketHole.centerX + offset.x,
         top: leftBucketHole.centerY + offset.y
       } ) );
-      dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.PURPLISH_COLOR, model, {
+      dualBoardBackLayer.addChild( new ShapeCreatorNode( rectangleShape, AreaBuilderSharedConstants.PURPLISH_COLOR,
+        model.addUserCreatedMovableShape.bind( model ), {
         left: rightBucketHole.centerX + offset.x,
         top: rightBucketHole.centerY + offset.y
       } ) );

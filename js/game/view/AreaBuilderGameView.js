@@ -738,7 +738,8 @@ define( function( require ) {
               creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
             }
             creatorNodes.push( new ShapeCreatorNode( userShapeSpec.shape, userShapeSpec.color,
-              self.model.simSpecificModel, creatorNodeOptions ) );
+              self.model.simSpecificModel.addUserCreatedMovableShape.bind( self.model.simSpecificModel ),
+              creatorNodeOptions ) );
           } );
           if ( creatorNodes.length > 4 ) {
             // Add a scrolling carousel.

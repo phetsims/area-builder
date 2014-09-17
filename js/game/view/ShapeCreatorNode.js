@@ -32,12 +32,11 @@ define( function( require ) {
   /**
    * @param {Shape} shape
    * @param {String || Color} color
-   * TODO: Pass in just the creator function instead of the whole model.
-   * @param {Object} model A model that supports adding shapes.
+   * @param {Function} addShapeToModel - A function for adding the created shape to the model
    * @param {Object} [options]
    * @constructor
    */
-  function ShapeCreatorNode( shape, color, model, options ) {
+  function ShapeCreatorNode( shape, color, addShapeToModel, options ) {
     assert && assert( shape.bounds.minX === 0 && shape.bounds.minY === 0, 'Error: Shape is expected to be located at 0, 0' );
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
@@ -113,7 +112,7 @@ define( function( require ) {
         // Create and add the new model element.
         movableShape = new MovableShape( shape, color, initialPosition );
         movableShape.userControlled = true;
-        model.addUserCreatedMovableShape( movableShape );
+        addShapeToModel( movableShape );
 
         // If the creation count is limited, adjust the value and monitor the created shape for if/when it is returned.
         if ( options.creationLimit < Number.POSITIVE_INFINITY ) {
