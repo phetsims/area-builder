@@ -32,8 +32,8 @@ define( function( require ) {
    */
   function AreaBuilderGameChallenge( toolSpec, userShapes, buildSpec, backgroundShape, checkSpec, exampleBuildItSolution ) {
     // Verification
+    assert && assert( buildSpec instanceof BuildSpec || buildSpec === null );
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
-    // TODO: Maybe add some additional verification.
 
     this.toolSpec = toolSpec;
     this.userShapes = userShapes;
