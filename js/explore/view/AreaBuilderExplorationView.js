@@ -31,7 +31,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var Shape = require( 'KITE/Shape' );
-  var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
+  var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );

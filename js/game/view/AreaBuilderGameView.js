@@ -29,7 +29,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var ShapeCreatorNode = require( 'AREA_BUILDER/game/view/ShapeCreatorNode' );
+  var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
   var SolutionBanner = require( 'AREA_BUILDER/game/view/SolutionBanner' );
