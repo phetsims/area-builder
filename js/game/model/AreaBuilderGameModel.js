@@ -97,10 +97,9 @@ define( function( require ) {
           }
         } );
 
-        //TODO: This doesn't feel quite right and should be revisited later in the evolution of this simulation.  It is
-        //TODO: relying on the shape to return to its origin and not be user controlled in order to remove it from the
-        //TODO: model.  It may make more sense to have an explicit 'freed' or 'dismissed' signal or something of that
-        //TODO: nature.
+        // TODO: This doesn't feel quite right and should be revisited later in the evolution of this simulation.  It
+        // is relying on the shape to return to its origin and not be user controlled in order to remove it from the
+        // model.  It may make more sense to have an explicit 'freed' or 'dismissed' signal or something of that nature.
         movableShape.on( 'returnedHome', function() {
           if ( !movableShape.userControlled ) {
             // The shape has been returned to its origin.
