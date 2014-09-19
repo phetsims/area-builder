@@ -925,7 +925,7 @@ define( function( require ) {
           _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) ); } );
           break;
 
-        //REVIEW this switch needs a default, throw new Error( 'level out of range: ' + level )
+        //REVIEW this switch needs a default, throw new Error( 'unsupported level: ' + level )
       }
       assert && assert( challengeSet.length === numChallenges, 'Error: Didn\'t generate correct number of challenges.' );
       return challengeSet;
