@@ -1,5 +1,9 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+/**
+ * A composiite Scenery node that brings together a keypad and a box where the entered values are displayed.  Kind of
+ * looks like a calculator, though it doesn't behave as one.
+ */
 define( function( require ) {
   'use strict';
 
@@ -14,6 +18,10 @@ define( function( require ) {
   // constants
   var READOUT_FONT = new PhetFont( 20 );
 
+  /**
+   * @param {Object} options
+   * @constructor
+   */
   function NumberEntryControl( options ) {
     Node.call( this );
     var self = this;

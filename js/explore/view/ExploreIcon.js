@@ -1,5 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+/**
+ * A Scenery node that represents a set of squares placed on a grid, used for making icons.
+ */
 define( function( require ) {
   'use strict';
 
@@ -14,7 +17,7 @@ define( function( require ) {
   /**
    * @param {String || Color } color
    * @param {Number} rectangleLength
-   * @param {Array<Vector>} positions
+   * @param {Array<Vector2>} positions
    * @constructor
    */
   function ExploreIcon( color, rectangleLength, positions ) {

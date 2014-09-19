@@ -1,5 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+/**
+ * A scenery node that displays the area and perimeter of shape that may change dynamically.
+ */
 define( function( require ) {
   'use strict';
 
@@ -19,6 +22,14 @@ define( function( require ) {
   // constants
   var DISPLAY_FONT = new PhetFont( 14 );
 
+  /**
+   * @param {Property<Number>} areaProperty
+   * @param {Color} areaTextColor
+   * @param {Promperty<Number>} perimeterProperty
+   * @param {Color} perimeterTextColor
+   * @param {Object} options
+   * @constructor
+   */
   function AreaAndPerimeterDisplay( areaProperty, areaTextColor, perimeterProperty, perimeterTextColor, options ) {
     Node.call( this );
     var contentNode = new Node();

@@ -1,8 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * The 'Explore' screen in the Area Builder simulation. Conforms to the
- * contract specified in joist/Screen.
+ * The 'Explore' screen in the Area Builder simulation. Conforms to the contract specified in joist/Screen.
  *
  * @author John Blanco
  */
