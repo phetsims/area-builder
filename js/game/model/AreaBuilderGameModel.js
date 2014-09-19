@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW I don't understand how this 'works in conjunction with the QuizGameModel', elaborate/clarify
 /**
  * Game model that works in conjunction with the QuizGameModel to add the elements that are specific to the Area
  * Builder game.
@@ -33,7 +34,7 @@ define( function( require ) {
   function AreaBuilderGameModel() {
 
     PropertySet.call( this, {
-      showGrid: false,
+      showGrid: false, //REVIEW which grid? board, composite shape, both?
       showDimensions: false
     } );
 
@@ -111,6 +112,7 @@ define( function( require ) {
         } );
       },
 
+      //REVIEW @private? @public?
       /**
        * Add a unit square directly to the shape placement board in the specified cell location (as opposed to model
        * location).  This was created to enable solutions to game challenges to be shown, but may have other uses.
@@ -132,17 +134,20 @@ define( function( require ) {
         this.shapePlacementBoard.addShapeDirectlyToCell( cellColumn, cellRow, shape );
       },
 
+      //REVIEW @private? @public?
       // Clear the placement board of all shapes placed on it by the user
       clearShapePlacementBoard: function() {
         this.shapePlacementBoard.releaseAllShapes( false );
       },
 
+      //REVIEW @private? @public?
       startLevel: function() {
         // Clear the 'show dimensions' and 'show grid' flag at the beginning of each new level.
         this.shapePlacementBoard.showDimensionsProperty.value = false;
         this.shapePlacementBoard.showGridProperty.value = false;
       },
 
+      //REVIEW @private? @public?
       displayCorrectAnswer: function( challenge ) {
         var self = this;
         if ( challenge.buildSpec ) {
@@ -160,6 +165,7 @@ define( function( require ) {
         }
       },
 
+      //REVIEW @private? @public?
       checkAnswer: function( challenge ) {
 
         var answerIsCorrect = false;
@@ -203,11 +209,13 @@ define( function( require ) {
         return answerIsCorrect;
       },
 
+      //REVIEW @private? @public?
       // Called from main model so that this model can do what it needs to in order to give the user another chance.
       tryAgain: function() {
         // Nothing needs to be reset in this model to allow the user to try again.
       },
 
+      //REVIEW @private? @public?
       /**
        * Returns true if the proportion of the current shapes that are the provided color is equal to the provided
        * proportion value, false otherwise.
@@ -229,6 +237,7 @@ define( function( require ) {
         return ( Math.abs( proportion - colorCount / this.movableShapes.length ) ) < 1E-6;
       },
 
+      //REVIEW @private? @public?
       /**
        * Returns the proportion of the shapes on the board that are the same color as the provided value.
        * @param color
@@ -238,6 +247,7 @@ define( function( require ) {
         return this.shapePlacementBoard.getProportionOfColor( color );
       },
 
+      //REVIEW @private? @public?
       /**
        * Set up anything in the model that is needed for the specified challenge.
        *

@@ -1,5 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW I didn't understand that this was an experiment at a reusable framework until we discussed on the phone.
+//REVIEW Elaborate on how responsibilies are divided between the reusable framework and the sim-specific piece that it delegates to.
 /**
  * Framework for a quiz style game where the user is presented with various 'challenges' which must be answered and
  * for which they get points.  The game has multiple levels.
@@ -14,18 +16,23 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
 
+  //REVIEW challengeFactory is not an Object, it requires methods that are called herein
+  //REVIEW simSpecificModel is not an Object, it requires methods that are called herein
+  //REVIEW elaborate on why you're calling this 'simSpecificModel'
   /**
    * @param {Object} challengeFactory - Factory object that is used to create challenges, examine usage for details.
    * @param {Object} simSpecificModel - Model containing the elements of the game that are unique to this sim, used to
    * delegate certain actions.  Look through code for usage details.
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function QuizGameModel( challengeFactory, simSpecificModel, options ) {
     var thisModel = this;
     this.challengeFactory = challengeFactory; // @private
+    //REVIEW making this public seems to defeat the advantages of composition, and argues for inheritance
     this.simSpecificModel = simSpecificModel; // @public
 
+    //REVIEW are you intentionally omitting the second 'options' arg to _.extend ?
     options = _.extend( {
       numberOfLevels: 6,
       challengesPerSet: 6,
@@ -40,6 +47,7 @@ define( function( require ) {
         currentChallenge: null,
         score: 0,
         elapsedTime: 0,
+        //REVIEW especially with verbose strings like this that are easy to mistype, I recommend using an enum pattern
         // Game state, valid values are 'choosingLevel', 'presentingInteractiveChallenge',
         // 'showingCorrectAnswerFeedback', 'showingIncorrectAnswerFeedbackTryAgain',
         // 'showingIncorrectAnswerFeedbackMoveOn', 'displayingCorrectAnswer', 'showingLevelResults'
@@ -56,18 +64,18 @@ define( function( require ) {
     thisModel.gameStartTime = 0;
 
     // Best times and scores.
-    thisModel.bestTimes = [];
-    thisModel.bestScores = [];
+    thisModel.bestTimes = []; //REVIEW @private or @public?
+    thisModel.bestScores = []; //REVIEW @private or @public?
     _.times( options.numberOfLevels, function() {
       thisModel.bestTimes.push( null );
       thisModel.bestScores.push( new Property( 0 ) );
     } );
 
-    // Counter used to track number of incorrect answers.
+    // Counter used to track number of incorrect answers. //REVIEW @private or @public?
     this.incorrectGuessesOnCurrentChallenge = 0;
 
     // Current set of challenges, which collectively comprise a single level, on which the user is currently working.
-    thisModel.challengeList = null;
+    thisModel.challengeList = null;  //REVIEW @private or @public?
 
     // Let the sim-specific model know when the challenge changes.
     thisModel.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ); } );
@@ -75,6 +83,8 @@ define( function( require ) {
 
   return inherit( PropertySet, QuizGameModel,
     {
+      //REVIEW are any of these prototype functions private?
+
       step: function( dt ) {
         this.simSpecificModel.step( dt );
       },

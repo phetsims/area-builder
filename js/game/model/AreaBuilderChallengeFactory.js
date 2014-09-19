@@ -838,6 +838,7 @@ define( function( require ) {
     return challenge;
   }
 
+  //REVIEW what is "the spec"? The Google design doc?
   // In the spec, level 4 has some unique requirements.  This function encapsulates these requirements, see the spec
   // for details.
   function makeLevel4SpecificModifications( challenge ) {
@@ -924,6 +925,7 @@ define( function( require ) {
           _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) ); } );
           break;
 
+        //REVIEW this switch needs a default, throw new Error( 'level out of range: ' + level )
       }
       assert && assert( challengeSet.length === numChallenges, 'Error: Didn\'t generate correct number of challenges.' );
       return challengeSet;

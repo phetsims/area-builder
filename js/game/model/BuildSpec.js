@@ -14,12 +14,13 @@ define( function( require ) {
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
 
+  //REVIEW color1, color2 and color1Proportion are apparently optional, indicate so in @param doc
   /**
    * @param {number} area
    * @param {number} perimeter
    * @param {Color || String} color1
    * @param {Color || String} color2
-   * @param {Fraction} color1Proportion
+   * @param {Fraction} color1Proportion //REVIEW how is this related to color1? range of values?
    * @constructor
    */
   function BuildSpec( area, perimeter, color1, color2, color1Proportion ) {
@@ -29,6 +30,7 @@ define( function( require ) {
       assert && assert( typeof( perimeter ) === 'number' );
       this.perimeter = perimeter;
     }
+    //REVIEW color1, color2 and color1Proportion must all be provided, or they are ignored. It would be better to pass in as one (optional) object literal with these 3 properties.
     if ( color1 !== null && color1Proportion !== null && color2 !== null ) {
       assert && assert( color1Proportion instanceof Fraction );
       this.proportions = {};
@@ -41,11 +43,14 @@ define( function( require ) {
   return inherit( Object, BuildSpec, {
     equals: function( that ) {
 
+      //REVIEW if ( !( that instanceof BuildSpec ) ) { return false; }
+
       // Compare area, which should always be defined.
       if ( this.area !== that.area ) {
         return false;
       }
 
+      //REVIEW is zero a valid value for perimeter? if so, this has problems
       // Compare perimeter
       if ( this.perimeter && !that.perimeter ||
            !this.perimeter && that.perimeter ||
@@ -73,6 +78,7 @@ define( function( require ) {
 
     // Static functions
 
+    //REVIEW use of null args is yucky. I would use options that default to null in the constructor. Then delete these factory functions, whose call sites are difficult to grok.
     areaOnly: function( area ) {
       return new BuildSpec( area, null, null, null, null );
     },

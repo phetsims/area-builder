@@ -24,7 +24,7 @@ define( function( require ) {
   var gameIcon = require( 'image!AREA_BUILDER/game-icon.png' );
 
   // constants
-  var BACKGROUND_COLOR = 'rgb( 225, 255, 255 )';
+  var BACKGROUND_COLOR = 'rgb( 225, 255, 255 )'; //REVIEW same as AreaBuilderExploreScreen, factor out?
 
   function AreaBuilderGameScreen() {
 
