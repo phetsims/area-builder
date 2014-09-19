@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW until I saw Node.call, I expected this to be a subtype of ScreenView. Rename to ShapeNode?
 /**
  * Type that represents a movable shape in the view.
  *
@@ -27,7 +28,7 @@ define( function( require ) {
   var BORDER_LINE_WIDTH = 1;
 
   /**
-   * @param movableShape
+   * @param {MovableShape} movableShape
    * @constructor
    */
   function ShapeView( movableShape ) {
@@ -78,11 +79,14 @@ define( function( require ) {
         return ( userControlled || animating || fadeProportion > 0 || !invisibleWhenStill );
       } );
 
+    //REVIEW you're assuming that opacity is 1 - fadeProportion. Why not just replace fadeProportion with opacity in the model?
+    //REVIEW document range of opacity, or refer to scenery
     // Opacity is also a derived property.
     var opacityProperty = new DerivedProperty( [
         movableShape.userControlledProperty,
         movableShape.animatingProperty,
         movableShape.fadeProportionProperty ],
+      //REVIEW there's an extra param in this function, invisibleWhenStill is not a dependency
       function( userControlled, animating, fadeProportion, invisibleWhenStill ) {
         if ( userControlled || animating ) {
           // The shape is either being dragged by the user or is moving to a location, so should be fully opaque.

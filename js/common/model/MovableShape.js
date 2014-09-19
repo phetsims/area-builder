@@ -36,6 +36,7 @@ define( function( require ) {
       // methods defined below.
       position: initialPosition,
 
+      //REVIEW revise this comment for grammar
       // Flag that tracks whether the user is dragging this shape around.  Can
       // should be set externally, generally by the a view node.
       userControlled: false,
@@ -44,6 +45,8 @@ define( function( require ) {
       // location to another, should not be set externally.
       animating: false,
 
+      //REVIEW in ShapeView, you use this to set opacity. Why not just have an 'opacity' property here?
+      //REVIEW if you do keep this, document that the values are the inverse of scenery opacity
       // Value that indicates how faded out this shape is.  This is used as
       // part of a feature where shapes can fade out.  Once fade has started,
       // it doesn't stop until it is fully faded, i.e. the value is 1.  This
@@ -68,7 +71,7 @@ define( function( require ) {
     } );
 
     // Non-dynamic attributes
-    this.shape = shape; // @public
+    this.shape = shape; // @public //REVIEW I don't see any client assignments, so is this intended to be read only?
     this.color = Color.toColor( color ); // @public
 
     // Internal vars
@@ -109,6 +112,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW document this. I had to poke around to determine that destination is {Vector2}
     setDestination: function( destination, animate ) {
       this.destination = destination;
       if ( animate ) {
@@ -119,6 +123,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW document this, not immediately obvious what 'home' means
     goHome: function( animate ) {
       this.setDestination( this.positionProperty.initialValue, animate );
     },
@@ -138,7 +143,9 @@ define( function( require ) {
      * @param squareLength
      */
     decomposeIntoSquares: function( squareLength ) {
-      assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength === 0, 'Error: A dimension of this movable shape is not an integer multiple of the provided dimension' );
+      assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength === 0,
+        'Error: A dimension of this movable shape is not an integer multiple of the provided dimension' );
+      //REVIEW comment above indicates that this only works for rectangles, add an assert to verify?
       var shapes = [];
       var unitSquareShape = Shape.rect( 0, 0, squareLength, squareLength );
       for ( var column = 0; column < this.shape.bounds.width; column += squareLength ) {

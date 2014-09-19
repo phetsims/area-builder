@@ -21,7 +21,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var INVALID_VALUE_STRING = '--';
+  var INVALID_VALUE_STRING = '--'; //REVIEW does this need to be translatable?
   var MOVEMENT_VECTORS = {
     // This sim is using screen conventions, meaning positive Y indicates down.
     up: new Vector2( 0, -1 ),
@@ -29,6 +29,7 @@ define( function( require ) {
     left: new Vector2( -1, 0 ),
     right: new Vector2( 1, 0 )
   };
+  //REVIEW what are these? what do the numeric comments mean? why are the first and last entries null? why do some functions have a param?
   var SCAN_AREA_MOVEMENT_FUNCTIONS = [
     null,                                            // 0
     function() { return MOVEMENT_VECTORS.up; },      // 1
@@ -60,24 +61,29 @@ define( function( require ) {
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled, showGridProperty, showDimensionsProperty ) {
 
     // The size should be an integer number of unit squares for both dimensions.
-    assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0, 'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
+    assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0,
+      'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
 
     this.showGridProperty = showGridProperty;
     this.showDimensionsProperty = showDimensionsProperty;
 
+    //REVIEW what is a 'composite' shape? it's used elsewhere herein
     // Set the initial fill and edge colors for the composite shape.  These can be changed if needed.
     this.compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
     this.compositeShapeEdgeColor = this.compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
     PropertySet.call( this, {
+      //REVIEW should this be a boolean? It's used as a boolean throughout, including assignment to {boolean} movableShape.invisibleWhenStill.
       // @public Read/Write value that controls whether the placement board moves individual shapes that are added to
       // the board such that they form a single, contiguous, composite shape, or if it just snaps them to the grid. The
       // perimeter and area values are only updated when this is set to true.
       formComposite: 'formComposite',
 
+      //REVIEW type? looks like this can be either a number or string (when invalid)
       // @public Read-only property that indicates the area of the composite shape
       area: 0,
 
+      //REVIEW type? looks like this can be either a number or string (when invalid)
       // @public Read-only property that indicates the perimeter of the composite shape
       perimeter: 0,
 
@@ -104,18 +110,20 @@ define( function( require ) {
     this.colorHandled = colorHandled === '*' ? colorHandled : Color.toColor( colorHandled ); // @public
 
     // Private variables
-    this.residentShapes = new ObservableArray(); // @public
+    //REVIEW what is a 'resident' shape? that terms is used elsewhere herein
+    this.residentShapes = new ObservableArray(); // @public //REVIEW array of {MovableShape}?
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
-    this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet
+    this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet //REVIEW {MovableShape}?
 
     // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
     // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
     // locations on this board where shapes may be placed.
-    this.cells = [];
+    this.cells = []; //REVIEW @private?
     for ( var column = 0; column < this.numColumns; column++ ) {
       var currentRow = [];
       for ( var row = 0; row < this.numRows; row++ ) {
+        //REVIEW put a comment here, something like "Here's where we define the cell data structure".
         currentRow.push( {
           column: column,
           row: row,
@@ -151,6 +159,7 @@ define( function( require ) {
         return false;
       }
 
+      //REVIEW formComposite is a string, invisibleWhenStill is a boolean.
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
       movableShape.invisibleWhenStill = this.formComposite;
 
@@ -209,7 +218,7 @@ define( function( require ) {
     },
 
     /**
-     * Add a shape directly the to specified cell.  This bypasses the placement process, and is generally used when
+     * Add a shape directly to the specified cell.  This bypasses the placement process, and is generally used when
      * displaying solutions to challenges.
      * @public
      * @param cellColumn
@@ -219,6 +228,7 @@ define( function( require ) {
     addShapeDirectlyToCell: function( cellColumn, cellRow, movableShape ) {
       var self = this;
 
+      //REVIEW formComposite is a string, invisibleWhenStill is a boolean.
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
       movableShape.invisibleWhenStill = this.formComposite;
 
@@ -282,6 +292,7 @@ define( function( require ) {
       this.updateAll();
     },
 
+    //REVIEW orthogonal to addResidentShape and also @private?
     removeResidentShape: function( movableShape ) {
       assert && assert( this.residentShapes.contains( movableShape ), 'Error: Attempt to remove shape that is not a resident.' );
       var self = this;
@@ -328,6 +339,7 @@ define( function( require ) {
       } );
     },
 
+    //REVIEW do you really want to return null if out of range? If that happens, getCellOccupant will fail.
     // @private Convenience function for returning a cell or null if row or column are out of range.
     getCell: function( column, row ) {
       if ( column < 0 || row < 0 || column >= this.numColumns || row >= this.numRows ) {
@@ -339,6 +351,7 @@ define( function( require ) {
     // @private Function for getting the occupant of the specified cell, does bounds checking.
     getCellOccupant: function( column, row ) {
       var cell = this.getCell( column, row );
+      //REVIEW this will blow up if getCell returns null. Either change getCell or assert that [column,row] is in range.
       return cell ? cell.occupiedBy : null;
     },
 
@@ -359,6 +372,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW @private?
     updateAreaAndTotalPerimeter: function() {
       if ( this.compositeShape.exteriorPerimeters.length <= 1 ) {
         var self = this;
@@ -489,6 +503,7 @@ define( function( require ) {
         }
       }
 
+      //REVIEW formComposite is a string, not a boolean
       // If this board is not set to consolidate shapes, we've done enough, and this location is valid.
       if ( !this.formComposite ) {
         return true;
@@ -567,27 +582,33 @@ define( function( require ) {
       }
     },
 
+    //REVIEW @private?
     cellToModelCoords: function( column, row ) {
       return new Vector2( column * this.unitSquareLength + this.bounds.minX, row * this.unitSquareLength + this.bounds.minY );
     },
 
+    //REVIEW @private?
     cellToModelVector: function( v ) {
       return this.cellToModelCoords( v.x, v.y );
     },
 
+    //REVIEW @private?
     modelToCellCoords: function( x, y ) {
       return new Vector2( Math.round( ( x - this.bounds.minX ) / this.unitSquareLength ),
         Math.round( ( y - this.bounds.minY ) / this.unitSquareLength ) );
     },
 
+    //REVIEW @private?
     modelToCellVector: function( v ) {
       return this.modelToCellCoords( v.x, v.y );
     },
 
+    //REVIEW unused?
     roundVector: function( vector ) {
       vector.setXY( Math.round( vector.x ), Math.round( vector.y ) );
     },
 
+    //REVIEW @private?
     createShapeFromPerimeterPoints: function( perimeterPoints ) {
       var perimeterShape = new Shape();
       perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
@@ -598,6 +619,7 @@ define( function( require ) {
       return perimeterShape;
     },
 
+    //REVIEW @private?
     createShapeFromPerimeterList: function( perimeters ) {
       var perimeterShape = new Shape();
       perimeters.forEach( function( perimeterPoints ) {
@@ -652,6 +674,7 @@ define( function( require ) {
       return perimeterPoints;
     },
 
+    //REVIEW @private?
     /**
      * Update the exterior and interior perimeters.
      */
@@ -745,6 +768,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW @private?
     perimeterPointsEqual: function( perimeter1, perimeter2 ) {
       assert && assert( perimeter1 instanceof Array && perimeter2 instanceof Array, 'Invalid parameters for perimeterPointsEqual' );
       if ( perimeter1.length !== perimeter2.length ) {
@@ -755,6 +779,7 @@ define( function( require ) {
       } );
     },
 
+    //REVIEW @private?
     perimeterListsEqual: function( perimeterList1, perimeterList2 ) {
       assert && assert( perimeterList1 instanceof Array && perimeterList2 instanceof Array, 'Invalid parameters for perimeterListsEqual' );
       if ( perimeterList1.length !== perimeterList2.length ) {
@@ -796,6 +821,7 @@ define( function( require ) {
       } );
     },
 
+    //REVIEW doc
     identifyContiguousCellGroups: function() {
 
       // Make a list of locations for all occupied cells.
@@ -823,6 +849,7 @@ define( function( require ) {
       return contiguousCellGroups;
     },
 
+    //REVIEW doc
     releaseAnyOrphans: function() {
 
       // Orphans can only exist when operating in the 'formComposite' mode.
@@ -854,6 +881,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW indicate @param types, especially not clear what unitSquares type is
     /**
      * Replace one of the composite shapes that currently resides on this board with a set of unit squares.  This is
      * generally done when a composite shape was placed on the board but we now want it treated as a bunch of smaller
@@ -883,6 +911,7 @@ define( function( require ) {
       } );
     },
 
+    //REVIEW doc
     addRemovalListener: function( movableShape ) {
       var self = this;
       var removalListener = function( userControlled ) {
@@ -893,11 +922,13 @@ define( function( require ) {
       movableShape.userControlledProperty.once( removalListener );
     },
 
+    //REVIEW @private? and not sure what a 'composite shape' is
     setCompositeShapeColorScheme: function( fillColor, edgeColor ) {
       this.compositeShapeFillColor = fillColor;
       this.compositeShapeEdgeColor = edgeColor;
     },
 
+    //REVIEW @private?
     // Update perimeter points, placement locations, total area, and total perimeter.
     updateAll: function() {
       this.updatePerimeters();

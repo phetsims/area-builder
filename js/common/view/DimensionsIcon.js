@@ -28,7 +28,7 @@ define( function( require ) {
   var DEFAULT_SINGLE_RECT_STROKE = DEFAULT_SINGLE_RECT_COLOR.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
   /**
-   * @param options
+   * @param {Object} [options]
    * @constructor
    */
   function DimensionsIcon( options ) {
@@ -44,6 +44,7 @@ define( function( require ) {
     this.compositeNode.addChild( new Rectangle( SQUARE_LENGTH * 2, SQUARE_LENGTH, SQUARE_LENGTH, SQUARE_LENGTH, 0, 0, { fill: COMPOSITE_FILL_COLOR, stroke: COMPOSITE_STROKE_COLOR } ) );
     this.addChild( this.compositeNode );
 
+    //REVIEW is this a rectangle that encloses the grid of 6 rectangles above? why is this needed?
     // Create the single rectangle node
     var singleRectNodeWidth = SQUARE_LENGTH * 3;
     var singleRectNodeHeight = SQUARE_LENGTH * 2;
@@ -68,6 +69,7 @@ define( function( require ) {
 
   return inherit( Node, DimensionsIcon, {
 
+    //REVIEW doc, describe style values
     setStyle: function( style ) {
       assert && assert( style === 'single' || style === 'composite' );
       switch( style ) {

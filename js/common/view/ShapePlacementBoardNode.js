@@ -19,7 +19,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   /**
-   * @param shapePlacementBoard
+   * @param {ShapePlacementBoard} shapePlacementBoard
    * @constructor
    */
   function ShapePlacementBoardNode( shapePlacementBoard ) {
@@ -71,6 +71,7 @@ define( function( require ) {
     } );
 
     // Add the perimeter shape, which depicts the exterior and interior perimeters formed by the placed shapes.
+    //REVIEW this is the flavor of assignment that we've asked others not to use. tempRef doesn't seem to be used anywhere.
     var tempRef;
     this.addChild( tempRef = new PerimeterShapeNode(
       shapePlacementBoard.compositeShapeProperty,
@@ -82,5 +83,6 @@ define( function( require ) {
   }
 
   return inherit( Node, ShapePlacementBoardNode, {
+    //REVIEW delete this empty object?
   } );
 } );

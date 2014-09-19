@@ -24,6 +24,7 @@ define( function( require ) {
   // constants
   var DIMENSION_LABEL_FONT = new PhetFont( { size: 14 } );
 
+  //REVIEW is perimeterPoints an array of Vector2, or an array of {x:,y:} ?
   // Utility function for identifying a perimeter segment with no bends.
   function identifySegment( perimeterPoints, startIndex ) {
 
@@ -125,6 +126,7 @@ define( function( require ) {
       // Hide all dimension labels in the pool, they will be shown later if used.
       textNodePool.forEach( function( textNode ) { textNode.visible = false; } );
 
+      //REVIEW when would mainShape.bounds be empty?
       if ( !mainShape.bounds.isEmpty() ) {
 
         // Make sure the shape fits within its specified bounds.
