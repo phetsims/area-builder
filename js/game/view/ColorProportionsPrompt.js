@@ -17,6 +17,13 @@ define( function( require ) {
   var SINGLE_LINE_SPACING = 12; // Empirically determined to look good
   var PROMPT_TO_COLOR_SPACING = 4; // Empirically determined to look good
 
+  /**
+   * @param {String || Color} color1 - Color value for the 1st color patch
+   * @param {String || Color} color2 - Color value for the 2nd color pathc
+   * @param {Fraction} color1Proportion - Fraction for color1, the color2 fraction is deduced from this.
+   * @param options
+   * @constructor
+   */
   function ColorProportionsPrompt( color1, color2, color1Proportion, options ) {
     Node.call( this );
 
@@ -26,43 +33,58 @@ define( function( require ) {
       multiLine: false
     }, options );
 
-    var color1FractionNode = new FractionNode( color1Proportion, {
+    this.color1FractionNode = new FractionNode( color1Proportion, {
       font: options.font,
       color: options.textFill
     } );
-    this.addChild( color1FractionNode );
+    this.addChild( this.color1FractionNode );
     var color2Proportion = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
-    var color2FractionNode = new FractionNode( color2Proportion, {
+    this.color2FractionNode = new FractionNode( color2Proportion, {
       font: options.font,
       color: options.textFill
     } );
-    this.addChild( color2FractionNode );
-    var patchRadiusX = color1FractionNode.bounds.height * 0.5;
-    var patchRadiusY = color1FractionNode.bounds.height * 0.35;
-    var color1Patch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
+    this.addChild( this.color2FractionNode );
+    var patchRadiusX = this.color1FractionNode.bounds.height * 0.5;
+    var patchRadiusY = this.color1FractionNode.bounds.height * 0.35;
+    var colorPatchShape = Shape.ellipse( 0, 0, this.color1FractionNode.bounds.height * 0.5, this.color1FractionNode.bounds.height * 0.35 );
+    this.color1Patch = new Path( colorPatchShape, {
       fill: color1,
-      left: color1FractionNode.right + PROMPT_TO_COLOR_SPACING,
-      centerY: color1FractionNode.centerY
+      left: this.color1FractionNode.right + PROMPT_TO_COLOR_SPACING,
+      centerY: this.color1FractionNode.centerY
     } );
-    this.addChild( color1Patch );
+    this.addChild( this.color1Patch );
 
     // Position the 2nd prompt based on whether or not the options specify multi-line.
     if ( options.multiLine ) {
-      color2FractionNode.top = color1FractionNode.bottom + MULTI_LINE_SPACING;
+      this.color2FractionNode.top = this.color1FractionNode.bottom + MULTI_LINE_SPACING;
     }
     else {
-      color2FractionNode.left = color1Patch.right + SINGLE_LINE_SPACING;
+      this.color2FractionNode.left = this.color1Patch.right + SINGLE_LINE_SPACING;
     }
 
-    var color2ColorPatch = new Path( Shape.ellipse( 0, 0, patchRadiusX, patchRadiusY ), {
+    this.color2Patch = new Path( colorPatchShape, {
       fill: color2,
-      left: color2FractionNode.right + PROMPT_TO_COLOR_SPACING,
-      centerY: color2FractionNode.centerY
+      left: this.color2FractionNode.right + PROMPT_TO_COLOR_SPACING,
+      centerY: this.color2FractionNode.centerY
     } );
-    this.addChild( color2ColorPatch );
+    this.addChild( this.color2Patch );
 
     this.mutate( options );
   }
 
-  return inherit( Node, ColorProportionsPrompt );
+  return inherit( Node, ColorProportionsPrompt, {
+
+    set color1( color ) {
+      this.color1Patch.fill = color;
+    },
+
+    set color2( color ) {
+      this.color2Patch.fill = color;
+    },
+
+    set color1Proportion( color1Proportion ) {
+      this.color1FractionNode.fraction = color1Proportion;
+      var color2Proportion = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
+    }
+  } );
 } );

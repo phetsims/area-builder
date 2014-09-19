@@ -1,5 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+/**
+ * Constants that are shared between the various portions of the Area Builder simulation.
+ */
 define( function( require ) {
   'use strict';
 

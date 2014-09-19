@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Main model class for the 'Explore' screen of the Area Builder simulation.
+ * Primary model class for the 'Explore' screen of the Area Builder simulation.
  *
  * @author John Blanco
  */
@@ -28,6 +28,9 @@ define( function( require ) {
   var BUCKET_SIZE = new Dimension2( 90, 45 );
   var BOARD_TO_BUCKET_Y_SPACING = 45;
 
+  /**
+   * @constructor
+   */
   function AreaBuilderExplorationModel() {
     var self = this;
 

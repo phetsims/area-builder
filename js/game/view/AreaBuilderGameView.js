@@ -14,12 +14,12 @@ define( function( require ) {
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
-  var ChallengePromptBanner = require( 'AREA_BUILDER/game/view/ChallengePromptBanner' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
-  var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
+  var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
+  var GameInfoBanner = require( 'AREA_BUILDER/game/view/GameInfoBanner' );
   var HCarousel = require( 'AREA_BUILDER/game/view/HCarousel' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
@@ -32,7 +32,6 @@ define( function( require ) {
   var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
-  var SolutionBanner = require( 'AREA_BUILDER/game/view/SolutionBanner' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -45,10 +44,12 @@ define( function( require ) {
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
   var areaQuestionString = require( 'string!AREA_BUILDER/areaQuestion' );
+  var buildItString = require( 'string!AREA_BUILDER/buildIt' );
   var checkString = require( 'string!VEGAS/check' );
+  var findTheAreaString = require( 'string!AREA_BUILDER/findTheArea' );
   var nextString = require( 'string!VEGAS/next' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
-  var ASolutionString = require( 'string!AREA_BUILDER/aSolution' );
+  var aSolutionString = require( 'string!AREA_BUILDER/aSolution' );
   var solutionString = require( 'string!AREA_BUILDER/solution' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
@@ -125,12 +126,12 @@ define( function( require ) {
     this.challengeLayer.addChild( this.youBuiltWindow );
     this.youEnteredWindow = new YouEnteredWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
     this.challengeLayer.addChild( this.youEnteredWindow );
-    this.challengePromptBanner = new ChallengePromptBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
+    this.challengePromptBanner = new GameInfoBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, '#1b1464', {
       left: this.shapeBoard.left,
       bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
     } );
     this.challengeLayer.addChild( this.challengePromptBanner );
-    this.solutionBanner = new SolutionBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, {
+    this.solutionBanner = new GameInfoBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, '#fbb03b', {
       left: this.shapeBoard.left,
       bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
     } );
@@ -221,7 +222,7 @@ define( function( require ) {
     this.gameControlButtons.push( this.solutionButton );
 
     // Solution button for 'built it' style of challenge, which has many potential answers.
-    this.showASolutionButton = new TextPushButton( ASolutionString, _.extend( {
+    this.showASolutionButton = new TextPushButton( aSolutionString, _.extend( {
       listener: function() {
         self.okayToUpdateYouBuiltWindow = false;
         gameModel.displayCorrectAnswer();
@@ -311,8 +312,11 @@ define( function( require ) {
           .start();
       }
 
-      // Show the build prompts on the challenge prompt banner if they aren't shown already.
-      self.challengePromptBanner.properties.showPrompts = true;
+      // If this is a 'built it' style challenge, and this is the first element being added to the board, add the
+      // build spec to the banner so that the user can reference it as they add more shapes to the board.
+      if ( gameModel.currentChallenge.buildSpec && self.challengePromptBanner.buildSpecProperty.value === null ) {
+        self.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallenge.buildSpec;
+      }
 
       // Make sure the check button is in the appropriate state.
       self.updatedCheckButtonEnabledState();
@@ -546,14 +550,15 @@ define( function( require ) {
           }
 
           // Update the solution banner.
-          this.solutionBanner.reset();
           if ( challenge.buildSpec ) {
-            this.solutionBanner.properties.mode = 'buildIt';
-            this.solutionBanner.properties.buildSpec = challenge.buildSpec;
+            this.solutionBanner.titleTextProperty.value = aSolutionString;
+            this.solutionBanner.areaToFindProperty.value = null;
+            this.solutionBanner.buildSpecProperty.value = challenge.buildSpec;
           }
           else {
-            this.solutionBanner.properties.mode = 'findArea';
-            this.solutionBanner.properties.findAreaValue = challenge.backgroundShape.unitArea;
+            this.solutionBanner.titleTextProperty.value = solutionString;
+            this.solutionBanner.buildSpecProperty.value = null;
+            this.solutionBanner.areaToFindProperty.value = challenge.backgroundShape.unitArea;
           }
           this.showChallengeGraphics();
 
@@ -664,15 +669,15 @@ define( function( require ) {
         var challenge = this.model.currentChallenge; // Convenience var
 
         // Set up the challenge prompt banner, which appears above the shape placement board.
-        this.challengePromptBanner.properties.mode = challenge.buildSpec ? 'buildIt' : 'findArea';
-        if ( challenge.buildSpec ) {
-
-          // Set the prompt values.
-          this.challengePromptBanner.properties.buildSpec = challenge.buildSpec;
-
-          // The prompts on the banner are initially invisible, and show up once the user adds a shape.
-          this.challengePromptBanner.properties.showPrompts = false;
-        }
+        this.challengePromptBanner.titleTextProperty.value = challenge.buildSpec ? buildItString : findTheAreaString;
+//        if ( challenge.buildSpec ) {
+//
+//          // Set the prompt values.
+//          this.challengePromptBanner.properties.buildSpec = challenge.buildSpec;
+//
+//          // The prompts on the banner are initially invisible, and show up once the user adds a shape.
+//          this.challengePromptBanner.properties.showPrompts = false;
+//        }
 
         // If needed, set up the goal prompt that will initially appear over the shape placement board (in the z-order).
         if ( challenge.buildSpec ) {

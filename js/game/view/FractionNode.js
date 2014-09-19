@@ -1,5 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+/**
+ * A Scenery node that represents a fraction.
+ */
 define( function( require ) {
   'use strict';
 
@@ -30,23 +33,42 @@ define( function( require ) {
     assert && assert( options.fractionBarWidthProportion >= 1, 'The fraction bar must be at least the width of the larger fraction component.' );
 
     // Create and add the pieces
-    var numeratorNode = new Text( fraction.numerator.toString(), { font: options.font, fill: options.color } );
-    this.addChild( numeratorNode );
-    var denominatorNode = new Text( fraction.denominator.toString(), { font: options.font, fill: options.color } );
-    this.addChild( denominatorNode );
-    var fractionBarWidth = options.fractionBarWidthProportion * Math.max( numeratorNode.width, denominatorNode.width );
-    var fractionBarNode = new Line( 0, 0, fractionBarWidth, 0, {
+    this.numeratorNode = new Text( '0', { font: options.font, fill: options.color } );
+    this.addChild( this.numeratorNode );
+    this.denominatorNode = new Text( '0', { font: options.font, fill: options.color } );
+    this.addChild( this.denominatorNode );
+    var fractionBarWidth = options.fractionBarWidthProportion * Math.max( this.numeratorNode.width, this.denominatorNode.width );
+    this.fractionBarNode = new Line( 0, 0, fractionBarWidth, 0, {
       stroke: options.color,
       lineWidth: options.fractionBarLineWidth
     } );
-    this.addChild( fractionBarNode );
+    this.addChild( this.fractionBarNode );
 
-    // layout
-    numeratorNode.centerX = fractionBarWidth / 2;
-    denominatorNode.centerX = fractionBarWidth / 2;
-    fractionBarNode.centerY = numeratorNode.bottom;
-    denominatorNode.top = fractionBarNode.bottom;
+    this.update( fraction );
   }
 
-  return inherit( Node, FractionNode );
+  return inherit( Node, FractionNode, {
+
+    // @private
+    update: function( fraction ) {
+      this.numeratorNode.text = fraction.numerator.toString();
+      this.denominatorNode.text = fraction.denominator.toString();
+
+      // Note: The fraction bar width is not updated here because the Line type didn't support changes when this code
+      // was developed and the code that used this node didn't really need it.  If this code is being used in a more
+      // general way, where the elements of the fraction could reach multiple digits, adjustments to the size of the
+      // fraction bar will need to be added here.
+
+      // layout
+      this.numeratorNode.centerX = this.fractionBarNode.centerX;
+      this.denominatorNode.centerX = this.fractionBarNode.centerX;
+      this.fractionBarNode.centerY = this.numeratorNode.bottom;
+      this.denominatorNode.top = this.fractionBarNode.bottom;
+    },
+
+    set fraction( fraction ) {
+      this.update( fraction );
+    }
+
+  } );
 } );
