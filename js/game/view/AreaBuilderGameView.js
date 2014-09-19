@@ -550,14 +550,13 @@ define( function( require ) {
           }
 
           // Update the solution banner.
+          this.solutionBanner.reset();
           if ( challenge.buildSpec ) {
             this.solutionBanner.titleTextProperty.value = aSolutionString;
-            this.solutionBanner.areaToFindProperty.value = null;
             this.solutionBanner.buildSpecProperty.value = challenge.buildSpec;
           }
           else {
             this.solutionBanner.titleTextProperty.value = solutionString;
-            this.solutionBanner.buildSpecProperty.value = null;
             this.solutionBanner.areaToFindProperty.value = challenge.backgroundShape.unitArea;
           }
           this.showChallengeGraphics();

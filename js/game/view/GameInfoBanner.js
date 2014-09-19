@@ -93,6 +93,15 @@ define( function( require ) {
       }
     }
 
+    // Function that positions the build prompt such that its visible bounds are centered in the space to the left of
+    // the title.
+    function positionTheBuildPrompt() {
+      var centerX = ( TITLE_INDENT + title.width + width - TITLE_INDENT ) / 2;
+      var centerY = height / 2;
+      buildPrompt.left += centerX - buildPrompt.visibleBounds.centerX;
+      buildPrompt.top += centerY - buildPrompt.visibleBounds.centerY;
+    }
+
     // Update the prompt or solution text based on the build spec.
     this.buildSpecProperty.link( function( buildSpec ) {
       assert && assert( self.areaToFindProperty.value === null, 'Can\'t display area to find and build spec at the same time.' );
@@ -107,7 +116,6 @@ define( function( require ) {
         }
         else {
           areaPrompt.font = SMALLER_FONT;
-          areaPrompt.text += ',';
           if ( buildSpec.perimeter ) {
             perimeterPrompt.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
             perimeterPrompt.visible = true;
@@ -116,6 +124,7 @@ define( function( require ) {
             perimeterPrompt.visible = false;
           }
           if ( buildSpec.proportions ) {
+            areaPrompt.text += ',';
             colorProportionPrompt.color1 = buildSpec.proportions.color1;
             colorProportionPrompt.color2 = buildSpec.proportions.color2;
             colorProportionPrompt.color1Proportion = buildSpec.proportions.color1Proportion;
@@ -127,11 +136,10 @@ define( function( require ) {
         }
 
         // Update the layout
-        perimeterPrompt.top = areaPrompt.bottom;
+        perimeterPrompt.top = areaPrompt.bottom + areaPrompt.height * 0.25; // Spacing empirically determined.
         colorProportionPrompt.left = areaPrompt.right + 10; // Spacing empirically determined
         colorProportionPrompt.centerY = areaPrompt.centerY;
-        buildPrompt.centerX = ( title.width + width - TITLE_INDENT ) / 2;
-        buildPrompt.centerY = height / 2;
+        positionTheBuildPrompt();
 
         // Make sure the title is over on the left side.
         moveTitleToSide();
@@ -155,6 +163,9 @@ define( function( require ) {
         // The other prompts (perimeter and color proportions) are not shown in this situation.
         perimeterPrompt.visible = false;
         colorProportionPrompt.visible = false;
+
+        // Place the build prompt where it needs to go.
+        positionTheBuildPrompt();
 
         // Make sure the title is over on the left side.
         moveTitleToSide();
