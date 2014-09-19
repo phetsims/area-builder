@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * A composiite Scenery node that brings together a keypad and a box where the entered values are displayed.  Kind of
+ * A composite Scenery node that brings together a keypad and a box where the entered values are displayed.  Kind of
  * looks like a calculator, though it doesn't behave as one.
  *
  * @author John Blanco
