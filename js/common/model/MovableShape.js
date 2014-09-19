@@ -98,9 +98,9 @@ define( function( require ) {
           this.fadeProportion = Math.min( 1, this.fadeProportion + ( dt * FADE_RATE ) );
           if ( this.fadeProportion >= 1 ) {
             // Return to origin when fully faded.
-            //TODO: This is a bit inelegant, since I am basically relying on the idea that the model will delete this
-            // when it goes home, which isn't obvious.  As noted elsewhere, I should consider a better scheme for
-            // signalling that a shape should be discarded.
+            //TODO: (see issue #27) This is a bit inelegant, since I am basically relying on the idea that the model
+            // will delete this when it goes home, which isn't obvious.  As noted elsewhere, I should consider a better
+            // scheme for signalling that a shape should be discarded.
             this.goHome( false );
             this.fading = false;
           }
