@@ -23,9 +23,10 @@ define( function( require ) {
   var SINGLE_LINE_SPACING = 12; // Empirically determined to look good
   var PROMPT_TO_COLOR_SPACING = 4; // Empirically determined to look good
 
+  //REVIEW doc for color1Proportion is inadequate, doesn't tell me what the Fraction is used for or what it's range is
   /**
    * @param {String || Color} color1 - Color value for the 1st color patch
-   * @param {String || Color} color2 - Color value for the 2nd color pathc
+   * @param {String || Color} color2 - Color value for the 2nd color patch
    * @param {Fraction} color1Proportion - Fraction for color1, the color2 fraction is deduced from this.
    * @param options
    * @constructor
@@ -44,12 +45,14 @@ define( function( require ) {
       color: options.textFill
     } );
     this.addChild( this.color1FractionNode );
+
     var color2Proportion = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
     this.color2FractionNode = new FractionNode( color2Proportion, {
       font: options.font,
       color: options.textFill
     } );
     this.addChild( this.color2FractionNode );
+
     var patchRadiusX = this.color1FractionNode.bounds.height * 0.5;
     var patchRadiusY = this.color1FractionNode.bounds.height * 0.35;
     var colorPatchShape = Shape.ellipse( 0, 0, this.color1FractionNode.bounds.height * 0.5, this.color1FractionNode.bounds.height * 0.35 );
@@ -80,6 +83,7 @@ define( function( require ) {
 
   return inherit( Node, ColorProportionsPrompt, {
 
+    //REVIEW ES5 setters without getters causes lint failure, see issue #35
     set color1( color ) {
       this.color1Patch.fill = color;
     },

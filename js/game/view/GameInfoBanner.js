@@ -1,5 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW this has localization layout problems, see issue #41
+
+//REVIEW this seems very complicated. perhaps you're to handle too many different cases with one UI component.
 /**
  * Banner that is used to present information to the user as they work through a challenge.
  *

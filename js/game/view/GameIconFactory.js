@@ -156,6 +156,8 @@ define( function( require ) {
             new Vector2( 5, 7 )
           ];
           break;
+
+        //REVIEW switch statements should have a default, throw new Error( 'unsupported level: ' + level );
       }
       return new GridIcon( NUM_COLUMNS, NUM_ROWS, CELL_LENGTH, color, occupiedCells, GRID_ICON_OPTIONS );
     }

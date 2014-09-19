@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW not actually a 'Screen', this is a UI component that happens to fill the Screen during one state of the game
 /**
  * Screen that allows the user to select the game level that they wish to play.
  *
@@ -97,6 +98,7 @@ define( function( require ) {
     var resetButton = new ResetAllButton( { listener: resetFunction, radius: 22 } );
     this.addChild( resetButton );
 
+    //REVIEW consider adjusting vertical layout of level-selection buttons, see issue #42
     // Layout
     var numColumns = options.numLevels / options.numButtonRows;
     var buttonSpacingX = buttons[0].width * 1.2; // Note: Assumes all buttons are the same size.

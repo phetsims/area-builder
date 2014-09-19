@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 //REVIEW I didn't understand that this was an experiment at a reusable framework until we discussed on the phone.
-//REVIEW Elaborate on how responsibilies are divided between the reusable framework and the sim-specific piece that it delegates to.
+//REVIEW Elaborate on how responsibilities are divided between the reusable framework and the sim-specific piece that it delegates to.
 /**
  * Framework for a quiz style game where the user is presented with various 'challenges' which must be answered and
  * for which they get points.  The game has multiple levels.

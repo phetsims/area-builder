@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW doc looks like it was copied from another sim
 /**
  * Main screen for the balance game.
  *
@@ -75,6 +76,7 @@ define( function( require ) {
     // Hook up the audio player to the sound settings.
     this.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
 
+    //REVIEW For future reference... rootNode is no longer necessary, see https://github.com/phetsims/joist/issues/145
     // Create a root node and send to back so that the layout bounds box can be made visible if needed.
     this.rootNode = new Node();
     this.addChild( self.rootNode );
@@ -350,7 +352,7 @@ define( function( require ) {
     // Various other initialization
     this.levelCompletedNode = null; // @private
     this.shapeCarouselRoot = new Node(); // @private
-    this.shapeCarouselTop = this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
+    this.shapeCarouselTop = this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;  //REVIEW @private?
     this.challengeLayer.addChild( this.shapeCarouselRoot );
     this.clearDimensionsControlOnNextChallenge = false; // @private
 
@@ -359,11 +361,12 @@ define( function( require ) {
 
     // Set up a flag to block updates of the 'You Built' window when showing the solution.  This is necessary because
     // adding the shapes to the board in order to show the solution triggers updates of this window.
-    this.okayToUpdateYouBuiltWindow = true;
+    this.okayToUpdateYouBuiltWindow = true; //REVIEW @private?
   }
 
   return inherit( ScreenView, AreaBuilderGameView, {
 
+    //REVIEW @private?
     // When the game state changes, update the view with the appropriate buttons and readouts.
     handleGameStateChange: function( gameState ) {
 
@@ -373,6 +376,7 @@ define( function( require ) {
       var challenge = this.model.currentChallenge; // convenience var
       var nodesToShow;
 
+      //REVIEW lots of statements for each case, consider moving logic to functions
       // Show the nodes appropriate to the state
       switch( gameState ) {
 
@@ -595,7 +599,7 @@ define( function( require ) {
           break;
 
         default:
-          throw new Error( 'Unhandled game state' );
+          throw new Error( 'Unhandled game state' ); //REVIEW print the state value
       }
     },
 
@@ -652,6 +656,7 @@ define( function( require ) {
       return false;
     },
 
+    //REVIEW @private?
     // Present the challenge to the user and set things up so that they can submit their answer.
     presentChallenge: function() {
 
@@ -669,6 +674,7 @@ define( function( require ) {
 
         // Set up the challenge prompt banner, which appears above the shape placement board.
         this.challengePromptBanner.titleTextProperty.value = challenge.buildSpec ? buildItString : findTheAreaString;
+        //REVIEW delete dead code
 //        if ( challenge.buildSpec ) {
 //
 //          // Set the prompt values.
@@ -761,6 +767,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW @private?
     // Utility method for hiding all of the game nodes whose visibility changes during the course of a challenge.
     hideAllGameNodes: function() {
       this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
@@ -780,14 +787,17 @@ define( function( require ) {
       ] );
     },
 
+    //REVIEW @private?
     show: function( nodesToShow ) {
       nodesToShow.forEach( function( nodeToShow ) { nodeToShow.visible = true; } );
     },
 
+    //REVIEW @private?
     setNodeVisibility: function( isVisible, nodes ) {
       nodes.forEach( function( node ) { node.visible = isVisible; } );
     },
 
+    //REVIEW @private?
     hideChallenge: function() {
       this.challengeLayer.visible = false;
       this.controlLayer.visible = false;
@@ -799,6 +809,7 @@ define( function( require ) {
       this.controlLayer.visible = true;
     },
 
+    //REVIEW @private?
     updatedCheckButtonEnabledState: function() {
       if ( this.model.currentChallenge ) {
         if ( this.model.currentChallenge.checkSpec === 'areaEntered' ) {
@@ -810,6 +821,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW @private?
     showLevelResultsNode: function() {
       var thisScreen = this;
 

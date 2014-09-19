@@ -40,12 +40,15 @@ define( function( require ) {
       xMargin: X_MARGIN
     }, options );
 
+    //REVIEW @private?
     // make the max width available to descendant classes
     this.maxWidth = maxWidth; // @protected
 
+    //REVIEW @private?
     // content root
     this.contentNode = new Node();
 
+    //REVIEW @private?
     // title
     this.titleNode = new Text( title, { font: TITLE_FONT } );
     this.titleNode.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / this.titleNode.width, 1 ) );
@@ -71,8 +74,8 @@ define( function( require ) {
     },
     {
       // Statics
-      X_MARGIN: X_MARGIN,
-      NORMAL_TEXT_FONT: NORMAL_TEXT_FONT
+      X_MARGIN: X_MARGIN, //REVIEW why does the panel's x margin need be known by subtypes?
+      NORMAL_TEXT_FONT: NORMAL_TEXT_FONT //REVIEW what is this font used for?
     }
   );
 } );

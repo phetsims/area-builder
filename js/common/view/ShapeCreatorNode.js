@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW this doesn't represent a node, it is a node.
 /**
  * Type that represents a node that can be clicked upon to create new movable shapes in the model.
  *

@@ -96,6 +96,7 @@ define( function( require ) {
     );
     this.addChild( switchPanel );
 
+    //REVIEW See issue #44. replace this with AreaBuilderGameControlPanel, both screens have identical control panel
     // Create and add the common control panel.
     var controlPanel = new Panel(
       new VBox( {

@@ -68,6 +68,7 @@ define( function( require ) {
       this.denominatorNode.top = this.fractionBarNode.bottom;
     },
 
+    //REVIEW ES5 setter without getter fails lint, see issue #35
     set fraction( fraction ) {
       this.update( fraction );
     }
