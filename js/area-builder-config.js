@@ -6,7 +6,6 @@
  *
  * @author John Blanco
  */
-
 require.config( {
 
   deps: ['area-builder-main'],

@@ -4,6 +4,8 @@
  * A Scenery node that depicts a basic shape with its dimensions labeled, intended for use in control panels.  This
  * supports two different styles, one that looks like a composite shapes that the user creates, and one that looks like
  * the solid shapes used in the 'find the area' challenges.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

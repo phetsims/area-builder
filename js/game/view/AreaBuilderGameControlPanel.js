@@ -3,6 +3,8 @@
 /**
  * Panel that contains controls for turning various tools on and off for the Area Builder game. It is dynamic in the
  * sense that different elements of the panel come and go.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

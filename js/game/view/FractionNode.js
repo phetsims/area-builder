@@ -2,6 +2,8 @@
 
 /**
  * A Scenery node that represents a fraction.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

@@ -2,6 +2,8 @@
 
 /**
  * A scenery node that displays the area and perimeter of shape that may change dynamically.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

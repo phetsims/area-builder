@@ -3,6 +3,8 @@
 /**
  * A Scenery node that depicts a grid with squares on it.  This is used in several places in the simulation to create
  * icons that look like the things that the user might create when using the simulation.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

@@ -3,6 +3,8 @@
 /**
  * A composiite Scenery node that brings together a keypad and a box where the entered values are displayed.  Kind of
  * looks like a calculator, though it doesn't behave as one.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

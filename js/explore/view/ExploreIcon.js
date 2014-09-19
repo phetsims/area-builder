@@ -2,6 +2,8 @@
 
 /**
  * A Scenery node that represents a set of squares placed on a grid, used for making icons.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

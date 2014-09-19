@@ -2,6 +2,8 @@
 
 /**
  * A 'carousel' user interface component that can contain multiple Scenery nodes and which the user can cycle through.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

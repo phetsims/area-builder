@@ -2,6 +2,8 @@
 
 /**
  * Static factory for creating the number-on-a-grid icons used in the level selection screen of the Area Builder game.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

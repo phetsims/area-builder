@@ -3,6 +3,8 @@
 /**
  * Defines a simple grid with horizontal and vertical lines, and no enclosing
  * lines on the outer edges.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

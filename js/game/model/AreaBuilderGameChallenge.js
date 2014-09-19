@@ -3,6 +3,8 @@
 /**
  * This type defines a challenge used in the Area Builder game.  It exists as a place to document the format of a
  * challenge and to verify that challenges are created correctly.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

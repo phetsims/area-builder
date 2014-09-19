@@ -2,6 +2,8 @@
 
 /**
  * Banner that is used to present information to the user as they work through a challenge.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

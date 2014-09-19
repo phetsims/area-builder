@@ -3,6 +3,8 @@
 /**
  * Game model that works in conjunction with the QuizGameModel to add the elements that are specific to the Area
  * Builder game.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

@@ -3,6 +3,7 @@
 /**
  * Type that defines a shape that can be moved by the user and placed on the shape placement boards.
  *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

@@ -2,6 +2,8 @@
 
 /**
  * A factory object that creates the challenges for the Area Builder game.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

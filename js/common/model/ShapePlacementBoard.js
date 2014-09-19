@@ -2,6 +2,8 @@
 
 /**
  * Model of a rectangular board (like a white board or bulletin board) upon which various smaller shapes can be placed.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

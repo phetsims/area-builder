@@ -2,6 +2,8 @@
 
 /**
  * Panel that shows the level, the current challenge, the score, and the time if enabled.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

@@ -4,6 +4,8 @@
  * A Scenery node that represents a shape that is defined by lists of perimeter points.  The perimeter points are
  * supplied in terms of external and internal perimeters.  This node also allows specification of a unit length that is
  * used to depict a grid on the shape, and can also show dimensions of the shape.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
     'use strict';

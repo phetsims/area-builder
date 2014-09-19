@@ -2,6 +2,8 @@
 
 /**
  * Constants that are shared between the various portions of the Area Builder simulation.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

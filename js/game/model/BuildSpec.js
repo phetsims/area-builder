@@ -3,6 +3,8 @@
 /**
  * Defines a 'build specification', which is used to define what a user should build when presented with a 'build it'
  * style challenge in the Area Builder game.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

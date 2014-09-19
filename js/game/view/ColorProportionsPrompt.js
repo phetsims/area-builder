@@ -3,6 +3,8 @@
 /**
  * A Scenery node that consists of two fractions and two color patches, used when prompting the user to create a shape
  * that is comprised to two different colors.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

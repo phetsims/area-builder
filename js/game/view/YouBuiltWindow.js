@@ -3,6 +3,8 @@
 /**
  * A Scenery node that is used to show the user what they constructed for a 'Build it' style of challenge.  It can be
  * dynamically updated if needed.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

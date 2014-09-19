@@ -3,6 +3,8 @@
 /**
  * A composite node that depicts a shape placement board, a bucket containing shapes to go on the board, an area and
  * perimeter readout, and an erase button.  These are consolidated together in this node to avoid code duplication.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
     'use strict';

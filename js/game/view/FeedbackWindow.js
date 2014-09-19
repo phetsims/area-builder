@@ -1,10 +1,10 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-// Copyright 2002-2014, University of Colorado Boulder
-
 /**
  * Base class for a node that looks like a window and provide the user with feedback about what they have entered
  * during the challenge.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

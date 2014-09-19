@@ -3,6 +3,8 @@
 /**
  * View representation of a ShapePlacementBoard, which is a board (like a whiteboard or bulletin board) where shapes
  * can be placed.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

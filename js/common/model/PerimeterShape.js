@@ -3,6 +3,8 @@
 /**
  * Model element that describes a shape in terms of 'perimeter points', both exterior and interior.  The interior
  * perimeters allow holes to be defined.  The shape is defined by straight lines drawn from each point to the next.
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';
