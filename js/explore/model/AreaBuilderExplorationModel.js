@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW type name doesn't correspond to screen, rename AreaBuilderExploreModel
 /**
  * Primary model class for the 'Explore' screen of the Area Builder simulation.
  *
@@ -35,6 +36,7 @@ define( function( require ) {
     var self = this;
 
     PropertySet.call( this, {
+      //REVIEW the only seems to affect the board grids, not the grids in the constructed shapes, am I correct?
       showGrids: true, // @public
       showDimensions: false, // @public
       boardDisplayMode: 'single' // @public, value values are 'single' and 'dual'
@@ -43,6 +45,9 @@ define( function( require ) {
     this.movableShapes = new ObservableArray(); // @public
     this.unitSquareLength = UNIT_SQUARE_LENGTH; // @public, @final
 
+    //REVIEW indicate that each boardDisplayMode has its own set of boards and buckets, so that state can be preserved when switching modes
+
+    //REVIEW document and rename to indicate which boardDisplayMode the boards go with
     // Create the shape placement boards.
     self.leftShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
@@ -72,6 +77,7 @@ define( function( require ) {
     // @private, for convenience.
     self.shapePlacementBoards = [ self.leftShapePlacementBoard, self.rightShapePlacementBoard, self.centerShapePlacementBoard ];
 
+    //REVIEW document and rename to indicate which boardDisplayMode the buckets go with
     // Create the buckets that will hold the shapes.
     var bucketYPos = self.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
     this.leftBucket = new Bucket( {
@@ -103,6 +109,7 @@ define( function( require ) {
       this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );
     },
 
+    //REVIEW is shape a {MovableShape}? If so, why is this param named 'shape' and addUserCreatedMovableShape param is movableShape?
     placeShape: function( shape ) {
       var shapePlaced = false;
       for ( var i = 0; i < this.shapePlacementBoards.length && !shapePlaced; i++ ) {

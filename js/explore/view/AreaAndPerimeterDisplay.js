@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW would be more helpful to describe this as an accordion box.
 /**
  * A scenery node that displays the area and perimeter of shape that may change dynamically.
  *
@@ -33,6 +34,8 @@ define( function( require ) {
    * @constructor
    */
   function AreaAndPerimeterDisplay( areaProperty, areaTextColor, perimeterProperty, perimeterTextColor, options ) {
+
+    //REVIEW why doesn't this subtype AccordionBox directly?
     Node.call( this );
     var contentNode = new Node();
     var areaCaption = new Text( areaString, { font: DISPLAY_FONT } );

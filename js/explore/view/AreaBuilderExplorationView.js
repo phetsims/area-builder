@@ -1,5 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
+//REVIEW type name doesn't correspond to screen, rename AreaBuilderExploreView
 /**
  * View for the 'Explore' screen of the Area Builder simulation.
  *
@@ -57,6 +58,7 @@ define( function( require ) {
       rightExploreNode.visible = boardDisplayMode === 'dual';
     } );
 
+    //REVIEW move this into BoardDisplayModePanel, see issue #39
     // Create the icons used on the A-B switch
     var dualBoardIcon = new HBox( {
         children: [
@@ -75,12 +77,14 @@ define( function( require ) {
         spacing: 3
       }
     );
+    //REVIEW move this into BoardDisplayModePanel, see issue #39
     var singleBoardIcon = new ExploreIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
       new Vector2( 0, 1 ),
       new Vector2( 1, 0 ),
       new Vector2( 1, 1 )
     ] );
 
+    //REVIEW move this into BoardDisplayModePanel, see issue #39
     // Create and add the panel that contains the ABSwitch.
     var switchPanel = new Panel(
       new VBox( {
