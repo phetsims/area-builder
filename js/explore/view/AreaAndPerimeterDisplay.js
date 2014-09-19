@@ -27,7 +27,7 @@ define( function( require ) {
   /**
    * @param {Property<Number>} areaProperty
    * @param {Color} areaTextColor
-   * @param {Promperty<Number>} perimeterProperty
+   * @param {Property<Number>} perimeterProperty
    * @param {Color} perimeterTextColor
    * @param {Object} options
    * @constructor
