@@ -26,3 +26,5 @@ game.
 STYLE NOTES:
 For this simulation, the comments wrap at 120 characters.  This was generally done the same way, except in
 a few circumstances where it made the code less readable (in the author's opinion).
+
+//REVIEW common/model/ code also refers to 'composite shape' and 'resident shape', describe here?
