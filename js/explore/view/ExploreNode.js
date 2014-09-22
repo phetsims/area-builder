@@ -22,7 +22,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
-  var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
+  var ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -108,7 +108,7 @@ define( function( require ) {
       if ( addedShape.color.equals( shapeColor ) ) {
 
         // Create and add the view representation for this shape.
-        var shapeNode = new ShapeView( addedShape );
+        var shapeNode = new ShapeNode( addedShape );
         movableShapesLayer.addChild( shapeNode );
 
         // Move the shape to the front of this layer when grabbed by the user.

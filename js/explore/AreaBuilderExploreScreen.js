@@ -9,8 +9,8 @@ define( function( require ) {
   'use strict';
 
   // imports
-  var AreaBuilderExplorationModel = require( 'AREA_BUILDER/explore/model/AreaBuilderExplorationModel' );
-  var AreaBuilderExplorationView = require( 'AREA_BUILDER/explore/view/AreaBuilderExplorationView' );
+  var AreaBuilderExploreModel = require( 'AREA_BUILDER/explore/model/AreaBuilderExploreModel' );
+  var AreaBuilderExploreView = require( 'AREA_BUILDER/explore/view/AreaBuilderExploreView' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
@@ -31,8 +31,8 @@ define( function( require ) {
     Screen.call( this,
       exploreString,
       new Image( exploreIcon ),
-      function() { return new AreaBuilderExplorationModel(); },
-      function( model ) { return new AreaBuilderExplorationView( model ); },
+      function() { return new AreaBuilderExploreModel(); },
+      function( model ) { return new AreaBuilderExploreView( model ); },
       { backgroundColor: BACKGROUND_COLOR }
     );
   }

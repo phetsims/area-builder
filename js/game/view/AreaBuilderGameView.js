@@ -32,7 +32,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
   var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
-  var ShapeView = require( 'AREA_BUILDER/common/view/ShapeView' );
+  var ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -279,13 +279,13 @@ define( function( require ) {
     gameModel.simSpecificModel.movableShapes.addItemAddedListener( function( addedShape ) {
 
       // Create and add the view representation for this shape.
-      var shapeView = new ShapeView( addedShape );
-      self.challengeLayer.addChild( shapeView );
+      var shapeNode = new ShapeNode( addedShape );
+      self.challengeLayer.addChild( shapeNode );
 
       // Add a listener that handles changes to the userControlled state.
       var userControlledListener = function( userControlled ) {
         if ( userControlled ) {
-          shapeView.moveToFront();
+          shapeNode.moveToFront();
 
           // If the game was in the state where it was prompting the user to try again, and the user started
           // interacting with shapes without pressing the 'Try Again' button, go ahead and make the state change
@@ -300,7 +300,7 @@ define( function( require ) {
       // Add the removal listener for if and when this shape is removed from the model.
       gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
         if ( removedShape === addedShape ) {
-          self.challengeLayer.removeChild( shapeView );
+          self.challengeLayer.removeChild( shapeNode );
           addedShape.userControlledProperty.unlink( userControlledListener );
           gameModel.simSpecificModel.movableShapes.removeItemRemovedListener( removalListener );
         }

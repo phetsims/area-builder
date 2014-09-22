@@ -32,7 +32,7 @@ define( function( require ) {
   /**
    * @constructor
    */
-  function AreaBuilderExplorationModel() {
+  function AreaBuilderExploreModel() {
     var self = this;
 
     PropertySet.call( this, {
@@ -103,7 +103,7 @@ define( function( require ) {
     } );
   }
 
-  return inherit( PropertySet, AreaBuilderExplorationModel, {
+  return inherit( PropertySet, AreaBuilderExploreModel, {
 
     step: function( dt ) {
       this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );

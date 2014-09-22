@@ -71,9 +71,7 @@ define( function( require ) {
     } );
 
     // Add the perimeter shape, which depicts the exterior and interior perimeters formed by the placed shapes.
-    //REVIEW this is the flavor of assignment that we've asked others not to use. tempRef doesn't seem to be used anywhere.
-    var tempRef;
-    this.addChild( tempRef = new PerimeterShapeNode(
+    this.addChild( new PerimeterShapeNode(
       shapePlacementBoard.compositeShapeProperty,
       shapePlacementBoard.bounds,
       shapePlacementBoard.unitSquareLength,
@@ -82,7 +80,5 @@ define( function( require ) {
     ) );
   }
 
-  return inherit( Node, ShapePlacementBoardNode, {
-    //REVIEW delete this empty object?
-  } );
+  return inherit( Node, ShapePlacementBoardNode );
 } );

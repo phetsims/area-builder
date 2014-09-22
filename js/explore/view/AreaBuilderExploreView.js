@@ -1,6 +1,5 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW type name doesn't correspond to screen, rename AreaBuilderExploreView
 /**
  * View for the 'Explore' screen of the Area Builder simulation.
  *
@@ -23,10 +22,10 @@ define( function( require ) {
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
 
   /**
-   * @param {AreaBuilderExplorationModel} model
+   * @param {AreaBuilderExploreModel} model
    * @constructor
    */
-  function AreaBuilderExplorationView( model ) {
+  function AreaBuilderExploreView( model ) {
 
     ScreenView.call( this, { renderer: 'svg', layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
 
@@ -79,5 +78,5 @@ define( function( require ) {
     switchPanel.right = centerBoardBounds.maxX;
   }
 
-  return inherit( ScreenView, AreaBuilderExplorationView );
+  return inherit( ScreenView, AreaBuilderExploreView );
 } );
