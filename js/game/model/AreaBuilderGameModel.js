@@ -1,9 +1,12 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW I don't understand how this 'works in conjunction with the QuizGameModel', elaborate/clarify
 /**
  * Game model that works in conjunction with the QuizGameModel to add the elements that are specific to the Area
- * Builder game.
+ * Builder game.  QuizGameModel handles things that are general to PhET's quiz style games, such as state transitions,
+ * and this model handles the behavior that is specific to this simulations game, such as how correct answers are
+ * presented.  This approach is experimental, and this simulation (Area Builder) is the first time that it is being
+ * done, so there may be significant room for improvement.
+ *
  *
  * @author John Blanco
  */
