@@ -21,8 +21,7 @@ define( function( require ) {
     credits: {
       leadDesign: 'Karina Hensberry',
       softwareDevelopment: 'John Blanco',
-      designTeam: 'Bryce Gruneich, Amanda McGarry, Ariel Paul, Kathy Perkins, Beth Stade',
-      thanks: 'Thanks to Mobile Learner Labs for working with the PhET development team to convert this simulation to HTML5.'
+      designTeam: 'Bryce Gruneich, Amanda McGarry, Ariel Paul, Kathy Perkins, Beth Stade'
     }
   };
 
