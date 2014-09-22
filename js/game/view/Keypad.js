@@ -2,7 +2,7 @@
 
 /**
  * A scenery node that looks like a key pad and allows the user to enter digits.  The entered digits are not displayed
- * by this node, and it is intended to be used in conjunction with a separate display of some sort.
+ * by this node - it is intended to be used in conjunction with a separate display of some sort.
  *
  * @author John Blanco
  * @author Andrey Zelenkov (MLearner)
@@ -46,7 +46,7 @@ define( function( require ) {
     // @private Flag used when arming the keypad to start over on the next key stroke.
     this.armedForNewEntry = false;
 
-    // Function for creating a number key
+    // function for creating a number key
     function createNumberKey( number, doubleWide ) {
       var minWidth = doubleWide ? options.minButtonWidth * 2 + options.xSpacing : options.minButtonWidth;
       return new RectangularPushButton( _.extend( {
@@ -65,14 +65,21 @@ define( function( require ) {
           }
 
           // Add the digit to the string, but limit the length and prevent multiple leading zeros.
-          if ( self.digitString.value.length < options.maxDigits && !( self.digitString.value.length === 0 && number === 0 ) ) {
+          if ( self.digitString.value === '0' ) {
+            if ( number.toString !== 0 ) {
+              // Replace the leading 0 with this digit.
+              self.digitString.value = number.toString();
+            }
+            // else ignore the additional zero
+          }
+          else if ( self.digitString.value.length < options.maxDigits ) {
             self.digitString.value += number.toString();
           }
         }
       }, options ) );
     }
 
-    // backspace button
+    // Create the backspace button.
     var backspaceIcon = new BackspaceIcon();
     backspaceIcon.scale( Math.min( options.minButtonWidth / backspaceIcon.width * 0.7, ( options.minButtonHeight * 0.65 ) / backspaceIcon.height ) );
     var backspaceButton = new RectangularPushButton( {
@@ -122,12 +129,12 @@ define( function( require ) {
 
   return inherit( VBox, Keypad, {
 
-    // @public
+    // Clear anything that has been accumulated in the digitString field.
     clear: function() {
       this.digitString.reset();
     },
 
-    // @public Set the keypad such that any new digit entry will clear the existing string and start over.
+    // Set the keypad such that any new digit entry will clear the existing string and start over.
     armForNewEntry: function() {
       this.armedForNewEntry = true;
     }
