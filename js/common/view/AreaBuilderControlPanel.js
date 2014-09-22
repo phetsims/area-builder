@@ -32,7 +32,7 @@ define( function( require ) {
    * @param options
    * @constructor
    */
-  function AreaBuilderGameControlPanel( showGridProperty, showDimensionsProperty, options ) {
+  function AreaBuilderControlPanel( showGridProperty, showDimensionsProperty, options ) {
     Node.call( this );
 
     // Properties that control which elements are visible and which are hidden.  This constitutes the primary API.
@@ -82,5 +82,5 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Node, AreaBuilderGameControlPanel );
+  return inherit( Node, AreaBuilderControlPanel );
 } );

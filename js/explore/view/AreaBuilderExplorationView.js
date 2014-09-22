@@ -10,7 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderGameControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderGameControlPanel' );
+  var AreaBuilderControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderControlPanel' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -54,7 +54,7 @@ define( function( require ) {
     this.addChild( switchPanel );
 
     // Create and add the common control panel.
-    var controlPanel = new AreaBuilderGameControlPanel( model.showGridsProperty, model.showDimensionsProperty );
+    var controlPanel = new AreaBuilderControlPanel( model.showGridsProperty, model.showDimensionsProperty );
     this.addChild( controlPanel );
 
     // Add the reset button.

@@ -11,7 +11,7 @@ define( function( require ) {
 
   // modules
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
-  var AreaBuilderGameControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderGameControlPanel' );
+  var AreaBuilderControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderControlPanel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
@@ -151,7 +151,7 @@ define( function( require ) {
     this.controlLayer.addChild( this.scoreboard );
 
     // Add the control panel
-    this.controlPanel = new AreaBuilderGameControlPanel(
+    this.controlPanel = new AreaBuilderControlPanel(
       gameModel.simSpecificModel.showGridProperty,
       gameModel.simSpecificModel.showDimensionsProperty,
       { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, bottom: this.shapeBoard.bottom }
