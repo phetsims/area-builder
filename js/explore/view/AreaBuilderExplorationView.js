@@ -10,23 +10,16 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var ABSwitch = require( 'SUN/ABSwitch' );
   var AreaBuilderGameControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderGameControlPanel' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Checkbox = require( 'SUN/Checkbox' );
-  var Dimension2 = require( 'DOT/Dimension2' );
   var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
-  var ExploreIcon = require( 'AREA_BUILDER/explore/view/ExploreIcon' );
   var ExploreNode = require( 'AREA_BUILDER/explore/view/ExploreNode' );
-  var Grid = require( 'AREA_BUILDER/common/view/Grid' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var Panel = require( 'SUN/Panel' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var CONTROL_INSET = 15;
@@ -59,42 +52,8 @@ define( function( require ) {
       rightExploreNode.visible = boardDisplayMode === 'dual';
     } );
 
-    //REVIEW move this into BoardDisplayModePanel, see issue #39
-    // Create the icons used on the A-B switch
-    var dualBoardIcon = new HBox( {
-        children: [
-          new ExploreIcon( AreaBuilderSharedConstants.GREENISH_COLOR, 6, [
-            new Vector2( 0, 0 ),
-            new Vector2( 1, 0 ),
-            new Vector2( 1, 1 )
-          ] ),
-          new ExploreIcon( AreaBuilderSharedConstants.PURPLISH_COLOR, 6, [
-            new Vector2( 0, 0 ),
-            new Vector2( 0, 1 ),
-            new Vector2( 1, 0 ),
-            new Vector2( 1, 1 )
-          ] )
-        ],
-        spacing: 3
-      }
-    );
-    //REVIEW move this into BoardDisplayModePanel, see issue #39
-    var singleBoardIcon = new ExploreIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
-      new Vector2( 0, 1 ),
-      new Vector2( 1, 0 ),
-      new Vector2( 1, 1 )
-    ] );
-
-    //REVIEW move this into BoardDisplayModePanel, see issue #39
     // Create and add the panel that contains the ABSwitch.
-    var switchPanel = new Panel(
-      new VBox( {
-        children: [
-          new ABSwitch( model.boardDisplayModeProperty, 'single', singleBoardIcon, 'dual', dualBoardIcon, { switchSize: new Dimension2( 36, 18 ) } )
-        ],
-        spacing: 10
-      } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
-    );
+    var switchPanel = new BoardDisplayModePanel( model.boardDisplayModeProperty );
     this.addChild( switchPanel );
 
     // Create and add the common control panel.

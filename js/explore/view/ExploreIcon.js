@@ -35,7 +35,7 @@ define( function( require ) {
         top: position.y * rectangleLength
       } ) );
     } );
-    Panel.call( this, content, { fill: 'white', stroke: 'black', cornerRadius: 0 } );
+    Panel.call( this, content, { fill: 'white', stroke: 'black', cornerRadius: 0, backgroundPickable: true } );
   }
 
   return inherit( Panel, ExploreIcon );
