@@ -727,8 +727,8 @@ define( function( require ) {
         }
 
         // Set the state of the control panel.
-        this.controlPanel.dimensionsIcon.setStyle( challenge.backgroundShape ? 'single' : 'composite' );
-        this.controlPanel.dimensionsIcon.setSingleRectColor( challenge.backgroundShape ? challenge.backgroundShape.fillColor : null );
+        this.controlPanel.dimensionsIcon.setGridVisible( challenge.backgroundShape ? false : true );
+        this.controlPanel.dimensionsIcon.setColor( challenge.backgroundShape ? challenge.backgroundShape.fillColor : AreaBuilderSharedConstants.GREENISH_COLOR );
         this.controlPanel.visibilityControls.gridControlVisible = challenge.toolSpec.gridControl;
         this.controlPanel.visibilityControls.dimensionsControlVisible = challenge.toolSpec.dimensionsControl;
 
