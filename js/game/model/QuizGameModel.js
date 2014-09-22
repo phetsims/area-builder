@@ -60,6 +60,7 @@ define( function( require ) {
     this.challengesPerSet = options.challengesPerSet; // @public
     this.maxPointsPerChallenge = options.maxPointsPerChallenge; // @public
     this.maxPossibleScore = options.challengesPerSet * options.maxPointsPerChallenge; // @public
+    this.maxAttemptsPerChallenge = options.maxAttemptsPerChallenge; // @private
 
     // @private Wall time at which current level was started.
     thisModel.gameStartTime = 0;
@@ -154,7 +155,7 @@ define( function( require ) {
         else {
           // The user got it wrong.
           this.incorrectGuessesOnCurrentChallenge++;
-          if ( this.incorrectGuessesOnCurrentChallenge < options.maxAttemptsPerChallenge ) {
+          if ( this.incorrectGuessesOnCurrentChallenge < this.maxAttemptsPerChallenge ) {
             this.gameState = 'showingIncorrectAnswerFeedbackTryAgain';
           }
           else {
