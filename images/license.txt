@@ -1,1 +1,2 @@
-eraser.png source=PhET author=John Blanco
+explore-icon.png source=PhET author=John Blanco
+game-icon.png source=PhET author=John Blanco
