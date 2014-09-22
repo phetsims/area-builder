@@ -15,6 +15,14 @@ When working with - and within - the shape placement boards, the code
 is sometimes written to work in terms of cells and at other times in terms of
 model coordinates, whichever is most reasonable for the problem at hand.
 
+A shape that has been placed on a shape placement board by the user is
+referred to in the code as a 'resident shape'.  The overall shape that is
+collectively created by these resident shapes is referred to as a 'composite
+shape'.  In any mode where the perimeter is being tracked, there is only one
+composite shape allowed on the board at a time.  If the user tries to create
+separate shapes, the individual shapes are moved to places where they are
+adjacent to previously placed shapes.
+
 Another central concept is that of a perimeter shape, which is a shape that is
 defined by an ordered set of points, with straight lines being drawn between
 the points when depicting it in the view.

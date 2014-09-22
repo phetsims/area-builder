@@ -68,8 +68,7 @@ define( function( require ) {
     this.showGridProperty = showGridProperty;
     this.showDimensionsProperty = showDimensionsProperty;
 
-    //REVIEW what is a 'composite' shape? it's used elsewhere herein
-    // Set the initial fill and edge colors for the composite shape.  These can be changed if needed.
+    // Set the initial fill and edge colors for the composite shape (defined in PropertySet below).
     this.compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
     this.compositeShapeEdgeColor = this.compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
@@ -105,14 +104,15 @@ define( function( require ) {
       showGridOnBackgroundShape: false
     } );
 
+    // Observable array of the shapes that have been placed on this board.
+    this.residentShapes = new ObservableArray(); // @public
+
     // Non-dynamic public values.
     this.unitSquareLength = unitSquareLength; // @public
     this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @public
     this.colorHandled = colorHandled === '*' ? colorHandled : Color.toColor( colorHandled ); // @public
 
     // Private variables
-    //REVIEW what is a 'resident' shape? that terms is used elsewhere herein
-    this.residentShapes = new ObservableArray(); // @public //REVIEW array of {MovableShape}?
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
     this.incomingShapes = []; // @private, list of shapes that are animating to a spot on this board but aren't here yet //REVIEW {MovableShape}?
