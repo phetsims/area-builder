@@ -30,33 +30,24 @@ define( function( require ) {
 
     PropertySet.call( this, {
 
-      // Property that indicates where in model space the upper left corner
-      // of this shape is.  In general, this should not be set directly
-      // outside of this type, and should only be manipulated through the
-      // methods defined below.
+      // Property that indicates where in model space the upper left corner of this shape is.  In general, this should
+      // not be set directly outside of this type, and should only be manipulated through the methods defined below.
       position: initialPosition,
 
-      //REVIEW revise this comment for grammar
-      // Flag that tracks whether the user is dragging this shape around.  Can
-      // should be set externally, generally by the a view node.
+      // Flag that tracks whether the user is dragging this shape around.  Should be set externally, generally by the a
+      // view node.
       userControlled: false,
 
-      // Flag that indicates whether this element is animating from one
-      // location to another, should not be set externally.
+      // Flag that indicates whether this element is animating from one location to another, should not be set externally.
       animating: false,
 
-      //REVIEW in ShapeView, you use this to set opacity. Why not just have an 'opacity' property here?
-      //REVIEW if you do keep this, document that the values are the inverse of scenery opacity
-      // Value that indicates how faded out this shape is.  This is used as
-      // part of a feature where shapes can fade out.  Once fade has started,
-      // it doesn't stop until it is fully faded, i.e. the value is 1.  This
-      // should not be set externally.
+      // Value that indicates how faded out this shape is.  This is used as part of a feature where shapes can fade
+      // out.  Once fade has started, it doesn't stop until it is fully faded, i.e. the value is 1.  This should not be
+      // set externally.
       fadeProportion: 0,
 
-      // A flag that indicates whether this individual shape should become
-      // invisible when it is done animating.  This is generally used in cases
-      // where it becomes part of a larger composite shape that is depicted
-      // instead.
+      // A flag that indicates whether this individual shape should become invisible when it is done animating.  This
+      // is generally used in cases where it becomes part of a larger composite shape that is depicted instead.
       invisibleWhenStill: true
     } );
 
@@ -71,7 +62,7 @@ define( function( require ) {
     } );
 
     // Non-dynamic attributes
-    this.shape = shape; // @public //REVIEW I don't see any client assignments, so is this intended to be read only?
+    this.shape = shape; // @public, read only
     this.color = Color.toColor( color ); // @public
 
     // Internal vars
@@ -113,6 +104,11 @@ define( function( require ) {
     },
 
     //REVIEW document this. I had to poke around to determine that destination is {Vector2}
+    /**
+     * Set the destination for this shape.
+     * @param {Vector2} destination
+     * @param {boolean} animate
+     */
     setDestination: function( destination, animate ) {
       this.destination = destination;
       if ( animate ) {
@@ -123,7 +119,10 @@ define( function( require ) {
       }
     },
 
-    //REVIEW document this, not immediately obvious what 'home' means
+    /**
+     * Return the shape to the place where it was originally created.
+     * @param {boolean} animate
+     */
     goHome: function( animate ) {
       this.setDestination( this.positionProperty.initialValue, animate );
     },
@@ -145,7 +144,6 @@ define( function( require ) {
     decomposeIntoSquares: function( squareLength ) {
       assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength === 0,
         'Error: A dimension of this movable shape is not an integer multiple of the provided dimension' );
-      //REVIEW comment above indicates that this only works for rectangles, add an assert to verify?
       var shapes = [];
       var unitSquareShape = Shape.rect( 0, 0, squareLength, squareLength );
       for ( var column = 0; column < this.shape.bounds.width; column += squareLength ) {
