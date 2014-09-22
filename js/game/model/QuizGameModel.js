@@ -36,13 +36,12 @@ define( function( require ) {
     //REVIEW making this public seems to defeat the advantages of composition, and argues for inheritance
     this.simSpecificModel = simSpecificModel; // @public
 
-    //REVIEW are you intentionally omitting the second 'options' arg to _.extend ?
     options = _.extend( {
       numberOfLevels: 6,
       challengesPerSet: 6,
       maxPointsPerChallenge: 2,
       maxAttemptsPerChallenge: 2
-    } );
+    }, options );
 
     PropertySet.call( this, {
         soundEnabled: true,
@@ -70,18 +69,18 @@ define( function( require ) {
     thisModel.gameStartTime = 0;
 
     // Best times and scores.
-    thisModel.bestTimes = []; //REVIEW @private or @public?
-    thisModel.bestScores = []; //REVIEW @private or @public?
+    thisModel.bestTimes = []; // @public
+    thisModel.bestScores = []; // @public
     _.times( options.numberOfLevels, function() {
       thisModel.bestTimes.push( null );
       thisModel.bestScores.push( new Property( 0 ) );
     } );
 
-    // Counter used to track number of incorrect answers. //REVIEW @private or @public?
-    this.incorrectGuessesOnCurrentChallenge = 0;
+    // Counter used to track number of incorrect answers.
+    this.incorrectGuessesOnCurrentChallenge = 0; // @public
 
     // Current set of challenges, which collectively comprise a single level, on which the user is currently working.
-    thisModel.challengeList = null;  //REVIEW @private or @public?
+    thisModel.challengeList = null;  // @private
 
     // Let the sim-specific model know when the challenge changes.
     thisModel.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ); } );

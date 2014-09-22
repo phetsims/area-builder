@@ -43,14 +43,13 @@ define( function( require ) {
   return inherit( Object, BuildSpec, {
     equals: function( that ) {
 
-      //REVIEW if ( !( that instanceof BuildSpec ) ) { return false; }
+      if ( !( that instanceof BuildSpec ) ) { return false; }
 
       // Compare area, which should always be defined.
       if ( this.area !== that.area ) {
         return false;
       }
 
-      //REVIEW is zero a valid value for perimeter? if so, this has problems
       // Compare perimeter
       if ( this.perimeter && !that.perimeter ||
            !this.perimeter && that.perimeter ||
@@ -78,7 +77,6 @@ define( function( require ) {
 
     // Static functions
 
-    //REVIEW use of null args is yucky. I would use options that default to null in the constructor. Then delete these factory functions, whose call sites are difficult to grok.
     areaOnly: function( area ) {
       return new BuildSpec( area, null, null, null, null );
     },

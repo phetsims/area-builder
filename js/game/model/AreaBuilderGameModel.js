@@ -37,7 +37,7 @@ define( function( require ) {
   function AreaBuilderGameModel() {
 
     PropertySet.call( this, {
-      showGrid: false, //REVIEW which grid? board, composite shape, both?
+      showGridOnBoard: false, //REVIEW which grid? board, composite shape, both?
       showDimensions: false
     } );
 
@@ -50,7 +50,7 @@ define( function( require ) {
       UNIT_SQUARE_LENGTH,
       new Vector2( ( AreaBuilderSharedConstants.LAYOUT_BOUNDS.width - BOARD_SIZE.width ) * 0.55, 85 ), // Position empirically determined
       '*', // Allow any color shape to be placed on the board
-      this.showGridProperty,
+      this.showGridOnBoardProperty,
       this.showDimensionsProperty
     );
 

@@ -152,7 +152,7 @@ define( function( require ) {
 
     // Add the control panel
     this.controlPanel = new AreaBuilderControlPanel(
-      gameModel.simSpecificModel.showGridProperty,
+      gameModel.simSpecificModel.showGridOnBoardProperty,
       gameModel.simSpecificModel.showDimensionsProperty,
       { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, bottom: this.shapeBoard.bottom }
     );

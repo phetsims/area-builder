@@ -157,7 +157,9 @@ define( function( require ) {
           ];
           break;
 
-        //REVIEW switch statements should have a default, throw new Error( 'unsupported level: ' + level );
+        default:
+          throw new Error( 'Unsupported game level: ' + level );
+          break;
       }
       return new GridIcon( NUM_COLUMNS, NUM_ROWS, CELL_LENGTH, color, occupiedCells, GRID_ICON_OPTIONS );
     }
