@@ -838,9 +838,8 @@ define( function( require ) {
     return challenge;
   }
 
-  //REVIEW what is "the spec"? The Google design doc?
-  // In the spec, level 4 has some unique requirements.  This function encapsulates these requirements, see the spec
-  // for details.
+  // Level 4 is required to limit the number of shapes available, to only allow unit squares, and to have not grid
+  // control.  This function modifies the challenges to conform to this.
   function makeLevel4SpecificModifications( challenge ) {
     challenge.toolSpec.gridControl = false;
     challenge.userShapes = [
@@ -925,7 +924,9 @@ define( function( require ) {
           _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) ); } );
           break;
 
-        //REVIEW switch statements should have a default, throw new Error( 'unsupported level: ' + level )
+        default:
+          throw new Error( 'Unsupported game level: ' + level );
+          break;
       }
       assert && assert( challengeSet.length === numChallenges, 'Error: Didn\'t generate correct number of challenges.' );
       return challengeSet;

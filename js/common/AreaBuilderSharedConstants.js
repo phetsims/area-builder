@@ -32,6 +32,7 @@ define( function( require ) {
     ANIMATION_VELOCITY: 200, // In screen coordinates per second
 
     // Various other constants
+    BACKGROUND_COLOR: 'rgb( 225, 255, 255 )',
     CONTROL_PANEL_BACKGROUND_COLOR: 'rgb( 254, 241, 233 )',
 
     UNIT_SQUARE_LENGTH: 32 // In screen coordinates, used in several places

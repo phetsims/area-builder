@@ -37,17 +37,13 @@ define( function( require ) {
     assert && assert( buildSpec instanceof BuildSpec || buildSpec === null );
     assert && assert( backgroundShape instanceof PerimeterShape || backgroundShape === null );
 
-    //REVIEW are any of these @private?
+    // Fields, all public.
     this.toolSpec = toolSpec;
     this.userShapes = userShapes;
     this.buildSpec = buildSpec;
     this.backgroundShape = backgroundShape;
     this.checkSpec = checkSpec;
     this.exampleBuildItSolution = exampleBuildItSolution;
-
-    //REVIEW I would move this to an option in QuizGameModel, where other challenge-related constants live (eg maxPointsPerChallenge)
-    // Non-parameterized fields.
-    this.maxAttemptsAllowed = 2;
   }
 
   AreaBuilderGameChallenge.createBuildAreaChallenge = function( areaToBuild, userShapes, exampleSolution ) {

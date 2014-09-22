@@ -11,6 +11,7 @@ define( function( require ) {
   // imports
   var AreaBuilderExploreModel = require( 'AREA_BUILDER/explore/model/AreaBuilderExploreModel' );
   var AreaBuilderExploreView = require( 'AREA_BUILDER/explore/view/AreaBuilderExploreView' );
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
@@ -21,9 +22,6 @@ define( function( require ) {
   // images
   var exploreIcon = require( 'image!AREA_BUILDER/explore-icon.png' );
 
-  // constants
-  var BACKGROUND_COLOR = 'rgb( 225, 255, 255 )';
-
   /**
    * @constructor
    */
@@ -33,7 +31,7 @@ define( function( require ) {
       new Image( exploreIcon ),
       function() { return new AreaBuilderExploreModel(); },
       function( model ) { return new AreaBuilderExploreView( model ); },
-      { backgroundColor: BACKGROUND_COLOR }
+      { backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR }
     );
   }
 

@@ -31,8 +31,8 @@ define( function( require ) {
 
     // Create the composite nodes that contain the shape placement board, the readout, the bucket, the shape creator
     // nodes, and the eraser button.
-    var centerExploreNode = new ExploreNode( model.centerShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.centerBucket );
+    var centerExploreNode = new ExploreNode( model.singleShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
+      model.movableShapes, model.singleModeBucket );
     this.addChild( centerExploreNode );
     var leftExploreNode = new ExploreNode( model.leftShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
       model.movableShapes, model.leftBucket );
@@ -53,7 +53,7 @@ define( function( require ) {
     this.addChild( switchPanel );
 
     // Create and add the common control panel.
-    var controlPanel = new AreaBuilderControlPanel( model.showGridsProperty, model.showDimensionsProperty );
+    var controlPanel = new AreaBuilderControlPanel( model.showShapeBoardGridsProperty, model.showDimensionsProperty );
     this.addChild( controlPanel );
 
     // Add the reset button.
@@ -71,7 +71,7 @@ define( function( require ) {
     } ) );
 
     // Perform final layout adjustments
-    var centerBoardBounds = model.centerShapePlacementBoard.bounds;
+    var centerBoardBounds = model.singleShapePlacementBoard.bounds;
     controlPanel.top = centerBoardBounds.maxY + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
     controlPanel.left = centerBoardBounds.minX;
     switchPanel.top = centerBoardBounds.maxY + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;

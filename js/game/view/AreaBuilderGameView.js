@@ -1,8 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW doc looks like it was copied from another sim
 /**
- * Main screen for the balance game.
+ * Main view for the area builder game.
  *
  * @author John Blanco
  */
@@ -368,8 +367,7 @@ define( function( require ) {
 
   return inherit( ScreenView, AreaBuilderGameView, {
 
-    //REVIEW @private?
-    // When the game state changes, update the view with the appropriate buttons and readouts.
+    // @private, When the game state changes, update the view with the appropriate buttons and readouts.
     handleGameStateChange: function( gameState ) {
 
       // Hide all nodes - the appropriate ones will be shown later based on the current state.
@@ -601,7 +599,7 @@ define( function( require ) {
           break;
 
         default:
-          throw new Error( 'Unhandled game state' ); //REVIEW print the state value
+          throw new Error( 'Unhandled game state: ' + gameState );
       }
     },
 
@@ -658,8 +656,7 @@ define( function( require ) {
       return false;
     },
 
-    //REVIEW @private?
-    // Present the challenge to the user and set things up so that they can submit their answer.
+    // @private, Present the challenge to the user and set things up so that they can submit their answer.
     presentChallenge: function() {
 
       var self = this;
@@ -676,15 +673,6 @@ define( function( require ) {
 
         // Set up the challenge prompt banner, which appears above the shape placement board.
         this.challengePromptBanner.titleTextProperty.value = challenge.buildSpec ? buildItString : findTheAreaString;
-        //REVIEW delete dead code
-//        if ( challenge.buildSpec ) {
-//
-//          // Set the prompt values.
-//          this.challengePromptBanner.properties.buildSpec = challenge.buildSpec;
-//
-//          // The prompts on the banner are initially invisible, and show up once the user adds a shape.
-//          this.challengePromptBanner.properties.showPrompts = false;
-//        }
 
         // If needed, set up the goal prompt that will initially appear over the shape placement board (in the z-order).
         if ( challenge.buildSpec ) {

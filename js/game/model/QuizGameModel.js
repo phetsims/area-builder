@@ -36,7 +36,8 @@ define( function( require ) {
     options = _.extend( {
       numberOfLevels: 6,
       challengesPerSet: 6,
-      maxPointsPerChallenge: 2
+      maxPointsPerChallenge: 2,
+      maxAttemptsPerChallenge: 2
     } );
 
     PropertySet.call( this, {
@@ -153,7 +154,7 @@ define( function( require ) {
         else {
           // The user got it wrong.
           this.incorrectGuessesOnCurrentChallenge++;
-          if ( this.incorrectGuessesOnCurrentChallenge < this.currentChallenge.maxAttemptsAllowed ) {
+          if ( this.incorrectGuessesOnCurrentChallenge < options.maxAttemptsPerChallenge ) {
             this.gameState = 'showingIncorrectAnswerFeedbackTryAgain';
           }
           else {

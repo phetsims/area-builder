@@ -1,6 +1,5 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW type name doesn't correspond to screen, rename AreaBuilderExploreModel
 /**
  * Primary model class for the 'Explore' screen of the Area Builder simulation.
  *
@@ -36,8 +35,7 @@ define( function( require ) {
     var self = this;
 
     PropertySet.call( this, {
-      //REVIEW the only seems to affect the board grids, not the grids in the constructed shapes, am I correct?
-      showGrids: true, // @public
+      showShapeBoardGrids: true, // @public
       showDimensions: false, // @public
       boardDisplayMode: 'single' // @public, value values are 'single' and 'dual'
     } );
@@ -45,16 +43,14 @@ define( function( require ) {
     this.movableShapes = new ObservableArray(); // @public
     this.unitSquareLength = UNIT_SQUARE_LENGTH; // @public, @final
 
-    //REVIEW indicate that each boardDisplayMode has its own set of boards and buckets, so that state can be preserved when switching modes
-
-    //REVIEW document and rename to indicate which boardDisplayMode the boards go with
-    // Create the shape placement boards.
+    // Create the shape placement boards. Each boardDisplayMode has its own set of boards and buckets so that state can
+    // be preserved when switching modes.
     self.leftShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - SMALL_BOARD_SIZE.width, BOARD_Y_POS ),
       AreaBuilderSharedConstants.GREENISH_COLOR,
-      this.showGridsProperty,
+      this.showShapeBoardGridsProperty,
       this.showDimensionsProperty
     ); // @public
     self.rightShapePlacementBoard = new ShapePlacementBoard(
@@ -62,22 +58,21 @@ define( function( require ) {
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS ),
       AreaBuilderSharedConstants.PURPLISH_COLOR,
-      this.showGridsProperty,
+      this.showShapeBoardGridsProperty,
       this.showDimensionsProperty
     ); // @public
-    self.centerShapePlacementBoard = new ShapePlacementBoard(
+    self.singleShapePlacementBoard = new ShapePlacementBoard(
       LARGE_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 - LARGE_BOARD_SIZE.width / 2, BOARD_Y_POS ),
       AreaBuilderSharedConstants.ORANGISH_COLOR,
-      this.showGridsProperty,
+      this.showShapeBoardGridsProperty,
       this.showDimensionsProperty
     ); // @public
 
     // @private, for convenience.
-    self.shapePlacementBoards = [ self.leftShapePlacementBoard, self.rightShapePlacementBoard, self.centerShapePlacementBoard ];
+    self.shapePlacementBoards = [ self.leftShapePlacementBoard, self.rightShapePlacementBoard, self.singleShapePlacementBoard ];
 
-    //REVIEW document and rename to indicate which boardDisplayMode the buckets go with
     // Create the buckets that will hold the shapes.
     var bucketYPos = self.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
     this.leftBucket = new Bucket( {
@@ -94,8 +89,8 @@ define( function( require ) {
       size: BUCKET_SIZE,
       invertY: true
     } );
-    this.centerBucket = new Bucket( {
-      position: new Vector2( self.centerShapePlacementBoard.bounds.minX + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
+    this.singleModeBucket = new Bucket( {
+      position: new Vector2( self.singleShapePlacementBoard.bounds.minX + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
       baseColor: '#000080',
       caption: '',
       size: BUCKET_SIZE,
@@ -109,14 +104,13 @@ define( function( require ) {
       this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );
     },
 
-    //REVIEW is shape a {MovableShape}? If so, why is this param named 'shape' and addUserCreatedMovableShape param is movableShape?
-    placeShape: function( shape ) {
+    placeShape: function( movableShape ) {
       var shapePlaced = false;
       for ( var i = 0; i < this.shapePlacementBoards.length && !shapePlaced; i++ ) {
-        shapePlaced = this.shapePlacementBoards[i].placeShape( shape );
+        shapePlaced = this.shapePlacementBoards[i].placeShape( movableShape );
       }
       if ( !shapePlaced ) {
-        shape.goHome( true );
+        movableShape.goHome( true );
       }
     },
 

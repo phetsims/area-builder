@@ -1,8 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW would be more helpful to describe this as an accordion box.
 /**
- * A scenery node that displays the area and perimeter of shape that may change dynamically.
+ * An accoridon box that displays the area and perimeter of shape that may change dynamically.
  *
  * @author John Blanco
  */
