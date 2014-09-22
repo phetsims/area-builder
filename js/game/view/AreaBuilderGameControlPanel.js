@@ -52,7 +52,7 @@ define( function( require ) {
         gridCheckbox,
         dimensionsCheckbox
       ],
-      spacing: 12
+      spacing: 8
     } );
     this.addChild( new Panel( vBox, PANEL_OPTIONS ) );
 

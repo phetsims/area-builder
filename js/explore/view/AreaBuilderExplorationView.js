@@ -11,6 +11,7 @@ define( function( require ) {
 
   // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
+  var AreaBuilderGameControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderGameControlPanel' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -98,16 +99,17 @@ define( function( require ) {
 
     //REVIEW See issue #44. replace this with AreaBuilderGameControlPanel, both screens have identical control panel
     // Create and add the common control panel.
-    var controlPanel = new Panel(
-      new VBox( {
-        children: [
-          new Checkbox( new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGridsProperty, { spacing: 15 } ),
-          new Checkbox( new DimensionsIcon(), model.showDimensionsProperty, { spacing: 15 } )
-        ],
-        align: 'left',
-        spacing: 10
-      } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
-    );
+    var controlPanel = new AreaBuilderGameControlPanel( model.showGridsProperty, model.showDimensionsProperty );
+//    var controlPanel = new Panel(
+//      new VBox( {
+//        children: [
+//          new Checkbox( new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#808080', lineDash: [ 1, 2 ] } ), model.showGridsProperty, { spacing: 15 } ),
+//          new Checkbox( new DimensionsIcon(), model.showDimensionsProperty, { spacing: 15 } )
+//        ],
+//        align: 'left',
+//        spacing: 10
+//      } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR }
+//    );
     this.addChild( controlPanel );
 
     // Add the reset button.
