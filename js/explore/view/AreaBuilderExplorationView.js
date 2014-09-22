@@ -13,10 +13,7 @@ define( function( require ) {
   var AreaBuilderGameControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderGameControlPanel' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
-  var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Checkbox = require( 'SUN/Checkbox' );
-  var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
   var ExploreNode = require( 'AREA_BUILDER/explore/view/ExploreNode' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );

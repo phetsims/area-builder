@@ -46,15 +46,16 @@ define( function( require ) {
     } );
     this.addChild( this.fractionBarNode );
 
-    this.update( fraction );
+    this._fraction = fraction;
+    this.update();
   }
 
   return inherit( Node, FractionNode, {
 
     // @private
-    update: function( fraction ) {
-      this.numeratorNode.text = fraction.numerator.toString();
-      this.denominatorNode.text = fraction.denominator.toString();
+    update: function() {
+      this.numeratorNode.text = this._fraction.numerator.toString();
+      this.denominatorNode.text = this._fraction.denominator.toString();
 
       // Note: The fraction bar width is not updated here because the Line type didn't support changes when this code
       // was developed and the code that used this node didn't really need it.  If this code is being used in a more
@@ -68,9 +69,13 @@ define( function( require ) {
       this.denominatorNode.top = this.fractionBarNode.bottom;
     },
 
-    //REVIEW ES5 setter without getter fails lint, see issue #35
     set fraction( fraction ) {
-      this.update( fraction );
+      this._fraction = fraction;
+      this.update();
+    },
+
+    get fraction() {
+      return this._fraction;
     }
 
   } );

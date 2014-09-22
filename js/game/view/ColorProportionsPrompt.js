@@ -53,8 +53,6 @@ define( function( require ) {
     } );
     this.addChild( this.color2FractionNode );
 
-    var patchRadiusX = this.color1FractionNode.bounds.height * 0.5;
-    var patchRadiusY = this.color1FractionNode.bounds.height * 0.35;
     var colorPatchShape = Shape.ellipse( 0, 0, this.color1FractionNode.bounds.height * 0.5, this.color1FractionNode.bounds.height * 0.35 );
     this.color1Patch = new Path( colorPatchShape, {
       fill: color1,
@@ -88,13 +86,26 @@ define( function( require ) {
       this.color1Patch.fill = color;
     },
 
+    get color1() {
+      return this.color1Patch.fill;
+    },
+
     set color2( color ) {
       this.color2Patch.fill = color;
     },
 
+    get color2() {
+      return this.color2Patch.fill;
+    },
+
     set color1Proportion( color1Proportion ) {
       this.color1FractionNode.fraction = color1Proportion;
-      var color2Proportion = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
+      this.color2FractionNode.fraction = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
+    },
+
+    get color1Proportion() {
+      return this.color1FractionNode.fraction;
     }
+
   } );
 } );
