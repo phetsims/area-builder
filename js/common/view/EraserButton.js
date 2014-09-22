@@ -1,6 +1,8 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW missing doc
+/**
+ * Button that contains an eraser.
+ */
 define( function( require ) {
   'use strict';
 
@@ -15,6 +17,10 @@ define( function( require ) {
   // constants
   var ERASER_WIDTH = 20;  // width of eraser, used for scaling, the aspect ratio will determine height
 
+  /**
+   * @param {object} options
+   * @constructor
+   */
   function EraserButton( options ) {
     var eraserImageNode = new Image( eraserImage );
     eraserImageNode.scale( ERASER_WIDTH / eraserImageNode.width );

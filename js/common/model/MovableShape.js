@@ -103,7 +103,6 @@ define( function( require ) {
       }
     },
 
-    //REVIEW document this. I had to poke around to determine that destination is {Vector2}
     /**
      * Set the destination for this shape.
      * @param {Vector2} destination

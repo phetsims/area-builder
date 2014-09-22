@@ -20,5 +20,6 @@
   "chooseYourLevel": "Choose Your Level!",
   "solutionColon": "Solution:",
   "solution": "Solution",
-  "startOver": "Start Over"
+  "startOver": "Start Over",
+  "invalidValue": "--"
 }

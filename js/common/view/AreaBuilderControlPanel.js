@@ -1,6 +1,5 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW why is this not used in the 'Explore' screen? it has an identical control panel. See issue #44.
 /**
  * Panel that contains controls for turning various tools on and off for the Area Builder game. It is dynamic in the
  * sense that different elements of the panel come and go.

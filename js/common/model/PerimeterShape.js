@@ -71,13 +71,16 @@ define( function( require ) {
     var self = this;
     var i;
 
-    options = _.extend( {}, options ); // Make sure options is defined.
+    options = _.extend( {
+      fillColor: null,
+      edgeColor: null
+    }, options ); // Make sure options is defined.
 
     // @public, read only
-    this.fillColor = options.fillColor || null; //REVIEW preferable to specify null default in _.extend
+    this.fillColor = options.fillColor;
 
     // @public, read only
-    this.edgeColor = options.edgeColor || null; //REVIEW preferable to specify null default in _.extend
+    this.edgeColor = options.edgeColor;
 
     // @public, read only
     this.exteriorPerimeters = exteriorPerimeters;
@@ -98,7 +101,8 @@ define( function( require ) {
       self.kiteShape.lineToPoint( exteriorPerimeter[ 0 ] );
       self.kiteShape.close();
     } );
-    //REVIEW not clear what's going on here. when would kiteShape bounds be empty, and what do we have to do in that case?
+
+    // Only add interior spaces if there is a legitimate external perimeter.
     if ( !self.kiteShape.bounds.isEmpty() ) {
       interiorPerimeters.forEach( function( interiorPerimeter ) {
         self.kiteShape.moveToPoint( interiorPerimeter[ 0 ] );

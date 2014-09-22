@@ -1,8 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
-//REVIEW this doesn't represent a node, it is a node.
 /**
- * Type that represents a node that can be clicked upon to create new movable shapes in the model.
+ * A Scenery node that can be clicked upon to create new movable shapes in the model.
  *
  * @author John Blanco
  */
@@ -81,21 +80,23 @@ define( function( require ) {
     } );
 
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
-    //REVIEW why are parentScreen and movableShape defined here? they are used only inside the SimpleDragHandler.
     //REVIEW consider factoring this out into an inner subtype of SimpleDragHandler
-    var parentScreen = null; // needed for coordinate transforms
-    var movableShape = null;
     this.addInputListener( new SimpleDragHandler( {
+
+      parentScreen: null, // needed for coordinate transforms
+      movableShape: null,
+
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,
 
       start: function( event, trail ) {
+        var thisDragHandler = this;
 
         // Find the parent screen by moving up the scene graph.
         var testNode = self;
         while ( testNode !== null ) {
           if ( testNode instanceof ScreenView ) {
-            parentScreen = testNode;
+            this.parentScreen = testNode;
             break;
           }
           testNode = testNode.parents[0]; // Move up the scene graph by one level
@@ -104,19 +105,19 @@ define( function( require ) {
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
         var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
         var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
-        var initialPosition = parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
+        var initialPosition = this.parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 
         // Create and add the new model element.
-        movableShape = new MovableShape( shape, color, initialPosition );
-        movableShape.userControlled = true;
-        addShapeToModel( movableShape );
+        this.movableShape = new MovableShape( shape, color, initialPosition );
+        this.movableShape.userControlled = true;
+        addShapeToModel( this.movableShape );
 
         // If the creation count is limited, adjust the value and monitor the created shape for if/when it is returned.
         if ( options.creationLimit < Number.POSITIVE_INFINITY ) {
           // Use an IIFE to keep a reference of the movable shape in a closure.
           (function() {
             createdCount.value++;
-            var localRefToMovableShape = movableShape;
+            var localRefToMovableShape = thisDragHandler.movableShape;
             localRefToMovableShape.on( 'returnedHome', function returnedToOriginListener() {
               if ( !localRefToMovableShape.userControlled ) {
                 // The shape has been returned to its origin.
@@ -129,12 +130,12 @@ define( function( require ) {
       },
 
       translate: function( translationParams ) {
-        movableShape.setDestination( movableShape.position.plus( translationParams.delta ) );
+        this.movableShape.setDestination( this.movableShape.position.plus( translationParams.delta ) );
       },
 
       end: function( event, trail ) {
-        movableShape.userControlled = false;
-        movableShape = null;
+        this.movableShape.userControlled = false;
+        this.movableShape = null;
       }
     } ) );
 
