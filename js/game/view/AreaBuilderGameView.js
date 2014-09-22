@@ -11,7 +11,7 @@ define( function( require ) {
 
   // modules
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
-  var AreaBuilderControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderControlPanel' );
+  var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );

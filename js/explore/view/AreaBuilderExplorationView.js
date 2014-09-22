@@ -10,7 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AreaBuilderControlPanel = require( 'AREA_BUILDER/game/view/AreaBuilderControlPanel' );
+  var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
   var inherit = require( 'PHET_CORE/inherit' );
