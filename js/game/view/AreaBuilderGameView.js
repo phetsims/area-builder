@@ -45,16 +45,18 @@ define( function( require ) {
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
   var areaQuestionString = require( 'string!AREA_BUILDER/areaQuestion' );
+  var aSolutionColonString = require( 'string!AREA_BUILDER/aSolutionColon' );
+  var aSolutionString = require( 'string!AREA_BUILDER/aSolution' );
   var buildItString = require( 'string!AREA_BUILDER/buildIt' );
   var checkString = require( 'string!VEGAS/check' );
   var findTheAreaString = require( 'string!AREA_BUILDER/findTheArea' );
   var nextString = require( 'string!VEGAS/next' );
   var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
-  var aSolutionString = require( 'string!AREA_BUILDER/aSolution' );
+  var solutionColonString = require( 'string!AREA_BUILDER/solutionColon' );
   var solutionString = require( 'string!AREA_BUILDER/solution' );
+  var startOverString = require( 'string!AREA_BUILDER/startOver' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );
   var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
-  var startOverString = require( 'string!AREA_BUILDER/startOver' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
@@ -556,11 +558,11 @@ define( function( require ) {
           // Update the solution banner.
           this.solutionBanner.reset();
           if ( challenge.buildSpec ) {
-            this.solutionBanner.titleTextProperty.value = aSolutionString;
+            this.solutionBanner.titleTextProperty.value = aSolutionColonString;
             this.solutionBanner.buildSpecProperty.value = challenge.buildSpec;
           }
           else {
-            this.solutionBanner.titleTextProperty.value = solutionString;
+            this.solutionBanner.titleTextProperty.value = solutionColonString;
             this.solutionBanner.areaToFindProperty.value = challenge.backgroundShape.unitArea;
           }
           this.showChallengeGraphics();
