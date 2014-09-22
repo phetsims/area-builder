@@ -81,7 +81,6 @@ define( function( require ) {
 
   return inherit( Node, ColorProportionsPrompt, {
 
-    //REVIEW ES5 setters without getters causes lint failure, see issue #35
     set color1( color ) {
       this.color1Patch.fill = color;
     },

@@ -77,7 +77,6 @@ define( function( require ) {
     // Hook up the audio player to the sound settings.
     this.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
 
-    //REVIEW For future reference... rootNode is no longer necessary, see https://github.com/phetsims/joist/issues/145
     // Create a root node and send to back so that the layout bounds box can be made visible if needed.
     this.rootNode = new Node();
     this.addChild( self.rootNode );
@@ -353,7 +352,7 @@ define( function( require ) {
     // Various other initialization
     this.levelCompletedNode = null; // @private
     this.shapeCarouselRoot = new Node(); // @private
-    this.shapeCarouselTop = this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;  //REVIEW @private?
+    this.shapeCarouselTop = this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;  // @private?
     this.challengeLayer.addChild( this.shapeCarouselRoot );
     this.clearDimensionsControlOnNextChallenge = false; // @private
 
@@ -362,7 +361,7 @@ define( function( require ) {
 
     // Set up a flag to block updates of the 'You Built' window when showing the solution.  This is necessary because
     // adding the shapes to the board in order to show the solution triggers updates of this window.
-    this.okayToUpdateYouBuiltWindow = true; //REVIEW @private?
+    this.okayToUpdateYouBuiltWindow = true; // @private?
   }
 
   return inherit( ScreenView, AreaBuilderGameView, {
@@ -757,8 +756,7 @@ define( function( require ) {
       }
     },
 
-    //REVIEW @private?
-    // Utility method for hiding all of the game nodes whose visibility changes during the course of a challenge.
+    // @private, Utility method for hiding all of the game nodes whose visibility changes during the course of a challenge.
     hideAllGameNodes: function() {
       this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
       this.setNodeVisibility( false, [
@@ -777,17 +775,17 @@ define( function( require ) {
       ] );
     },
 
-    //REVIEW @private?
+    // @private
     show: function( nodesToShow ) {
       nodesToShow.forEach( function( nodeToShow ) { nodeToShow.visible = true; } );
     },
 
-    //REVIEW @private?
+    // @private
     setNodeVisibility: function( isVisible, nodes ) {
       nodes.forEach( function( node ) { node.visible = isVisible; } );
     },
 
-    //REVIEW @private?
+    // @private
     hideChallenge: function() {
       this.challengeLayer.visible = false;
       this.controlLayer.visible = false;
@@ -799,7 +797,7 @@ define( function( require ) {
       this.controlLayer.visible = true;
     },
 
-    //REVIEW @private?
+    // @private
     updatedCheckButtonEnabledState: function() {
       if ( this.model.currentChallenge ) {
         if ( this.model.currentChallenge.checkSpec === 'areaEntered' ) {
@@ -811,7 +809,7 @@ define( function( require ) {
       }
     },
 
-    //REVIEW @private?
+    // @private
     showLevelResultsNode: function() {
       var thisScreen = this;
 

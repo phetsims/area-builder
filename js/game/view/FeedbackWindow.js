@@ -40,17 +40,13 @@ define( function( require ) {
       xMargin: X_MARGIN
     }, options );
 
-    //REVIEW @private?
     // make the max width available to descendant classes
     this.maxWidth = maxWidth; // @protected
 
-    //REVIEW @private?
-    // content root
-    this.contentNode = new Node();
+    this.contentNode = new Node(); // @private
 
-    //REVIEW @private?
     // title
-    this.titleNode = new Text( title, { font: TITLE_FONT } );
+    this.titleNode = new Text( title, { font: TITLE_FONT } ); // @private
     this.titleNode.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / this.titleNode.width, 1 ) );
     this.titleNode.top = 5;
     this.contentNode.addChild( this.titleNode );
