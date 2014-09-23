@@ -80,7 +80,6 @@ define( function( require ) {
     } );
 
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
-    //REVIEW consider factoring this out into an inner subtype of SimpleDragHandler
     this.addInputListener( new SimpleDragHandler( {
 
       parentScreen: null, // needed for coordinate transforms

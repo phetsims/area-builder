@@ -55,7 +55,6 @@ define( function( require ) {
     null                                            // 15
   ];
 
-  //REVIEW call sites (eg ShapePlacementBoard) would be easier to grok if most of these params were options. All except Properties could easily be make options.
   /**
    * @param {Dimension2} size
    * @param {Number} unitSquareLength

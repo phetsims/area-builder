@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * An accoridon box that displays the area and perimeter of shape that may change dynamically.
+ * An accordion box that displays the area and perimeter of shape that may change dynamically.
  *
  * @author John Blanco
  */
