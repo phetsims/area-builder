@@ -16,12 +16,11 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var GameState = require( 'AREA_BUILDER/game/model/GameState' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var PropertySet = require( 'AXON/PropertySet' );
 
-  //REVIEW challengeFactory is not an Object, it requires methods that are called herein
-  //REVIEW simSpecificModel is not an Object, it requires methods that are called herein
   /**
    * @param challengeFactory - Factory object that is used to create challenges, examine usage for details.
    * @param simSpecificModel - Model containing the elements of the game that are unique to this sim, used to delegate
@@ -32,7 +31,6 @@ define( function( require ) {
   function QuizGameModel( challengeFactory, simSpecificModel, options ) {
     var thisModel = this;
     this.challengeFactory = challengeFactory; // @private
-    //REVIEW making this public seems to defeat the advantages of composition, and argues for inheritance
     this.simSpecificModel = simSpecificModel; // @public
 
     options = _.extend( {
@@ -50,11 +48,9 @@ define( function( require ) {
         currentChallenge: null,
         score: 0,
         elapsedTime: 0,
-        //REVIEW especially with verbose strings like this that are easy to mistype, I recommend using an enum pattern
-        // Game state, valid values are 'choosingLevel', 'presentingInteractiveChallenge',
-        // 'showingCorrectAnswerFeedback', 'showingIncorrectAnswerFeedbackTryAgain',
-        // 'showingIncorrectAnswerFeedbackMoveOn', 'displayingCorrectAnswer', 'showingLevelResults'
-        gameState: 'choosingLevel'
+
+        // Current state of the game, see GameState for valid values.
+        gameState: GameState.CHOOSING_LEVEL
       }
     );
 
@@ -121,14 +117,14 @@ define( function( require ) {
         this.simSpecificModel.startLevel();
 
         // Change to new game state.
-        this.gameState = 'presentingInteractiveChallenge';
+        this.gameState = GameState.PRESENTING_INTERACTIVE_CHALLENGE;
 
         // Flag set to indicate new best time, cleared each time a level is started.
         this.newBestTime = false;
       },
 
       setChoosingLevelState: function() {
-        this.gameState = 'choosingLevel';
+        this.gameState = GameState.CHOOSING_LEVEL;
       },
 
       getChallengeCurrentPointValue: function() {
@@ -145,7 +141,7 @@ define( function( require ) {
         var pointsEarned = 0;
         if ( answerIsCorrect ) {
           // The user answered the challenge correctly.
-          this.gameState = 'showingCorrectAnswerFeedback';
+          this.gameState = GameState.SHOWING_CORRECT_ANSWER_FEEDBACK;
           if ( this.incorrectGuessesOnCurrentChallenge === 0 ) {
             // User got it right the first time.
             pointsEarned = this.maxPointsPerChallenge;
@@ -160,10 +156,10 @@ define( function( require ) {
           // The user got it wrong.
           this.incorrectGuessesOnCurrentChallenge++;
           if ( this.incorrectGuessesOnCurrentChallenge < this.maxAttemptsPerChallenge ) {
-            this.gameState = 'showingIncorrectAnswerFeedbackTryAgain';
+            this.gameState = GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN;
           }
           else {
-            this.gameState = 'showingIncorrectAnswerFeedbackMoveOn';
+            this.gameState = GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON;
           }
         }
       },
@@ -171,7 +167,7 @@ define( function( require ) {
       // @private
       newGame: function() {
         this.stopGameTimer();
-        this.gameState = 'choosingLevel';
+        this.gameState = GameState.CHOOSING_LEVEL;
         this.incorrectGuessesOnCurrentChallenge = 0;
       },
 
@@ -182,7 +178,7 @@ define( function( require ) {
           // Move to the next challenge.
           this.challengeIndex++;
           this.currentChallenge = this.challengeList[ this.challengeIndex ];
-          this.gameState = 'presentingInteractiveChallenge';
+          this.gameState = GameState.PRESENTING_INTERACTIVE_CHALLENGE;
         }
         else {
           // All challenges completed for this level.  See if this is a new best time and, if so, record it.
@@ -196,13 +192,13 @@ define( function( require ) {
           this.bestScores[ this.level ].value = this.score;
 
           // Done with this game, show the results.
-          this.gameState = 'showingLevelResults';
+          this.gameState = GameState.SHOWING_LEVEL_RESULTS;
         }
       },
 
       tryAgain: function() {
         this.simSpecificModel.tryAgain();
-        this.gameState = 'presentingInteractiveChallenge';
+        this.gameState = GameState.PRESENTING_INTERACTIVE_CHALLENGE;
       },
 
       displayCorrectAnswer: function() {
@@ -211,7 +207,7 @@ define( function( require ) {
         this.simSpecificModel.displayCorrectAnswer( this.currentChallenge );
 
         // Update the game state.
-        this.gameState = 'displayingCorrectAnswer';
+        this.gameState = GameState.DISPLAYING_CORRECT_ANSWER;
       },
 
       // @private

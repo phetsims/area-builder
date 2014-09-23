@@ -20,6 +20,7 @@ define( function( require ) {
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
   var GameInfoBanner = require( 'AREA_BUILDER/game/view/GameInfoBanner' );
+  var GameState = require( 'AREA_BUILDER/game/model/GameState' );
   var HCarousel = require( 'AREA_BUILDER/game/view/HCarousel' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
@@ -254,7 +255,7 @@ define( function( require ) {
 
       // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
       // this case, we go ahead and make the state transition to the next state.
-      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
         assert && assert( digitString.length <= 1, 'Shouldn\'t reach this code with digit strings longer than 1' );
         gameModel.tryAgain();
       }
@@ -288,7 +289,7 @@ define( function( require ) {
           // If the game was in the state where it was prompting the user to try again, and the user started
           // interacting with shapes without pressing the 'Try Again' button, go ahead and make the state change
           // automatically.
-          if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackTryAgain' ) {
+          if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
             gameModel.tryAgain();
           }
         }
@@ -328,7 +329,7 @@ define( function( require ) {
       // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being given
       // the opportunity to view a solution, and the user just removed a piece, check if they now have the correct
       // answer.
-      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' && !self.isAnyShapeMoving() ) {
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && !self.isAnyShapeMoving() ) {
         self.model.checkAnswer();
       }
     } );
@@ -338,7 +339,7 @@ define( function( require ) {
       // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
       // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
       // window.
-      if ( gameModel.gameStateProperty.value === 'showingIncorrectAnswerFeedbackMoveOn' && self.okayToUpdateYouBuiltWindow ) {
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && self.okayToUpdateYouBuiltWindow ) {
         self.updateUserAnswer();
         self.updateYouBuiltWindow( self.model.currentChallenge );
 
@@ -377,31 +378,31 @@ define( function( require ) {
       // Show the nodes appropriate to the state
       switch( gameState ) {
 
-        case 'choosingLevel':
+        case GameState.CHOOSING_LEVEL:
           this.handleChoosingLevelState();
           break;
 
-        case 'presentingInteractiveChallenge':
+        case GameState.PRESENTING_INTERACTIVE_CHALLENGE:
           this.handlePresentingInteractiveChallengeState( challenge );
           break;
 
-        case 'showingCorrectAnswerFeedback':
+        case GameState.SHOWING_CORRECT_ANSWER_FEEDBACK:
           this.handleShowingCorrectAnswerFeedbackState( challenge );
           break;
 
-        case 'showingIncorrectAnswerFeedbackTryAgain':
+        case GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN:
           this.handleShowingIncorrectAnswerFeedbackTryAgainState( challenge );
           break;
 
-        case 'showingIncorrectAnswerFeedbackMoveOn':
+        case GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON:
           this.handleShowingIncorrectAnswerFeedbackMoveOnState( challenge );
           break;
 
-        case 'displayingCorrectAnswer':
+        case GameState.DISPLAYING_CORRECT_ANSWER:
           this.handleDisplayingCorrectAnswerState( challenge );
           break;
 
-        case 'showingLevelResults':
+        case GameState.SHOWING_LEVEL_RESULTS:
           this.handleShowingLevelResultsState();
           break;
 
@@ -848,7 +849,7 @@ define( function( require ) {
         this.model.bestTimes[ this.model.level ],
         thisScreen.model.newBestTime,
         function() {
-          thisScreen.model.gameState = 'choosingLevel';
+          thisScreen.model.gameState = GameState.CHOOSING_LEVEL;
           thisScreen.rootNode.removeChild( levelCompletedNode );
           levelCompletedNode = null;
         },
