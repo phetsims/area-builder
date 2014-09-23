@@ -23,11 +23,11 @@ define( function( require ) {
   var SINGLE_LINE_SPACING = 12; // Empirically determined to look good
   var PROMPT_TO_COLOR_SPACING = 4; // Empirically determined to look good
 
-  //REVIEW doc for color1Proportion is inadequate, doesn't tell me what the Fraction is used for or what it's range is
   /**
    * @param {String || Color} color1 - Color value for the 1st color patch
    * @param {String || Color} color2 - Color value for the 2nd color patch
-   * @param {Fraction} color1Proportion - Fraction for color1, the color2 fraction is deduced from this.
+   * @param {Fraction} color1Proportion - Fraction of the whole that is comprised of color1, must be between 0 and 1,
+   * inclusive.  The proportion for color2 is deduced from this value, with the two proportions summing to 1.
    * @param options
    * @constructor
    */

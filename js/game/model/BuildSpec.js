@@ -16,11 +16,11 @@ define( function( require ) {
 
   //REVIEW color1, color2 and color1Proportion are apparently optional, indicate so in @param doc
   /**
-   * @param {number} area
-   * @param {number} perimeter
+   * @param {number} area - Area of the shape that the user should construct from smaller shapes
+   * @param {number} perimeter - Perimeter of the shapes that the user should construct
    * @param {Color || String} color1
    * @param {Color || String} color2
-   * @param {Fraction} color1Proportion //REVIEW how is this related to color1? range of values?
+   * @param {Fraction} color1Proportion - Proportion of the overall shape that should be color1.  The rest must be color2.
    * @constructor
    */
   function BuildSpec( area, perimeter, color1, color2, color1Proportion ) {

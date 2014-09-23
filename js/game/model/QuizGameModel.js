@@ -22,7 +22,6 @@ define( function( require ) {
 
   //REVIEW challengeFactory is not an Object, it requires methods that are called herein
   //REVIEW simSpecificModel is not an Object, it requires methods that are called herein
-  //REVIEW elaborate on why you're calling this 'simSpecificModel'
   /**
    * @param {Object} challengeFactory - Factory object that is used to create challenges, examine usage for details.
    * @param {Object} simSpecificModel - Model containing the elements of the game that are unique to this sim, used to
@@ -88,12 +87,12 @@ define( function( require ) {
 
   return inherit( PropertySet, QuizGameModel,
     {
-      //REVIEW are any of these prototype functions private?
-
+      // @private
       step: function( dt ) {
         this.simSpecificModel.step( dt );
       },
 
+      // reset this model
       reset: function() {
         PropertySet.prototype.reset.call( this );
         this.bestScores.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
@@ -104,6 +103,7 @@ define( function( require ) {
         } );
       },
 
+      // starts new level
       startLevel: function( level ) {
         this.level = level;
         this.score = 0;
@@ -140,6 +140,7 @@ define( function( require ) {
         this.handleProposedAnswer( this.simSpecificModel.checkAnswer( this.currentChallenge ) );
       },
 
+      // @private
       handleProposedAnswer: function( answerIsCorrect ) {
         var pointsEarned = 0;
         if ( answerIsCorrect ) {
@@ -167,12 +168,14 @@ define( function( require ) {
         }
       },
 
+      // @private
       newGame: function() {
         this.stopGameTimer();
         this.gameState = 'choosingLevel';
         this.incorrectGuessesOnCurrentChallenge = 0;
       },
 
+      // Move to the next challenge in the current challenge set.
       nextChallenge: function() {
         this.incorrectGuessesOnCurrentChallenge = 0;
         if ( this.challengeIndex + 1 < this.challengeList.length ) {
@@ -211,6 +214,7 @@ define( function( require ) {
         this.gameState = 'displayingCorrectAnswer';
       },
 
+      // @private
       restartGameTimer: function() {
         if ( this.gameTimerId !== null ) {
           window.clearInterval( this.gameTimerId );
@@ -220,6 +224,7 @@ define( function( require ) {
         this.gameTimerId = window.setInterval( function() { thisModel.elapsedTime += 1; }, 1000 );
       },
 
+      // @private
       stopGameTimer: function() {
         window.clearInterval( this.gameTimerId );
         this.gameTimerId = null;

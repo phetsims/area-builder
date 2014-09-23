@@ -37,7 +37,7 @@ define( function( require ) {
   function AreaBuilderGameModel() {
 
     PropertySet.call( this, {
-      showGridOnBoard: false, //REVIEW which grid? board, composite shape, both?
+      showGridOnBoard: false,
       showDimensions: false
     } );
 

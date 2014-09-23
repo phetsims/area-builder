@@ -70,8 +70,8 @@ define( function( require ) {
     },
     {
       // Statics
-      X_MARGIN: X_MARGIN, //REVIEW why does the panel's x margin need be known by subtypes?
-      NORMAL_TEXT_FONT: NORMAL_TEXT_FONT //REVIEW what is this font used for?
+      X_MARGIN: X_MARGIN, // Must be visible to subtypes so that max width can be calculated and, if necessary, scaled.
+      NORMAL_TEXT_FONT: NORMAL_TEXT_FONT // Font used in this window for text that is not the title.
     }
   );
 } );
