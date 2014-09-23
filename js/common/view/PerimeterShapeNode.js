@@ -23,6 +23,7 @@ define( function( require ) {
 
   // constants
   var DIMENSION_LABEL_FONT = new PhetFont( { size: 14 } );
+  var COMPARISON_TOLERANCE = 1E-6;
 
   // Utility function for identifying a perimeter segment with no bends.
   function identifySegment( perimeterPoints, startIndex ) {
@@ -167,7 +168,7 @@ define( function( require ) {
             var segment = { startIndex: 0, endIndex: 0 };
             do {
               segment = identifySegment( perimeterToLabel, segment.endIndex );
-              // Only label segments that have integer lengths.
+              // Only put labels on segments that have integer lengths.
               var segmentLabelInfo = {
                 unitLength: perimeterToLabel[ segment.startIndex ].distance( perimeterToLabel[ segment.endIndex ] ) / unitSquareLength,
                 position: new Vector2( ( perimeterToLabel[ segment.startIndex ].x + perimeterToLabel[ segment.endIndex ].x ) / 2,
@@ -178,7 +179,8 @@ define( function( require ) {
               };
 
               // Only include the labels that are integer values.
-              if ( Math.round( segmentLabelInfo.unitLength ) === segmentLabelInfo.unitLength ) {
+              if ( Math.abs( Math.round( segmentLabelInfo.unitLength ) - segmentLabelInfo.unitLength ) < COMPARISON_TOLERANCE ) {
+                segmentLabelInfo.unitLength = Math.round( segmentLabelInfo.unitLength );
                 segmentLabelsInfo.push( segmentLabelInfo );
               }
             } while ( segment.endIndex !== 0 );
