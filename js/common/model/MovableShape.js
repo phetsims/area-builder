@@ -57,7 +57,7 @@ define( function( require ) {
     // Trigger an event whenever this shape returns to its original position.
     this.positionProperty.lazyLink( function( position ) {
       if ( position.equals( initialPosition ) ) {
-        self.trigger( 'returnedHome' );
+        self.trigger( 'returnedToOrigin' );
       }
     } );
 
@@ -92,12 +92,8 @@ define( function( require ) {
         if ( this.fading ) {
           this.fadeProportion = Math.min( 1, this.fadeProportion + ( dt * FADE_RATE ) );
           if ( this.fadeProportion >= 1 ) {
-            // Return to origin when fully faded.
-            //TODO: (see issue #27) This is a bit inelegant, since I am basically relying on the idea that the model
-            // will delete this when it goes home, which isn't obvious.  As noted elsewhere, I should consider a better
-            // scheme for signalling that a shape should be discarded.
-            this.goHome( false );
             this.fading = false;
+            this.trigger( 'fadedAway' );
           }
         }
       }
@@ -122,7 +118,7 @@ define( function( require ) {
      * Return the shape to the place where it was originally created.
      * @param {boolean} animate
      */
-    goHome: function( animate ) {
+    returnToOrigin: function( animate ) {
       this.setDestination( this.positionProperty.initialValue, animate );
     },
 

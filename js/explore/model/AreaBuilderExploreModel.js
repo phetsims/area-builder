@@ -110,7 +110,7 @@ define( function( require ) {
         shapePlaced = this.shapePlacementBoards[i].placeShape( movableShape );
       }
       if ( !shapePlaced ) {
-        movableShape.goHome( true );
+        movableShape.returnToOrigin( true );
       }
     },
 
@@ -129,15 +129,18 @@ define( function( require ) {
         }
       } );
 
-      // TODO (see issue #27): This doesn't feel quite right and should be revisited later in the evolution of this
-      // simulation.  It is relying on the shape to return to its origin and not be user controlled in order to remove
-      // it from the model. It may make more sense to have an explicit 'freed' or 'dismissed' signal or something of
-      // that nature.
-      movableShape.on( 'returnedHome', function() {
+      // The shape will be removed from the model if and when it returns to its origination point.  This is how a shape
+      // can be 'put back' into the bucket.
+      movableShape.on( 'returnedToOrigin', function() {
         if ( !movableShape.userControlled ) {
           // The shape has been returned to the bucket.
           self.movableShapes.remove( movableShape );
         }
+      } );
+
+      // Another point at which the shape is removed is if it fades away.
+      movableShape.on( 'fadedAway', function() {
+        self.movableShapes.remove( movableShape );
       } );
     },
 

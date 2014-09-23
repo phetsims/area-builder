@@ -98,18 +98,14 @@ define( function( require ) {
             else {
               // Shape did not go onto board, possibly because it's not over the board or the board is full.  Send it
               // home.
-              movableShape.goHome( true );
+              movableShape.returnToOrigin( true );
             }
           }
         } );
 
-        // TODO: (See issue #27) This doesn't feel quite right and should be revisited later in the evolution of this
-        // simulation.  It is relying on the shape to return to its origin and not be user controlled in order to
-        // remove it from the model.  It may make more sense to have an explicit 'freed' or 'dismissed' signal or
-        // something of that nature.
-        movableShape.on( 'returnedHome', function() {
+        // Remove the shape if it returns to its origin, since at that point it has essentially been 'put away'.
+        movableShape.on( 'returnedToOrigin', function() {
           if ( !movableShape.userControlled ) {
-            // The shape has been returned to its origin.
             self.movableShapes.remove( movableShape );
           }
         } );
@@ -128,10 +124,11 @@ define( function( require ) {
         var shape = new MovableShape( UNIT_SQUARE_SHAPE, color, this.solutionShapeOrigin );
         this.movableShapes.push( shape );
 
-        // TODO: As noted above, it's a little weird to rely on returning home to remove the shape.  May want to change eventually.
-        shape.on( 'returnedHome', function() {
-          // The shape has been returned to its origin.
-          self.movableShapes.remove( shape );
+        // Remove this shape when it gets returned to its original location.
+        shape.on( 'returnedToOrigin', function() {
+          if ( !shape.userControlled ) {
+            self.movableShapes.remove( shape );
+          }
         } );
 
         this.shapePlacementBoard.addShapeDirectlyToCell( cellColumn, cellRow, shape );

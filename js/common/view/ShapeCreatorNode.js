@@ -117,11 +117,11 @@ define( function( require ) {
           (function() {
             createdCount.value++;
             var localRefToMovableShape = thisDragHandler.movableShape;
-            localRefToMovableShape.on( 'returnedHome', function returnedToOriginListener() {
+            localRefToMovableShape.on( 'returnedToOrigin', function returnedToOriginListener() {
               if ( !localRefToMovableShape.userControlled ) {
                 // The shape has been returned to its origin.
                 createdCount.value--;
-                localRefToMovableShape.off( 'returnedHome', returnedToOriginListener );
+                localRefToMovableShape.off( 'returnedToOrigin', returnedToOriginListener );
               }
             } );
           })();

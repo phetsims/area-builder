@@ -210,8 +210,7 @@ define( function( require ) {
         self.addRemovalListener( movableShape );
       };
 
-      // Tag the listener so that it can be removed without firing if needed, such as when the board is cleared due to
-      // reset.
+      // Tag the listener so that it can be removed without firing if needed, such as when the board is cleared.
       this.tagListener( animationCompleteListener );
 
       // Hook up the listener.
@@ -562,7 +561,7 @@ define( function( require ) {
         shapesToRelease.forEach( function( shape ) { shape.fadeAway(); } );
       }
       else {
-        shapesToRelease.forEach( function( shape ) { shape.goHome( false ); } );
+        shapesToRelease.forEach( function( shape ) { shape.returnToOrigin( false ); } );
       }
 
       // Update board state.
@@ -872,7 +871,7 @@ define( function( require ) {
                 var movableShape = cell.occupiedBy;
                 if ( movableShape !== null ) { // Need to test in case a previously release shape covered multiple cells.
                   self.releaseShape( movableShape );
-                  movableShape.goHome( true );
+                  movableShape.returnToOrigin( true );
                 }
               } );
             }
