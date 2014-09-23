@@ -926,7 +926,6 @@ define( function( require ) {
 
         default:
           throw new Error( 'Unsupported game level: ' + level );
-          break;
       }
       assert && assert( challengeSet.length === numChallenges, 'Error: Didn\'t generate correct number of challenges.' );
       return challengeSet;

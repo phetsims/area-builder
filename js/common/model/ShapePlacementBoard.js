@@ -21,8 +21,6 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var simTitle = require( 'string!AREA_BUILDER/area-builder.name' );
-
   var invalidValueString = require( 'string!AREA_BUILDER/invalidValue' );
 
   // constants
