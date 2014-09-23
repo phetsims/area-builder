@@ -4,6 +4,6 @@
 define( function() {
   'use strict';
   return function() {
-    return '1.0.0-dev.19';
+    return '1.0.0-rc.1';
   };
 } );
