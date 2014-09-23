@@ -34,8 +34,6 @@ define( function( require ) {
    */
   function AreaAndPerimeterDisplay( areaProperty, areaTextColor, perimeterProperty, perimeterTextColor, options ) {
 
-    //REVIEW why doesn't this subtype AccordionBox directly?
-    Node.call( this );
     var contentNode = new Node();
     var areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
     var perimeterCaption = new Text( perimeterString, { font: DISPLAY_FONT } );
@@ -63,8 +61,8 @@ define( function( require ) {
       perimeterReadout.right = readoutsRightEdge;
     } );
 
-    this.accordonBoxExpanded = new Property( true );
-    this.addChild( new AccordionBox( contentNode, {
+    this.expanded = new Property( true );
+    AccordionBox.call( this, contentNode, {
       titleNode: new Text( valuesString, { font: DISPLAY_FONT } ),
       titleAlign: 'left',
       contentAlign: 'left',
@@ -72,15 +70,15 @@ define( function( require ) {
       showTitleWhenExpanded: false,
       contentXMargin: 8,
       contentYMargin: 4,
-      expandedProperty: this.accordonBoxExpanded
-    } ) );
+      expandedProperty: this.expanded
+    } );
 
     this.mutate( options );
   }
 
-  return inherit( Node, AreaAndPerimeterDisplay, {
+  return inherit( AccordionBox, AreaAndPerimeterDisplay, {
     reset: function() {
-      this.accordonBoxExpanded.reset();
+      this.expanded.reset();
     }
   } );
 } );
