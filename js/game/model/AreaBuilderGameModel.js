@@ -109,6 +109,11 @@ define( function( require ) {
             self.movableShapes.remove( movableShape );
           }
         } );
+
+        // Another point at which the shape is removed is if it fades away.
+        movableShape.on( 'fadedAway', function() {
+          self.movableShapes.remove( movableShape );
+        } );
       },
 
       /**
