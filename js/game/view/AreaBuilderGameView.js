@@ -633,9 +633,11 @@ define( function( require ) {
       var userBuiltSpec = new BuildSpec(
         this.areaOfUserCreatedShape,
         challenge.buildSpec.perimeter ? this.perimeterOfUserCreatedShape : null,
-        challenge.buildSpec.proportions ? challenge.buildSpec.proportions.color1 : null,
-        challenge.buildSpec.proportions ? challenge.buildSpec.proportions.color2 : null,
-        challenge.buildSpec.proportions ? this.color1Proportion : null
+        challenge.buildSpec.proportions ? {
+          color1: challenge.buildSpec.proportions.color1,
+          color2: challenge.buildSpec.proportions.color2,
+          color1Proportion: this.color1Proportion
+        } : null
       );
       this.youBuiltWindow.setBuildSpec( userBuiltSpec );
       this.youBuiltWindow.setColorBasedOnAnswerCorrectness( userBuiltSpec.equals( challenge.buildSpec ) );

@@ -14,29 +14,27 @@ define( function( require ) {
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
 
-  //REVIEW color1, color2 and color1Proportion are apparently optional, indicate so in @param doc
   /**
    * @param {number} area - Area of the shape that the user should construct from smaller shapes
-   * @param {number} perimeter - Perimeter of the shapes that the user should construct
-   * @param {Color || String} color1
-   * @param {Color || String} color2
-   * @param {Fraction} color1Proportion - Proportion of the overall shape that should be color1.  The rest must be color2.
+   * @param {number} [perimeter] - Perimeter of the shapes that the user should construct
+   * @param {Object} [colorProportionsSpec] - An object that specifies two colors and the proportion of the first color
+   * that should be present in the user's solution.
    * @constructor
    */
-  function BuildSpec( area, perimeter, color1, color2, color1Proportion ) {
+  function BuildSpec( area, perimeter, colorProportionsSpec ) {
     assert && assert( typeof( area) === 'number' );
     this.area = area;
-    if ( perimeter !== null ) {
+    if ( typeof( perimeter ) !== 'undefined' && perimeter !== null ) {
       assert && assert( typeof( perimeter ) === 'number' );
       this.perimeter = perimeter;
     }
-    //REVIEW color1, color2 and color1Proportion must all be provided, or they are ignored. It would be better to pass in as one (optional) object literal with these 3 properties.
-    if ( color1 !== null && color1Proportion !== null && color2 !== null ) {
-      assert && assert( color1Proportion instanceof Fraction );
-      this.proportions = {};
-      this.proportions.color1 = Color.toColor( color1 );
-      this.proportions.color2 = Color.toColor( color2 );
-      this.proportions.color1Proportion = color1Proportion;
+    if ( colorProportionsSpec ) {
+      assert && assert( colorProportionsSpec.color1Proportion instanceof Fraction );
+      this.proportions = {
+        color1: Color.toColor( colorProportionsSpec.color1 ),
+        color2: Color.toColor( colorProportionsSpec.color2 ),
+        color1Proportion: colorProportionsSpec.color1Proportion
+      };
     }
   }
 
@@ -75,22 +73,29 @@ define( function( require ) {
     }
   }, {
 
-    // Static functions
-
+    // Static creator functions
     areaOnly: function( area ) {
-      return new BuildSpec( area, null, null, null, null );
+      return new BuildSpec( area );
     },
 
     areaAndPerimeter: function( area, perimeter ) {
-      return new BuildSpec( area, perimeter, null, null, null );
+      return new BuildSpec( area, perimeter );
     },
 
     areaAndProportions: function( area, color1, color2, color1Proportion ) {
-      return new BuildSpec( area, null, color1, color2, color1Proportion );
+      return new BuildSpec( area, null, {
+          color1: color1,
+          color2: color2,
+          color1Proportion: color1Proportion }
+      );
     },
 
     areaPerimeterAndProportions: function( area, perimeter, color1, color2, color1Proportion ) {
-      return new BuildSpec( area, perimeter, color1, color2, color1Proportion );
+      return new BuildSpec( area, perimeter, {
+          color1: color1,
+          color2: color2,
+          color1Proportion: color1Proportion }
+      );
     }
   } );
 } );
