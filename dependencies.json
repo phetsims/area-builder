@@ -1,0 +1,63 @@
+{
+  "chipper": {
+    "sha": "b2bf379e7638122094aa7863d7b7e2b4619344b4",
+    "branch": "master"
+  },
+  "vibe": {
+    "sha": "1df0fd08d6c312b628e8f2006f8c7466d0ab1d7f",
+    "branch": "master"
+  },
+  "vegas": {
+    "sha": "43c94d2ec034d14ed9671a657def27e93f9a583e",
+    "branch": "master"
+  },
+  "sun": {
+    "sha": "a4c5181defa6edaebf87a94870abb7208c7439eb",
+    "branch": "master"
+  },
+  "sherpa": {
+    "sha": "3e191e57bdb12109664e7870bdcab3f2487afe45",
+    "branch": "master"
+  },
+  "scenery-phet": {
+    "sha": "59169b3c916962e4ec542c5a0d68c8298bb61ea3",
+    "branch": "master"
+  },
+  "scenery": {
+    "sha": "2e896729df9acffa6024925d06402573c74367f7",
+    "branch": "master"
+  },
+  "phetcommon": {
+    "sha": "d979f0cf3c0b0db867ed8b06676593277a0fbbc7",
+    "branch": "master"
+  },
+  "phet-core": {
+    "sha": "a4408a40d9d23706b245df422835841e7d7a36db",
+    "branch": "master"
+  },
+  "kite": {
+    "sha": "b8e681a33851b098cc9f339034879a82efc461dd",
+    "branch": "master"
+  },
+  "joist": {
+    "sha": "c6d9aecb55b1f495f784c05a2812fa9ddcc9eacb",
+    "branch": "master"
+  },
+  "dot": {
+    "sha": "05f3b7bf2ec86572a70c626518e642b01743f79b",
+    "branch": "master"
+  },
+  "brand": {
+    "sha": "8be52066aa533f58f118abd34d73f2609c844d48",
+    "branch": "master"
+  },
+  "axon": {
+    "sha": "bd88cd7e2d2be78665ad1d28eff77ddd97784f27",
+    "branch": "master"
+  },
+  "assert": {
+    "sha": "e4595f5eae375c15fa9aaba9511c52dbc1b0f2c6",
+    "branch": "master"
+  },
+  "comment": "# area-builder 1.0.0-rc.1 Tue Sep 23 2014 16:05:18 GMT-0600 (Mountain Daylight Time)"
+}
