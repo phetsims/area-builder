@@ -23,8 +23,8 @@ define( function( require ) {
   //REVIEW challengeFactory is not an Object, it requires methods that are called herein
   //REVIEW simSpecificModel is not an Object, it requires methods that are called herein
   /**
-   * @param {Object} challengeFactory - Factory object that is used to create challenges, examine usage for details.
-   * @param {Object} simSpecificModel - Model containing the elements of the game that are unique to this sim, used to
+   * @param challengeFactory - Factory object that is used to create challenges, examine usage for details.
+   * @param simSpecificModel - Model containing the elements of the game that are unique to this sim, used to delegate
    * delegate certain actions.  Look through code for usage details.
    * @param {Object} [options]
    * @constructor
