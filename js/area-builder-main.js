@@ -21,7 +21,7 @@ define( function( require ) {
     credits: {
       leadDesign: 'Karina Hensberry',
       softwareDevelopment: 'John Blanco',
-      designTeam: 'Bryce Gruneich, Amanda McGarry, Ariel Paul, Kathy Perkins, Beth Stade'
+      team: 'Bryce Gruneich, Amanda McGarry, Ariel Paul, Kathy Perkins, Beth Stade'
     }
   };
 
