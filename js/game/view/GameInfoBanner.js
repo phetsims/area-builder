@@ -67,7 +67,7 @@ define( function( require ) {
     // Define the build prompt, which is shown in both the challenge prompt and the solution.
     var buildPrompt = new Node();
     this.addChild( buildPrompt );
-    var areaPrompt = new Text( 'Testing', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
+    var areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
     buildPrompt.addChild( areaPrompt );
     var perimeterPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
     buildPrompt.addChild( perimeterPrompt );
@@ -157,7 +157,6 @@ define( function( require ) {
       if ( areaToFind !== null ) {
         areaPrompt.text = StringUtils.format( areaEqualsString, areaToFind );
         areaPrompt.font = LARGER_FONT;
-        areaPrompt.centerX = ( title.width + width - TITLE_INDENT ) / 2;
         areaPrompt.visible = true;
 
         // The other prompts (perimeter and color proportions) are not shown in this situation.
