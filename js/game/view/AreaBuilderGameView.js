@@ -603,8 +603,8 @@ define( function( require ) {
       if ( challenge.checkSpec === 'areaEntered' ||
            challenge.checkSpec === 'areaAndPerimeterConstructed' ||
            challenge.checkSpec === 'areaPerimeterAndProportionConstructed' ) {
+        this.clearDimensionsControlOnNextChallenge = !this.model.simSpecificModel.showDimensions;
         this.model.simSpecificModel.showDimensions = true;
-        this.clearDimensionsControlOnNextChallenge = true;
       }
 
       // Show the nodes.
