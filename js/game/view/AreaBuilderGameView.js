@@ -26,6 +26,7 @@ define( function( require ) {
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Property = require( 'AXON/Property' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
@@ -334,21 +335,24 @@ define( function( require ) {
       }
     } );
 
+    Property.multilink( [
+        gameModel.simSpecificModel.shapePlacementBoard.areaProperty,
+        gameModel.simSpecificModel.shapePlacementBoard.perimeterProperty ],
+      function() {
+        // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
+        // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
+        // window.
+        if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && self.okayToUpdateYouBuiltWindow ) {
+          self.updateUserAnswer();
+          self.updateYouBuiltWindow( self.model.currentChallenge );
 
-    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function( area ) {
-      // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
-      // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
-      // window.
-      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && self.okayToUpdateYouBuiltWindow ) {
-        self.updateUserAnswer();
-        self.updateYouBuiltWindow( self.model.currentChallenge );
-
-        // If the user has put all shapes away, check to see if they now have the correct answer.
-        if ( !self.isAnyShapeMoving() ) {
-          self.model.checkAnswer();
+          // If the user has put all shapes away, check to see if they now have the correct answer.
+          if ( !self.isAnyShapeMoving() ) {
+            self.model.checkAnswer();
+          }
         }
       }
-    } );
+    );
 
     // Various other initialization
     this.levelCompletedNode = null; // @private

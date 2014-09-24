@@ -125,7 +125,7 @@ define( function( require ) {
       }
 
       // If perimeter is specified, update it, otherwise hide it.
-      if ( buildSpec.perimeter ) {
+      if ( typeof( buildSpec.perimeter ) !== 'undefined' ) {
         if ( !this.contentNode.isChild( this.perimeterTextNode ) ) {
           this.contentNode.addChild( this.perimeterTextNode );
         }
