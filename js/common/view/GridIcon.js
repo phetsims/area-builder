@@ -35,14 +35,18 @@ define( function( require ) {
       // defaults
       gridStroke: 'black',
       gridLineWidth: 1,
+      backgroundStroke: null,
       backgroundFill: 'white',
+      backgroundLineWidth: 1,
       shapeStroke: new Color( shapeFillColor ).colorUtilsDarker( 0.2 ), // darkening factor empirically determined
       shapeLineWidth: 1
     }, options );
 
-    if ( options.backgroundFill ) {
-      this.addChild( new Rectangle( 0, 0, columns * cellLength, rows * cellLength, 0, 0, { fill: options.backgroundFill } ) );
-    }
+    this.addChild( new Rectangle( 0, 0, columns * cellLength, rows * cellLength, 0, 0, {
+      fill: options.backgroundFill,
+      stroke: options.backgroundStroke,
+      lineWidth: options.backgroundLineWidth
+    } ) );
 
     this.addChild( new Grid( new Bounds2( 0, 0, columns * cellLength, rows * cellLength ), cellLength, {
       stroke: options.gridStroke,
