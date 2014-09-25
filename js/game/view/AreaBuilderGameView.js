@@ -602,14 +602,9 @@ define( function( require ) {
       // Disable interaction with the challenge elements.
       this.challengeLayer.pickable = false;
 
-      // If the challenge is a 'find the area' challenge or a 'build it' challenge that included a perimeter spec,
-      // turn on dimensions so that the answer is perhaps more obvious.
-      if ( challenge.checkSpec === 'areaEntered' ||
-           challenge.checkSpec === 'areaAndPerimeterConstructed' ||
-           challenge.checkSpec === 'areaPerimeterAndProportionConstructed' ) {
-        this.clearDimensionsControlOnNextChallenge = !this.model.simSpecificModel.showDimensions;
-        this.model.simSpecificModel.showDimensions = true;
-      }
+      // Turn on the dimensions indicator, since it may make the answer more clear for the user.
+      this.clearDimensionsControlOnNextChallenge = !this.model.simSpecificModel.showDimensions;
+      this.model.simSpecificModel.showDimensions = true;
 
       // Show the nodes.
       this.show( nodesToShow );
