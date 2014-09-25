@@ -66,7 +66,7 @@ define( function( require ) {
       // left shape placement board and shapes
       var leftBoard = new GridIcon( 4, 4, UNIT_SQUARE_LENGTH, AreaBuilderSharedConstants.GREENISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 ), new Vector2( 1, 2 )
-      ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.05, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) )
+      ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.05, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
       icon.addChild( leftBoard );
 
       // right shape placement board and shapes
