@@ -46,7 +46,7 @@ define( function( require ) {
     this.setColor( DEFAULT_FILL_COLOR );
 
     // Label the sides.
-    this.addChild( new Text( '2', { font: LABEL_FONT, right: -2, centerY: WIDTH / 2 } ) );
+    this.addChild( new Text( '2', { font: LABEL_FONT, right: -2, centerY: HEIGHT / 2 } ) );
     this.addChild( new Text( '2', { font: LABEL_FONT, left: WIDTH + 2, centerY: HEIGHT / 2 } ) );
     this.addChild( new Text( '3', { font: LABEL_FONT, centerX: WIDTH / 2, bottom: 0 } ) );
     this.addChild( new Text( '3', { font: LABEL_FONT, centerX: WIDTH / 2, top: HEIGHT } ) );
