@@ -15,6 +15,6 @@
     "uglify-js": "~2.4.0",
     "requirejs": "~2.1.8"
   },
-  "requirejsNamespace": "AREA",
-  "simTitleStringKey": "AREA/area-builder.name"
+  "requirejsNamespace": "AREA_BUILDER",
+  "simTitleStringKey": "AREA_BUILDER/area-builder.name"
 }
