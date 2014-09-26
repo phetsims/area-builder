@@ -107,7 +107,7 @@ define( function( require ) {
     } );
 
     // Observable array of the shapes that have been placed on this board.
-    this.residentShapes = new ObservableArray(); // @public
+    this.residentShapes = new ObservableArray(); // @public, read only
 
     // Non-dynamic public values.
     this.unitSquareLength = unitSquareLength; // @public

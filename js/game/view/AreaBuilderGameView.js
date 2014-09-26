@@ -321,9 +321,6 @@ define( function( require ) {
       if ( gameModel.currentChallenge.buildSpec && self.challengePromptBanner.buildSpecProperty.value === null ) {
         self.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallenge.buildSpec;
       }
-
-      // Make sure the check button is in the appropriate state.
-      self.updatedCheckButtonEnabledState();
     } );
 
     gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function() {
@@ -353,6 +350,10 @@ define( function( require ) {
         }
       }
     );
+
+    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function() {
+      self.updatedCheckButtonEnabledState();
+    } );
 
     // Various other initialization
     this.levelCompletedNode = null; // @private
@@ -830,7 +831,7 @@ define( function( require ) {
           this.checkAnswerButton.enabled = this.numberEntryControl.keypad.digitString.value.length > 0;
         }
         else {
-          this.checkAnswerButton.enabled = this.model.simSpecificModel.movableShapes.length > 0;
+          this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.area > 0;
         }
       }
     },
