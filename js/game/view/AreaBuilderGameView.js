@@ -117,6 +117,7 @@ define( function( require ) {
 
     // Set up the constant portions of the challenge view
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
+    this.shapeBoardOriginalBounds = this.shapeBoard.bounds.copy(); // Necessary because the shape board's bounds can vary when shapes are placed.
     this.challengeLayer.addChild( this.shapeBoard );
     this.eraserButton = new EraserButton( {
       right: this.shapeBoard.left,
@@ -358,7 +359,6 @@ define( function( require ) {
     // Various other initialization
     this.levelCompletedNode = null; // @private
     this.shapeCarouselRoot = new Node(); // @private
-    this.shapeCarouselTop = this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;  // @private?
     this.challengeLayer.addChild( this.shapeCarouselRoot );
     this.clearDimensionsControlOnNextChallenge = false; // @private
 
@@ -641,8 +641,8 @@ define( function( require ) {
       );
       this.youBuiltWindow.setBuildSpec( userBuiltSpec );
       this.youBuiltWindow.setColorBasedOnAnswerCorrectness( userBuiltSpec.equals( challenge.buildSpec ) );
-      this.youBuiltWindow.centerY = this.shapeBoard.centerY;
-      this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
+      this.youBuiltWindow.centerY = this.shapeBoardOriginalBounds.centerY;
+      this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoardOriginalBounds.maxX ) / 2;
     },
 
     // @private Update the window that depicts what the user has entered using the keypad.
@@ -650,8 +650,8 @@ define( function( require ) {
       assert && assert( challenge.checkSpec === 'areaEntered', 'This method should only be called for find-the-area style challenges.' );
       this.youEnteredWindow.setValueEntered( this.model.simSpecificModel.areaGuess );
       this.youEnteredWindow.setColorBasedOnAnswerCorrectness( challenge.backgroundShape.unitArea === this.model.simSpecificModel.areaGuess );
-      this.youEnteredWindow.centerY = this.shapeBoard.centerY;
-      this.youEnteredWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoard.bounds.maxX ) / 2;
+      this.youEnteredWindow.centerY = this.shapeBoardOriginalBounds.centerY;
+      this.youEnteredWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoardOriginalBounds.maxX ) / 2;
     },
 
     // @private Grab a snapshot of whatever the user has built or entered
@@ -733,8 +733,8 @@ define( function( require ) {
           }
 
           // Center the panel over the shape board and make it visible.
-          this.buildPromptPanel.centerX = this.shapeBoard.centerX;
-          this.buildPromptPanel.centerY = this.shapeBoard.centerY;
+          this.buildPromptPanel.centerX = this.shapeBoardOriginalBounds.centerX;
+          this.buildPromptPanel.centerY = this.shapeBoardOriginalBounds.centerY;
           this.buildPromptPanel.visible = true;
           this.buildPromptPanel.opacity = 1; // Necessary because the board is set to fade out elsewhere.
         }
@@ -763,8 +763,8 @@ define( function( require ) {
           if ( creatorNodes.length > 4 ) {
             // Add a scrolling carousel.
             this.shapeCarouselRoot.addChild( new HCarousel( creatorNodes, {
-              centerX: this.shapeBoard.centerX,
-              top: this.shapeCarouselTop,
+              centerX: this.shapeBoardOriginalBounds.centerX,
+              top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
             } ) );
           }
@@ -772,8 +772,8 @@ define( function( require ) {
             // Add a non-scrolling panel
             var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
             this.shapeCarouselRoot.addChild( new Panel( creatorNodeHBox, {
-              centerX: this.shapeBoard.centerX,
-              top: this.shapeCarouselTop,
+              centerX: this.shapeBoardOriginalBounds.centerX,
+              top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               xMargin: 50,
               yMargin: 15,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
