@@ -123,7 +123,14 @@ define( function( require ) {
       right: this.shapeBoard.left,
       top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
       listener: function() {
-        gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( true );
+        var challenge = gameModel.currentChallenge;
+        var shapeReleaseMode = 'fade';
+        if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[0].creationLimit ) {
+          // In the case where there is a limited number of shapes, have them animate back to the carousel instead of
+          // fading away so that the user understands that the stash is being replenished.
+          shapeReleaseMode = 'animateHome'
+        }
+        gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( shapeReleaseMode );
       }
     } );
     this.challengeLayer.addChild( this.eraserButton );

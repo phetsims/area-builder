@@ -527,8 +527,10 @@ define( function( require ) {
     /**
      * Release all the shapes that are currently on this board and send them to their home location.
      * @public
+     * @param releaseMode - Controls what the shapes do after release, options are 'fade', 'animateHome', and
+     * 'jumpHome'.  'jumpHome' is the default.
      */
-    releaseAllShapes: function( fade ) {
+    releaseAllShapes: function( releaseMode ) {
       var self = this;
 
       var shapesToRelease = [];
@@ -554,13 +556,21 @@ define( function( require ) {
         }
       }
 
-      // Send the shapes to their origin.
-      if ( fade ) {
-        shapesToRelease.forEach( function( shape ) { shape.fadeAway(); } );
-      }
-      else {
-        shapesToRelease.forEach( function( shape ) { shape.returnToOrigin( false ); } );
-      }
+      // Tell the shapes what to do after being released.
+      shapesToRelease.forEach( function( shape ) {
+        if ( typeof( releaseMode ) === 'undefined' || releaseMode === 'jumpHome' ) {
+          shape.returnToOrigin( false );
+        }
+        else if ( releaseMode === 'animateHome' ) {
+          shape.returnToOrigin( true );
+        }
+        else if ( releaseMode === 'fade' ) {
+          shape.fadeAway();
+        }
+        else {
+          throw new Error( 'Unsupported release mode for shapes.' );
+        }
+      } );
 
       // Update board state.
       this.updateAll();

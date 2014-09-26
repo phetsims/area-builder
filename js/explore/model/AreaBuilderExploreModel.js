@@ -147,7 +147,7 @@ define( function( require ) {
     // Resets all model elements
     reset: function() {
       PropertySet.prototype.reset.call( this );
-      this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes(); } );
+      this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes( 'jumpHome' ); } );
       this.movableShapes.clear();
     }
   } );

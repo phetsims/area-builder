@@ -141,7 +141,7 @@ define( function( require ) {
 
       // @public, Clear the placement board of all shapes placed on it by the user
       clearShapePlacementBoard: function() {
-        this.shapePlacementBoard.releaseAllShapes( false );
+        this.shapePlacementBoard.releaseAllShapes( 'jumpHome' );
       },
 
       // @public?
@@ -285,7 +285,7 @@ define( function( require ) {
 
       // Resets all model elements
       reset: function() {
-        this.shapePlacementBoard.releaseAllShapes( false );
+        this.shapePlacementBoard.releaseAllShapes( 'jumpHome' );
         this.movableShapes.clear();
       }
     },

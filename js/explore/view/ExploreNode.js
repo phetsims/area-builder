@@ -99,7 +99,7 @@ define( function( require ) {
     this.addChild( new EraserButton( {
       right: bucketFront.right - 3,
       top: bucketFront.bottom + 5,
-      listener: function() { shapePlacementBoard.releaseAllShapes( true ); }
+      listener: function() { shapePlacementBoard.releaseAllShapes( 'fade' ); }
     } ) );
 
     // Handle the comings and goings of movable shapes.
