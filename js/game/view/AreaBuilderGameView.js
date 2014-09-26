@@ -128,7 +128,7 @@ define( function( require ) {
         if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[0].creationLimit ) {
           // In the case where there is a limited number of shapes, have them animate back to the carousel instead of
           // fading away so that the user understands that the stash is being replenished.
-          shapeReleaseMode = 'animateHome'
+          shapeReleaseMode = 'animateHome';
         }
         gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( shapeReleaseMode );
       }
