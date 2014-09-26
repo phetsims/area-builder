@@ -10,9 +10,10 @@ define( function( require ) {
 
   // imports
   var QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
-  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderChallengeFactory = require( 'AREA_BUILDER/game/model/AreaBuilderChallengeFactory' );
+  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderGameView = require( 'AREA_BUILDER/game/view/AreaBuilderGameView' );
+  var AreaBuilderIconFactory = require( 'AREA_BUILDER/common/view/AreaBuilderIconFactory' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -31,7 +32,10 @@ define( function( require ) {
       new Image( gameIcon ),
       function() { return new QuizGameModel( AreaBuilderChallengeFactory, new AreaBuilderGameModel() ); },
       function( model ) { return new AreaBuilderGameView( model ); },
-      { backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR }
+      {
+        backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
+        navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon()
+      }
     );
   }
 
