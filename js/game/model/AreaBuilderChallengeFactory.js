@@ -865,9 +865,10 @@ define( function( require ) {
       challenge = generationFunction();
       attempts++;
       uniqueChallengeGenerated = isChallengeUnique( challenge );
-      if ( attempts > 10 && !uniqueChallengeGenerated ) {
+      if ( attempts > 12 && !uniqueChallengeGenerated ) {
         // Remove the oldest half of challenges.
-        challengeHistory = challengeHistory.slice( 0, challengeHistory.length / 2 + 1 );
+        challengeHistory = challengeHistory.slice( 0, challengeHistory.length / 2 );
+        attempts = 0;
       }
     }
 
