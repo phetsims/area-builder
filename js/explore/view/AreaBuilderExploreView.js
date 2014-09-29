@@ -20,7 +20,7 @@ define( function( require ) {
 
   // constants
   var CONTROL_INSET = 15;
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 12;
 
   /**
    * @param {AreaBuilderExploreModel} model
