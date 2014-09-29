@@ -9,7 +9,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Image = require( 'SCENERY/nodes/Image' );
-  var PushButton = require( 'SUN/buttons/RectangularPushButton' );
+  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
 
   // images
   var eraserImage = require( 'image!SCENERY_PHET/eraser.png' );
@@ -25,8 +25,8 @@ define( function( require ) {
     var eraserImageNode = new Image( eraserImage );
     eraserImageNode.scale( ERASER_WIDTH / eraserImageNode.width );
     options = _.extend( { content: eraserImageNode, baseColor: '#F2E916' }, options );
-    PushButton.call( this, options );
+    RectangularPushButton.call( this, options );
   }
 
-  return inherit( PushButton, EraserButton );
+  return inherit( RectangularPushButton, EraserButton );
 } );
