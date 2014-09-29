@@ -751,9 +751,18 @@ define( function( require ) {
 
         // Set the state of the control panel.
         this.controlPanel.dimensionsIcon.setGridVisible( challenge.backgroundShape ? false : true );
-        this.controlPanel.dimensionsIcon.setColor( challenge.backgroundShape ? challenge.backgroundShape.fillColor : AreaBuilderSharedConstants.GREENISH_COLOR );
         this.controlPanel.visibilityControls.gridControlVisible = challenge.toolSpec.gridControl;
         this.controlPanel.visibilityControls.dimensionsControlVisible = challenge.toolSpec.dimensionsControl;
+        if ( challenge.backgroundShape ) {
+          this.controlPanel.dimensionsIcon.setColor( challenge.backgroundShape.fillColor );
+        }
+        else if ( challenge.userShapes ) {
+          this.controlPanel.dimensionsIcon.setColor( challenge.userShapes[ 0 ].color );
+        }
+        else {
+          debugger;
+          this.controlPanel.dimensionsIcon.setColor( AreaBuilderSharedConstants.GREENISH_COLOR );
+        }
 
         // Create the carousel if present
         if ( challenge.userShapes !== null ) {
