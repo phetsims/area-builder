@@ -44,9 +44,15 @@ define( function( require ) {
    * @param {Function} addShapeToModel - Function for adding a newly created shape to the model.
    * @param {ObservableArray} movableShapeList - The array that tracks the movable shapes.
    * @param {Bucket} bucket - Model of the bucket that is to be portrayed
+   * @param {Object} layerOptions
    * @constructor
    */
-  function ExploreNode( shapePlacementBoard, addShapeToModel, movableShapeList, bucket ) {
+  function ExploreNode( shapePlacementBoard, addShapeToModel, movableShapeList, bucket, layerOptions ) {
+
+    layerOptions = _.extend( {
+      // optional layers (scenery nodes) that can be passed in to enable optimal layering.
+      shapesLayer: null
+    }, layerOptions );
 
     // Verify that the shape placement board is set up to handle a specific color, rather than all colors, since other
     // code below depends on this.
@@ -58,7 +64,7 @@ define( function( require ) {
     // Create the nodes that will be used to layer things visually.
     var backLayer = new Node();
     this.addChild( backLayer );
-    var movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
+    var movableShapesLayer = layerOptions.shapesLayer ? layerOptions.shapesLayer : new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
     this.addChild( movableShapesLayer );
     var bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );

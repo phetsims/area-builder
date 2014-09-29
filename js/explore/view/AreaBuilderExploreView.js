@@ -14,6 +14,7 @@ define( function( require ) {
   var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ExploreNode = require( 'AREA_BUILDER/explore/view/ExploreNode' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
 
@@ -29,16 +30,20 @@ define( function( require ) {
 
     ScreenView.call( this, { renderer: 'svg', layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
 
+    // Create the layer where the shapes will be placed.  They are maintained in a separate layer so that they are over
+    // all of the shape placement boards in the z-order.
+    var movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
+
     // Create the composite nodes that contain the shape placement board, the readout, the bucket, the shape creator
     // nodes, and the eraser button.
     var centerExploreNode = new ExploreNode( model.singleShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.singleModeBucket );
+      model.movableShapes, model.singleModeBucket, { shapesLayer: movableShapesLayer } );
     this.addChild( centerExploreNode );
     var leftExploreNode = new ExploreNode( model.leftShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.leftBucket );
+      model.movableShapes, model.leftBucket, { shapesLayer: movableShapesLayer } );
     this.addChild( leftExploreNode );
     var rightExploreNode = new ExploreNode( model.rightShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.rightBucket );
+      model.movableShapes, model.rightBucket, { shapesLayer: movableShapesLayer } );
     this.addChild( rightExploreNode );
 
     // Control which board(s), bucket(s), and shapes are visible.
@@ -69,6 +74,9 @@ define( function( require ) {
         model.reset();
       }
     } ) );
+
+    // Add the movable shapes issue.
+    this.addChild( movableShapesLayer );
 
     // Perform final layout adjustments
     var centerBoardBounds = model.singleShapePlacementBoard.bounds;
