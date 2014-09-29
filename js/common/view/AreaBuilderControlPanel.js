@@ -51,7 +51,8 @@ define( function( require ) {
         gridCheckbox,
         dimensionsCheckbox
       ],
-      spacing: 8
+      spacing: 8,
+      align: 'left'
     } );
     this.addChild( new Panel( vBox, PANEL_OPTIONS ) );
 
