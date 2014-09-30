@@ -258,28 +258,32 @@ define( function( require ) {
         if ( challenge ) {
           assert && assert( typeof( challenge.backgroundShape !== 'undefined' ) );
 
-          // Set the background shape.  If none is included, the value should be null.
+          // Set the background shape.
           this.shapePlacementBoard.setBackgroundShape( challenge.backgroundShape, true );
-          this.shapePlacementBoard.showGridOnBackgroundShape = false;
+          this.shapePlacementBoard.showGridOnBackgroundShape = false; // Initially off, may be turned on when showing solution.
 
           // Set the board to either form composite shapes or allow free placement.
           this.shapePlacementBoard.formComposite = challenge.backgroundShape === null;
 
           // Set the color scheme of the composite so that the placed squares can be seen if needed.
-          if ( challenge.buildSpec ) {
-            // The composite shapes needs to be see-through so that the shapes placed by the user are visible.
-            this.shapePlacementBoard.setCompositeShapeColorScheme( null, new Color( 'black' ) );
+          if ( challenge.buildSpec && this.shapePlacementBoard.formComposite && challenge.userShapes ) {
+
+            // Make the perimeter color be a darker version of the first user shape.
+            var perimeterColor = Color.toColor( challenge.userShapes[0].color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+
+            var fillColor;
+            if ( challenge.buildSpec.proportions ) {
+              // The composite shape needs to be see through so that the original shapes can be seen.  This allows
+              // multiple colors to be depicted, but generally doesn't look quite as good.
+              fillColor = null;
+            }
+            else {
+              // The fill color should be the same as the user shapes.  Assume all user shapes are the same color.
+              fillColor = challenge.userShapes[0].color;
+            }
+
+            this.shapePlacementBoard.setCompositeShapeColorScheme( fillColor, perimeterColor );
           }
-//          if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
-//            // The composite shapes needs to be see-through so that the shapes placed by the user are visible.
-//            this.shapePlacementBoard.setCompositeShapeColorScheme( null, new Color( 'black' ) );
-//          }
-//          else {
-//            // The composite shape should be opaque.
-//            this.shapePlacementBoard.setCompositeShapeColorScheme(
-//              AreaBuilderSharedConstants.GREENISH_COLOR,
-//              Color.toColor( AreaBuilderSharedConstants.GREENISH_COLOR ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ) );
-//          }
         }
       },
 

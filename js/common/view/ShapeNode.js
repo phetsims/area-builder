@@ -22,7 +22,7 @@ define( function( require ) {
   // constants
   var SHADOW_COLOR = 'rgba( 50, 50, 50, 0.5 )';
   var SHADOW_OFFSET = new Vector2( 5, 5 );
-  var OPACITY_OF_TRANSLUCENT_SHAPES = 0.65; // Value is empirically determined.
+  var OPACITY_OF_TRANSLUCENT_SHAPES = 0.65; // Value empirically determined.
   var UNIT_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
   var BORDER_LINE_WIDTH = 1;
 
