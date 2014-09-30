@@ -81,13 +81,13 @@ define( function( require ) {
       // grid. The perimeter and area values are only updated when this is set to true.
       formComposite: true,
 
-      // @public Read-only property that indicates the area of the composite shape.  This will be a number for valid
-      // values, and a string when invalid.
-      area: 0,
-
-      // @public Read-only property that indicates the perimeter of the composite shape.   This will be a number for
-      // valid values, and a string when invalid.
-      perimeter: 0,
+      // @public Read-only property that indicates the area and perimeter of the composite shape.  These must be
+      // together in an object so that they can be updated simultaneously, otherwise race conditions can occur when
+      // evaluating challenges.
+      areaAndPerimeter: {
+        area: 0, // Number when valid, string when invalid.
+        perimeter: 0  // Number when valid, string when invalid.
+      },
 
       // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by all
       // of the individual shapes placed on the board by the user.
@@ -374,24 +374,28 @@ define( function( require ) {
     updateAreaAndTotalPerimeter: function() {
       if ( this.compositeShape.exteriorPerimeters.length <= 1 ) {
         var self = this;
-        var area = 0;
+        var totalArea = 0;
         this.residentShapes.forEach( function( residentShape ) {
-          area += residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
+          totalArea += residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
         } );
-        this.area = area;
-        var totalPerimeterAccumulator = 0;
+        var totalPerimeter = 0;
         this.compositeShape.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
-          totalPerimeterAccumulator += exteriorPerimeter.length;
+          totalPerimeter += exteriorPerimeter.length;
         } );
         this.compositeShape.interiorPerimeters.forEach( function( interiorPerimeter ) {
-          totalPerimeterAccumulator += interiorPerimeter.length;
+          totalPerimeter += interiorPerimeter.length;
         } );
-        this.perimeter = totalPerimeterAccumulator;
+        this.areaAndPerimeter = {
+          area: totalArea,
+          perimeter: totalPerimeter
+        }
       }
       else {
         // Area and perimeter readings are currently invalid.
-        this.area = invalidValueString;
-        this.perimeter = invalidValueString;
+        this.areaAndPerimeter = {
+          area: invalidValueString,
+          perimeter: invalidValueString
+        }
       }
     },
 

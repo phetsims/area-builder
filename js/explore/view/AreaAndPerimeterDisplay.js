@@ -25,14 +25,13 @@ define( function( require ) {
   var DISPLAY_FONT = new PhetFont( 14 );
 
   /**
-   * @param {Property<Number>} areaProperty
+   * @param {Property<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
    * @param {Color} areaTextColor
-   * @param {Property<Number>} perimeterProperty
    * @param {Color} perimeterTextColor
    * @param {Object} options
    * @constructor
    */
-  function AreaAndPerimeterDisplay( areaProperty, areaTextColor, perimeterProperty, perimeterTextColor, options ) {
+  function AreaAndPerimeterDisplay( areaAndPerimeterProperty, areaTextColor, perimeterTextColor, options ) {
 
     var contentNode = new Node();
     var areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
@@ -49,14 +48,11 @@ define( function( require ) {
     contentNode.addChild( perimeterReadout );
     var readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 8 + tempTwoDigitString.width;
 
-    areaProperty.link( function( area ) {
-      areaReadout.text = area;
+    areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
+      areaReadout.text = areaAndPerimeter.area;
       areaReadout.bottom = areaCaption.bottom;
       areaReadout.right = readoutsRightEdge;
-    } );
-
-    perimeterProperty.link( function( perimeter ) {
-      perimeterReadout.text = perimeter;
+      perimeterReadout.text = areaAndPerimeter.perimeter;
       perimeterReadout.bottom = perimeterCaption.bottom;
       perimeterReadout.right = readoutsRightEdge;
     } );

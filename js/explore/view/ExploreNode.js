@@ -78,9 +78,8 @@ define( function( require ) {
 
     // Add the area and perimeter display
     this.areaAndPerimeterDisplay = new AreaAndPerimeterDisplay(
-      shapePlacementBoard.areaProperty,
+      shapePlacementBoard.areaAndPerimeterProperty,
       shapeColor,
-      shapePlacementBoard.perimeterProperty,
       shapeColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       { centerX: shapePlacementBoardNode.centerX, bottom: shapePlacementBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD }
     );

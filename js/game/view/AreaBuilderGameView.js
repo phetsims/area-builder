@@ -340,27 +340,22 @@ define( function( require ) {
       }
     } );
 
-    Property.multilink( [
-        gameModel.simSpecificModel.shapePlacementBoard.areaProperty,
-        gameModel.simSpecificModel.shapePlacementBoard.perimeterProperty ],
-      function() {
-        // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
-        // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
-        // window.
-        if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && self.okayToUpdateYouBuiltWindow ) {
-          self.updateUserAnswer();
-          self.updateYouBuiltWindow( self.model.currentChallenge );
+    gameModel.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
 
-          // If the user has put all shapes away, check to see if they now have the correct answer.
-          if ( !self.isAnyShapeMoving() ) {
-            self.model.checkAnswer();
-          }
+      self.updatedCheckButtonEnabledState();
+
+      // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
+      // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
+      // window.
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && self.okayToUpdateYouBuiltWindow ) {
+        self.updateUserAnswer();
+        self.updateYouBuiltWindow( self.model.currentChallenge );
+
+        // If the user has put all shapes away, check to see if they now have the correct answer.
+        if ( !self.isAnyShapeMoving() ) {
+          self.model.checkAnswer();
         }
       }
-    );
-
-    gameModel.simSpecificModel.shapePlacementBoard.areaProperty.link( function() {
-      self.updatedCheckButtonEnabledState();
     } );
 
     // Various other initialization
@@ -664,8 +659,8 @@ define( function( require ) {
     // @private Grab a snapshot of whatever the user has built or entered
     updateUserAnswer: function() {
       // Save the parameters of what the user has built, if they've built anything.
-      this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.area;
-      this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.perimeter;
+      this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.area;
+      this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.perimeter;
       var challenge = this.model.currentChallenge; // convenience var
       if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
         this.color1Proportion = this.model.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
@@ -846,7 +841,7 @@ define( function( require ) {
           this.checkAnswerButton.enabled = this.numberEntryControl.keypad.digitString.value.length > 0;
         }
         else {
-          this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.area > 0;
+          this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.area > 0;
         }
       }
     },
