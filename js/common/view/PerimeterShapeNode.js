@@ -80,7 +80,7 @@ define( function( require ) {
     var perimeterShapeNode = new Path();
     this.addChild( perimeterShapeNode );
     var grid = new Grid( maxBounds, unitSquareLength, {
-      lineDash: [ 1, 4 ],
+      lineDash: [ 0, 3, 1, 0 ], // Tweaked to work well with unit size
       stroke: 'black'
     } );
     this.addChild( grid );
