@@ -388,14 +388,14 @@ define( function( require ) {
         this.areaAndPerimeter = {
           area: totalArea,
           perimeter: totalPerimeter
-        }
+        };
       }
       else {
         // Area and perimeter readings are currently invalid.
         this.areaAndPerimeter = {
           area: invalidValueString,
           perimeter: invalidValueString
-        }
+        };
       }
     },
 

@@ -26,7 +26,6 @@ define( function( require ) {
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Property = require( 'AXON/Property' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
