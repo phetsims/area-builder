@@ -760,7 +760,6 @@ define( function( require ) {
           this.controlPanel.dimensionsIcon.setColor( challenge.userShapes[ 0 ].color );
         }
         else {
-          debugger;
           this.controlPanel.dimensionsIcon.setColor( AreaBuilderSharedConstants.GREENISH_COLOR );
         }
 
