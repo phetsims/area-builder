@@ -16,10 +16,10 @@ define( function( require ) {
   var LevelStartButton = require( 'VEGAS/LevelStartButton' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
-  var SoundToggleButton = require( 'SCENERY_PHET/SoundToggleButton' );
+  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var TimerToggleButton = require( 'SCENERY_PHET/TimerToggleButton' );
+  var TimerToggleButton = require( 'SCENERY_PHET/buttons/TimerToggleButton' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
