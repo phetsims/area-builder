@@ -13,7 +13,7 @@ define( function( require ) {
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var LevelStartButton = require( 'VEGAS/LevelStartButton' );
+  var LevelStartButton = require( 'VEGAS/LevelStartButtonNew' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -48,8 +48,7 @@ define( function( require ) {
       titleString: chooseYourLevel,
       numStarsOnButtons: 5,
       perfectScore: 10,
-      buttonBackgroundColor: 'rgb( 242, 255, 204 )',
-      highlightedButtonBackgroundColor: 'rgb( 224, 255, 122 )',
+      buttonBackgroundColor: '#A8BEFF',
       numButtonRows: 1, // For layout
       controlsInset: 12,
       size: AreaBuilderSharedConstants.LAYOUT_BOUNDS
@@ -78,9 +77,7 @@ define( function( require ) {
         scores[ i ],
         options.perfectScore,
         {
-          backgroundColor: options.buttonBackgroundColor,
-          highlightedBackgroundColor: options.highlightedButtonBackgroundColor,
-          shadowOffset: 4
+          baseColor: options.buttonBackgroundColor
         }
       );
       buttons[ i ].scale( 0.80 );
