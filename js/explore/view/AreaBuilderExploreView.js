@@ -30,27 +30,33 @@ define( function( require ) {
 
     ScreenView.call( this, { renderer: 'svg', layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
 
-    // Create the layer where the shapes will be placed.  They are maintained in a separate layer so that they are over
-    // all of the shape placement boards in the z-order.
+    // Create the layers where the shapes will be placed.  The shapes are maintained in separate layers so that they
+    // are over all of the shape placement boards in the z-order.
     var movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
+    var singleBoardShapesLayer = new Node();
+    movableShapesLayer.addChild( singleBoardShapesLayer );
+    var dualBoardShapesLayer = new Node();
+    movableShapesLayer.addChild( dualBoardShapesLayer );
 
     // Create the composite nodes that contain the shape placement board, the readout, the bucket, the shape creator
     // nodes, and the eraser button.
     var centerExploreNode = new ExploreNode( model.singleShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.singleModeBucket, { shapesLayer: movableShapesLayer } );
+      model.movableShapes, model.singleModeBucket, { shapesLayer: singleBoardShapesLayer } );
     this.addChild( centerExploreNode );
     var leftExploreNode = new ExploreNode( model.leftShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.leftBucket, { shapesLayer: movableShapesLayer } );
+      model.movableShapes, model.leftBucket, { shapesLayer: dualBoardShapesLayer } );
     this.addChild( leftExploreNode );
     var rightExploreNode = new ExploreNode( model.rightShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.rightBucket, { shapesLayer: movableShapesLayer } );
+      model.movableShapes, model.rightBucket, { shapesLayer: dualBoardShapesLayer } );
     this.addChild( rightExploreNode );
 
     // Control which board(s), bucket(s), and shapes are visible.
     model.boardDisplayModeProperty.link( function( boardDisplayMode ) {
       centerExploreNode.visible = boardDisplayMode === 'single';
+      singleBoardShapesLayer.pickable = boardDisplayMode === 'single';
       leftExploreNode.visible = boardDisplayMode === 'dual';
       rightExploreNode.visible = boardDisplayMode === 'dual';
+      dualBoardShapesLayer.pickable = boardDisplayMode === 'dual';
     } );
 
     // Create and add the panel that contains the ABSwitch.
@@ -75,7 +81,7 @@ define( function( require ) {
       }
     } ) );
 
-    // Add the movable shapes issue.
+    // Add the layers where the movable shapes reside.
     this.addChild( movableShapesLayer );
 
     // Perform final layout adjustments
