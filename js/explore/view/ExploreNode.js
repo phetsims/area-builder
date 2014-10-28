@@ -64,8 +64,15 @@ define( function( require ) {
     // Create the nodes that will be used to layer things visually.
     var backLayer = new Node();
     this.addChild( backLayer );
-    var movableShapesLayer = layerOptions.shapesLayer ? layerOptions.shapesLayer : new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
-    this.addChild( movableShapesLayer );
+    var movableShapesLayer;
+    if ( !layerOptions.shapesLayer ) {
+      movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
+      this.addChild( movableShapesLayer );
+    }
+    else {
+      // Assume that this layer was added to the scene graph elsewhere, and doesn't need to be added here.
+      movableShapesLayer = layerOptions.shapesLayer;
+    }
     var bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );
     var singleBoardControlsLayer = new Node();
