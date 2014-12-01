@@ -15,7 +15,7 @@ define( function( require ) {
   var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
   var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
   var Color = require( 'SCENERY/util/Color' );
-  var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
+  var EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );

@@ -15,7 +15,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
-  var EraserButton = require( 'AREA_BUILDER/common/view/EraserButton' );
+  var EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
