@@ -107,7 +107,7 @@ define( function( require ) {
     placeShape: function( movableShape ) {
       var shapePlaced = false;
       for ( var i = 0; i < this.shapePlacementBoards.length && !shapePlaced; i++ ) {
-        shapePlaced = this.shapePlacementBoards[i].placeShape( movableShape );
+        shapePlaced = this.shapePlacementBoards[ i ].placeShape( movableShape );
       }
       if ( !shapePlaced ) {
         movableShape.returnToOrigin( true );

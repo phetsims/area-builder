@@ -60,7 +60,10 @@ define( function( require ) {
     rootNode.addChild( representation );
 
     // Add the grid
-    representation.addChild( new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), UNIT_LENGTH, { lineDash: [ 0, 3, 1, 0 ], stroke: 'black' } ) );
+    representation.addChild( new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), UNIT_LENGTH, {
+      lineDash: [ 0, 3, 1, 0 ],
+      stroke: 'black'
+    } ) );
 
     // Move this node as the model representation moves
     movableShape.positionProperty.link( function( position ) {

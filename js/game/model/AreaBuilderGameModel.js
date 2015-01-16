@@ -269,7 +269,7 @@ define( function( require ) {
           if ( challenge.buildSpec && this.shapePlacementBoard.formComposite && challenge.userShapes ) {
 
             // Make the perimeter color be a darker version of the first user shape.
-            var perimeterColor = Color.toColor( challenge.userShapes[0].color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+            var perimeterColor = Color.toColor( challenge.userShapes[ 0 ].color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
             var fillColor;
             if ( challenge.buildSpec.proportions ) {
@@ -279,7 +279,7 @@ define( function( require ) {
             }
             else {
               // The fill color should be the same as the user shapes.  Assume all user shapes are the same color.
-              fillColor = challenge.userShapes[0].color;
+              fillColor = challenge.userShapes[ 0 ].color;
             }
 
             this.shapePlacementBoard.setCompositeShapeColorScheme( fillColor, perimeterColor );

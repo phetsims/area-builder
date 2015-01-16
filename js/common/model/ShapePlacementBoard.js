@@ -365,7 +365,7 @@ define( function( require ) {
       // Mark all cells occupied by this shape.
       for ( var row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
         for ( var column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
-          this.cells[ xIndex + column ][yIndex + row ].occupiedBy = operation === 'add' ? movableShape : null;
+          this.cells[ xIndex + column ][ yIndex + row ].occupiedBy = operation === 'add' ? movableShape : null;
         }
       }
     },
@@ -449,8 +449,8 @@ define( function( require ) {
 
       // Get the closest point in cell coordinates.
       var normalizedStartingPoint = new Vector2(
-          Math.floor( ( point.x - this.bounds.minX ) / this.unitSquareLength ) - levelsRemoved,
-          Math.floor( ( point.y - this.bounds.minY ) / this.unitSquareLength ) - levelsRemoved
+        Math.floor( ( point.x - this.bounds.minX ) / this.unitSquareLength ) - levelsRemoved,
+        Math.floor( ( point.y - this.bounds.minY ) / this.unitSquareLength ) - levelsRemoved
       );
 
       var squareSize = ( levelsRemoved + 1 ) * 2;
@@ -519,7 +519,7 @@ define( function( require ) {
             this.isCellOccupiedNowOrSoon( normalizedLocation.x + column - 1, normalizedLocation.y + row ) ||
             this.isCellOccupiedNowOrSoon( normalizedLocation.x + column + 1, normalizedLocation.y + row ) ||
             this.isCellOccupiedNowOrSoon( normalizedLocation.x + column, normalizedLocation.y + row + 1 )
-            ) {
+          ) {
             return true;
           }
         }
@@ -619,7 +619,7 @@ define( function( require ) {
       var perimeterShape = new Shape();
       perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
       for ( var i = 1; i < perimeterPoints.length; i++ ) {
-        perimeterShape.lineToPoint( perimeterPoints[i] );
+        perimeterShape.lineToPoint( perimeterPoints[ i ] );
       }
       perimeterShape.close(); // Shouldn't be needed, but best to be sure.
       return perimeterShape;
@@ -631,7 +631,7 @@ define( function( require ) {
       perimeters.forEach( function( perimeterPoints ) {
         perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
         for ( var i = 1; i < perimeterPoints.length; i++ ) {
-          perimeterShape.lineToPoint( perimeterPoints[i] );
+          perimeterShape.lineToPoint( perimeterPoints[ i ] );
         }
         perimeterShape.close();
       } );
@@ -778,7 +778,7 @@ define( function( require ) {
         return false;
       }
       return perimeter1.every( function( point, index ) {
-        return( point.equals( perimeter2[ index ] ) );
+        return ( point.equals( perimeter2[ index ] ) );
       } );
     },
 

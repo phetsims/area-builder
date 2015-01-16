@@ -124,7 +124,7 @@ define( function( require ) {
       listener: function() {
         var challenge = gameModel.currentChallenge;
         var shapeReleaseMode = 'fade';
-        if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[0].creationLimit ) {
+        if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[ 0 ].creationLimit ) {
           // In the case where there is a limited number of shapes, have them animate back to the carousel instead of
           // fading away so that the user understands that the stash is being replenished.
           shapeReleaseMode = 'animateHome';
@@ -211,7 +211,8 @@ define( function( require ) {
       listener: function() {
         self.updateUserAnswer();
         gameModel.checkAnswer();
-      } }, buttonOptions ) );
+      }
+    }, buttonOptions ) );
     this.gameControlButtons.push( this.checkAnswerButton );
 
     this.nextButton = new TextPushButton( nextString, _.extend( {
@@ -317,7 +318,7 @@ define( function( require ) {
       if ( self.buildPromptPanel.opacity === 1 ) {
         // using a function instead, see Seasons sim, PanelNode.js for an example.
         new TWEEN.Tween( { opacity: self.buildPromptPanel.opacity } )
-          .to( { opacity: 0}, 500 )
+          .to( { opacity: 0 }, 500 )
           .easing( TWEEN.Easing.Cubic.InOut )
           .onUpdate( function() { self.buildPromptPanel.opacity = this.opacity; } )
           .start();

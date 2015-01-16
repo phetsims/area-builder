@@ -86,7 +86,8 @@ define( function( require ) {
       return new BuildSpec( area, null, {
           color1: color1,
           color2: color2,
-          color1Proportion: color1Proportion }
+          color1Proportion: color1Proportion
+        }
       );
     },
 
@@ -94,7 +95,8 @@ define( function( require ) {
       return new BuildSpec( area, perimeter, {
           color1: color1,
           color2: color2,
-          color1Proportion: color1Proportion }
+          color1Proportion: color1Proportion
+        }
       );
     }
   } );

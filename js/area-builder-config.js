@@ -8,7 +8,7 @@
  */
 require.config( {
 
-  deps: ['area-builder-main'],
+  deps: [ 'area-builder-main' ],
 
   paths: {
 

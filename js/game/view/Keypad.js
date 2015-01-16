@@ -97,31 +97,39 @@ define( function( require ) {
     } );
 
     // The bottom row of buttons can vary based on options.
-    var bottomButtonRowChildren = [ createNumberKey( 0, options.doubleWideZeroKey )];
+    var bottomButtonRowChildren = [ createNumberKey( 0, options.doubleWideZeroKey ) ];
     if ( !options.doubleWideZeroKey ) {
       bottomButtonRowChildren.push( new HStrut( options.minButtonWidth ) );
     }
     bottomButtonRowChildren.push( backspaceButton );
 
     // Add the buttons.
-    VBox.call( this, {spacing: options.ySpacing, children: [
-      new HBox( { spacing: options.xSpacing, children: [
-        createNumberKey( 7 ),
-        createNumberKey( 8 ),
-        createNumberKey( 9 )
-      ] } ),
-      new HBox( { spacing: options.xSpacing, children: [
-        createNumberKey( 4 ),
-        createNumberKey( 5 ),
-        createNumberKey( 6 )
-      ] } ),
-      new HBox( { spacing: options.xSpacing, children: [
-        createNumberKey( 1 ),
-        createNumberKey( 2 ),
-        createNumberKey( 3 )
-      ] } ),
-      new HBox( { spacing: options.xSpacing, children: bottomButtonRowChildren } )
-    ] } );
+    VBox.call( this, {
+      spacing: options.ySpacing, children: [
+        new HBox( {
+          spacing: options.xSpacing, children: [
+            createNumberKey( 7 ),
+            createNumberKey( 8 ),
+            createNumberKey( 9 )
+          ]
+        } ),
+        new HBox( {
+          spacing: options.xSpacing, children: [
+            createNumberKey( 4 ),
+            createNumberKey( 5 ),
+            createNumberKey( 6 )
+          ]
+        } ),
+        new HBox( {
+          spacing: options.xSpacing, children: [
+            createNumberKey( 1 ),
+            createNumberKey( 2 ),
+            createNumberKey( 3 )
+          ]
+        } ),
+        new HBox( { spacing: options.xSpacing, children: bottomButtonRowChildren } )
+      ]
+    } );
 
     // Pass options through to parent class
     this.mutate( options );

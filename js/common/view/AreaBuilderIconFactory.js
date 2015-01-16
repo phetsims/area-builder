@@ -140,7 +140,8 @@ define( function( require ) {
                 fill: shapeFill,
                 stroke: shapeStroke
               } )
-            ], spacing: 0 } ) ],
+            ], spacing: 0
+          } ) ],
         spacing: 2,
         centerX: shapeCarousel.width / 2,
         centerY: shapeCarousel.height / 2

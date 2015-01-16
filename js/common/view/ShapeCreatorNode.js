@@ -68,7 +68,10 @@ define( function( require ) {
 
     // Add grid if specified.
     if ( options.gridSpacing ) {
-      var gridNode = new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), options.gridSpacing, { lineDash: [ 0, 3, 1, 0 ], stroke: 'black' } );
+      var gridNode = new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), options.gridSpacing, {
+        lineDash: [ 0, 3, 1, 0 ],
+        stroke: 'black'
+      } );
       this.addChild( gridNode );
     }
 
@@ -98,7 +101,7 @@ define( function( require ) {
             this.parentScreen = testNode;
             break;
           }
-          testNode = testNode.parents[0]; // Move up the scene graph by one level
+          testNode = testNode.parents[ 0 ]; // Move up the scene graph by one level
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.

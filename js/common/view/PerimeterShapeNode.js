@@ -172,9 +172,9 @@ define( function( require ) {
               var segmentLabelInfo = {
                 unitLength: perimeterToLabel[ segment.startIndex ].distance( perimeterToLabel[ segment.endIndex ] ) / unitSquareLength,
                 position: new Vector2( ( perimeterToLabel[ segment.startIndex ].x + perimeterToLabel[ segment.endIndex ].x ) / 2,
-                    ( perimeterToLabel[ segment.startIndex ].y + perimeterToLabel[ segment.endIndex ].y ) / 2 ),
+                  ( perimeterToLabel[ segment.startIndex ].y + perimeterToLabel[ segment.endIndex ].y ) / 2 ),
                 edgeAngle: Math.atan2( perimeterToLabel[ segment.endIndex ].y - perimeterToLabel[ segment.startIndex ].y,
-                    perimeterToLabel[ segment.endIndex ].x - perimeterToLabel[ segment.startIndex ].x
+                  perimeterToLabel[ segment.endIndex ].x - perimeterToLabel[ segment.startIndex ].x
                 )
               };
 

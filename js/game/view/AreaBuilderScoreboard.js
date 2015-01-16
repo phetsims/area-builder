@@ -42,11 +42,11 @@ define( function( require ) {
     } );
 
     // Create the labels
-    var levelIndicator = new Text( '', { font: new PhetFont( { size: 20, weight: 'bold' } )  } );
+    var levelIndicator = new Text( '', { font: new PhetFont( { size: 20, weight: 'bold' } ) } );
     levelProperty.link( function( level ) {
       levelIndicator.text = StringUtils.format( levelString, level + 1 );
     } );
-    var currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } )  } );
+    var currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } ) } );
     problemNumberProperty.link( function( currentChallenge ) {
       currentChallengeIndicator.text = StringUtils.format( currentChallengeString, currentChallenge + 1, problemsPerLevel );
     } );

@@ -101,10 +101,10 @@ define( function( require ) {
     // beneath the clip window.
     var windowNode = new Node();
     windowNode.clipArea = new Shape.rect( previousButton.right + MIN_INTER_ITEM_SPACING / 2, 0,
-        nextButton.left - previousButton.right - MIN_INTER_ITEM_SPACING, panelHeight );
+      nextButton.left - previousButton.right - MIN_INTER_ITEM_SPACING, panelHeight );
     this.addChild( windowNode );
     var scrollingNode = new Rectangle( 0, 0,
-        buttonWidth + children.length * ( maxChildWidth + 2 * MIN_INTER_ITEM_SPACING),
+      buttonWidth + children.length * ( maxChildWidth + 2 * MIN_INTER_ITEM_SPACING),
       panelHeight, 0, 0, { fill: 'rgba( 0, 0, 0, 0)' }
     );
     children.forEach( function( child, index ) {
