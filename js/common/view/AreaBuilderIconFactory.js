@@ -24,7 +24,7 @@ define( function( require ) {
   // constants
   var NAV_BAR_ICON_SIZE = new Dimension2( 40, 30 ); // Empirically determined.
   var GRID_STROKE = null;
-  var SHAPE_LINE_WIDTH = null;
+  var SHAPE_LINE_WIDTH = 1;
   var GRID_OPTIONS = {
     backgroundStroke: 'black',
     backgroundLineWidth: 0.5,
