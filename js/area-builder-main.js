@@ -30,8 +30,7 @@ define( function( require ) {
   if ( phet.phetcommon.getQueryParameter( 'dev' ) ) {
     simOptions = _.extend( {
       // add dev-specific options here
-      showHomeScreen: false,
-      screenIndex: 0
+      showHomeScreen: false
     }, simOptions );
   }
 
