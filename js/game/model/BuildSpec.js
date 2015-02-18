@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -22,10 +23,10 @@ define( function( require ) {
    * @constructor
    */
   function BuildSpec( area, perimeter, colorProportionsSpec ) {
-    assert && assert( typeof( area) === 'number' );
+    assert && assert( typeof( area ) === 'number' || area === AreaBuilderSharedConstants.INVALID_VALUE );
     this.area = area;
     if ( typeof( perimeter ) !== 'undefined' && perimeter !== null ) {
-      assert && assert( typeof( perimeter ) === 'number' );
+      assert && assert( typeof( perimeter ) === 'number' || perimeter === AreaBuilderSharedConstants.INVALID_VALUE );
       this.perimeter = perimeter;
     }
     if ( colorProportionsSpec ) {

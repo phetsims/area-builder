@@ -12,7 +12,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
 
   return {
-    // Layout bounds used throughout the simulation for laying out the screens.
+    // layout bounds used throughout the simulation for laying out the screens
     LAYOUT_BOUNDS: new Bounds2( 0, 0, 768, 464 ),
 
     // Colors used for the various shapes
@@ -28,13 +28,16 @@ define( function( require ) {
     PURPLE_PINK_COLOR: '#AA548D',
     PERIMETER_DARKEN_FACTOR: 0.6, // The amount that the perimeter colors are darkened from the main shape color
 
-    // Velocity at which animated elements move
+    // velocity at which animated elements move
     ANIMATION_VELOCITY: 200, // In screen coordinates per second
 
-    // Various other constants
+    // various other constants
     BACKGROUND_COLOR: 'rgb( 225, 255, 255 )',
     CONTROL_PANEL_BACKGROUND_COLOR: 'rgb( 254, 241, 233 )',
 
-    UNIT_SQUARE_LENGTH: 32 // In screen coordinates, used in several places
+    UNIT_SQUARE_LENGTH: 32, // In screen coordinates, used in several places
+
+    // string used to indicate an invalid value for area and perimeter
+    INVALID_VALUE: require( 'string!AREA_BUILDER/invalidValue' )
   };
 } );

@@ -20,9 +20,6 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // strings
-  var invalidValueString = require( 'string!AREA_BUILDER/invalidValue' );
-
   // constants
   var MOVEMENT_VECTORS = {
     // This sim is using screen conventions, meaning positive Y indicates down.
@@ -393,8 +390,8 @@ define( function( require ) {
       else {
         // Area and perimeter readings are currently invalid.
         this.areaAndPerimeter = {
-          area: invalidValueString,
-          perimeter: invalidValueString
+          area: AreaBuilderSharedConstants.INVALID_VALUE,
+          perimeter: AreaBuilderSharedConstants.INVALID_VALUE
         };
       }
     },

@@ -369,7 +369,7 @@ define( function( require ) {
 
     // Set up a flag to block updates of the 'You Built' window when showing the solution.  This is necessary because
     // adding the shapes to the board in order to show the solution triggers updates of this window.
-    this.okayToUpdateYouBuiltWindow = true; // @private?
+    this.okayToUpdateYouBuiltWindow = true; // @private
   }
 
   return inherit( ScreenView, AreaBuilderGameView, {
