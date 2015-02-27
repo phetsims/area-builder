@@ -60,7 +60,7 @@ define( function( require ) {
     this.expanded = new Property( true );
     AccordionBox.call( this, contentNode, {
       titleNode: new Text( valuesString, { font: DISPLAY_FONT } ),
-      titleAlign: 'left',
+      titleAlignX: 'left',
       contentAlign: 'left',
       fill: 'white',
       showTitleWhenExpanded: false,
