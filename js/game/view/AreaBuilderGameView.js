@@ -71,7 +71,7 @@ define( function( require ) {
    * @constructor
    */
   function AreaBuilderGameView( gameModel ) {
-    ScreenView.call( this, { renderer: 'svg', layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
+    ScreenView.call( this, { layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
     var self = this;
     self.model = gameModel;
 
@@ -251,7 +251,10 @@ define( function( require ) {
     } );
 
     // Add the number entry control, which is only visible on certain challenge types.
-    this.numberEntryControl = new NumberEntryControl( { centerX: buttonCenterX, bottom: this.checkAnswerButton.top - 10 } );
+    this.numberEntryControl = new NumberEntryControl( {
+      centerX: buttonCenterX,
+      bottom: this.checkAnswerButton.top - 10
+    } );
     this.challengeLayer.addChild( this.numberEntryControl );
     this.areaQuestionPrompt = new Text( areaQuestionString, { // This prompt goes with the number entry control.
       font: new PhetFont( 20 ),

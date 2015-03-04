@@ -28,7 +28,7 @@ define( function( require ) {
    */
   function AreaBuilderExploreView( model ) {
 
-    ScreenView.call( this, { renderer: 'svg', layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
+    ScreenView.call( this, { layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
 
     // Create the layers where the shapes will be placed.  The shapes are maintained in separate layers so that they
     // are over all of the shape placement boards in the z-order.
