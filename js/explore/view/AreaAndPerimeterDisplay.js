@@ -28,7 +28,7 @@ define( function( require ) {
    * @param {Property<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
    * @param {Color} areaTextColor
    * @param {Color} perimeterTextColor
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function AreaAndPerimeterDisplay( areaAndPerimeterProperty, areaTextColor, perimeterTextColor, options ) {

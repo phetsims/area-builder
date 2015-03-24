@@ -21,7 +21,7 @@ define( function( require ) {
   var READOUT_FONT = new PhetFont( 20 );
 
   /**
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function NumberEntryControl( options ) {
