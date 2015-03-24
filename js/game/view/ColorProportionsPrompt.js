@@ -28,7 +28,7 @@ define( function( require ) {
    * @param {String || Color} color2 - Color value for the 2nd color patch
    * @param {Fraction} color1Proportion - Fraction of the whole that is comprised of color1, must be between 0 and 1,
    * inclusive.  The proportion for color2 is deduced from this value, with the two proportions summing to 1.
-   * @param options
+   * @param {Object} [options]
    * @constructor
    */
   function ColorProportionsPrompt( color1, color2, color1Proportion, options ) {

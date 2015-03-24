@@ -30,7 +30,7 @@ define( function( require ) {
    * @param problemsPerLevel
    * @param scoreProperty
    * @param elapsedTimeProperty
-   * @param options
+   * @param {Object} [options]
    * @constructor
    */
   function AreaBuilderScoreboard( levelProperty, problemNumberProperty, problemsPerLevel, scoreProperty, elapsedTimeProperty, options ) {

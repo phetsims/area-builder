@@ -28,7 +28,7 @@ define( function( require ) {
   /**
    * @param showGridProperty
    * @param showDimensionsProperty
-   * @param options
+   * @param {Object} [options]
    * @constructor
    */
   function AreaBuilderControlPanel( showGridProperty, showDimensionsProperty, options ) {

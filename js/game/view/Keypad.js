@@ -22,7 +22,7 @@ define( function( require ) {
   var BackspaceIcon = require( 'SCENERY_PHET/BackspaceIcon' );
 
   /**
-   * @param options {Object}
+   * @param {Object} [options]
    * @constructor
    */
   function Keypad( options ) {

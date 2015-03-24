@@ -25,7 +25,7 @@ define( function( require ) {
    * contents are added later when the build spec is set.
    *
    * @param maxWidth
-   * @param options
+   * @param {Object} [options]
    * @constructor
    */
   function YouEnteredWindow( maxWidth, options ) {
