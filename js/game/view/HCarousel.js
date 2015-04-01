@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * A 'carousel' user interface component that can contain multiple Scenery nodes and which the user can cycle through.
+ * A 'carousel' user interface component that can contain multiple Scenery nodes which the user can cycle through.
  *
  * @author John Blanco
  */
