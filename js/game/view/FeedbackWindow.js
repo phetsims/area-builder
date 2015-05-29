@@ -40,9 +40,6 @@ define( function( require ) {
       xMargin: X_MARGIN
     }, options );
 
-    // make the max width available to descendant classes
-    this.maxWidth = maxWidth; // @protected
-
     this.contentNode = new Node(); // @private
 
     // title
