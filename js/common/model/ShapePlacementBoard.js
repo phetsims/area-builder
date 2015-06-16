@@ -637,7 +637,8 @@ define( function( require ) {
 
     /**
      * Marching squares algorithm for scanning the perimeter of a shape, see
-     * http://devblog.phillipspiess.com/2010/02/23/better-know-an-algorithm-1-marching-squares/
+     * https://en.wikipedia.org/wiki/Marching_squares or search the Internet for 'Marching Squares Algorithm' for more
+     * information on this.
      * @private
      */
     scanPerimeter: function( windowStart ) {
