@@ -519,7 +519,7 @@ define( function( require ) {
 
       // Give the user the appropriate feedback.
       this.gameAudioPlayer.wrongAnswer();
-      this.faceWithPointsNode.grimace();
+      this.faceWithPointsNode.frown();
       this.faceWithPointsNode.setPoints( this.model.score );
 
       if ( challenge.checkSpec === 'areaEntered' ) {
@@ -562,7 +562,7 @@ define( function( require ) {
 
       // Give the user the appropriate feedback
       this.gameAudioPlayer.wrongAnswer();
-      this.faceWithPointsNode.grimace();
+      this.faceWithPointsNode.frown();
       this.faceWithPointsNode.setPoints( this.model.score );
 
       // For 'built it' style challenges, the user can still interact while in this state in case they want to try
