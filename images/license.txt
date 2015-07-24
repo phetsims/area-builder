@@ -1,2 +1,18 @@
-explore-icon.png source=PhET author=John Blanco
-game-icon.png source=PhET author=John Blanco
+{
+  "explore-icon.png": {
+    "text": [
+      "Copyright 2002-2015 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco"
+  },
+  "game-icon.png": {
+    "text": [
+      "Copyright 2002-2015 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco"
+  }
+}
