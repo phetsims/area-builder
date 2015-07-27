@@ -64,7 +64,6 @@ define( function( require ) {
       else if ( !gridControlVisible && vBox.isChild( gridCheckbox ) ) {
         vBox.removeChild( gridCheckbox );
       }
-      vBox.updateLayout();
     } );
 
     // Add/remove the dimension visibility control.
@@ -76,7 +75,6 @@ define( function( require ) {
       else if ( !dimensionsControlVisible && vBox.isChild( dimensionsCheckbox ) ) {
         vBox.removeChild( dimensionsCheckbox );
       }
-      vBox.updateLayout();
     } );
 
     this.mutate( options );

@@ -80,7 +80,6 @@ define( function( require ) {
       else if ( !timeVisible && vBox.isChild( elapsedTimeIndicator ) ) {
         vBox.removeChild( elapsedTimeIndicator );
       }
-      vBox.updateLayout();
     } );
 
     this.mutate( options );
