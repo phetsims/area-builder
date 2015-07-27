@@ -19,10 +19,11 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Screen = require( 'JOIST/Screen' );
   var Shape = require( 'KITE/Shape' );
 
   // constants
-  var NAV_BAR_ICON_SIZE = new Dimension2( 40, 30 ); // Empirically determined.
+  var NAV_BAR_ICON_SIZE = Screen.NAVBAR_ICON_SIZE;
   var GRID_STROKE = null;
   var SHAPE_LINE_WIDTH = 1;
   var GRID_OPTIONS = {
@@ -67,7 +68,7 @@ define( function( require ) {
       } ) );
 
       // left shape placement board and shapes
-      var unitSquareLength = 4;
+      var unitSquareLength = 15;
       var leftBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 ), new Vector2( 1, 2 )
       ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.05, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
@@ -99,7 +100,7 @@ define( function( require ) {
       } ) );
 
       // shape placement board and shapes
-      var unitSquareLength = 3.5;
+      var unitSquareLength = 12;
       var shapePlacementBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 ), new Vector2( 2, 2 )
       ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.075, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
@@ -116,7 +117,7 @@ define( function( require ) {
         fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
         stroke: 'black',
         lineWidth: 0.5,
-        top: shapePlacementBoard.bottom + 2,
+        top: shapePlacementBoard.bottom + 8,
         centerX: NAV_BAR_ICON_SIZE.width / 2
       } );
       icon.addChild( shapeCarousel );
