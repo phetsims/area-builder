@@ -10,7 +10,6 @@ define( function( require ) {
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
-  var Dimension2 = require( 'DOT/Dimension2' );
   var FaceNode = require( 'SCENERY_PHET/FaceNode' );
   var GridIcon = require( 'AREA_BUILDER/common/view/GridIcon' );
   var HBox = require( 'SCENERY/nodes/HBox' );
