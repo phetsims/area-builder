@@ -41,7 +41,7 @@ define( function( require ) {
     var self = this;
 
     // @public String of digits entered by the user
-    this.digitString = new Property( '' );
+    this.digitStringProperty = new Property( '' );
 
     // @private Flag used when arming the keypad to start over on the next key stroke.
     this.armedForNewEntry = false;
@@ -60,20 +60,20 @@ define( function( require ) {
 
           // If armed for new entry, clear the existing string.
           if ( self.armedForNewEntry ) {
-            self.digitString.reset();
+            self.digitStringProperty.reset();
             self.armedForNewEntry = false;
           }
 
           // Add the digit to the string, but limit the length and prevent multiple leading zeros.
-          if ( self.digitString.value === '0' ) {
+          if ( self.digitStringProperty.value === '0' ) {
             if ( number.toString !== 0 ) {
               // Replace the leading 0 with this digit.
-              self.digitString.value = number.toString();
+              self.digitStringProperty.value = number.toString();
             }
             // else ignore the additional zero
           }
-          else if ( self.digitString.value.length < options.maxDigits ) {
-            self.digitString.value += number.toString();
+          else if ( self.digitStringProperty.value.length < options.maxDigits ) {
+            self.digitStringProperty.value += number.toString();
           }
         }
       }, options ) );
@@ -89,9 +89,9 @@ define( function( require ) {
       xMargin: 1,
       baseColor: options.keyColor,
       listener: function() {
-        if ( self.digitString.value.length > 0 ) {
+        if ( self.digitStringProperty.value.length > 0 ) {
           // Remove the last digit from the string.
-          self.digitString.value = self.digitString.value.slice( 0, -1 );
+          self.digitStringProperty.value = self.digitStringProperty.value.slice( 0, -1 );
         }
       }
     } );
@@ -139,7 +139,7 @@ define( function( require ) {
 
     // Clear anything that has been accumulated in the digitString field.
     clear: function() {
-      this.digitString.reset();
+      this.digitStringProperty.reset();
     },
 
     // Set the keypad such that any new digit entry will clear the existing string and start over.

@@ -103,7 +103,7 @@ define( function( require ) {
         GameIconFactory.createIcon( 5 ),
         GameIconFactory.createIcon( 6 )
       ],
-      gameModel.bestScores,
+      gameModel.bestScoreProperties,
       {
         numStarsOnButtons: gameModel.challengesPerSet,
         perfectScore: gameModel.maxPossibleScore,
@@ -263,7 +263,7 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.areaQuestionPrompt );
 
-    this.numberEntryControl.keypad.digitString.link( function( digitString ) {
+    this.numberEntryControl.keypad.digitStringProperty.link( function( digitString ) {
 
       // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
       // this case, we go ahead and make the state transition to the next state.
@@ -716,7 +716,7 @@ define( function( require ) {
           if ( challenge.buildSpec.proportions ) {
             var areaPrompt = new Node();
             areaPrompt.addChild( areaGoalNode );
-            areaGoalNode.text += ',';
+            areaGoalNode.text = areaGoalNode.text + ',';
             var colorProportionsPrompt = new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
               challenge.buildSpec.proportions.color2, challenge.buildSpec.proportions.color1Proportion, {
                 font: new PhetFont( { size: 16, weight: 'bold' } ),
@@ -841,7 +841,7 @@ define( function( require ) {
     updatedCheckButtonEnabledState: function() {
       if ( this.model.currentChallenge ) {
         if ( this.model.currentChallenge.checkSpec === 'areaEntered' ) {
-          this.checkAnswerButton.enabled = this.numberEntryControl.keypad.digitString.value.length > 0;
+          this.checkAnswerButton.enabled = this.numberEntryControl.keypad.digitStringProperty.value.length > 0;
         }
         else {
           this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.area > 0;

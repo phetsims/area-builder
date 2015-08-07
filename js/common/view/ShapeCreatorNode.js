@@ -75,10 +75,10 @@ define( function( require ) {
       this.addChild( gridNode );
     }
 
-    var createdCount = new Property( 0 ); // Used to track the number of shapes created and not returned.
+    var createdCountProperty = new Property( 0 ); // Used to track the number of shapes created and not returned.
 
     // If the created count exceeds the max, make this node invisible (which also makes it unusable).
-    createdCount.link( function( numCreated ) {
+    createdCountProperty.link( function( numCreated ) {
       self.visible = numCreated < options.creationLimit;
     } );
 
@@ -118,12 +118,12 @@ define( function( require ) {
         if ( options.creationLimit < Number.POSITIVE_INFINITY ) {
           // Use an IIFE to keep a reference of the movable shape in a closure.
           (function() {
-            createdCount.value++;
+            createdCountProperty.value++;
             var localRefToMovableShape = thisDragHandler.movableShape;
             localRefToMovableShape.on( 'returnedToOrigin', function returnedToOriginListener() {
               if ( !localRefToMovableShape.userControlled ) {
                 // The shape has been returned to its origin.
-                createdCount.value--;
+                createdCountProperty.value--;
                 localRefToMovableShape.off( 'returnedToOrigin', returnedToOriginListener );
               }
             } );

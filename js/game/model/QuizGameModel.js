@@ -65,10 +65,10 @@ define( function( require ) {
 
     // Best times and scores.
     thisModel.bestTimes = []; // @public
-    thisModel.bestScores = []; // @public
+    thisModel.bestScoreProperties = []; // @public
     _.times( options.numberOfLevels, function() {
       thisModel.bestTimes.push( null );
-      thisModel.bestScores.push( new Property( 0 ) );
+      thisModel.bestScoreProperties.push( new Property( 0 ) );
     } );
 
     // Counter used to track number of incorrect answers.
@@ -91,7 +91,7 @@ define( function( require ) {
       // reset this model
       reset: function() {
         PropertySet.prototype.reset.call( this );
-        this.bestScores.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
+        this.bestScoreProperties.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
         this.bestTimes = [];
         var thisModel = this;
         _.times( this.numberOfLevels, function() {
@@ -189,7 +189,7 @@ define( function( require ) {
               this.bestTimes[ this.level ] = this.elapsedTime;
             }
           }
-          this.bestScores[ this.level ].value = this.score;
+          this.bestScoreProperties[ this.level ].value = this.score;
 
           // Done with this game, show the results.
           this.gameState = GameState.SHOWING_LEVEL_RESULTS;

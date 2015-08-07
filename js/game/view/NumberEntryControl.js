@@ -37,7 +37,7 @@ define( function( require ) {
 
     // Add the number readout background.
     var testString = new Text( '', { font: READOUT_FONT } );
-    _.times( options.maxDigits, function() { testString.text += '9'; } );
+    _.times( options.maxDigits, function() { testString.text = testString.text + '9'; } );
     var readoutBackground = new Rectangle( 0, 0, testString.width * 1.2, testString.height * 1.2, 4, 4, {
       fill: 'white',
       stroke: '#777777',
@@ -50,7 +50,7 @@ define( function( require ) {
     var digits = new Text( '', { font: READOUT_FONT } );
     this.addChild( digits );
     this.value = 0; // @private
-    this.keypad.digitString.link( function( digitString ) {
+    this.keypad.digitStringProperty.link( function( digitString ) {
       digits.text = digitString;
       digits.center = readoutBackground.center;
       self.value = Number( digitString );
