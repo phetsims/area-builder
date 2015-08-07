@@ -125,7 +125,7 @@ define( function( require ) {
 
     function scrollLeft() {
       var itemsToTheRight = children.length - ( targetPositionProperty.value + options.numVisibleAtOnce );
-      targetPositionProperty.value = targetPositionProperty.value +
+      targetPositionProperty.value = targetPositionProperty.value -
                                      Math.min( itemsToTheRight, options.numVisibleAtOnce );
     }
 
