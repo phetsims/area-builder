@@ -12,7 +12,7 @@ define( function( require ) {
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bounds2 = require( 'DOT/Bounds2' );
-  var Checkbox = require( 'SUN/CheckBox' );
+  var CheckBox = require( 'SUN/CheckBox' );
   var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -41,9 +41,9 @@ define( function( require ) {
     } );
 
     // Create the controls and labels
-    var gridCheckbox = new Checkbox( new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ), showGridProperty, { spacing: 15 } );
+    var gridCheckbox = new CheckBox( new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ), showGridProperty, { spacing: 15 } );
     this.dimensionsIcon = new DimensionsIcon(); // @public so that the icon style can be set
-    var dimensionsCheckbox = new Checkbox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
+    var dimensionsCheckbox = new CheckBox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
 
     // Create the panel.
     var vBox = new VBox( {
