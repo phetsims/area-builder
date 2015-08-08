@@ -115,26 +115,28 @@ define( function( require ) {
     windowNode.addChild( scrollingNode );
 
     // Set up the scrolling functions.
-    var targetPosition = new Property( 0 );
+    var targetPositionProperty = new Property( 0 );
     var scrollDistance = maxChildWidth + MIN_INTER_ITEM_SPACING;
 
     function scrollRight() {
-      targetPosition.value += Math.min( -targetPosition.value, options.numVisibleAtOnce );
+      targetPositionProperty.value = targetPositionProperty.value +
+                                     Math.min( -targetPositionProperty.value, options.numVisibleAtOnce );
     }
 
     function scrollLeft() {
-      var itemsToTheRight = children.length - ( targetPosition.value + options.numVisibleAtOnce );
-      targetPosition.value -= Math.min( itemsToTheRight, options.numVisibleAtOnce );
+      var itemsToTheRight = children.length - ( targetPositionProperty.value + options.numVisibleAtOnce );
+      targetPositionProperty.value = targetPositionProperty.value -
+                                     Math.min( itemsToTheRight, options.numVisibleAtOnce );
     }
 
-    targetPosition.link( function( pos ) {
+    targetPositionProperty.link( function( pos ) {
 
       // Show/hide the navigation buttons.
       nextButton.visible = pos > options.numVisibleAtOnce - children.length;
       previousButton.visible = pos < 0;
 
       // Set up the animation to scroll to the next location.
-      new TWEEN.Tween( scrollingNode ).to( { left: targetPosition.value * scrollDistance }, 400 ).easing( TWEEN.Easing.Cubic.InOut ).start();
+      new TWEEN.Tween( scrollingNode ).to( { left: targetPositionProperty.value * scrollDistance }, 400 ).easing( TWEEN.Easing.Cubic.InOut ).start();
     } );
 
     // Hook up the scrolling nodes to the buttons.

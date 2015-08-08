@@ -57,7 +57,7 @@ define( function( require ) {
       perimeterReadout.right = readoutsRightEdge;
     } );
 
-    this.expanded = new Property( true );
+    this.expandedProperty = new Property( true );
     AccordionBox.call( this, contentNode, {
       titleNode: new Text( valuesString, { font: DISPLAY_FONT } ),
       titleAlignX: 'left',
@@ -66,7 +66,7 @@ define( function( require ) {
       showTitleWhenExpanded: false,
       contentXMargin: 8,
       contentYMargin: 4,
-      expandedProperty: this.expanded
+      expandedProperty: this.expandedProperty
     } );
 
     this.mutate( options );
@@ -74,7 +74,7 @@ define( function( require ) {
 
   return inherit( AccordionBox, AreaAndPerimeterDisplay, {
     reset: function() {
-      this.expanded.reset();
+      this.expandedProperty.reset();
     }
   } );
 } );
