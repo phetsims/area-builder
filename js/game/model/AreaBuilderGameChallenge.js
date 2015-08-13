@@ -15,7 +15,7 @@ define( function( require ) {
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
 
   /**
-   * @param {object} toolSpec An object that specifies which tools are available to the user.  It should have three
+   * @param {Object} toolSpec An object that specifies which tools are available to the user.  It should have three
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether
    * the user is allowed to control these things for this challenge.
    * @param {Array<Object>} userShapes An array of shape specification that describe the shapes that can be created and
