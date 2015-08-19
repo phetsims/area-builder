@@ -201,7 +201,7 @@ define( function( require ) {
           self.addResidentShape( movableShape, true );
         }
 
-        // Set up a listener to remove this shape when the user grabs is.
+        // Set up a listener to remove this shape when the user grabs it.
         self.addRemovalListener( movableShape );
       };
 
@@ -577,10 +577,15 @@ define( function( require ) {
       this.updateAll();
     },
 
+    // @public - check if a shape is resident on the board
+    isResidentShape: function( shape ) {
+      return this.residentShapes.contains( shape );
+    },
+
     // @private
     releaseShape: function( shape ) {
-      assert && assert( this.residentShapes.contains( shape ) || this.incomingShapes.contains( shape ), 'Error: An attempt was made to release a shape that is not present.' );
-      if ( this.residentShapes.contains( shape ) ) {
+      assert && assert( this.isResidentShape( shape ) || this.incomingShapes.contains( shape ), 'Error: An attempt was made to release a shape that is not present.' );
+      if ( this.isResidentShape( shape ) ) {
         this.removeTaggedObservers( shape.userControlledProperty );
         this.removeResidentShape( shape );
       }
@@ -879,7 +884,7 @@ define( function( require ) {
             if ( groupIndex !== indexOfRetainedGroup ) {
               group.forEach( function( cell ) {
                 var movableShape = cell.occupiedBy;
-                if ( movableShape !== null ) { // Need to test in case a previously release shape covered multiple cells.
+                if ( movableShape !== null ) { // Need to test in case a previously released shape covered multiple cells.
                   self.releaseShape( movableShape );
                   movableShape.returnToOrigin( true );
                 }

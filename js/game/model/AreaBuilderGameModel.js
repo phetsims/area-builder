@@ -64,6 +64,27 @@ define( function( require ) {
 
   return inherit( PropertySet, AreaBuilderGameModel, {
 
+      // @private - replace a composite shape with unit squares
+      replaceShapeWithUnitSquares: function( movableShape ){
+        var self = this;
+        assert && assert(
+          movableShape.shape.bounds.width > UNIT_SQUARE_LENGTH || movableShape.shape.bounds.height > UNIT_SQUARE_LENGTH,
+          'This method should not be called for non-composite shapes'
+        );
+
+        // break the shape into the constituent squares
+        var constituentShapes = movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH );
+
+        // add the newly created squares to this model
+        constituentShapes.forEach( function( shape ) { self.addUserCreatedMovableShape( shape ); } );
+
+        // replace the shape on the shape placement board with unit squares
+        self.shapePlacementBoard.replaceShapeWithUnitSquares( movableShape, constituentShapes );
+
+        // remove the original composite shape from this model
+        self.movableShapes.remove( movableShape );
+      },
+
       /**
        * Function for adding new movable shapes to this model when the user is creating them, generally by clicking on
        * some sort of creator node.
@@ -78,20 +99,26 @@ define( function( require ) {
           if ( !userControlled ) {
             if ( self.shapePlacementBoard.placeShape( movableShape ) ) {
               if ( movableShape.shape.bounds.width > UNIT_SQUARE_LENGTH || movableShape.shape.bounds.height > UNIT_SQUARE_LENGTH ) {
+
                 // This is a composite shape, meaning that it is made up of more than one unit square.  Rather than
                 // tracking these, the design team decided that they should decompose into individual unit squares once
                 // they have been placed.
-                var decomposeShape = function() {
-                  var constituentShapes = movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH );
-                  constituentShapes.forEach( function( shape ) { self.addUserCreatedMovableShape( shape ); } );
-                  self.movableShapes.remove( movableShape );
-                  self.shapePlacementBoard.replaceShapeWithUnitSquares( movableShape, constituentShapes );
-                };
                 if ( movableShape.animating ) {
-                  movableShape.animatingProperty.once( function() { decomposeShape(); } );
+                  movableShape.animatingProperty.once( function( animating ) {
+
+                    // Decompose the shape once it has landed on the board.  In the 'if' clause below, we test to make
+                    // sure that the shape is actually on the board.  This is necessary because of a race condition
+                    // where a shape can actually end up orphaned before it completes its animation sequence.  See
+                    // https://github.com/phetsims/area-builder/issues/71.
+                    if ( !animating && self.shapePlacementBoard.isResidentShape( movableShape)) {
+                      self.replaceShapeWithUnitSquares( movableShape );
+                    }
+                  } );
                 }
                 else {
-                  decomposeShape();
+
+                  // decompose the shape now, since it is already on the board
+                  self.replaceShapeWithUnitSquares( movableShape );
                 }
               }
             }
