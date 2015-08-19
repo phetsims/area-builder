@@ -277,7 +277,7 @@ define( function( require ) {
       assert && assert( movableShape.position.equals( movableShape.destination ), 'Error: Shapes should not become residents until they have completed animating.' );
 
       // Made sure that the shape isn't already a resident.
-      assert && assert( !this.residentShapes.contains( movableShape ), 'Error: Attempt to add shape that is already a resident.' );
+      assert && assert( !this.isResidentShape( movableShape ), 'Error: Attempt to add shape that is already a resident.' );
 
       this.residentShapes.add( movableShape );
 
@@ -291,7 +291,7 @@ define( function( require ) {
 
     //@private, remove the specified shape from the shape placement board
     removeResidentShape: function( movableShape ) {
-      assert && assert( this.residentShapes.contains( movableShape ), 'Error: Attempt to remove shape that is not a resident.' );
+      assert && assert( this.isResidentShape( movableShape ), 'Error: Attempt to remove shape that is not a resident.' );
       var self = this;
       this.residentShapes.remove( movableShape );
       self.updateCellOccupation( movableShape, 'remove' );
@@ -905,7 +905,7 @@ define( function( require ) {
      * since this method does not relocate them to the appropriate places.
      */
     replaceShapeWithUnitSquares: function( originalShape, unitSquares ) {
-      assert && assert( this.residentShapes.contains( originalShape ), 'Error: Specified shape to be replaced does not appear to be present.' );
+      assert && assert( this.isResidentShape( originalShape ), 'Error: Specified shape to be replaced does not appear to be present.' );
       var self = this;
 
       // The following add and remove operations do not use the add and remove methods in order to avoid releasing

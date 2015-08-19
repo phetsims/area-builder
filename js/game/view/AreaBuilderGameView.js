@@ -175,7 +175,10 @@ define( function( require ) {
     // Add the button for returning to the level selection screen.
     this.controlLayer.addChild( new RectangularPushButton( {
       content: new Text( startOverString, { font: BUTTON_FONT } ),
-      listener: function() { gameModel.setChoosingLevelState(); },
+      listener: function() {
+        gameModel.simSpecificModel.reset();
+        gameModel.setChoosingLevelState();
+      },
       baseColor: BUTTON_FILL,
       centerX: this.scoreboard.centerX,
       centerY: this.solutionBanner.centerY
@@ -233,7 +236,7 @@ define( function( require ) {
     }, buttonOptions ) );
     this.gameControlButtons.push( this.solutionButton );
 
-    // Solution button for 'built it' style of challenge, which has many potential answers.
+    // Solution button for 'build it' style of challenge, which has many potential answers.
     this.showASolutionButton = new TextPushButton( aSolutionString, _.extend( {
       listener: function() {
         self.okayToUpdateYouBuiltWindow = false;
@@ -350,7 +353,9 @@ define( function( require ) {
       // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
       // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
       // window.
-      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && self.okayToUpdateYouBuiltWindow ) {
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON &&
+           self.model.currentChallenge.buildSpec &&
+           self.okayToUpdateYouBuiltWindow ) {
         self.updateUserAnswer();
         self.updateYouBuiltWindow( self.model.currentChallenge );
 
