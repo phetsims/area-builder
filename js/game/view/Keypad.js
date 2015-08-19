@@ -90,8 +90,17 @@ define( function( require ) {
       baseColor: options.keyColor,
       listener: function() {
         if ( self.digitStringProperty.value.length > 0 ) {
-          // Remove the last digit from the string.
-          self.digitStringProperty.value = self.digitStringProperty.value.slice( 0, -1 );
+
+          // remove the last digit from the current digit string
+          var shortenedDigitString = self.digitStringProperty.value.slice( 0, -1 );
+
+          if ( self.armedForNewEntry ){
+            self.digitStringProperty.reset(); // this reset will trigger the state change that we want in the game
+            self.armedForNewEntry = false;
+          }
+
+          // set the new shortened value
+          self.digitStringProperty.value = shortenedDigitString;
         }
       }
     } );
