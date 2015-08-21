@@ -110,6 +110,7 @@ define( function( require ) {
         this.animating = true;
       }
       else {
+        this.animating = false;
         this.position = destination;
       }
     },
@@ -124,6 +125,7 @@ define( function( require ) {
 
     fadeAway: function() {
       this.fading = true;
+      this.fadeProportion = 0.0001; // this is done to make sure the shape is made unpickable as soon as fading starts
     },
 
     /**

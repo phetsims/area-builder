@@ -120,14 +120,17 @@ define( function( require ) {
 
     shadowVisibilityProperty.linkAttribute( shadow, 'visible' );
 
-    movableShape.animatingProperty.link( function( animating ) {
-      // To avoid certain complications, make it so that users can't grab this when it is moving.
-      self.pickable = !animating;
+    function updatePickability(){
+      // To avoid certain complications, this node should not be pickable if it is animating or fading.
+      self.pickable = !movableShape.animating && movableShape.fadeProportion === 0;
+    }
+
+    movableShape.animatingProperty.link( function() {
+      updatePickability();
     } );
 
     movableShape.fadeProportionProperty.link( function( fadeProportion ) {
-      // To avoid certain complications, make it so that users can't grab this when it is fading.
-      self.pickable = fadeProportion === 0;
+      updatePickability();
     } );
 
     // Add the listener that will allow the user to drag the shape around.

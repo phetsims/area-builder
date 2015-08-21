@@ -193,23 +193,23 @@ define( function( require ) {
 
       // Create a listener that will move this shape from the incoming shape list to the resident list once the
       // animation completes.
-      var animationCompleteListener = function( animating ) {
-        assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
+      function animationCompleteListener( animating ) {
         if ( !animating ) {
           // Move the shape from the incoming list to the resident list.
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.addResidentShape( movableShape, true );
+          movableShape.animatingProperty.unlink( animationCompleteListener );
         }
 
-        // Set up a listener to remove this shape when the user grabs it.
+        // Set up a listener to remove this shape if and when the user grabs it.
         self.addRemovalListener( movableShape );
-      };
+      }
 
       // Tag the listener so that it can be removed without firing if needed, such as when the board is cleared.
       this.tagListener( animationCompleteListener );
 
       // Hook up the listener.
-      movableShape.animatingProperty.once( animationCompleteListener );
+      movableShape.animatingProperty.lazyLink( animationCompleteListener );
 
       // If we made it to here, placement succeeded.
       return true;
@@ -217,7 +217,7 @@ define( function( require ) {
 
     /**
      * Add a shape directly to the specified cell.  This bypasses the placement process, and is generally used when
-     * displaying solutions to challenges.
+     * displaying solutions to challenges.  The shape will animate to the chosen cell.
      * @public
      * @param cellColumn
      * @param cellRow
@@ -237,14 +237,21 @@ define( function( require ) {
       // odd results if it isn't, so we check it here.
       assert && assert( movableShape.animating, 'Shape is not animating after being directly added to board.' );
 
-      // Move the shape to the resident list once it has finished animating.
-      movableShape.animatingProperty.once( function( animating ) {
-        assert && assert( !animating, 'Error: The animating property changed to true when expected to change to false.' );
+      // listener the moves shape from incoming to resident list once it arrives at its destination
+      function moveShapeFromIncomingToResidentList( animating ){
         if ( !animating ) {
+          assert && assert( self.incomingShapes.indexOf( movableShape ) >= 0, 'Error: The shape is not on the list of incoming shapes.' );
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.addResidentShape( movableShape, false );
+          movableShape.animatingProperty.unlink( moveShapeFromIncomingToResidentList );
         }
-      } );
+      }
+
+      // tag the listener in case it needs to be removed before it fires
+      this.tagListener( moveShapeFromIncomingToResidentList );
+
+      // Move the shape to the resident list once it has finished animating.
+      movableShape.animatingProperty.lazyLink( moveShapeFromIncomingToResidentList );
     },
 
     /**
@@ -279,7 +286,7 @@ define( function( require ) {
       // Made sure that the shape isn't already a resident.
       assert && assert( !this.isResidentShape( movableShape ), 'Error: Attempt to add shape that is already a resident.' );
 
-      this.residentShapes.add( movableShape );
+      this.residentShapes.push( movableShape );
 
       // Make the appropriate updates.
       this.updateCellOccupation( movableShape, 'add' );
