@@ -15,7 +15,6 @@
   },
   "phet": {
     "requirejsNamespace": "AREA_BUILDER",
-    "simTitleStringKey": "AREA_BUILDER/area-builder.name",
     "phetLibs": [
       "vegas",
       "vibe"
