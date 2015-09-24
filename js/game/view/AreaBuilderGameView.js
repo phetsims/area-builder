@@ -21,7 +21,7 @@ define( function( require ) {
   var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
   var GameInfoBanner = require( 'AREA_BUILDER/game/view/GameInfoBanner' );
   var GameState = require( 'AREA_BUILDER/game/model/GameState' );
-  var HCarousel = require( 'AREA_BUILDER/game/view/HCarousel' );
+  var Carousel = require( 'SUN/Carousel' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
@@ -766,7 +766,7 @@ define( function( require ) {
           this.controlPanel.dimensionsIcon.setColor( AreaBuilderSharedConstants.GREENISH_COLOR );
         }
 
-        // Create the carousel if present
+        // Create the carousel if included as part of this challenge
         if ( challenge.userShapes !== null ) {
           var creatorNodes = [];
           challenge.userShapes.forEach( function( userShapeSpec ) {
@@ -780,10 +780,12 @@ define( function( require ) {
           } );
           if ( creatorNodes.length > 4 ) {
             // Add a scrolling carousel.
-            this.shapeCarouselRoot.addChild( new HCarousel( creatorNodes, {
+            this.shapeCarouselRoot.addChild( new Carousel( creatorNodes, {
+              orientation: 'horizontal',
               centerX: this.shapeBoardOriginalBounds.centerX,
               top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
-              fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
+              fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+              hideDisabledButtons: true
             } ) );
           }
           else {
