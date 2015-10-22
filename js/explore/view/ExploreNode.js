@@ -29,7 +29,7 @@ define( function( require ) {
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 12;
   var IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
-  var UNIT_RECTANGLE_SHAPE = new Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
+  var UNIT_RECTANGLE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
   var SHAPE_CREATOR_OFFSET_POSITIONS = [
     // Offsets used for initial position of shape, relative to bucket hole center.  Empirically determined.
     new Vector2( -20 - UNIT_SQUARE_LENGTH / 2, 0 - UNIT_SQUARE_LENGTH / 2 ),
