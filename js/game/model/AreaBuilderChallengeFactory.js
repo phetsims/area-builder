@@ -586,7 +586,8 @@ define( function( require ) {
 
   function generateBuildAreaAndPerimeterChallenge() {
 
-    var width, height;
+    var width;
+    var height;
 
     // Width can be any value from 3 to 8 excluding 7, see design doc.
     do {
@@ -612,7 +613,8 @@ define( function( require ) {
   }
 
   function generateRectangularFindAreaChallenge() {
-    var width, height;
+    var width;
+    var height;
     do {
       width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
@@ -624,7 +626,8 @@ define( function( require ) {
   }
 
   function generateLShapedFindAreaChallenge() {
-    var width, height;
+    var width;
+    var height;
     do {
       width = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       height = _.random( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
@@ -639,13 +642,16 @@ define( function( require ) {
   }
 
   function generateUShapedFindAreaChallenge() {
-    var width, height;
+    var width;
+    var height;
     do {
       width = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       height = _.random( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     } while ( width * height < 16 || width * height > 36 );
     var sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
-    var cutoutWidth, cutoutHeight, cutoutOffset;
+    var cutoutWidth;
+    var cutoutHeight;
+    var cutoutOffset;
     if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
       cutoutWidth = _.random( 2, width - 1 );
       cutoutHeight = _.random( 1, height - 2 );
@@ -664,7 +670,8 @@ define( function( require ) {
   }
 
   function generateOShapedFindAreaChallenge() {
-    var width, height;
+    var width;
+    var height;
     do {
       width = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
       height = _.random( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
@@ -714,7 +721,9 @@ define( function( require ) {
     var width = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
     var height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
     var sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
-    var cutoutWidth, cutoutHeight, cutoutOffset;
+    var cutoutWidth;
+    var cutoutHeight;
+    var cutoutOffset;
     if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
       cutoutWidth = 1;
       cutoutHeight = _.random( 1, 3 );
@@ -735,7 +744,8 @@ define( function( require ) {
   function generateLargeRectWithSmallHoleMissingChallenge() {
     var width = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
     var height = _.random( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
-    var holeWidth, holeHeight;
+    var holeWidth;
+    var holeHeight;
     if ( Math.random() < 0.5 ) {
       holeWidth = _.random( 1, 3 );
       holeHeight = 1;
@@ -785,7 +795,8 @@ define( function( require ) {
 
   function generateProportionalBuildAreaChallenge( difficulty, includePerimeter ) {
     assert && assert( difficulty === 'easy' || difficulty === 'harder' );
-    var width, height;
+    var width;
+    var height;
 
     // Randomly generate width, height, and the possible factors from which a proportional challenge can be created.
     var factors = [];
