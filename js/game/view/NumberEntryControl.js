@@ -11,7 +11,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Keypad = require( 'SCENERY_PHET/Keypad' );
+  var NumberKeypad = require( 'SCENERY_PHET/NumberKeypad' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -32,7 +32,7 @@ define( function( require ) {
     }, options );
 
     // Add the keypad.
-    this.keypad = new Keypad( { maxDigits: options.maxDigits } );
+    this.keypad = new NumberKeypad( { maxDigits: options.maxDigits } );
     this.addChild( this.keypad );
 
     // Add the number readout background.
