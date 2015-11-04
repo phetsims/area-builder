@@ -65,6 +65,7 @@ define( function( require ) {
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
   var YOUR_GOAL_TITLE = new Text( yourGoalString, { font: new PhetFont( { size: 24, weight: 'bold' } ) } );
+  var ITEMS_PER_CAROUSEL_PAGE = 4;
 
   /**
    * @param {AreaBuilderGameModel} gameModel
@@ -778,10 +779,11 @@ define( function( require ) {
               self.model.simSpecificModel.addUserCreatedMovableShape.bind( self.model.simSpecificModel ),
               creatorNodeOptions ) );
           } );
-          if ( creatorNodes.length > 4 ) {
+          if ( creatorNodes.length > ITEMS_PER_CAROUSEL_PAGE ) {
             // Add a scrolling carousel.
             this.shapeCarouselRoot.addChild( new Carousel( creatorNodes, {
               orientation: 'horizontal',
+              itemsPerPage: ITEMS_PER_CAROUSEL_PAGE,
               centerX: this.shapeBoardOriginalBounds.centerX,
               top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
