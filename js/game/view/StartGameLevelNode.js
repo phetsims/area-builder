@@ -23,7 +23,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var chooseYourLevel = require( 'string!AREA_BUILDER/chooseYourLevel' );
+  var chooseYourLevelString = require( 'string!AREA_BUILDER/chooseYourLevel' );
 
   /**
    * @param {Function} startLevelFunction - Function used to initiate a game
@@ -45,7 +45,7 @@ define( function( require ) {
     options = _.extend( {
       // Defaults
       numLevels: 4,
-      titleString: chooseYourLevel,
+      titleString: chooseYourLevelString,
       numStarsOnButtons: 5,
       perfectScore: 10,
       buttonBackgroundColor: '#A8BEFF',

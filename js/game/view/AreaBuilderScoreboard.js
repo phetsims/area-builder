@@ -20,9 +20,9 @@ define( function( require ) {
 
   // strings
   var levelString = require( 'string!AREA_BUILDER/level' );
-  var scoreString = require( 'string!VEGAS/label.score' );
-  var timeString = require( 'string!VEGAS/label.time' );
-  var currentChallengeString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
+  var labelScoreString = require( 'string!VEGAS/label.score' );
+  var labelTimeString = require( 'string!VEGAS/label.time' );
+  var pattern0Challenge1MaxString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
 
   /**
    * @param levelProperty
@@ -48,15 +48,15 @@ define( function( require ) {
     } );
     var currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } ) } );
     problemNumberProperty.link( function( currentChallenge ) {
-      currentChallengeIndicator.text = StringUtils.format( currentChallengeString, currentChallenge + 1, problemsPerLevel );
+      currentChallengeIndicator.text = StringUtils.format( pattern0Challenge1MaxString, currentChallenge + 1, problemsPerLevel );
     } );
     var scoreIndicator = new Text( '', { font: new PhetFont( 20 ) } );
     scoreProperty.link( function( score ) {
-      scoreIndicator.text = StringUtils.format( scoreString, score );
+      scoreIndicator.text = StringUtils.format( labelScoreString, score );
     } );
     var elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ) } );
     elapsedTimeProperty.link( function( elapsedTime ) {
-      elapsedTimeIndicator.text = StringUtils.format( timeString, GameTimer.formatTime( elapsedTime ) );
+      elapsedTimeIndicator.text = StringUtils.format( labelTimeString, GameTimer.formatTime( elapsedTime ) );
     } );
 
     // Create the panel.

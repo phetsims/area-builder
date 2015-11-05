@@ -15,7 +15,7 @@ define( function( require ) {
   var SimLauncher = require( 'JOIST/SimLauncher' );
 
   // strings
-  var simTitle = require( 'string!AREA_BUILDER/area-builder.title' );
+  var areaBuilderTitleString = require( 'string!AREA_BUILDER/area-builder.title' );
 
   var simOptions = {
     credits: {
@@ -28,6 +28,6 @@ define( function( require ) {
 
   SimLauncher.launch( function() {
     // create and start the sim
-    new Sim( simTitle, [ new AreaBuilderExploreScreen(), new AreaBuilderGameScreen() ], simOptions ).start();
+    new Sim( areaBuilderTitleString, [ new AreaBuilderExploreScreen(), new AreaBuilderGameScreen() ], simOptions ).start();
   } );
 } );
