@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2014, University of Colorado Boulder
 
 /**
  * View representation of a ShapePlacementBoard, which is a board (like a whiteboard or bulletin board) where shapes

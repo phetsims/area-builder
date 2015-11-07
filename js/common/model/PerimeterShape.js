@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2014, University of Colorado Boulder
 
 /**
  * Model element that describes a shape in terms of 'perimeter points', both exterior and interior.  The interior
