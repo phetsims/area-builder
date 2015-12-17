@@ -333,7 +333,7 @@ define( function( require ) {
     removeTaggedObservers: function( property ) {
       var self = this;
       var taggedObservers = [];
-      property._observers.forEach( function( observer ) {
+      property.changedEmitter.listeners.forEach( function( observer ) {
         if ( self.listenerTagMatches( observer ) ) {
           taggedObservers.push( observer );
         }
