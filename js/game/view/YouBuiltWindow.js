@@ -126,14 +126,14 @@ define( function( require ) {
 
       // If perimeter is specified, update it, otherwise hide it.
       if ( typeof( buildSpec.perimeter ) !== 'undefined' ) {
-        if ( !this.contentNode.isChild( this.perimeterTextNode ) ) {
+        if ( !this.contentNode.hasChild( this.perimeterTextNode ) ) {
           this.contentNode.addChild( this.perimeterTextNode );
         }
         this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
         this.perimeterTextNode.visible = true;
         this.perimeterTextNode.top = ( this.proportionsInfoNode ? this.proportionsInfoNode.bottom : this.areaTextNode.bottom ) + LINE_SPACING;
       }
-      else if ( this.contentNode.isChild( this.perimeterTextNode ) ) {
+      else if ( this.contentNode.hasChild( this.perimeterTextNode ) ) {
         this.contentNode.removeChild( this.perimeterTextNode );
       }
 

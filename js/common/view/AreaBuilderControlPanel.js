@@ -58,21 +58,21 @@ define( function( require ) {
 
     // Add/remove the grid visibility control.
     this.visibilityControls.gridControlVisibleProperty.link( function( gridControlVisible ) {
-      if ( gridControlVisible && !vBox.isChild( gridCheckbox ) ) {
+      if ( gridControlVisible && !vBox.hasChild( gridCheckbox ) ) {
         vBox.insertChild( 0, gridCheckbox );
       }
-      else if ( !gridControlVisible && vBox.isChild( gridCheckbox ) ) {
+      else if ( !gridControlVisible && vBox.hasChild( gridCheckbox ) ) {
         vBox.removeChild( gridCheckbox );
       }
     } );
 
     // Add/remove the dimension visibility control.
     this.visibilityControls.dimensionsControlVisibleProperty.link( function( dimensionsControlVisible ) {
-      if ( dimensionsControlVisible && !vBox.isChild( dimensionsCheckbox ) ) {
+      if ( dimensionsControlVisible && !vBox.hasChild( dimensionsCheckbox ) ) {
         // Insert at bottom.
         vBox.insertChild( vBox.getChildrenCount(), dimensionsCheckbox );
       }
-      else if ( !dimensionsControlVisible && vBox.isChild( dimensionsCheckbox ) ) {
+      else if ( !dimensionsControlVisible && vBox.hasChild( dimensionsCheckbox ) ) {
         vBox.removeChild( dimensionsCheckbox );
       }
     } );

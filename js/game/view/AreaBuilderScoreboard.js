@@ -73,11 +73,11 @@ define( function( require ) {
 
     // Add/remove the time indicator.
     this.visibilityControls.timeVisibleProperty.link( function( timeVisible ) {
-      if ( timeVisible && !vBox.isChild( elapsedTimeIndicator ) ) {
+      if ( timeVisible && !vBox.hasChild( elapsedTimeIndicator ) ) {
         // Insert just after the score indicator.
         vBox.insertChild( vBox.indexOfChild( scoreIndicator ) + 1, elapsedTimeIndicator );
       }
-      else if ( !timeVisible && vBox.isChild( elapsedTimeIndicator ) ) {
+      else if ( !timeVisible && vBox.hasChild( elapsedTimeIndicator ) ) {
         vBox.removeChild( elapsedTimeIndicator );
       }
     } );
