@@ -85,7 +85,7 @@ define( function( require ) {
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
     this.addInputListener( new SimpleDragHandler( {
 
-      parentScreen: null, // needed for coordinate transforms
+      parentScreenView: null, // needed for coordinate transforms
       movableShape: null,
 
       // Allow moving a finger (touch) across this node to interact with it
@@ -94,20 +94,23 @@ define( function( require ) {
       start: function( event, trail ) {
         var thisDragHandler = this;
 
-        // Find the parent screen by moving up the scene graph.
-        var testNode = self;
-        while ( testNode !== null ) {
-          if ( testNode instanceof ScreenView ) {
-            this.parentScreen = testNode;
-            break;
+        if ( !this.parentScreenView ) {
+          // Find the parent screen view by moving up the scene graph.
+          var testNode = self;
+          while ( testNode !== null ) {
+            if ( testNode instanceof ScreenView ) {
+              this.parentScreenView = testNode;
+              break;
+            }
+            testNode = testNode.parents[ 0 ]; // Move up the scene graph by one level
           }
-          testNode = testNode.parents[ 0 ]; // Move up the scene graph by one level
+          assert && assert( this.parentScreenView, 'unable to find parent screen view' );
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
         var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
         var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
-        var initialPosition = this.parentScreen.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
+        var initialPosition = this.parentScreenView.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 
         // Create and add the new model element.
         this.movableShape = new MovableShape( shape, color, initialPosition );
