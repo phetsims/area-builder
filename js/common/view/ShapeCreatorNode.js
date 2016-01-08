@@ -95,14 +95,15 @@ define( function( require ) {
         var thisDragHandler = this;
 
         if ( !this.parentScreenView ) {
-          // Find the parent screen view by moving up the scene graph.
+
+          // find the parent screen view by moving up the scene graph
           var testNode = self;
           while ( testNode !== null ) {
             if ( testNode instanceof ScreenView ) {
               this.parentScreenView = testNode;
               break;
             }
-            testNode = testNode.parents[ 0 ]; // Move up the scene graph by one level
+            testNode = testNode.parents[ 0 ]; // move up the scene graph by one level
           }
           assert && assert( this.parentScreenView, 'unable to find parent screen view' );
         }
