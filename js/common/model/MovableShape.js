@@ -76,10 +76,10 @@ define( function( require ) {
 
         // perform any animation
         var distanceToDestination = this.position.distance( this.destination );
-        if ( distanceToDestination > dt * AreaBuilderSharedConstants.ANIMATION_VELOCITY ) {
+        if ( distanceToDestination > dt * AreaBuilderSharedConstants.ANIMATION_SPEED ) {
           // Move a step toward the destination.
           var stepAngle = Math.atan2( this.destination.y - this.position.y, this.destination.x - this.position.x );
-          var stepVector = Vector2.createPolar( AreaBuilderSharedConstants.ANIMATION_VELOCITY * dt, stepAngle );
+          var stepVector = Vector2.createPolar( AreaBuilderSharedConstants.ANIMATION_SPEED * dt, stepAngle );
           this.position = this.position.plus( stepVector );
         }
         else if ( this.animating ) {

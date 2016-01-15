@@ -29,7 +29,7 @@ define( function( require ) {
     PERIMETER_DARKEN_FACTOR: 0.6, // The amount that the perimeter colors are darkened from the main shape color
 
     // velocity at which animated elements move
-    ANIMATION_VELOCITY: 200, // In screen coordinates per second
+    ANIMATION_SPEED: 200, // In screen coordinates per second
 
     // various other constants
     BACKGROUND_COLOR: 'rgb( 225, 255, 255 )',
