@@ -83,47 +83,44 @@ define( function( require ) {
     } );
 
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
+    var parentScreenView = null; // needed for coordinate transforms
+    var movableShape = null;
     this.addInputListener( new SimpleDragHandler( {
-
-      parentScreenView: null, // needed for coordinate transforms
-      movableShape: null,
 
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,
 
       start: function( event, trail ) {
-        var thisDragHandler = this;
-
-        if ( !this.parentScreenView ) {
+        if ( !parentScreenView ) {
 
           // find the parent screen view by moving up the scene graph
           var testNode = self;
           while ( testNode !== null ) {
             if ( testNode instanceof ScreenView ) {
-              this.parentScreenView = testNode;
+              parentScreenView = testNode;
               break;
             }
             testNode = testNode.parents[ 0 ]; // move up the scene graph by one level
           }
-          assert && assert( this.parentScreenView, 'unable to find parent screen view' );
+          assert && assert( parentScreenView, 'unable to find parent screen view' );
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
         var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
         var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
-        var initialPosition = this.parentScreenView.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
+        var initialPosition = parentScreenView.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
 
         // Create and add the new model element.
-        this.movableShape = new MovableShape( shape, color, initialPosition );
-        this.movableShape.userControlled = true;
-        addShapeToModel( this.movableShape );
+        movableShape = new MovableShape( shape, color, initialPosition );
+        movableShape.userControlled = true;
+        addShapeToModel( movableShape );
 
         // If the creation count is limited, adjust the value and monitor the created shape for if/when it is returned.
         if ( options.creationLimit < Number.POSITIVE_INFINITY ) {
           // Use an IIFE to keep a reference of the movable shape in a closure.
           (function() {
             createdCountProperty.value++;
-            var localRefToMovableShape = thisDragHandler.movableShape;
+            var localRefToMovableShape = movableShape;
             localRefToMovableShape.on( 'returnedToOrigin', function returnedToOriginListener() {
               if ( !localRefToMovableShape.userControlled ) {
                 // The shape has been returned to its origin.
@@ -136,12 +133,12 @@ define( function( require ) {
       },
 
       translate: function( translationParams ) {
-        this.movableShape.setDestination( this.movableShape.position.plus( translationParams.delta ) );
+        movableShape.setDestination( movableShape.position.plus( translationParams.delta ) );
       },
 
       end: function( event, trail ) {
-        this.movableShape.userControlled = false;
-        this.movableShape = null;
+        movableShape.userControlled = false;
+        movableShape = null;
       }
     } ) );
 
