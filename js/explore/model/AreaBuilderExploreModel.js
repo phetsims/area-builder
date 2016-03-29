@@ -78,21 +78,18 @@ define( function( require ) {
     this.leftBucket = new Bucket( {
       position: new Vector2( self.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
       baseColor: '#000080',
-      caption: '',
       size: BUCKET_SIZE,
       invertY: true
     } );
     this.rightBucket = new Bucket( {
       position: new Vector2( self.rightShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
       baseColor: '#000080',
-      caption: '',
       size: BUCKET_SIZE,
       invertY: true
     } );
     this.singleModeBucket = new Bucket( {
       position: new Vector2( self.singleShapePlacementBoard.bounds.minX + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
       baseColor: '#000080',
-      caption: '',
       size: BUCKET_SIZE,
       invertY: true
     } );
