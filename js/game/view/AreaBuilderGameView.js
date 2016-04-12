@@ -64,7 +64,6 @@ define( function( require ) {
   var INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
-  var YOUR_GOAL_TITLE = new Text( yourGoalString, { font: new PhetFont( { size: 24, weight: 'bold' } ) } );
   var ITEMS_PER_CAROUSEL_PAGE = 4;
 
   /**
@@ -115,9 +114,14 @@ define( function( require ) {
     );
     this.rootNode.addChild( this.startGameLevelNode );
 
-    // Set up the constant portions of the challenge view
+    // Set up the constant portions of the challenge view.
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
     this.shapeBoardOriginalBounds = this.shapeBoard.bounds.copy(); // Necessary because the shape board's bounds can vary when shapes are placed.
+    var maxShapeBoardTextWidth = this.shapeBoardOriginalBounds.width * 0.9;
+    this.yourGoalTitle = new Text( yourGoalString, {
+      font: new PhetFont( { size: 24, weight: 'bold' } ),
+      maxWidth: maxShapeBoardTextWidth
+    } );
     this.challengeLayer.addChild( this.shapeBoard );
     this.eraserButton = new EraserButton( {
       right: this.shapeBoard.left,
@@ -149,17 +153,6 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.solutionBanner );
 
-    // Add the scoreboard.
-    this.scoreboard = new AreaBuilderScoreboard(
-      gameModel.levelProperty,
-      gameModel.challengeIndexProperty,
-      gameModel.challengesPerSet,
-      gameModel.scoreProperty,
-      gameModel.elapsedTimeProperty,
-      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, top: this.shapeBoard.top }
-    );
-    this.controlLayer.addChild( this.scoreboard );
-
     // Add the control panel
     this.controlPanel = new AreaBuilderControlPanel(
       gameModel.simSpecificModel.showGridOnBoardProperty,
@@ -168,6 +161,21 @@ define( function( require ) {
     );
     this.controlLayer.addChild( this.controlPanel );
 
+    // Add the scoreboard.
+    this.scoreboard = new AreaBuilderScoreboard(
+      gameModel.levelProperty,
+      gameModel.challengeIndexProperty,
+      gameModel.challengesPerSet,
+      gameModel.scoreProperty,
+      gameModel.elapsedTimeProperty,
+      {
+        centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2,
+        top: this.shapeBoard.top,
+        maxWidth: this.controlPanel.width
+      }
+    );
+    this.controlLayer.addChild( this.scoreboard );
+
     // Control visibility of elapsed time indicator in the scoreboard.
     this.model.timerEnabledProperty.link( function( timerEnabled ) {
       self.scoreboard.visibilityControls.timeVisible = timerEnabled;
@@ -175,7 +183,7 @@ define( function( require ) {
 
     // Add the button for returning to the level selection screen.
     this.controlLayer.addChild( new RectangularPushButton( {
-      content: new Text( startOverString, { font: BUTTON_FONT } ),
+      content: new Text( startOverString, { font: BUTTON_FONT, maxWidth: this.controlPanel.width } ),
       listener: function() {
         gameModel.simSpecificModel.reset();
         gameModel.setChoosingLevelState();
@@ -188,7 +196,7 @@ define( function( require ) {
     // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
     this.buildPromptVBox = new VBox( {
       children: [
-        YOUR_GOAL_TITLE
+        this.yourGoalTitle
       ],
       spacing: 20
     } );
@@ -209,7 +217,8 @@ define( function( require ) {
     var buttonOptions = {
       font: BUTTON_FONT,
       baseColor: BUTTON_FILL,
-      cornerRadius: 4
+      cornerRadius: 4,
+      maxWidth: ( this.layoutBounds.maxX - this.shapeBoardOriginalBounds.maxX ) * 0.9
     };
     this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
       listener: function() {
@@ -715,9 +724,10 @@ define( function( require ) {
         if ( challenge.buildSpec ) {
 
           this.buildPromptVBox.removeAllChildren();
-          this.buildPromptVBox.addChild( YOUR_GOAL_TITLE );
+          this.buildPromptVBox.addChild( this.yourGoalTitle );
           var areaGoalNode = new Text( StringUtils.format( areaEqualsString, challenge.buildSpec.area ), {
-            font: GOAL_PROMPT_FONT
+            font: GOAL_PROMPT_FONT,
+            maxWidth: this.shapeBoardOriginalBounds.width * 0.9
           } );
           if ( challenge.buildSpec.proportions ) {
             var areaPrompt = new Node();

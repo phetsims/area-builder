@@ -48,7 +48,12 @@ define( function( require ) {
     this.areaToFindProperty = new Property( null );
 
     // Define the title.
-    var title = new Text( this.titleTextProperty.value, { font: TITLE_FONT, fill: TEXT_FILL_COLOR, centerY: height / 2 } );
+    var title = new Text( this.titleTextProperty.value, {
+      font: TITLE_FONT,
+      fill: TEXT_FILL_COLOR,
+      centerY: height / 2,
+      maxWidth: width * 0.45 // must be less than half so it can slide over and provide room for other text
+    } );
     this.addChild( title );
 
     // Update the title when the title text changes.
@@ -67,7 +72,7 @@ define( function( require ) {
     // Define the build prompt, which is shown in both the challenge prompt and the solution.
     var buildPrompt = new Node();
     this.addChild( buildPrompt );
-    var areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
+    var areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0, maxWidth: width * 0.45 } );
     buildPrompt.addChild( areaPrompt );
     var perimeterPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
     buildPrompt.addChild( perimeterPrompt );

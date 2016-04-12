@@ -46,6 +46,7 @@ define( function( require ) {
       // Defaults
       numLevels: 4,
       titleString: chooseYourLevelString,
+      maxTitleWidth: 500,
       numStarsOnButtons: 5,
       perfectScore: 10,
       buttonBackgroundColor: '#A8BEFF',
@@ -60,7 +61,7 @@ define( function( require ) {
     }
 
     // Title
-    var title = new Text( options.titleString, { font: new PhetFont( 30 ) } );
+    var title = new Text( options.titleString, { font: new PhetFont( 30 ), maxWidth: options.maxTitleWidth } );
     this.addChild( title );
 
     // Add the buttons

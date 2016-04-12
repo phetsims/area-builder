@@ -33,8 +33,11 @@ define( function( require ) {
    * @param {Object} [options]
    * @constructor
    */
-  function AreaBuilderScoreboard( levelProperty, problemNumberProperty, problemsPerLevel, scoreProperty, elapsedTimeProperty, options ) {
+  function AreaBuilderScoreboard( levelProperty, problemNumberProperty, problemsPerLevel, scoreProperty,
+                                  elapsedTimeProperty, options ) {
     Node.call( this );
+
+    options = _.extend( { maxWidth: Number.POSITIVE_INFINITY }, options );
 
     // Properties that control which elements are visible and which are hidden.  This constitutes the primary API.
     this.visibilityControls = new PropertySet( {
@@ -42,19 +45,22 @@ define( function( require ) {
     } );
 
     // Create the labels
-    var levelIndicator = new Text( '', { font: new PhetFont( { size: 20, weight: 'bold' } ) } );
+    var levelIndicator = new Text( '', {
+      font: new PhetFont( { size: 20, weight: 'bold' } ),
+      maxWidth: options.maxWidth
+    } );
     levelProperty.link( function( level ) {
       levelIndicator.text = StringUtils.format( levelString, level + 1 );
     } );
-    var currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } ) } );
+    var currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } ), maxWidth: options.maxWidth } );
     problemNumberProperty.link( function( currentChallenge ) {
       currentChallengeIndicator.text = StringUtils.format( pattern0Challenge1MaxString, currentChallenge + 1, problemsPerLevel );
     } );
-    var scoreIndicator = new Text( '', { font: new PhetFont( 20 ) } );
+    var scoreIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     scoreProperty.link( function( score ) {
       scoreIndicator.text = StringUtils.format( labelScoreString, score );
     } );
-    var elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ) } );
+    var elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     elapsedTimeProperty.link( function( elapsedTime ) {
       elapsedTimeIndicator.text = StringUtils.format( labelTimeString, GameTimer.formatTime( elapsedTime ) );
     } );
