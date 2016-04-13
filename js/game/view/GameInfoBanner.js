@@ -52,7 +52,7 @@ define( function( require ) {
       font: TITLE_FONT,
       fill: TEXT_FILL_COLOR,
       centerY: height / 2,
-      maxWidth: width * 0.45 // must be less than half so it can slide over and provide room for other text
+      maxWidth: width * 0.3 // must be small enough that the prompt can also fit on the banner
     } );
     this.addChild( title );
 
@@ -72,7 +72,8 @@ define( function( require ) {
     // Define the build prompt, which is shown in both the challenge prompt and the solution.
     var buildPrompt = new Node();
     this.addChild( buildPrompt );
-    var areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0, maxWidth: width * 0.45 } );
+    var maxBuildPromptWidth = width / 2; // the build prompt has to fit in the banner with the title
+    var areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
     buildPrompt.addChild( areaPrompt );
     var perimeterPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
     buildPrompt.addChild( perimeterPrompt );
@@ -100,9 +101,14 @@ define( function( require ) {
 
     // Function that positions the build prompt such that its visible bounds are centered in the space to the left of
     // the title.
-    function positionTheBuildPrompt() {
+    function positionBuildPrompt() {
       var centerX = ( TITLE_INDENT + title.width + width - TITLE_INDENT ) / 2;
       var centerY = height / 2;
+      buildPrompt.setScaleMagnitude( 1 );
+      if ( buildPrompt.width > maxBuildPromptWidth ){
+        // scale the build prompt to fit with the title on the banner
+        buildPrompt.setScaleMagnitude( maxBuildPromptWidth / buildPrompt.width );
+      }
       buildPrompt.left += centerX - buildPrompt.visibleBounds.centerX;
       buildPrompt.top += centerY - buildPrompt.visibleBounds.centerY;
     }
@@ -144,7 +150,7 @@ define( function( require ) {
         perimeterPrompt.top = areaPrompt.bottom + areaPrompt.height * 0.25; // Spacing empirically determined.
         colorProportionPrompt.left = areaPrompt.right + 10; // Spacing empirically determined
         colorProportionPrompt.centerY = areaPrompt.centerY;
-        positionTheBuildPrompt();
+        positionBuildPrompt();
 
         // Make sure the title is over on the left side.
         moveTitleToSide();
@@ -169,7 +175,7 @@ define( function( require ) {
         colorProportionPrompt.visible = false;
 
         // Place the build prompt where it needs to go.
-        positionTheBuildPrompt();
+        positionBuildPrompt();
 
         // Make sure the title is over on the left side.
         moveTitleToSide();

@@ -117,10 +117,10 @@ define( function( require ) {
     // Set up the constant portions of the challenge view.
     this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
     this.shapeBoardOriginalBounds = this.shapeBoard.bounds.copy(); // Necessary because the shape board's bounds can vary when shapes are placed.
-    var maxShapeBoardTextWidth = this.shapeBoardOriginalBounds.width * 0.9;
+    this.maxShapeBoardTextWidth = this.shapeBoardOriginalBounds.width * 0.9;
     this.yourGoalTitle = new Text( yourGoalString, {
       font: new PhetFont( { size: 24, weight: 'bold' } ),
-      maxWidth: maxShapeBoardTextWidth
+      maxWidth: this.maxShapeBoardTextWidth
     } );
     this.challengeLayer.addChild( this.shapeBoard );
     this.eraserButton = new EraserButton( {
@@ -272,7 +272,8 @@ define( function( require ) {
     this.areaQuestionPrompt = new Text( areaQuestionString, { // This prompt goes with the number entry control.
       font: new PhetFont( 20 ),
       centerX: this.numberEntryControl.centerX,
-      bottom: this.numberEntryControl.top - 10
+      bottom: this.numberEntryControl.top - 10,
+      maxWidth: this.numberEntryControl.width
     } );
     this.challengeLayer.addChild( this.areaQuestionPrompt );
 
@@ -737,10 +738,17 @@ define( function( require ) {
               challenge.buildSpec.proportions.color2, challenge.buildSpec.proportions.color1Proportion, {
                 font: new PhetFont( { size: 16, weight: 'bold' } ),
                 left: areaGoalNode.width + 10,
-                centerY: areaGoalNode.centerY
+                centerY: areaGoalNode.centerY,
+                maxWidth: this.shapeBoardOriginalBounds.width * 0.9
               }
             );
             areaPrompt.addChild( colorProportionsPrompt );
+
+            // make sure the prompt will fit on the board - important for translatability
+            if ( areaPrompt.width > this.shapeBoardOriginalBounds.width * 0.9 ){
+              areaPrompt.scale( ( this.shapeBoardOriginalBounds.width * 0.9 ) / areaPrompt.width );
+            }
+
             this.buildPromptVBox.addChild( areaPrompt );
           }
           else {
@@ -749,7 +757,8 @@ define( function( require ) {
 
           if ( challenge.buildSpec.perimeter ) {
             this.buildPromptVBox.addChild( new Text( StringUtils.format( perimeterEqualsString, challenge.buildSpec.perimeter ), {
-              font: GOAL_PROMPT_FONT
+              font: GOAL_PROMPT_FONT,
+              maxWidth: this.maxShapeBoardTextWidth
             } ) );
           }
 
