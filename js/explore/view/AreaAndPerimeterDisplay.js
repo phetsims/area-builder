@@ -23,6 +23,8 @@ define( function( require ) {
 
   // constants
   var DISPLAY_FONT = new PhetFont( 14 );
+  var MAX_CONTENT_WIDTH = 200; // empirically determined, supports translation
+  var MAX_TITLE_WIDTH = 190; // empirically determined, supports translation
 
   /**
    * @param {Property<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
@@ -32,6 +34,10 @@ define( function( require ) {
    * @constructor
    */
   function AreaAndPerimeterDisplay( areaAndPerimeterProperty, areaTextColor, perimeterTextColor, options ) {
+
+    options = _.extend( {
+      maxWidth: Number.POSITIVE_INFINITY
+    }, options );
 
     var contentNode = new Node();
     var areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
@@ -57,9 +63,14 @@ define( function( require ) {
       perimeterReadout.right = readoutsRightEdge;
     } );
 
+    // in support of translation, scale the content node if it's too big
+    if ( contentNode.width > MAX_CONTENT_WIDTH ){
+      contentNode.scale( MAX_CONTENT_WIDTH / contentNode.width );
+    }
+
     this.expandedProperty = new Property( true );
     AccordionBox.call( this, contentNode, {
-      titleNode: new Text( valuesString, { font: DISPLAY_FONT } ),
+      titleNode: new Text( valuesString, { font: DISPLAY_FONT, maxWidth: MAX_TITLE_WIDTH } ),
       titleAlignX: 'left',
       contentAlign: 'left',
       fill: 'white',
