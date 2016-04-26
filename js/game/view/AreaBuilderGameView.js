@@ -260,7 +260,7 @@ define( function( require ) {
     this.gameControlButtons.forEach( function( button ) {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
-      self.rootNode.addChild( button );
+      self.controlLayer.addChild( button );
     } );
 
     // Add the number entry control, which is only visible on certain challenge types.
