@@ -10,13 +10,14 @@ define( function( require ) {
 
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var Color = require( 'SCENERY/util/Color' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -28,9 +29,10 @@ define( function( require ) {
 
   /**
    * @param {MovableShape} movableShape
+   * @param {Bounds2} dragBounds
    * @constructor
    */
-  function ShapeNode( movableShape ) {
+  function ShapeNode( movableShape, dragBounds ) {
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
     this.color = movableShape.color; // @public
@@ -133,20 +135,27 @@ define( function( require ) {
       updatePickability();
     } );
 
+    // Adjust the drag bounds to compensate for the shape that that the entire shape will stay in bounds.
+    var shapeDragBounds = new Bounds2(
+      dragBounds.minX,
+      dragBounds.minY,
+      dragBounds.maxX - movableShape.shape.bounds.width,
+      dragBounds.maxY - movableShape.shape.bounds.height
+    );
+
     // Add the listener that will allow the user to drag the shape around.
-    this.addInputListener( new SimpleDragHandler( {
+    this.addInputListener( new MovableDragHandler( movableShape.positionProperty, {
+
+      dragBounds: shapeDragBounds,
+
       // Allow moving a finger (touch) across a node to pick it up.
       allowTouchSnag: true,
 
-      // Handler that moves the shape in model space.
-      translate: function( translationParams ) {
-        movableShape.setDestination( movableShape.position.plus( translationParams.delta ), false );
-        return translationParams.position;
-      },
-      start: function( event, trail ) {
+      startDrag: function( event, trail ) {
         movableShape.userControlled = true;
       },
-      end: function( event, trail ) {
+
+      endDrag: function( event, trail ) {
         movableShape.userControlled = false;
       }
     } ) );

@@ -12,6 +12,7 @@ define( function( require ) {
   // modules
   var AreaAndPerimeterDisplay = require( 'AREA_BUILDER/explore/view/AreaAndPerimeterDisplay' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
   var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
   var Color = require( 'SCENERY/util/Color' );
@@ -44,15 +45,21 @@ define( function( require ) {
    * @param {Function} addShapeToModel - Function for adding a newly created shape to the model.
    * @param {ObservableArray} movableShapeList - The array that tracks the movable shapes.
    * @param {Bucket} bucket - Model of the bucket that is to be portrayed
-   * @param {Object} layerOptions
+   * @param {Object} options
    * @constructor
    */
-  function ExploreNode( shapePlacementBoard, addShapeToModel, movableShapeList, bucket, layerOptions ) {
+  function ExploreNode( shapePlacementBoard, addShapeToModel, movableShapeList, bucket, options ) {
 
-    layerOptions = _.extend( {
-      // optional layers (scenery nodes) that can be passed in to enable optimal layering.
+    options = _.extend( {
+
+      // drag bounds for the shapes that can go on the board
+      shapeDragBounds: Bounds2.EVERYTHING,
+
+      // An optional layer (scenery node) on which movable shapes will be placed.  Passing it in allows it to be
+      // created outside this node, which supports some layering which is otherwise not possible.
       shapesLayer: null
-    }, layerOptions );
+
+    }, options );
 
     // Verify that the shape placement board is set up to handle a specific color, rather than all colors, since other
     // code below depends on this.
@@ -65,13 +72,13 @@ define( function( require ) {
     var backLayer = new Node();
     this.addChild( backLayer );
     var movableShapesLayer;
-    if ( !layerOptions.shapesLayer ) {
+    if ( !options.shapesLayer ) {
       movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
       this.addChild( movableShapesLayer );
     }
     else {
       // Assume that this layer was added to the scene graph elsewhere, and doesn't need to be added here.
-      movableShapesLayer = layerOptions.shapesLayer;
+      movableShapesLayer = options.shapesLayer;
     }
     var bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );
@@ -88,7 +95,10 @@ define( function( require ) {
       shapePlacementBoard.areaAndPerimeterProperty,
       shapeColor,
       shapeColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
-      { centerX: shapePlacementBoardNode.centerX, bottom: shapePlacementBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD }
+      {
+        centerX: shapePlacementBoardNode.centerX,
+        bottom: shapePlacementBoardNode.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
+      }
     );
     this.addChild( this.areaAndPerimeterDisplay );
 
@@ -100,11 +110,11 @@ define( function( require ) {
 
     // Add the shape creator nodes.  These must be added after the bucket hole for proper layering.
     SHAPE_CREATOR_OFFSET_POSITIONS.forEach( function( offset ) {
-      backLayer.addChild( new ShapeCreatorNode( UNIT_RECTANGLE_SHAPE, shapeColor,
-        addShapeToModel, {
-          left: bucketHole.centerX + offset.x,
-          top: bucketHole.centerY + offset.y
-        } ) );
+      backLayer.addChild( new ShapeCreatorNode( UNIT_RECTANGLE_SHAPE, shapeColor, addShapeToModel, {
+        left: bucketHole.centerX + offset.x,
+        top: bucketHole.centerY + offset.y,
+        shapeDragBounds: options.shapeDragBounds
+      } ) );
     } );
 
     // Add the button that allows the board to be cleared of all shapes.
@@ -120,7 +130,7 @@ define( function( require ) {
       if ( addedShape.color.equals( shapeColor ) ) {
 
         // Create and add the view representation for this shape.
-        var shapeNode = new ShapeNode( addedShape );
+        var shapeNode = new ShapeNode( addedShape, options.shapeDragBounds );
         movableShapesLayer.addChild( shapeNode );
 
         // Move the shape to the front of this layer when grabbed by the user.

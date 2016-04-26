@@ -10,15 +10,17 @@ define( function( require ) {
 
   // modules
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var Color = require( 'SCENERY/util/Color' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var BORDER_LINE_WIDTH = 1;
@@ -41,7 +43,10 @@ define( function( require ) {
       gridSpacing: null,
 
       // Max number of shapes that can be created by this node.
-      creationLimit: Number.POSITIVE_INFINITY
+      creationLimit: Number.POSITIVE_INFINITY,
+
+      // Drag bounds for the created shapes
+      shapeDragBounds: Bounds2.EVERYTHING
 
     }, options );
 
@@ -82,18 +87,35 @@ define( function( require ) {
       self.visible = numCreated < options.creationLimit;
     } );
 
-    // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
+    // variables used by the drag handler
     var parentScreenView = null; // needed for coordinate transforms
     var movableShape = null;
-    this.addInputListener( new SimpleDragHandler( {
+    var shapePositionProperty = new Property( Vector2.ZERO );
+
+    // Link the internal position property to the movable shape.
+    shapePositionProperty.link( function( position ){
+      if ( movableShape !== null ){
+        movableShape.position = position;
+      }
+    } );
+
+    // Adjust the drag bounds to compensate for the shape that that the entire shape will stay in bounds.
+    var shapeDragBounds = options.shapeDragBounds.copy();
+    shapeDragBounds.setMaxX( shapeDragBounds.maxX - shape.bounds.width );
+    shapeDragBounds.setMaxY( shapeDragBounds.maxY - shape.bounds.height );
+
+    // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
+    this.addInputListener( new MovableDragHandler( shapePositionProperty, {
+
+      dragBounds: shapeDragBounds,
 
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,
 
-      start: function( event, trail ) {
+      startDrag: function( event, trail ) {
         if ( !parentScreenView ) {
 
-          // find the parent screen view by moving up the scene graph
+          // Find the parent screen view by moving up the scene graph.
           var testNode = self;
           while ( testNode !== null ) {
             if ( testNode instanceof ScreenView ) {
@@ -109,6 +131,7 @@ define( function( require ) {
         var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
         var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
         var initialPosition = parentScreenView.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
+        shapePositionProperty.value = initialPosition;
 
         // Create and add the new model element.
         movableShape = new MovableShape( shape, color, initialPosition );
@@ -118,7 +141,7 @@ define( function( require ) {
         // If the creation count is limited, adjust the value and monitor the created shape for if/when it is returned.
         if ( options.creationLimit < Number.POSITIVE_INFINITY ) {
           // Use an IIFE to keep a reference of the movable shape in a closure.
-          (function() {
+          ( function() {
             createdCountProperty.value++;
             var localRefToMovableShape = movableShape;
             localRefToMovableShape.on( 'returnedToOrigin', function returnedToOriginListener() {
@@ -128,15 +151,11 @@ define( function( require ) {
                 localRefToMovableShape.off( 'returnedToOrigin', returnedToOriginListener );
               }
             } );
-          })();
+          } )();
         }
       },
 
-      translate: function( translationParams ) {
-        movableShape.setDestination( movableShape.position.plus( translationParams.delta ) );
-      },
-
-      end: function( event, trail ) {
+      endDrag: function( event, trail ) {
         movableShape.userControlled = false;
         movableShape = null;
       }

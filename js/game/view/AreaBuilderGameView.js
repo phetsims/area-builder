@@ -304,7 +304,7 @@ define( function( require ) {
     gameModel.simSpecificModel.movableShapes.addItemAddedListener( function( addedShape ) {
 
       // Create and add the view representation for this shape.
-      var shapeNode = new ShapeNode( addedShape );
+      var shapeNode = new ShapeNode( addedShape, self.layoutBounds );
       self.challengeLayer.addChild( shapeNode );
 
       // Add a listener that handles changes to the userControlled state.
@@ -790,13 +790,19 @@ define( function( require ) {
         if ( challenge.userShapes !== null ) {
           var creatorNodes = [];
           challenge.userShapes.forEach( function( userShapeSpec ) {
-            var creatorNodeOptions = { gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH };
+            var creatorNodeOptions = {
+              gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH,
+              shapeDragBounds: self.layoutBounds
+            };
             if ( userShapeSpec.creationLimit ) {
               creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
             }
-            creatorNodes.push( new ShapeCreatorNode( userShapeSpec.shape, userShapeSpec.color,
+            creatorNodes.push( new ShapeCreatorNode(
+              userShapeSpec.shape,
+              userShapeSpec.color,
               self.model.simSpecificModel.addUserCreatedMovableShape.bind( self.model.simSpecificModel ),
-              creatorNodeOptions ) );
+              creatorNodeOptions
+            ) );
           } );
           if ( creatorNodes.length > ITEMS_PER_CAROUSEL_PAGE ) {
             // Add a scrolling carousel.

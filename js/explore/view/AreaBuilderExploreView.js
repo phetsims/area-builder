@@ -41,13 +41,13 @@ define( function( require ) {
     // Create the composite nodes that contain the shape placement board, the readout, the bucket, the shape creator
     // nodes, and the eraser button.
     var centerExploreNode = new ExploreNode( model.singleShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.singleModeBucket, { shapesLayer: singleBoardShapesLayer } );
+      model.movableShapes, model.singleModeBucket, { shapesLayer: singleBoardShapesLayer, shapeDragBounds: this.layoutBounds } );
     this.addChild( centerExploreNode );
     var leftExploreNode = new ExploreNode( model.leftShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.leftBucket, { shapesLayer: dualBoardShapesLayer } );
+      model.movableShapes, model.leftBucket, { shapesLayer: dualBoardShapesLayer, shapeDragBounds: this.layoutBounds  } );
     this.addChild( leftExploreNode );
     var rightExploreNode = new ExploreNode( model.rightShapePlacementBoard, model.addUserCreatedMovableShape.bind( model ),
-      model.movableShapes, model.rightBucket, { shapesLayer: dualBoardShapesLayer } );
+      model.movableShapes, model.rightBucket, { shapesLayer: dualBoardShapesLayer, shapeDragBounds: this.layoutBounds  } );
     this.addChild( rightExploreNode );
 
     // Control which board(s), bucket(s), and shapes are visible.
