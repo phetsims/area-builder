@@ -127,14 +127,23 @@ define( function( require ) {
       right: this.shapeBoard.left,
       top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
       listener: function() {
+
         var challenge = gameModel.currentChallenge;
         var shapeReleaseMode = 'fade';
+
         if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[ 0 ].creationLimit ) {
+
           // In the case where there is a limited number of shapes, have them animate back to the carousel instead of
           // fading away so that the user understands that the stash is being replenished.
           shapeReleaseMode = 'animateHome';
         }
         gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( shapeReleaseMode );
+
+        // If the game was showing the user incorrect feedback when they pressed this button, auto-advance to the
+        // next state.
+        if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
+          gameModel.tryAgain();
+        }
       }
     } );
     this.challengeLayer.addChild( this.eraserButton );
