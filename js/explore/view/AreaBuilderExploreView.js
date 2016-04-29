@@ -32,7 +32,7 @@ define( function( require ) {
 
     // Create the layers where the shapes will be placed.  The shapes are maintained in separate layers so that they
     // are over all of the shape placement boards in the z-order.
-    var movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
+    var movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for improved performance.
     var singleBoardShapesLayer = new Node();
     movableShapesLayer.addChild( singleBoardShapesLayer );
     var dualBoardShapesLayer = new Node();
