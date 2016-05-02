@@ -11,6 +11,7 @@ define( function( require ) {
 
   // modules
   var AreaAndPerimeterDisplay = require( 'AREA_BUILDER/explore/view/AreaAndPerimeterDisplay' );
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
@@ -150,6 +151,8 @@ define( function( require ) {
       }
     } );
   }
+
+  areaBuilder.register( 'ExploreNode', ExploreNode );
 
   return inherit( Node, ExploreNode, {
     reset: function() {

@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
   var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -42,6 +43,8 @@ define( function( require ) {
     // Handle options, mostly those relating to position.
     this.mutate( options );
   }
+
+  areaBuilder.register( 'YouEnteredWindow', YouEnteredWindow );
 
   return inherit( FeedbackWindow, YouEnteredWindow, {
 

@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -188,6 +189,8 @@ define( function( require ) {
     // Pass options through to parent class.
     this.mutate( options );
   }
+
+  areaBuilder.register( 'GameInfoBanner', GameInfoBanner );
 
   return inherit( Rectangle, GameInfoBanner, {
     reset: function() {

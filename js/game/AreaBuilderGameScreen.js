@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // imports
-  var QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderChallengeFactory = require( 'AREA_BUILDER/game/model/AreaBuilderChallengeFactory' );
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderGameView = require( 'AREA_BUILDER/game/view/AreaBuilderGameView' );
@@ -17,6 +17,7 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
   var Screen = require( 'JOIST/Screen' );
 
   // strings
@@ -38,6 +39,8 @@ define( function( require ) {
       }
     );
   }
+
+  areaBuilder.register( 'AreaBuilderGameScreen', AreaBuilderGameScreen );
 
   return inherit( Screen, AreaBuilderGameScreen );
 } );

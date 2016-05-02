@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bucket = require( 'PHETCOMMON/model/Bucket' );
   var Dimension2 = require( 'DOT/Dimension2' );
@@ -94,6 +95,8 @@ define( function( require ) {
       invertY: true
     } );
   }
+
+  areaBuilder.register( 'AreaBuilderExploreModel', AreaBuilderExploreModel );
 
   return inherit( PropertySet, AreaBuilderExploreModel, {
 

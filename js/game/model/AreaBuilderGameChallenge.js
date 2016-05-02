@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
@@ -175,6 +176,8 @@ define( function( require ) {
       null
     );
   };
+
+  areaBuilder.register( 'AreaBuilderGameChallenge', AreaBuilderGameChallenge );
 
   return inherit( Object, AreaBuilderGameChallenge );
 } );

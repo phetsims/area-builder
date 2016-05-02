@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
@@ -91,6 +92,8 @@ define( function( require ) {
     switchPanel.top = centerBoardBounds.maxY + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
     switchPanel.right = centerBoardBounds.maxX;
   }
+
+  areaBuilder.register( 'AreaBuilderExploreView', AreaBuilderExploreView );
 
   return inherit( ScreenView, AreaBuilderExploreView );
 } );

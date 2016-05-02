@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // imports
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderExploreModel = require( 'AREA_BUILDER/explore/model/AreaBuilderExploreModel' );
   var AreaBuilderExploreView = require( 'AREA_BUILDER/explore/view/AreaBuilderExploreView' );
   var AreaBuilderIconFactory = require( 'AREA_BUILDER/common/view/AreaBuilderIconFactory' );
@@ -38,6 +39,8 @@ define( function( require ) {
       }
     );
   }
+
+  areaBuilder.register( 'AreaBuilderExploreScreen', AreaBuilderExploreScreen );
 
   return inherit( Screen, AreaBuilderExploreScreen );
 } );

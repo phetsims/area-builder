@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
@@ -38,6 +39,8 @@ define( function( require ) {
       };
     }
   }
+
+  areaBuilder.register( 'BuildSpec', BuildSpec );
 
   return inherit( Object, BuildSpec, {
     equals: function( that ) {

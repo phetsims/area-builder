@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberKeypad = require( 'SCENERY_PHET/NumberKeypad' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -62,6 +63,8 @@ define( function( require ) {
     // Pass options through to parent class.
     this.mutate( options );
   }
+
+  areaBuilder.register( 'NumberEntryControl', NumberEntryControl );
 
   return inherit( Node, NumberEntryControl, {
     getValue: function() {

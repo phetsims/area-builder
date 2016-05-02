@@ -16,6 +16,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var GameState = require( 'AREA_BUILDER/game/model/GameState' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
@@ -80,6 +81,8 @@ define( function( require ) {
     // Let the sim-specific model know when the challenge changes.
     thisModel.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ); } );
   }
+
+  areaBuilder.register( 'QuizGameModel', QuizGameModel );
 
   return inherit( PropertySet, QuizGameModel,
     {

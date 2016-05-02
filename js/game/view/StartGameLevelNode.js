@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
@@ -117,6 +118,8 @@ define( function( require ) {
     timerToggleButton.left = options.controlsInset;
     timerToggleButton.bottom = soundToggleButton.top - 10;
   }
+
+  areaBuilder.register( 'StartGameLevelNode', StartGameLevelNode );
 
   // Inherit from Node.
   return inherit( Node, StartGameLevelNode );

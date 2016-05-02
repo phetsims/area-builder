@@ -8,6 +8,7 @@ define( function( require ) {
 
   // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var Dimension2 = require( 'DOT/Dimension2' );
@@ -75,6 +76,8 @@ define( function( require ) {
       } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR, cornerRadius: 4 }
     );
   }
+
+  areaBuilder.register( 'BoardDisplayModePanel', BoardDisplayModePanel );
 
   return inherit( Panel, BoardDisplayModePanel );
 } );

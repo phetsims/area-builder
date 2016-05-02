@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var GameTimer = require( 'VEGAS/GameTimer' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -90,6 +91,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  areaBuilder.register( 'AreaBuilderScoreboard', AreaBuilderScoreboard );
 
   return inherit( Node, AreaBuilderScoreboard );
 } );

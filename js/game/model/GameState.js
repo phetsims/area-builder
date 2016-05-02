@@ -8,7 +8,10 @@
 define( function() {
   'use strict';
 
-  return Object.freeze( {
+  // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+
+  var GameState = {
     CHOOSING_LEVEL: 'choosingLevel',
     PRESENTING_INTERACTIVE_CHALLENGE: 'presentingInteractiveChallenge',
     SHOWING_CORRECT_ANSWER_FEEDBACK: 'showingCorrectAnswerFeedback',
@@ -16,5 +19,12 @@ define( function() {
     SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON: 'showingIncorrectAnswerFeedbackMoveOn',
     DISPLAYING_CORRECT_ANSWER: 'displayingCorrectAnswer',
     SHOWING_LEVEL_RESULTS: 'showingLevelResults'
-  } );
+  };
+
+  // verify that enum is immutable, without the runtime penalty in production code
+  if ( assert ) { Object.freeze( GameState ); }
+
+  areaBuilder.register( 'GameState', GameState );
+
+  return GameState;
 } );

@@ -9,9 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var Bounds2 = require( 'DOT/Bounds2' );
 
-  return {
+  var AreaBuilderSharedConstants = {
     // layout bounds used throughout the simulation for laying out the screens
     LAYOUT_BOUNDS: new Bounds2( 0, 0, 768, 464 ),
 
@@ -40,4 +41,8 @@ define( function( require ) {
     // string used to indicate an invalid value for area and perimeter
     INVALID_VALUE: require( 'string!AREA_BUILDER/invalidValue' )
   };
+
+  areaBuilder.register( 'AreaBuilderSharedConstants', AreaBuilderSharedConstants );
+
+  return AreaBuilderSharedConstants;
 } );

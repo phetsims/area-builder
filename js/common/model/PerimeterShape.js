@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -117,6 +118,8 @@ define( function( require ) {
     // @public, read only
     this.unitArea = calculateUnitArea( this.kiteShape, unitLength );
   }
+
+  areaBuilder.register( 'PerimeterShape', PerimeterShape );
 
   return inherit( Object, PerimeterShape, {
 

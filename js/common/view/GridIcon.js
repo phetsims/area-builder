@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Color = require( 'SCENERY/util/Color' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
@@ -67,6 +68,8 @@ define( function( require ) {
     // Pass options through to the parent class.
     this.mutate( options );
   }
+
+  areaBuilder.register( 'GridIcon', GridIcon );
 
   return inherit( Node, GridIcon );
 } );

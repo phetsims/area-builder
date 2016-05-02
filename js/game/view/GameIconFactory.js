@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var GridIcon = require( 'AREA_BUILDER/common/view/GridIcon' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -26,7 +27,7 @@ define( function( require ) {
   /**
    * Static object, not meant to be instantiated.
    */
-  return {
+  var GameIconFactory = {
     createIcon: function( level ) {
       var color;
       var occupiedCells;
@@ -163,4 +164,8 @@ define( function( require ) {
       return new GridIcon( NUM_COLUMNS, NUM_ROWS, CELL_LENGTH, color, occupiedCells, GRID_ICON_OPTIONS );
     }
   };
+
+  areaBuilder.register( 'GameIconFactory', GameIconFactory );
+
+  return GameIconFactory;
 } );

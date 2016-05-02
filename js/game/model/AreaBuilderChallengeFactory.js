@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
@@ -907,7 +908,7 @@ define( function( require ) {
   }
 
   // No constructor - this is a static type.
-  return {
+  var AreaBuilderChallengeFactory = {
 
     /**
      * Generate a set of challenges for the given game level.
@@ -980,4 +981,8 @@ define( function( require ) {
       return challengeSet;
     }
   };
+
+  areaBuilder.register( 'AreaBuilderChallengeFactory', AreaBuilderChallengeFactory );
+
+  return AreaBuilderChallengeFactory;
 } );

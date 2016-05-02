@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Color = require( 'SCENERY/util/Color' );
@@ -160,6 +161,8 @@ define( function( require ) {
       }
     } ) );
   }
+
+  areaBuilder.register( 'ShapeNode', ShapeNode );
 
   return inherit( Node, ShapeNode );
 } );

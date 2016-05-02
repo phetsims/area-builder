@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var AccordionBox = require( 'SUN/AccordionBox' );
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -82,6 +83,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  areaBuilder.register( 'AreaAndPerimeterDisplay', AreaAndPerimeterDisplay );
 
   return inherit( AccordionBox, AreaAndPerimeterDisplay, {
     reset: function() {

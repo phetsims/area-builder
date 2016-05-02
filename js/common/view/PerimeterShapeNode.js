@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -244,6 +245,8 @@ define( function( require ) {
     // Pass options through to parent class.
     this.mutate( options );
   }
+
+  areaBuilder.register( 'PerimeterShapeNode', PerimeterShapeNode );
 
   return inherit( Node, PerimeterShapeNode );
 } );

@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -49,6 +50,8 @@ define( function( require ) {
     this._fraction = fraction;
     this.update();
   }
+
+  areaBuilder.register( 'FractionNode', FractionNode );
 
   return inherit( Node, FractionNode, {
 

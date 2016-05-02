@@ -14,6 +14,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
   var Color = require( 'SCENERY/util/Color' );
@@ -62,6 +63,8 @@ define( function( require ) {
     // offset is empirically determined to be somewhere in the carousel.
     this.solutionShapeOrigin = new Vector2( this.shapePlacementBoard.bounds.left + 30, this.shapePlacementBoard.bounds.maxY + 30 );
   }
+
+  areaBuilder.register( 'AreaBuilderGameModel', AreaBuilderGameModel );
 
   return inherit( PropertySet, AreaBuilderGameModel, {
 

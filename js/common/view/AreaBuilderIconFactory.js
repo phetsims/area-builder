@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var FaceNode = require( 'SCENERY_PHET/FaceNode' );
@@ -55,7 +56,7 @@ define( function( require ) {
   /**
    * Static object, not meant to be instantiated.
    */
-  return {
+  var AreaBuilderIconFactory = {
     createExploreScreenNavBarIcon: function() {
 
       // root node
@@ -151,8 +152,9 @@ define( function( require ) {
 
       return icon;
     }
+  };
 
-  }
-    ;
-} )
-;
+  areaBuilder.register( 'AreaBuilderIconFactory', AreaBuilderIconFactory );
+
+  return AreaBuilderIconFactory;
+} );

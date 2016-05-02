@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var Grid = require( 'AREA_BUILDER/common/view/Grid' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -79,6 +80,8 @@ define( function( require ) {
       new Property( true ) // grid on shape - always shown for the composite shape
     ) );
   }
+
+  areaBuilder.register( 'ShapePlacementBoardNode', ShapePlacementBoardNode );
 
   return inherit( Node, ShapePlacementBoardNode );
 } );

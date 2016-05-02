@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -68,6 +69,8 @@ define( function( require ) {
     // Internal vars
     this.fading = false; // @private
   }
+
+  areaBuilder.register( 'MovableShape', MovableShape );
 
   return inherit( PropertySet, MovableShape, {
 

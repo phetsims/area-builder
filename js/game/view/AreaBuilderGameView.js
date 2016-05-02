@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
@@ -399,6 +400,8 @@ define( function( require ) {
     // adding the shapes to the board in order to show the solution triggers updates of this window.
     this.okayToUpdateYouBuiltWindow = true; // @private
   }
+
+  areaBuilder.register( 'AreaBuilderGameView', AreaBuilderGameView );
 
   return inherit( ScreenView, AreaBuilderGameView, {
 

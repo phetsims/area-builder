@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var FractionNode = require( 'AREA_BUILDER/game/view/FractionNode' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -78,6 +79,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  areaBuilder.register( 'ColorProportionsPrompt', ColorProportionsPrompt );
 
   return inherit( Node, ColorProportionsPrompt, {
 

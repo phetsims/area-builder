@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
@@ -37,6 +38,8 @@ define( function( require ) {
 
     Path.call( this, gridShape, options );
   }
+
+  areaBuilder.register( 'Grid', Grid );
 
   return inherit( Path, Grid );
 } );

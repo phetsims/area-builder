@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -52,6 +53,8 @@ define( function( require ) {
     // position options - that needs to be handled in descendant classes.
     Panel.call( this, this.contentNode, { fill: options.fill, stroke: options.stroke, xMargin: options.xMargin } );
   }
+
+  areaBuilder.register( 'FeedbackWindow', FeedbackWindow );
 
   return inherit( Panel, FeedbackWindow, {
 
