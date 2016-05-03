@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
+  var AreaBuilderQueryParameters = require( 'AREA_BUILDER/common/AreaBuilderQueryParameters' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -91,6 +92,11 @@ define( function( require ) {
     controlPanel.left = centerBoardBounds.minX;
     switchPanel.top = centerBoardBounds.maxY + SPACE_AROUND_SHAPE_PLACEMENT_BOARD;
     switchPanel.right = centerBoardBounds.maxX;
+
+    // If the appropriate query parameter is set, fill the boards.  This is useful for debugging.
+    if ( AreaBuilderQueryParameters.PREFILL_BOARDS ){
+      model.fillBoards();
+    }
   }
 
   areaBuilder.register( 'AreaBuilderExploreView', AreaBuilderExploreView );

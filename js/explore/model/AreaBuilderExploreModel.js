@@ -14,13 +14,16 @@ define( function( require ) {
   var Bucket = require( 'PHETCOMMON/model/Bucket' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PropertySet = require( 'AXON/PropertySet' );
+  var Shape = require( 'KITE/Shape' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
+  var UNIT_SQUARE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
   var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 9, UNIT_SQUARE_LENGTH * 8 );
   var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 19, UNIT_SQUARE_LENGTH * 8 );
   var PLAY_AREA_WIDTH = AreaBuilderSharedConstants.LAYOUT_BOUNDS.width;
@@ -33,7 +36,6 @@ define( function( require ) {
    * @constructor
    */
   function AreaBuilderExploreModel() {
-    var self = this;
 
     PropertySet.call( this, {
       showShapeBoardGrids: true, // @public
@@ -46,7 +48,7 @@ define( function( require ) {
 
     // Create the shape placement boards. Each boardDisplayMode has its own set of boards and buckets so that state can
     // be preserved when switching modes.
-    self.leftShapePlacementBoard = new ShapePlacementBoard(
+    this.leftShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 - SPACE_BETWEEN_PLACEMENT_BOARDS / 2 - SMALL_BOARD_SIZE.width, BOARD_Y_POS ),
@@ -54,7 +56,7 @@ define( function( require ) {
       this.showShapeBoardGridsProperty,
       this.showDimensionsProperty
     ); // @public
-    self.rightShapePlacementBoard = new ShapePlacementBoard(
+    this.rightShapePlacementBoard = new ShapePlacementBoard(
       SMALL_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 + SPACE_BETWEEN_PLACEMENT_BOARDS / 2, BOARD_Y_POS ),
@@ -62,7 +64,7 @@ define( function( require ) {
       this.showShapeBoardGridsProperty,
       this.showDimensionsProperty
     ); // @public
-    self.singleShapePlacementBoard = new ShapePlacementBoard(
+    this.singleShapePlacementBoard = new ShapePlacementBoard(
       LARGE_BOARD_SIZE,
       UNIT_SQUARE_LENGTH,
       new Vector2( PLAY_AREA_WIDTH / 2 - LARGE_BOARD_SIZE.width / 2, BOARD_Y_POS ),
@@ -72,24 +74,24 @@ define( function( require ) {
     ); // @public
 
     // @private, for convenience.
-    self.shapePlacementBoards = [ self.leftShapePlacementBoard, self.rightShapePlacementBoard, self.singleShapePlacementBoard ];
+    this.shapePlacementBoards = [ this.leftShapePlacementBoard, this.rightShapePlacementBoard, this.singleShapePlacementBoard ];
 
     // Create the buckets that will hold the shapes.
-    var bucketYPos = self.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
+    var bucketYPos = this.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
     this.leftBucket = new Bucket( {
-      position: new Vector2( self.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
+      position: new Vector2( this.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
       baseColor: '#000080',
       size: BUCKET_SIZE,
       invertY: true
     } );
     this.rightBucket = new Bucket( {
-      position: new Vector2( self.rightShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
+      position: new Vector2( this.rightShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
       baseColor: '#000080',
       size: BUCKET_SIZE,
       invertY: true
     } );
     this.singleModeBucket = new Bucket( {
-      position: new Vector2( self.singleShapePlacementBoard.bounds.minX + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
+      position: new Vector2( this.singleShapePlacementBoard.bounds.minX + LARGE_BOARD_SIZE.width / 2, bucketYPos ),
       baseColor: '#000080',
       size: BUCKET_SIZE,
       invertY: true
@@ -141,6 +143,37 @@ define( function( require ) {
       // Another point at which the shape is removed is if it fades away.
       movableShape.on( 'fadedAway', function() {
         self.movableShapes.remove( movableShape );
+      } );
+    },
+
+    /**
+     * fill the boards with unit squares, useful for debugging, not used in general operation of the sim
+     */
+    fillBoards: function() {
+      var self = this;
+      this.shapePlacementBoards.forEach( function( board ) {
+        var numRows = board.bounds.height / UNIT_SQUARE_LENGTH;
+        var numColumns = board.bounds.width / UNIT_SQUARE_LENGTH;
+        var movableShape;
+        var shapeOrigin;
+        if ( board === self.leftShapePlacementBoard ){
+          shapeOrigin = self.leftBucket.position;
+        }
+        else if ( board === self.rightShapePlacementBoard ){
+          shapeOrigin = self.rightBucket.position;
+        }
+        else{
+          shapeOrigin = self.singleModeBucket.position;
+        }
+        _.times( numColumns, function( columnIndex ) {
+          _.times( numRows, function( rowIndex ) {
+            movableShape = new MovableShape( UNIT_SQUARE_SHAPE, board.colorHandled, shapeOrigin );
+            movableShape.position = new Vector2(
+              board.bounds.minX + columnIndex * UNIT_SQUARE_LENGTH,
+              board.bounds.minY + rowIndex * UNIT_SQUARE_LENGTH );
+            self.addUserCreatedMovableShape( movableShape );
+          } );
+        } );
       } );
     },
 
