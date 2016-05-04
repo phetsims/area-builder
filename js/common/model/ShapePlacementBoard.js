@@ -183,42 +183,9 @@ define( function( require ) {
         // No valid location found - bail out.
         return false;
       }
-      movableShape.setDestination( placementLocation, true );
 
-      // The remaining code in this function assumes that the shape is animating to the new location, and will cause
-      // odd results if it isn't, so we check it here.
-      assert && assert( movableShape.animating, 'Shape is not animating after being placed.' );
-
-      // The shape is moving to a spot on the board.  We don't want to add it to the list of resident shapes yet, or we
-      // may trigger a change to the exterior and interior perimeters, but we need to keep a reference to it so that
-      // the valid placement locations can be updated, especially in multi-touch environments.  So, basically, there is
-      // an intermediate 'holding place' for incoming shapes.
-      this.incomingShapes.push( movableShape );
-
-      // Create a listener that will move this shape from the incoming shape list to the resident list once the
-      // animation completes.
-      function animationCompleteListener( animating ) {
-        if ( !animating ) {
-          // Move the shape from the incoming list to the resident list.
-          self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
-          self.addResidentShape( movableShape, true );
-          movableShape.animatingProperty.unlink( animationCompleteListener );
-          if ( self.updatesSuspended && self.incomingShapes.length === 0 ){
-            // updates had been suspended (for better performance), and the last incoming shapes was added, so resume updates
-            self.updatesSuspended = false;
-            self.updateAll();
-          }
-        }
-
-        // Set up a listener to remove this shape if and when the user grabs it.
-        self.addRemovalListener( movableShape );
-      }
-
-      // Tag the listener so that it can be removed without firing if needed, such as when the board is cleared.
-      this.tagListener( animationCompleteListener );
-
-      // Hook up the listener.
-      movableShape.animatingProperty.lazyLink( animationCompleteListener );
+      // add this shape to the list of incoming shapes
+      this.addIncomingShape( movableShape, placementLocation );
 
       // If we made it to here, placement succeeded.
       return true;
@@ -233,39 +200,12 @@ define( function( require ) {
      * @param movableShape
      */
     addShapeDirectlyToCell: function( cellColumn, cellRow, movableShape ) {
-      var self = this;
 
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
       movableShape.invisibleWhenStill = this.formComposite;
 
       // Add the shape by putting it on the list of incoming shapes and setting its destination.
-      this.incomingShapes.push( movableShape );
-      movableShape.setDestination( this.cellToModelCoords( cellColumn, cellRow ), true );
-
-      // The remaining code in this function assumes that the shape is animating to the new location, and will cause
-      // odd results if it isn't, so we check it here.
-      assert && assert( movableShape.animating, 'Shape is not animating after being directly added to board.' );
-
-      // listener the moves shape from incoming to resident list once it arrives at its destination
-      function moveShapeFromIncomingToResidentList( animating ){
-        if ( !animating ) {
-          assert && assert( self.incomingShapes.indexOf( movableShape ) >= 0, 'Error: The shape is not on the list of incoming shapes.' );
-          self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
-          self.addResidentShape( movableShape, false );
-          movableShape.animatingProperty.unlink( moveShapeFromIncomingToResidentList );
-          if ( self.updatesSuspended && self.incomingShapes.length === 0 ){
-            // updates had been suspended (for better performance), and the last incoming shapes was added, so resume updates
-            self.updatesSuspended = false;
-            self.updateAll();
-          }
-        }
-      }
-
-      // tag the listener in case it needs to be removed before it fires
-      this.tagListener( moveShapeFromIncomingToResidentList );
-
-      // Move the shape to the resident list once it has finished animating.
-      movableShape.animatingProperty.lazyLink( moveShapeFromIncomingToResidentList );
+      this.addIncomingShape( movableShape, this.cellToModelCoords( cellColumn, cellRow ) );
     },
 
     /**
@@ -331,6 +271,50 @@ define( function( require ) {
         } );
       }
     },
+
+    // @private, add the shape to the list of incoming shapes and set up a listener to move it to resident shapes
+    addIncomingShape: function( movableShape, destination ){
+
+      var self = this;
+
+      movableShape.setDestination( destination, true );
+
+      // The remaining code in this method assumes that the shape is animating to the new location, and will cause
+      // odd results if it isn't, so we double check it here.
+      assert && assert( movableShape.animating, 'Shape is is expected to be animating' );
+
+      // The shape is moving to a spot on the board.  We don't want to add it to the list of resident shapes yet, or we
+      // may trigger a change to the exterior and interior perimeters, but we need to keep a reference to it so that
+      // the valid placement locations can be updated, especially in multi-touch environments.  So, basically, there is
+      // an intermediate 'holding place' for incoming shapes.
+      this.incomingShapes.push( movableShape );
+
+      // Create a listener that will move this shape from the incoming shape list to the resident list once the
+      // animation completes.
+      function animationCompleteListener( animating ) {
+        if ( !animating ) {
+          // Move the shape from the incoming list to the resident list.
+          self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
+          self.addResidentShape( movableShape, true );
+          movableShape.animatingProperty.unlink( animationCompleteListener );
+          if ( self.updatesSuspended && self.incomingShapes.length === 0 ){
+            // updates had been suspended (for better performance), and the last incoming shapes was added, so resume updates
+            self.updatesSuspended = false;
+            self.updateAll();
+          }
+        }
+
+        // Set up a listener to remove this shape if and when the user grabs it.
+        self.addRemovalListener( movableShape );
+      }
+
+      // Tag the listener so that it can be removed without firing if needed, such as when the board is cleared.
+      this.tagListener( animationCompleteListener );
+
+      // Hook up the listener.
+      movableShape.animatingProperty.lazyLink( animationCompleteListener );
+    },
+
 
     // @private, tag a listener for removal
     tagListener: function( listener ) {
