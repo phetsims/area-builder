@@ -185,7 +185,7 @@ define( function( require ) {
       }
 
       // add this shape to the list of incoming shapes
-      this.addIncomingShape( movableShape, placementLocation );
+      this.addIncomingShape( movableShape, placementLocation, true );
 
       // If we made it to here, placement succeeded.
       return true;
@@ -205,7 +205,7 @@ define( function( require ) {
       movableShape.invisibleWhenStill = this.formComposite;
 
       // Add the shape by putting it on the list of incoming shapes and setting its destination.
-      this.addIncomingShape( movableShape, this.cellToModelCoords( cellColumn, cellRow ) );
+      this.addIncomingShape( movableShape, this.cellToModelCoords( cellColumn, cellRow, false ) );
     },
 
     /**
@@ -273,7 +273,7 @@ define( function( require ) {
     },
 
     // @private, add the shape to the list of incoming shapes and set up a listener to move it to resident shapes
-    addIncomingShape: function( movableShape, destination ){
+    addIncomingShape: function( movableShape, destination, releaseOrphans ){
 
       var self = this;
 
@@ -295,7 +295,7 @@ define( function( require ) {
         if ( !animating ) {
           // Move the shape from the incoming list to the resident list.
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
-          self.addResidentShape( movableShape, true );
+          self.addResidentShape( movableShape, releaseOrphans );
           movableShape.animatingProperty.unlink( animationCompleteListener );
           if ( self.updatesSuspended && self.incomingShapes.length === 0 ){
             // updates had been suspended (for better performance), and the last incoming shapes was added, so resume updates
