@@ -116,6 +116,7 @@ define( function( require ) {
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
     this.incomingShapes = []; // @private, {Array<MovableShape>}, list of shapes that are animating to a spot on this board but aren't here yet
+    this.updatesSuspended = false; // @private, used to improve performance when adding a bunch of shapes at once to the board
 
     // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
     // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
@@ -202,6 +203,11 @@ define( function( require ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.addResidentShape( movableShape, true );
           movableShape.animatingProperty.unlink( animationCompleteListener );
+          if ( self.updatesSuspended && self.incomingShapes.length === 0 ){
+            // updates had been suspended (for better performance), and the last incoming shapes was added, so resume updates
+            self.updatesSuspended = false;
+            self.updateAll();
+          }
         }
 
         // Set up a listener to remove this shape if and when the user grabs it.
@@ -247,6 +253,11 @@ define( function( require ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.addResidentShape( movableShape, false );
           movableShape.animatingProperty.unlink( moveShapeFromIncomingToResidentList );
+          if ( self.updatesSuspended && self.incomingShapes.length === 0 ){
+            // updates had been suspended (for better performance), and the last incoming shapes was added, so resume updates
+            self.updatesSuspended = false;
+            self.updateAll();
+          }
         }
       }
 
@@ -953,8 +964,21 @@ define( function( require ) {
 
     // @private, Update perimeter points, placement locations, total area, and total perimeter.
     updateAll: function() {
-      this.updatePerimeters();
-      this.updateAreaAndTotalPerimeter();
+      if ( !this.updatesSuspended ){
+        this.updatePerimeters();
+        this.updateAreaAndTotalPerimeter();
+      }
+    },
+
+    /**
+     * This method suspends updates so that a block of squares can be added without having to all the recalculations
+     * for each one.  This is generally done for performance reasons in cases such as depicting the solution to a
+     * challenge in the game.  The flag is automatically cleared when the last incoming shape is added as a resident
+     * shape.
+     * @public
+     */
+    suspendUpdatesForBlockAdd: function(){
+      this.updatesSuspended = true;
     },
 
     /**

@@ -186,7 +186,12 @@ define( function( require ) {
       displayCorrectAnswer: function( challenge ) {
         var self = this;
         if ( challenge.buildSpec ) {
+
+          // clear whatever the user had added
           this.clearShapePlacementBoard();
+
+          // suspend updates of the shape placement board so that the answer can be added efficiently
+          this.shapePlacementBoard.suspendUpdatesForBlockAdd();
 
           // Add the shapes that comprise the solution.
           assert && assert( challenge.exampleBuildItSolution !== null, 'Error: Challenge does not contain an example solution.' );
