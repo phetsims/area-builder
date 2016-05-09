@@ -122,6 +122,8 @@ define( function( require ) {
     this.addChild( new EraserButton( {
       right: bucketFront.right - 3,
       top: bucketFront.bottom + 5,
+      touchAreaXDilation: 5,
+      touchAreaYDilation: 5,
       listener: function() { shapePlacementBoard.releaseAllShapes( 'fade' ); }
     } ) );
 

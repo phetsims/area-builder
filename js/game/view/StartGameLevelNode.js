@@ -26,6 +26,9 @@ define( function( require ) {
   // strings
   var chooseYourLevelString = require( 'string!AREA_BUILDER/chooseYourLevel' );
 
+  // constants
+  var CONTROL_BUTTON_TOUCH_AREA_DILATION = 4;
+
   /**
    * @param {Function} startLevelFunction - Function used to initiate a game
    * level, will be called with a zero-based index value.
@@ -87,13 +90,19 @@ define( function( require ) {
     }
 
     // Sound and timer controls.
-    var timerToggleButton = new TimerToggleButton( timerEnabledProperty );
+    var timerToggleButton = new TimerToggleButton( timerEnabledProperty, {
+      touchAreaXDilation: CONTROL_BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: CONTROL_BUTTON_TOUCH_AREA_DILATION
+    } );
     this.addChild( timerToggleButton );
-    var soundToggleButton = new SoundToggleButton( soundEnabledProperty );
+    var soundToggleButton = new SoundToggleButton( soundEnabledProperty, {
+      touchAreaXDilation: CONTROL_BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: CONTROL_BUTTON_TOUCH_AREA_DILATION
+    } );
     this.addChild( soundToggleButton );
 
     // Reset button.
-    var resetButton = new ResetAllButton( { listener: resetFunction, radius: 22 } );
+    var resetButton = new ResetAllButton( { listener: resetFunction, radius: 22, touchAreaDilation: 7 } );
     this.addChild( resetButton );
 
     // Layout
