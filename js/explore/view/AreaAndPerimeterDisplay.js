@@ -78,7 +78,9 @@ define( function( require ) {
       showTitleWhenExpanded: false,
       contentXMargin: 8,
       contentYMargin: 4,
-      expandedProperty: this.expandedProperty
+      expandedProperty: this.expandedProperty,
+      buttonTouchAreaXDilation: 5,
+      buttonTouchAreaYDilation: 5
     } );
 
     this.mutate( options );
