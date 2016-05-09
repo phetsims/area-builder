@@ -66,6 +66,7 @@ define( function( require ) {
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
   var ITEMS_PER_CAROUSEL_PAGE = 4;
+  var BUTTON_TOUCH_AREA_DILATION = 7;
 
   /**
    * @param {AreaBuilderGameModel} gameModel
@@ -127,6 +128,8 @@ define( function( require ) {
     this.eraserButton = new EraserButton( {
       right: this.shapeBoard.left,
       top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
+      touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
       listener: function() {
 
         var challenge = gameModel.currentChallenge;
@@ -194,6 +197,8 @@ define( function( require ) {
     // Add the button for returning to the level selection screen.
     this.controlLayer.addChild( new RectangularPushButton( {
       content: new Text( startOverString, { font: BUTTON_FONT, maxWidth: this.controlPanel.width } ),
+      touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
       listener: function() {
         gameModel.simSpecificModel.reset();
         gameModel.setChoosingLevelState();
@@ -228,6 +233,8 @@ define( function( require ) {
       font: BUTTON_FONT,
       baseColor: BUTTON_FILL,
       cornerRadius: 4,
+      touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
       maxWidth: ( this.layoutBounds.maxX - this.shapeBoardOriginalBounds.maxX ) * 0.9
     };
     this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
