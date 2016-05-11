@@ -46,8 +46,11 @@ define( function( require ) {
       // Max number of shapes that can be created by this node.
       creationLimit: Number.POSITIVE_INFINITY,
 
-      // Drag bounds for the created shapes
-      shapeDragBounds: Bounds2.EVERYTHING
+      // Drag bounds for the created shapes.
+      shapeDragBounds: Bounds2.EVERYTHING,
+
+      // TODO: temp
+      nonMovingNode: null
 
     }, options );
 
@@ -109,6 +112,7 @@ define( function( require ) {
     this.addInputListener( new MovableDragHandler( shapePositionProperty, {
 
       dragBounds: shapeDragBounds,
+      targetNode: options.nonMovingNode,
 
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,

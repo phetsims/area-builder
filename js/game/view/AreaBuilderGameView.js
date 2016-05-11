@@ -811,7 +811,8 @@ define( function( require ) {
           challenge.userShapes.forEach( function( userShapeSpec ) {
             var creatorNodeOptions = {
               gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH,
-              shapeDragBounds: self.layoutBounds
+              shapeDragBounds: self.layoutBounds,
+              nonMovingNode: self.shapeCarouselRoot
             };
             if ( userShapeSpec.creationLimit ) {
               creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
