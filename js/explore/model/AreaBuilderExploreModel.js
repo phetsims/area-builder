@@ -79,13 +79,13 @@ define( function( require ) {
     // Create the buckets that will hold the shapes.
     var bucketYPos = this.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
     this.leftBucket = new Bucket( {
-      position: new Vector2( this.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.67, bucketYPos ),
+      position: new Vector2( this.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.7, bucketYPos ),
       baseColor: '#000080',
       size: BUCKET_SIZE,
       invertY: true
     } );
     this.rightBucket = new Bucket( {
-      position: new Vector2( this.rightShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.33, bucketYPos ),
+      position: new Vector2( this.rightShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.3, bucketYPos ),
       baseColor: '#000080',
       size: BUCKET_SIZE,
       invertY: true
