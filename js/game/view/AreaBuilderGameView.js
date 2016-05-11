@@ -396,8 +396,8 @@ define( function( require ) {
 
     // Various other initialization
     this.levelCompletedNode = null; // @private
-    this.shapeCarouselRoot = new Node(); // @private
-    this.challengeLayer.addChild( this.shapeCarouselRoot );
+    this.shapeCarouselLayer = new Node(); // @private
+    this.challengeLayer.addChild( this.shapeCarouselLayer );
     this.clearDimensionsControlOnNextChallenge = false; // @private
 
     // Hook up the update function for handling changes to game state.
@@ -481,7 +481,7 @@ define( function( require ) {
         nodesToShow.push( this.areaQuestionPrompt );
       }
       if ( challenge.userShapes ) {
-        nodesToShow.push( this.shapeCarouselRoot );
+        nodesToShow.push( this.shapeCarouselLayer );
         nodesToShow.push( this.eraserButton );
       }
 
@@ -548,7 +548,7 @@ define( function( require ) {
         nodesToShow.push( this.areaQuestionPrompt );
       }
       if ( challenge.userShapes ) {
-        nodesToShow.push( this.shapeCarouselRoot );
+        nodesToShow.push( this.shapeCarouselLayer );
         nodesToShow.push( this.eraserButton );
       }
 
@@ -583,7 +583,7 @@ define( function( require ) {
         this.updateYouBuiltWindow( challenge );
         nodesToShow.push( this.youBuiltWindow );
         if ( challenge.userShapes ) {
-          nodesToShow.push( this.shapeCarouselRoot );
+          nodesToShow.push( this.shapeCarouselLayer );
           nodesToShow.push( this.eraserButton );
         }
       }
@@ -733,7 +733,7 @@ define( function( require ) {
         // Clean up previous challenge.
         this.model.simSpecificModel.clearShapePlacementBoard();
         this.challengePromptBanner.reset();
-        this.shapeCarouselRoot.removeAllChildren();
+        this.shapeCarouselLayer.removeAllChildren();
 
         var challenge = this.model.currentChallenge; // Convenience var
 
@@ -812,7 +812,7 @@ define( function( require ) {
             var creatorNodeOptions = {
               gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH,
               shapeDragBounds: self.layoutBounds,
-              nonMovingNode: self.shapeCarouselRoot
+              nonMovingParent: self.shapeCarouselLayer
             };
             if ( userShapeSpec.creationLimit ) {
               creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
@@ -826,7 +826,7 @@ define( function( require ) {
           } );
           if ( creatorNodes.length > ITEMS_PER_CAROUSEL_PAGE ) {
             // Add a scrolling carousel.
-            this.shapeCarouselRoot.addChild( new Carousel( creatorNodes, {
+            this.shapeCarouselLayer.addChild( new Carousel( creatorNodes, {
               orientation: 'horizontal',
               itemsPerPage: ITEMS_PER_CAROUSEL_PAGE,
               centerX: this.shapeBoardOriginalBounds.centerX,
@@ -838,7 +838,7 @@ define( function( require ) {
           else {
             // Add a non-scrolling panel
             var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
-            this.shapeCarouselRoot.addChild( new Panel( creatorNodeHBox, {
+            this.shapeCarouselLayer.addChild( new Panel( creatorNodeHBox, {
               centerX: this.shapeBoardOriginalBounds.centerX,
               top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               xMargin: 50,
@@ -864,7 +864,7 @@ define( function( require ) {
         this.areaQuestionPrompt,
         this.youBuiltWindow,
         this.youEnteredWindow,
-        this.shapeCarouselRoot,
+        this.shapeCarouselLayer,
         this.eraserButton
       ] );
     },

@@ -49,9 +49,13 @@ define( function( require ) {
       // Drag bounds for the created shapes.
       shapeDragBounds: Bounds2.EVERYTHING,
 
-      // TODO: temp
-      nonMovingNode: null
-
+      // This is a node that is or will be somewhere up the scene graph tree from this ShapeCreatorNode, doesn't move,
+      // and whose parent has the coordinate frame needed to do the appropriate transformations when the a drag takes
+      // place on this ShapeCreatorNode. This is needed in cases where the ShapeCreatorNode can be moved while a drag
+      // of a created node is still in progress.  This can occur when the ShapeCreatorNode is placed on a carousel and
+      // the sim is being used in a multi-touch environment.  See https://github.com/phetsims/area-builder/issues/95 for
+      // more information.
+      nonMovingAncestor: null
     }, options );
 
     // parameter check
@@ -112,7 +116,7 @@ define( function( require ) {
     this.addInputListener( new MovableDragHandler( shapePositionProperty, {
 
       dragBounds: shapeDragBounds,
-      targetNode: options.nonMovingNode,
+      targetNode: options.nonMovingAncestor,
 
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,
