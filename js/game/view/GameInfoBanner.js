@@ -60,6 +60,7 @@ define( function( require ) {
     // Update the title when the title text changes.
     this.titleTextProperty.link( function( titleText ) {
       title.text = titleText;
+      title.centerY = height / 2;
       if ( self.buildSpecProperty.value === null && self.areaToFindProperty.value === null ) {
         // There is no build spec are area to find, so center the title in the banner.
         title.centerX = width / 2;
