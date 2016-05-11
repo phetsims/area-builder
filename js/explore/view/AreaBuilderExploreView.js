@@ -21,8 +21,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
 
   // constants
-  var CONTROL_INSET = 15;
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 12;
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
 
   /**
    * @param {AreaBuilderExploreModel} model
@@ -72,8 +71,8 @@ define( function( require ) {
     // Add the reset button.
     this.addChild( new ResetAllButton( {
       radius: 20,
-      right: this.layoutBounds.width - CONTROL_INSET,
-      bottom: this.layoutBounds.height - CONTROL_INSET,
+      right: this.layoutBounds.width - 15,
+      bottom: this.layoutBounds.height - 15,
       lineWidth: 1,
       listener: function() {
         centerExploreNode.reset();
