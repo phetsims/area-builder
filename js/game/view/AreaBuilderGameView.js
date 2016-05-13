@@ -812,7 +812,7 @@ define( function( require ) {
             var creatorNodeOptions = {
               gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH,
               shapeDragBounds: self.layoutBounds,
-              nonMovingParent: self.shapeCarouselLayer
+              nonMovingAncestor: self.shapeCarouselLayer
             };
             if ( userShapeSpec.creationLimit ) {
               creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
