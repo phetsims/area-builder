@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.1 Fri Jun 10 2016 16:15:31 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.1 Tue Jun 21 2016 13:21:34 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "90326646d243c680ec489bbd33dcffa9e052caa9",
+    "sha": "5175467c91164a0ac5a175c63f7a8ed58c211c1c",
     "branch": "1.1"
   },
   "assert": {
@@ -17,16 +17,16 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "64ea5afc89b2a56851fd6fd751398bd1824fa6a7",
-    "branch": "HEAD"
+    "sha": "e7cd7ef39317f1649661779a921e99eb5e4622ee",
+    "branch": "area-builder-1.1"
   },
   "dot": {
     "sha": "bf6f038bca1ea87f23a51c670474438ae282ac2c",
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "4e95673dd3c40cbcfb44573b0d0e5839bd4852b0",
-    "branch": "HEAD"
+    "sha": "b1ef6e0a5d353e9e03f0e74ad1b6c11a913065fb",
+    "branch": "area-builder-1.1"
   },
   "kite": {
     "sha": "dce9765e6fcb535970ef17c1a1bcb8db95599b08",
@@ -49,8 +49,8 @@
     "branch": "HEAD"
   },
   "sherpa": {
-    "sha": "ab4d5c141bec124c13aeb3d5e0631257da1785bf",
-    "branch": "HEAD"
+    "sha": "a7ccb78f3dd295502a298d7327bbd060f04852ef",
+    "branch": "area-builder-1.1"
   },
   "sun": {
     "sha": "9f2d40d5ba8cc0f11c9852300e0d7ba59eb06495",
