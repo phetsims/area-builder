@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.1 Tue Jun 21 2016 13:21:34 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.2-rc.1 Tue Jun 21 2016 13:24:55 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "5175467c91164a0ac5a175c63f7a8ed58c211c1c",
+    "sha": "90b99cddb546a0c4555a9cf662b4a16b6ced5077",
     "branch": "1.1"
   },
   "assert": {
@@ -18,7 +18,7 @@
   },
   "chipper": {
     "sha": "e7cd7ef39317f1649661779a921e99eb5e4622ee",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "dot": {
     "sha": "bf6f038bca1ea87f23a51c670474438ae282ac2c",
@@ -26,7 +26,7 @@
   },
   "joist": {
     "sha": "b1ef6e0a5d353e9e03f0e74ad1b6c11a913065fb",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "kite": {
     "sha": "dce9765e6fcb535970ef17c1a1bcb8db95599b08",
@@ -50,7 +50,7 @@
   },
   "sherpa": {
     "sha": "a7ccb78f3dd295502a298d7327bbd060f04852ef",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "sun": {
     "sha": "9f2d40d5ba8cc0f11c9852300e0d7ba59eb06495",
