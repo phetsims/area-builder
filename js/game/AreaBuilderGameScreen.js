@@ -26,16 +26,16 @@ define( function( require ) {
   // images
   var gameIcon = require( 'image!AREA_BUILDER/game-icon.png' );
 
-  function AreaBuilderGameScreen() {
+  function AreaBuilderGameScreen( tandem ) {
 
     Screen.call( this,
       gameString,
       new Image( gameIcon ),
       function() { return new QuizGameModel( AreaBuilderChallengeFactory, new AreaBuilderGameModel() ); },
-      function( model ) { return new AreaBuilderGameView( model ); },
-      {
+      function( model ) { return new AreaBuilderGameView( model ); }, {
         backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
-        navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon()
+        navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
+        tandem: tandem
       }
     );
   }

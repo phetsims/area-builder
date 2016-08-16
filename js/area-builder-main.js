@@ -13,9 +13,13 @@ define( function( require ) {
   var AreaBuilderGameScreen = require( 'AREA_BUILDER/game/AreaBuilderGameScreen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
+  var Tandem = require( 'TANDEM/Tandem' );
 
   // strings
   var areaBuilderTitleString = require( 'string!AREA_BUILDER/area-builder.title' );
+
+  // constants
+  var tandem = Tandem.createRootTandem();
 
   var simOptions = {
     credits: {
@@ -23,11 +27,15 @@ define( function( require ) {
       softwareDevelopment: 'John Blanco',
       team: 'Bryce Gruneich, Amanda McGarry, Ariel Paul, Kathy Perkins, Beth Stade',
       qualityAssurance: 'Steele Dalton, Amanda Davis, Oliver Nix, Oliver Orejola, \n Arnab Purkayastha, Amy Rouinfar, Bryan Yoelin'
-    }
+    },
+    tandem: tandem
   };
 
   SimLauncher.launch( function() {
     // create and start the sim
-    new Sim( areaBuilderTitleString, [ new AreaBuilderExploreScreen(), new AreaBuilderGameScreen() ], simOptions ).start();
+    new Sim( areaBuilderTitleString, [
+      new AreaBuilderExploreScreen( tandem.createTandem( 'exploreScreen' ) ),
+      new AreaBuilderGameScreen( tandem.createTandem( 'gameScreen' ) )
+    ], simOptions ).start();
   } );
 } );

@@ -27,15 +27,15 @@ define( function( require ) {
   /**
    * @constructor
    */
-  function AreaBuilderExploreScreen() {
+  function AreaBuilderExploreScreen( tandem ) {
     Screen.call( this,
       exploreString,
       new Image( exploreIcon ),
       function() { return new AreaBuilderExploreModel(); },
-      function( model ) { return new AreaBuilderExploreView( model ); },
-      {
+      function( model ) { return new AreaBuilderExploreView( model ); }, {
         backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
-        navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon()
+        navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
+        tandem: tandem
       }
     );
   }
