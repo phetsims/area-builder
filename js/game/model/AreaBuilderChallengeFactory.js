@@ -20,15 +20,13 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords
 
   function AreaBuilderChallengeFactory() {
 
-    // support reproducible playback, see #98
-    var random = new Random( { staticSeed: true } );
+    var random = phet.joist.random;
 
     // Basic shapes used in the 'creator kits'.
     var UNIT_SQUARE_SHAPE = new Shape()
