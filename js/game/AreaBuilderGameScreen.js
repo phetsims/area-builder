@@ -31,7 +31,7 @@ define( function( require ) {
     Screen.call( this,
       gameString,
       new Image( gameIcon ),
-      function() { return new QuizGameModel( AreaBuilderChallengeFactory, new AreaBuilderGameModel() ); },
+      function() { return new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ); },
       function( model ) { return new AreaBuilderGameView( model ); }, {
         backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
         navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
