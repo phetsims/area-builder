@@ -538,7 +538,7 @@ define( function( require ) {
       var width = random.nextBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
       var height = 0;
       while ( width * height < 8 || width * height > 36 ) {
-        height = random.nextBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+        height = random.nextBetween( 0, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       }
       var color = BUILD_IT_COLOR_CHOOSER.nextColor();
       var exampleSolution = createMonochromeRectangularSolutionSpec(
