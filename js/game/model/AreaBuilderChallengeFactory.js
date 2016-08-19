@@ -535,10 +535,10 @@ define( function( require ) {
 
       // Create a unique challenge
       var challenge;
-      var width = random.nextBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      var width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
       var height = 0;
       while ( width * height < 8 || width * height > 36 ) {
-        height = random.nextBetween( 0, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+        height = random.nextIntBetween( 0, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       }
       var color = BUILD_IT_COLOR_CHOOSER.nextColor();
       var exampleSolution = createMonochromeRectangularSolutionSpec(
@@ -559,24 +559,24 @@ define( function( require ) {
     function generateTwoRectangleBuildAreaAndPerimeterChallenge() {
 
       // Create first rectangle dimensions
-      var width1 = random.nextBetween( 2, 6 );
+      var width1 = random.nextIntBetween( 2, 6 );
       var height1;
       do {
-        height1 = random.nextBetween( 1, 4 );
+        height1 = random.nextIntBetween( 1, 4 );
       } while ( width1 % 2 === height1 % 2 );
 
       // Create second rectangle dimensions
       var width2 = 0;
       do {
-        width2 = random.nextBetween( 1, 6 );
+        width2 = random.nextIntBetween( 1, 6 );
       } while ( width1 + width2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
       var height2;
       do {
-        height2 = random.nextBetween( 1, 6 );
+        height2 = random.nextIntBetween( 1, 6 );
       } while ( width2 % 2 === height2 % 2 || height1 + height2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
       // Choose the amount of overlap
-      var overlap = random.nextBetween( 1, Math.min( width1, width2 ) - 1 );
+      var overlap = random.nextIntBetween( 1, Math.min( width1, width2 ) - 1 );
 
       var left = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - ( width1 + width2 - overlap ) ) / 2 );
       var top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
@@ -597,12 +597,12 @@ define( function( require ) {
 
       // Width can be any value from 3 to 8 excluding 7, see design doc.
       do {
-        width = random.nextBetween( 3, 8 );
+        width = random.nextIntBetween( 3, 8 );
       } while ( width === 0 || width === 7 );
 
       // Choose the height based on the total area.
       do {
-        height = random.nextBetween( 3, 8 );
+        height = random.nextIntBetween( 3, 8 );
       } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
       var color = BUILD_IT_COLOR_CHOOSER.nextColor();
@@ -622,8 +622,8 @@ define( function( require ) {
       var width;
       var height;
       do {
-        width = random.nextBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-        height = random.nextBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+        width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+        height = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
       } while ( width * height < 16 || width * height > 36 );
       var perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
@@ -635,11 +635,11 @@ define( function( require ) {
       var width;
       var height;
       do {
-        width = random.nextBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-        height = random.nextBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+        width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+        height = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
       } while ( width * height < 16 || width * height > 36 );
-      var missingWidth = random.nextBetween( 1, width - 1 );
-      var missingHeight = random.nextBetween( 1, height - 1 );
+      var missingWidth = random.nextIntBetween( 1, width - 1 );
+      var missingHeight = random.nextIntBetween( 1, height - 1 );
       var missingCorner = randomElement( [ 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
       var perimeterShape = createLShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         missingCorner, missingWidth * UNIT_SQUARE_LENGTH, missingHeight * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
@@ -651,22 +651,22 @@ define( function( require ) {
       var width;
       var height;
       do {
-        width = random.nextBetween( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-        height = random.nextBetween( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+        width = random.nextIntBetween( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+        height = random.nextIntBetween( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       } while ( width * height < 16 || width * height > 36 );
       var sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
       var cutoutWidth;
       var cutoutHeight;
       var cutoutOffset;
       if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
-        cutoutWidth = random.nextBetween( 2, width - 1 );
-        cutoutHeight = random.nextBetween( 1, height - 2 );
-        cutoutOffset = random.nextBetween( 1, height - cutoutHeight - 1 );
+        cutoutWidth = random.nextIntBetween( 2, width - 1 );
+        cutoutHeight = random.nextIntBetween( 1, height - 2 );
+        cutoutOffset = random.nextIntBetween( 1, height - cutoutHeight - 1 );
       }
       else {
-        cutoutWidth = random.nextBetween( 1, width - 2 );
-        cutoutHeight = random.nextBetween( 2, height - 1 );
-        cutoutOffset = random.nextBetween( 1, width - cutoutWidth - 1 );
+        cutoutWidth = random.nextIntBetween( 1, width - 2 );
+        cutoutHeight = random.nextIntBetween( 2, height - 1 );
+        cutoutOffset = random.nextIntBetween( 1, width - cutoutWidth - 1 );
       }
       var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH,
@@ -679,13 +679,13 @@ define( function( require ) {
       var width;
       var height;
       do {
-        width = random.nextBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-        height = random.nextBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+        width = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+        height = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       } while ( width * height < 16 || width * height > 36 );
-      var holeWidth = random.nextBetween( 1, width - 2 );
-      var holeHeight = random.nextBetween( 1, height - 2 );
-      var holeXOffset = random.nextBetween( 1, width - holeWidth - 1 );
-      var holeYOffset = random.nextBetween( 1, height - holeHeight - 1 );
+      var holeWidth = random.nextIntBetween( 1, width - 2 );
+      var holeHeight = random.nextIntBetween( 1, height - 2 );
+      var holeXOffset = random.nextIntBetween( 1, width - holeWidth - 1 );
+      var holeYOffset = random.nextIntBetween( 1, height - holeHeight - 1 );
       var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
         holeYOffset * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
@@ -697,7 +697,7 @@ define( function( require ) {
       var cornerPosition = randomElement( [ 'leftTop', 'rightTop', 'rightBottom', 'leftBottom' ] );
       var edgeLength = 0;
       do {
-        edgeLength = random.nextBetween( 4, Math.min( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2,
+        edgeLength = random.nextIntBetween( 4, Math.min( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2,
           AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 ) );
       } while ( edgeLength % 2 !== 0 );
       var perimeterShape = createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( 0, 0,
@@ -716,7 +716,7 @@ define( function( require ) {
         maxHypotenuse = AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2;
       }
       do {
-        hypotenuseLength = random.nextBetween( 2, maxHypotenuse );
+        hypotenuseLength = random.nextIntBetween( 2, maxHypotenuse );
       } while ( hypotenuseLength % 2 !== 0 );
       var perimeterShape = createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( 0, 0,
         hypotenuseLength * UNIT_SQUARE_LENGTH, cornerPosition, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
@@ -724,21 +724,21 @@ define( function( require ) {
     }
 
     function generateLargeRectWithChipMissingChallenge() {
-      var width = random.nextBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height = random.nextBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      var width = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      var height = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       var sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
       var cutoutWidth;
       var cutoutHeight;
       var cutoutOffset;
       if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
         cutoutWidth = 1;
-        cutoutHeight = random.nextBetween( 1, 3 );
-        cutoutOffset = random.nextBetween( 1, height - cutoutHeight - 1 );
+        cutoutHeight = random.nextIntBetween( 1, 3 );
+        cutoutOffset = random.nextIntBetween( 1, height - cutoutHeight - 1 );
       }
       else {
-        cutoutWidth = random.nextBetween( 1, 3 );
+        cutoutWidth = random.nextIntBetween( 1, 3 );
         cutoutHeight = 1;
-        cutoutOffset = random.nextBetween( 1, width - cutoutWidth - 1 );
+        cutoutOffset = random.nextIntBetween( 1, width - cutoutWidth - 1 );
       }
       var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH,
@@ -748,20 +748,20 @@ define( function( require ) {
     }
 
     function generateLargeRectWithSmallHoleMissingChallenge() {
-      var width = random.nextBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height = random.nextBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      var width = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      var height = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       var holeWidth;
       var holeHeight;
       if ( random.nextDouble() < 0.5 ) {
-        holeWidth = random.nextBetween( 1, 3 );
+        holeWidth = random.nextIntBetween( 1, 3 );
         holeHeight = 1;
       }
       else {
-        holeHeight = random.nextBetween( 1, 3 );
+        holeHeight = random.nextIntBetween( 1, 3 );
         holeWidth = 1;
       }
-      var holeXOffset = random.nextBetween( 1, width - holeWidth - 1 );
-      var holeYOffset = random.nextBetween( 1, height - holeHeight - 1 );
+      var holeXOffset = random.nextIntBetween( 1, width - holeWidth - 1 );
+      var holeYOffset = random.nextIntBetween( 1, height - holeHeight - 1 );
       var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
         holeYOffset * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
@@ -774,15 +774,15 @@ define( function( require ) {
     }
 
     function generateShapeWithDiagonalFindAreaChallenge() {
-      var width = random.nextBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-      var height = random.nextBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+      var width = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      var height = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
       var diagonalPosition = randomElement( [ 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
       var diagonalSquareLength = 2;
       if ( height > 4 && width > 4 && random.nextDouble() > 0.5 ) {
         diagonalSquareLength = 4;
       }
-      var cutWidth = random.nextBetween( 1, width - diagonalSquareLength );
-      var cutHeight = random.nextBetween( 1, height - diagonalSquareLength );
+      var cutWidth = random.nextIntBetween( 1, width - diagonalSquareLength );
+      var cutHeight = random.nextIntBetween( 1, height - diagonalSquareLength );
 
       var perimeterShape = createShapeWithDiagonalAndMissingCorner( 0, 0, width * UNIT_SQUARE_LENGTH,
         height * UNIT_SQUARE_LENGTH, diagonalPosition, diagonalSquareLength * UNIT_SQUARE_LENGTH,
@@ -807,12 +807,12 @@ define( function( require ) {
       // Randomly generate width, height, and the possible factors from which a proportional challenge can be created.
       var factors = [];
       do {
-        height = random.nextBetween( 3, 6 );
+        height = random.nextIntBetween( 3, 6 );
         if ( height === 3 ) {
-          width = random.nextBetween( 4, 8 );
+          width = random.nextIntBetween( 4, 8 );
         }
         else {
-          width = random.nextBetween( 2, 10 );
+          width = random.nextIntBetween( 2, 10 );
         }
 
         var minFactor = difficulty === 'easy' ? 2 : 5;
@@ -831,7 +831,7 @@ define( function( require ) {
       var fractionDenominator = randomElement( factors );
       var color1FractionNumerator;
       do {
-        color1FractionNumerator = random.nextBetween( 1, fractionDenominator - 1 );
+        color1FractionNumerator = random.nextIntBetween( 1, fractionDenominator - 1 );
       } while ( Util.gcd( color1FractionNumerator, fractionDenominator ) > 1 );
       var color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
 
