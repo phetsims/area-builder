@@ -28,16 +28,18 @@ define( function( require ) {
 
   function AreaBuilderGameScreen( tandem ) {
 
+    var options = {
+      name: gameString,
+      backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
+      homeScreenIcon: new Image( gameIcon ),
+      navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
+      tandem: tandem
+    };
+
     Screen.call( this,
-      gameString,
-      new Image( gameIcon ),
       function() { return new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ); },
-      function( model ) { return new AreaBuilderGameView( model ); }, {
-        backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
-        navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
-        tandem: tandem
-      }
-    );
+      function( model ) { return new AreaBuilderGameView( model ); },
+      options );
   }
 
   areaBuilder.register( 'AreaBuilderGameScreen', AreaBuilderGameScreen );

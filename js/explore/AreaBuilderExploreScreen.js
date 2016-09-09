@@ -28,16 +28,19 @@ define( function( require ) {
    * @constructor
    */
   function AreaBuilderExploreScreen( tandem ) {
+
+    var options = {
+      name: exploreString,
+      backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
+      homeScreenIcon: new Image( exploreIcon ),
+      navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
+      tandem: tandem
+    };
+
     Screen.call( this,
-      exploreString,
-      new Image( exploreIcon ),
       function() { return new AreaBuilderExploreModel(); },
-      function( model ) { return new AreaBuilderExploreView( model ); }, {
-        backgroundColor: AreaBuilderSharedConstants.BACKGROUND_COLOR,
-        navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
-        tandem: tandem
-      }
-    );
+      function( model ) { return new AreaBuilderExploreView( model ); },
+      options );
   }
 
   areaBuilder.register( 'AreaBuilderExploreScreen', AreaBuilderExploreScreen );
