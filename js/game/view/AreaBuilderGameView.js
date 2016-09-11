@@ -355,7 +355,7 @@ define( function( require ) {
           .to( { opacity: 0 }, 500 )
           .easing( TWEEN.Easing.Cubic.InOut )
           .onUpdate( function() { self.buildPromptPanel.opacity = this.opacity; } )
-          .start();
+          .start( phet.joist.elapsedTime );
       }
 
       // If this is a 'built it' style challenge, and this is the first element being added to the board, add the
@@ -764,7 +764,7 @@ define( function( require ) {
             areaPrompt.addChild( colorProportionsPrompt );
 
             // make sure the prompt will fit on the board - important for translatability
-            if ( areaPrompt.width > this.shapeBoardOriginalBounds.width * 0.9 ){
+            if ( areaPrompt.width > this.shapeBoardOriginalBounds.width * 0.9 ) {
               areaPrompt.scale( ( this.shapeBoardOriginalBounds.width * 0.9 ) / areaPrompt.width );
             }
 

@@ -91,12 +91,12 @@ define( function( require ) {
     function moveTitleToSide() {
       if ( title.centerX === width / 2 ) {
         // Move the title over
-        new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
+        new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start( phet.joist.elapsedTime );
 
         // Fade in the build prompt if it is now set to be visible.
         if ( buildPrompt.visible ) {
           buildPrompt.opacity = 0;
-          new TWEEN.Tween( buildPrompt ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start();
+          new TWEEN.Tween( buildPrompt ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start( phet.joist.elapsedTime );
         }
       }
     }
@@ -107,7 +107,7 @@ define( function( require ) {
       var centerX = ( TITLE_INDENT + title.width + width - TITLE_INDENT ) / 2;
       var centerY = height / 2;
       buildPrompt.setScaleMagnitude( 1 );
-      if ( buildPrompt.width > maxBuildPromptWidth ){
+      if ( buildPrompt.width > maxBuildPromptWidth ) {
         // scale the build prompt to fit with the title on the banner
         buildPrompt.setScaleMagnitude( maxBuildPromptWidth / buildPrompt.width );
       }
