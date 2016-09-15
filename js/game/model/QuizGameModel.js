@@ -30,7 +30,7 @@ define( function( require ) {
    * @constructor
    */
   function QuizGameModel( challengeFactory, simSpecificModel, options ) {
-    var thisModel = this;
+    var self = this;
     this.challengeFactory = challengeFactory; // @private
     this.simSpecificModel = simSpecificModel; // @public
 
@@ -62,24 +62,24 @@ define( function( require ) {
     this.maxAttemptsPerChallenge = options.maxAttemptsPerChallenge; // @private
 
     // @private Wall time at which current level was started.
-    thisModel.gameStartTime = 0;
+    self.gameStartTime = 0;
 
     // Best times and scores.
-    thisModel.bestTimes = []; // @public
-    thisModel.bestScoreProperties = []; // @public
+    self.bestTimes = []; // @public
+    self.bestScoreProperties = []; // @public
     _.times( options.numberOfLevels, function() {
-      thisModel.bestTimes.push( null );
-      thisModel.bestScoreProperties.push( new Property( 0 ) );
+      self.bestTimes.push( null );
+      self.bestScoreProperties.push( new Property( 0 ) );
     } );
 
     // Counter used to track number of incorrect answers.
     this.incorrectGuessesOnCurrentChallenge = 0; // @public
 
     // Current set of challenges, which collectively comprise a single level, on which the user is currently working.
-    thisModel.challengeList = null;  // @private
+    self.challengeList = null;  // @private
 
     // Let the sim-specific model know when the challenge changes.
-    thisModel.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ); } );
+    self.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ); } );
   }
 
   areaBuilder.register( 'QuizGameModel', QuizGameModel );
@@ -96,9 +96,9 @@ define( function( require ) {
         PropertySet.prototype.reset.call( this );
         this.bestScoreProperties.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
         this.bestTimes = [];
-        var thisModel = this;
+        var self = this;
         _.times( this.numberOfLevels, function() {
-          thisModel.bestTimes.push( null );
+          self.bestTimes.push( null );
         } );
       },
 
@@ -219,8 +219,8 @@ define( function( require ) {
           window.clearInterval( this.gameTimerId );
         }
         this.elapsedTime = 0;
-        var thisModel = this;
-        this.gameTimerId = window.setInterval( function() { thisModel.elapsedTime += 1; }, 1000 );
+        var self = this;
+        this.gameTimerId = window.setInterval( function() { self.elapsedTime += 1; }, 1000 );
       },
 
       // @private

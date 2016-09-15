@@ -905,7 +905,7 @@ define( function( require ) {
 
     // @private
     showLevelResultsNode: function() {
-      var thisScreen = this;
+      var self = this;
 
       // Set a new "level completed" node based on the results.
       var levelCompletedNode = new LevelCompletedNode(
@@ -916,14 +916,14 @@ define( function( require ) {
         this.model.timerEnabled,
         this.model.elapsedTime,
         this.model.bestTimes[ this.model.level ],
-        thisScreen.model.newBestTime,
+        self.model.newBestTime,
         function() {
-          thisScreen.model.gameState = GameState.CHOOSING_LEVEL;
-          thisScreen.rootNode.removeChild( levelCompletedNode );
+          self.model.gameState = GameState.CHOOSING_LEVEL;
+          self.rootNode.removeChild( levelCompletedNode );
           levelCompletedNode = null;
         },
         {
-          center: thisScreen.layoutBounds.center
+          center: self.layoutBounds.center
         }
       );
 
