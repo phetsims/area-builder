@@ -23,7 +23,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
 
   // constants
-  var NAV_BAR_ICON_SIZE = Screen.NAVBAR_ICON_SIZE;
+  var NAV_BAR_ICON_SIZE = Screen.MINIMUM_NAVBAR_ICON_SIZE;
   var GRID_STROKE = null;
   var SHAPE_LINE_WIDTH = 1;
   var GRID_OPTIONS = {
