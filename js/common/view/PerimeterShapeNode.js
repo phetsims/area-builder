@@ -78,7 +78,7 @@ define( function( require ) {
 
     // Set up the shape, edge, and grid, which will be updated as the perimeter changes.  The order in which these
     // are added is important for proper layering.
-    var perimeterShapeNode = new Path();
+    var perimeterShapeNode = new Path( null );
     this.addChild( perimeterShapeNode );
     var grid = new Grid( maxBounds, unitSquareLength, {
       lineDash: [ 0, 3, 1, 0 ], // Tweaked to work well with unit size
