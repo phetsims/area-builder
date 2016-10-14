@@ -24,7 +24,7 @@ define( function( require ) {
   var GameState = require( 'AREA_BUILDER/game/model/GameState' );
   var Carousel = require( 'SUN/Carousel' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var NumberEntryControl = require( 'AREA_BUILDER/game/view/NumberEntryControl' );
+  var NumberEntryControl = require( 'SCENERY_PHET/NumberEntryControl' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
