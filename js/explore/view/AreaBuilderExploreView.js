@@ -94,7 +94,7 @@ define( function( require ) {
     switchPanel.right = centerBoardBounds.maxX;
 
     // If the appropriate query parameter is set, fill the boards.  This is useful for debugging.
-    if ( AreaBuilderQueryParameters.PREFILL_BOARDS ){
+    if ( AreaBuilderQueryParameters.prefillBoards ){
       model.fillBoards();
     }
   }

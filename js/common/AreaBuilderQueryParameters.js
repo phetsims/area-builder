@@ -11,13 +11,11 @@ define( function( require ) {
   // modules
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
 
-  var getQueryParameter = phet.chipper.getQueryParameter;
-
-  var AreaBuilderQueryParameters = {
+  var AreaBuilderQueryParameters = QueryStringMachine.getAll( {
 
     // fill the shape placement boards on the 'Explore' screen during startup, useful for testing
-    PREFILL_BOARDS: !!getQueryParameter( 'prefillBoards' )
-  };
+    prefillBoards: { type: 'flag' }
+  } );
 
   areaBuilder.register( 'AreaBuilderQueryParameters', AreaBuilderQueryParameters );
 
