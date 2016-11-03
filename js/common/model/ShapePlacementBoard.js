@@ -972,7 +972,7 @@ define( function( require ) {
      * @public
      * @param {PerimeterShape} perimeterShape The new background perimeterShape, or null to set no background
      * perimeterShape.
-     * @param {Boolean} centered True if the perimeterShape should be centered on the board (but still aligned with grid).
+     * @param {boolean} centered True if the perimeterShape should be centered on the board (but still aligned with grid).
      */
     setBackgroundShape: function( perimeterShape, centered ) {
       if ( perimeterShape === null ) {
