@@ -33,9 +33,9 @@ define( function( require ) {
   var ANIMATION_TIME = 600; // In milliseconds
 
   /**
-   * @param {Number} width
-   * @param {Number} height
-   * @param {String} backgroundColor
+   * @param {number} width
+   * @param {number} height
+   * @param {string} backgroundColor
    * @param {Object} [options]
    * @constructor
    */

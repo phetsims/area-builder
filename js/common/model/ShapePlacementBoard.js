@@ -53,7 +53,7 @@ define( function( require ) {
 
   /**
    * @param {Dimension2} size
-   * @param {Number} unitSquareLength
+   * @param {number} unitSquareLength
    * @param {Vector2} position
    * @param {String || Color} colorHandled A string or Color object, can be wildcard string ('*') for all colors
    * @param {Property<Boolean>} showGridProperty

@@ -17,7 +17,7 @@ define( function( require ) {
 
   /**
    * @param {Bounds2} bounds
-   * @param {Number} spacing
+   * @param {number} spacing
    * @param {Object} [options]
    * @constructor
    */

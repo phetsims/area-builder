@@ -19,10 +19,10 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   /**
-   * @param {Number} columns
-   * @param {Number} rows
-   * @param {Number} cellLength
-   * @param {String} shapeFillColor
+   * @param {number} columns
+   * @param {number} rows
+   * @param {number} cellLength
+   * @param {string} shapeFillColor
    * @param {Array<Vector2>} occupiedCells
    * @param {Object} [options]
    * @constructor

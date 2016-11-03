@@ -64,7 +64,7 @@ define( function( require ) {
   /**
    * @param {Property<PerimeterShape>} perimeterShapeProperty
    * @param {Bounds2} maxBounds
-   * @param {Number} unitSquareLength
+   * @param {number} unitSquareLength
    * @param {boolean} showDimensionsProperty
    * @param {boolean} showGridProperty
    * @param {Object} [options]

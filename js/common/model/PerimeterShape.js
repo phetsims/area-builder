@@ -63,7 +63,7 @@ define( function( require ) {
    * points.
    * @param {Array<Array<Vector2>>} interiorPerimeters An array of perimeters, each of which is a sequential array of
    * points. Each interior perimeter must be fully contained within an exterior perimeter.
-   * @param {Number} unitLength The unit length (i.e. the width or height of a unit square) of the unit sizes that
+   * @param {number} unitLength The unit length (i.e. the width or height of a unit square) of the unit sizes that
    * this shape should be constructed from.
    * @param {Object} [options]
    * @constructor

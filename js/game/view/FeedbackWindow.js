@@ -28,8 +28,8 @@ define( function( require ) {
    * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
    * contents are added later when the build spec is set.
    *
-   * @param {String} title
-   * @param {Number} maxWidth
+   * @param {string} title
+   * @param {number} maxWidth
    * @param {Object} [options]
    * @constructor
    */
