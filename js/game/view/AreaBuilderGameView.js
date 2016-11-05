@@ -42,6 +42,7 @@ define( function( require ) {
   var YouBuiltWindow = require( 'AREA_BUILDER/game/view/YouBuiltWindow' );
   var YouEnteredWindow = require( 'AREA_BUILDER/game/view/YouEnteredWindow' );
   var VBox = require( 'SCENERY/nodes/VBox' );
+  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
@@ -61,7 +62,7 @@ define( function( require ) {
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
-  var BUTTON_FILL = '#F2E916';
+  var BUTTON_FILL = PhetColorScheme.PHET_YELLOW;
   var INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;

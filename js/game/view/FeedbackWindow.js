@@ -16,13 +16,14 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
 
   // constants
   var X_MARGIN = 8;
   var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var NORMAL_TEXT_FONT = new PhetFont( { size: 18 } );
   var CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
-  var INCORRECT_ANSWER_BACKGROUND_COLOR = '#F2E916';
+  var INCORRECT_ANSWER_BACKGROUND_COLOR = PhetColorScheme.PHET_YELLOW;
 
   /**
    * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
