@@ -295,12 +295,12 @@ define( function( require ) {
     } );
     this.challengeLayer.addChild( this.areaQuestionPrompt );
 
-    this.numberEntryControl.keypad.digitStringProperty.link( function( digitString ) {
+    this.numberEntryControl.keypad.valueStringProperty.link( function( valueString ) {
 
       // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
       // this case, we go ahead and make the state transition to the next state.
       if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
-        assert && assert( digitString.length <= 1, 'Shouldn\'t reach this code with digit strings longer than 1' );
+        assert && assert( valueString.length <= 1, 'Shouldn\'t reach this code with strings longer than 1' );
         gameModel.tryAgain();
       }
 
@@ -896,7 +896,7 @@ define( function( require ) {
     updatedCheckButtonEnabledState: function() {
       if ( this.model.currentChallenge ) {
         if ( this.model.currentChallenge.checkSpec === 'areaEntered' ) {
-          this.checkAnswerButton.enabled = this.numberEntryControl.keypad.digitStringProperty.value.length > 0;
+          this.checkAnswerButton.enabled = this.numberEntryControl.keypad.valueStringProperty.value.length > 0;
         }
         else {
           this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.area > 0;
