@@ -3,10 +3,9 @@
 /**
  * Game model that works in conjunction with the QuizGameModel to add the elements that are specific to the Area
  * Builder game.  QuizGameModel handles things that are general to PhET's quiz style games, such as state transitions,
- * and this model handles the behavior that is specific to this simulations game, such as how correct answers are
+ * and this model handles the behavior that is specific to this simulation's game, such as how correct answers are
  * presented.  This approach is experimental, and this simulation (Area Builder) is the first time that it is being
  * done, so there may be significant room for improvement.
- *
  *
  * @author John Blanco
  */
@@ -33,7 +32,6 @@ define( function( require ) {
   var UNIT_SQUARE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
 
   /**
-   *
    * @constructor
    */
   function AreaBuilderGameModel() {
