@@ -94,7 +94,10 @@ define( function( require ) {
 
     // Add the node that allows the user to choose a game level to play.
     this.startGameLevelNode = new StartGameLevelNode(
-      function( level ) { gameModel.startLevel( level ); },
+      function( level ) {
+        self.numberEntryControl.clear();
+        gameModel.startLevel( level );
+      },
       function() { gameModel.reset(); },
       gameModel.timerEnabledProperty,
       gameModel.soundEnabledProperty,
