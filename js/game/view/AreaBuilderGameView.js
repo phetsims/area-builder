@@ -147,6 +147,7 @@ define( function( require ) {
         // If the game was showing the user incorrect feedback when they pressed this button, auto-advance to the
         // next state.
         if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
+          self.numberEntryControl.clear();
           gameModel.tryAgain();
         }
       }
@@ -247,12 +248,18 @@ define( function( require ) {
     this.gameControlButtons.push( this.checkAnswerButton );
 
     this.nextButton = new TextPushButton( nextString, _.extend( {
-      listener: function() { gameModel.nextChallenge(); }
+      listener: function() {
+        self.numberEntryControl.clear();
+        gameModel.nextChallenge();
+      }
     }, buttonOptions ) );
     this.gameControlButtons.push( this.nextButton );
 
     this.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
-      listener: function() { gameModel.tryAgain(); }
+      listener: function() {
+        self.numberEntryControl.clear();
+        gameModel.tryAgain();
+      }
     }, buttonOptions ) );
     this.gameControlButtons.push( this.tryAgainButton );
 
@@ -300,7 +307,6 @@ define( function( require ) {
       // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
       // this case, we go ahead and make the state transition to the next state.
       if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
-        assert && assert( valueString.length <= 1, 'Shouldn\'t reach this code with strings longer than 1' );
         gameModel.tryAgain();
       }
 
@@ -727,7 +733,6 @@ define( function( require ) {
     presentChallenge: function() {
 
       var self = this;
-      this.numberEntryControl.clear();
 
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
 
