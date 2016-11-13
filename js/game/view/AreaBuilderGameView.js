@@ -569,7 +569,7 @@ define( function( require ) {
 
       if ( challenge.checkSpec === 'areaEntered' ) {
         // Set the keypad to allow the user to start entering a new value.
-        this.numberEntryControl.armForNewEntry();
+        this.numberEntryControl.setArmedForNewEntry( true );
       }
 
       // Show the nodes
