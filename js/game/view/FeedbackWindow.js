@@ -23,7 +23,7 @@ define( function( require ) {
   var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var NORMAL_TEXT_FONT = new PhetFont( { size: 18 } );
   var CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
-  var INCORRECT_ANSWER_BACKGROUND_COLOR = PhetColorScheme.PHET_YELLOW;
+  var INCORRECT_ANSWER_BACKGROUND_COLOR = PhetColorScheme.PHET_LOGO_YELLOW;
 
   /**
    * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
