@@ -20,7 +20,6 @@ define( function( require ) {
   var QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
   var Screen = require( 'JOIST/Screen' );
   var Property = require( 'AXON/Property' );
-  var Color = require( 'SCENERY/util/Color' );
 
   // strings
   var gameString = require( 'string!AREA_BUILDER/game' );
@@ -32,7 +31,7 @@ define( function( require ) {
 
     var options = {
       name: gameString,
-      backgroundColorProperty: new Property( Color.toColor( AreaBuilderSharedConstants.BACKGROUND_COLOR ) ),
+      backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
       homeScreenIcon: new Image( gameIcon ),
       navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
       tandem: tandem

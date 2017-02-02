@@ -18,7 +18,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var Property = require( 'AXON/Property' );
-  var Color = require( 'SCENERY/util/Color' );
 
   // strings
   var exploreString = require( 'string!AREA_BUILDER/explore' );
@@ -33,7 +32,7 @@ define( function( require ) {
 
     var options = {
       name: exploreString,
-      backgroundColorProperty: new Property( Color.toColor( AreaBuilderSharedConstants.BACKGROUND_COLOR ) ),
+      backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
       homeScreenIcon: new Image( exploreIcon ),
       navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
       tandem: tandem
