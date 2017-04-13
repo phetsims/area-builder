@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.5-rc.1 Thu Apr 13 2017 16:48:27 GMT-0600 (MDT)",
+  "comment": "# area-builder 1.1.5-rc.1 Thu Apr 13 2017 17:25:01 GMT-0600 (MDT)",
   "area-builder": {
-    "sha": "ba8ec4636c659c15e65e9e6a3e5c97a42758de71",
+    "sha": "9ae7704c012b15e92533ec4f30f5fe7c4c4e2101",
     "branch": "1.1"
   },
   "assert": {
@@ -25,8 +25,8 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "b1ef6e0a5d353e9e03f0e74ad1b6c11a913065fb",
-    "branch": "HEAD"
+    "sha": "0a0456ab18390a06abe9696f9b12c66e5bf36957",
+    "branch": "area-builder-1.1"
   },
   "kite": {
     "sha": "dce9765e6fcb535970ef17c1a1bcb8db95599b08",
