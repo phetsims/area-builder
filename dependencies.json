@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.4 Thu Apr 13 2017 15:34:49 GMT-0600 (MDT)",
+  "comment": "# area-builder 1.1.4 Thu Apr 13 2017 16:14:15 GMT-0600 (MDT)",
   "area-builder": {
-    "sha": "ea0898f93c347a183033bc5b9e33299934c2e314",
+    "sha": "a4a79a303da6ea604e121371bf06db50bc8ed34e",
     "branch": "1.1"
   },
   "assert": {
@@ -14,11 +14,11 @@
   },
   "brand": {
     "sha": "933206444340e4513efbde6c5f834373b09ef64f",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "chipper": {
     "sha": "e7cd7ef39317f1649661779a921e99eb5e4622ee",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "dot": {
     "sha": "bf6f038bca1ea87f23a51c670474438ae282ac2c",
@@ -38,7 +38,7 @@
   },
   "phetcommon": {
     "sha": "cdc509d44fa86f0bef116f6ad30036163b9b3fb7",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "scenery": {
     "sha": "0a973c4232ff526b99171784a2e999d4eee65b59",
@@ -65,7 +65,7 @@
     "branch": "HEAD"
   },
   "vibe": {
-    "sha": "e6fdee6ac9bd497dc647a00b54663f6be7dd96bf",
-    "branch": "HEAD"
+    "sha": "c55dfc142ee864cc67b04ced6300cccba9af92b2",
+    "branch": "area-builder-1.1"
   }
 }
