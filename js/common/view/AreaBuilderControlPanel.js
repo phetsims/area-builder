@@ -19,7 +19,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
@@ -36,10 +36,8 @@ define( function( require ) {
     Node.call( this );
 
     // Properties that control which elements are visible and which are hidden.  This constitutes the primary API.
-    this.visibilityControls = new PropertySet( {
-      gridControlVisible: true,
-      dimensionsControlVisible: true
-    } );
+    this.gridControlVisibleProperty = new Property( true );
+    this.dimensionsControlVisibleProperty = new Property( true );
 
     // Create the controls and labels
     var gridCheckbox = new CheckBox( new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ), showGridProperty, { spacing: 15 } );

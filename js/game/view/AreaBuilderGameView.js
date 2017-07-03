@@ -802,8 +802,8 @@ define( function( require ) {
 
         // Set the state of the control panel.
         this.controlPanel.dimensionsIcon.setGridVisible( challenge.backgroundShape ? false : true );
-        this.controlPanel.visibilityControls.gridControlVisible = challenge.toolSpec.gridControl;
-        this.controlPanel.visibilityControls.dimensionsControlVisible = challenge.toolSpec.dimensionsControl;
+        this.controlPanel.gridControlVisibleProperty.set( challenge.toolSpec.gridControl );
+        this.controlPanel.dimensionsControlVisibleProperty.set( challenge.toolSpec.dimensionsControl );
         if ( challenge.backgroundShape ) {
           this.controlPanel.dimensionsIcon.setColor( challenge.backgroundShape.fillColor );
         }
