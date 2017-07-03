@@ -16,7 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -37,11 +37,9 @@ define( function( require ) {
    */
   function AreaBuilderExploreModel() {
 
-    PropertySet.call( this, {
-      showShapeBoardGrids: true, // @public
-      showDimensions: false, // @public
-      boardDisplayMode: 'single' // @public, value values are 'single' and 'dual'
-    } );
+    this.showShapeBoardGridsProperty = new Property( true ); // @public
+    this.showDimensionsProperty = new Property( true ); // @public
+    this.boardDisplayModeProperty = new Property( 'single' ); // @public, value values are 'single' and 'dual'
 
     this.movableShapes = new ObservableArray(); // @public
     this.unitSquareLength = UNIT_SQUARE_LENGTH; // @public, @final
@@ -100,7 +98,7 @@ define( function( require ) {
 
   areaBuilder.register( 'AreaBuilderExploreModel', AreaBuilderExploreModel );
 
-  return inherit( PropertySet, AreaBuilderExploreModel, {
+  return inherit( Object, AreaBuilderExploreModel, {
 
     step: function( dt ) {
       this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );
@@ -183,7 +181,9 @@ define( function( require ) {
 
     // Resets all model elements
     reset: function() {
-      PropertySet.prototype.reset.call( this );
+      this.showShapeBoardGridsProperty.reset();
+      this.showDimensionsProperty.reset();
+      this.boardDisplayModeProperty.reset();
       this.shapePlacementBoards.forEach( function( board ) { board.releaseAllShapes( 'jumpHome' ); } );
       this.movableShapes.clear();
     }

@@ -56,7 +56,7 @@ define( function( require ) {
     this.addChild( new Panel( vBox, PANEL_OPTIONS ) );
 
     // Add/remove the grid visibility control.
-    this.visibilityControls.gridControlVisibleProperty.link( function( gridControlVisible ) {
+    this.gridControlVisibleProperty.link( function( gridControlVisible ) {
       if ( gridControlVisible && !vBox.hasChild( gridCheckbox ) ) {
         vBox.insertChild( 0, gridCheckbox );
       }
@@ -66,7 +66,7 @@ define( function( require ) {
     } );
 
     // Add/remove the dimension visibility control.
-    this.visibilityControls.dimensionsControlVisibleProperty.link( function( dimensionsControlVisible ) {
+    this.dimensionsControlVisibleProperty.link( function( dimensionsControlVisible ) {
       if ( dimensionsControlVisible && !vBox.hasChild( dimensionsCheckbox ) ) {
         // Insert at bottom.
         vBox.insertChild( vBox.getChildrenCount(), dimensionsCheckbox );

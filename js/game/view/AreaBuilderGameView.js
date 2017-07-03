@@ -501,7 +501,7 @@ define( function( require ) {
       this.okayToUpdateYouBuiltWindow = true;
 
       if ( this.clearDimensionsControlOnNextChallenge ) {
-        this.model.simSpecificModel.showDimensions = false;
+        this.model.simSpecificModel.showDimensionsProperty.set( false );
         this.clearDimensionsControlOnNextChallenge = false;
       }
     },
@@ -654,8 +654,8 @@ define( function( require ) {
       this.challengeLayer.pickable = false;
 
       // Turn on the dimensions indicator, since it may make the answer more clear for the user.
-      this.clearDimensionsControlOnNextChallenge = !this.model.simSpecificModel.showDimensions;
-      this.model.simSpecificModel.showDimensions = true;
+      this.clearDimensionsControlOnNextChallenge = !this.model.simSpecificModel.showDimensionsProperty.get();
+      this.model.simSpecificModel.showDimensionsProperty.set( true );
 
       // Show the nodes.
       this.show( nodesToShow );
