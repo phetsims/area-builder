@@ -21,7 +21,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -36,10 +36,8 @@ define( function( require ) {
    */
   function AreaBuilderGameModel() {
 
-    PropertySet.call( this, {
-      showGridOnBoard: false,
-      showDimensions: false
-    } );
+    this.showGridOnBoardProperty = new Property( false );
+    this.showDimensionsProperty = new Property( false );
 
     // @public Value where the user's submission of area is stored.
     this.areaGuess = 0;
@@ -64,7 +62,7 @@ define( function( require ) {
 
   areaBuilder.register( 'AreaBuilderGameModel', AreaBuilderGameModel );
 
-  return inherit( PropertySet, AreaBuilderGameModel, {
+  return inherit( Object, AreaBuilderGameModel, {
 
       // @private - replace a composite shape with unit squares
       replaceShapeWithUnitSquares: function( movableShape ) {
