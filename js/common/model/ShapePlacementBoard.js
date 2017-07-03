@@ -144,7 +144,13 @@ define( function( require ) {
 
     // @private
     shapeOverlapsBoard: function( shape ) {
-      var shapeBounds = new Bounds2( shape.position.x, shape.position.y, shape.position.x + shape.shape.bounds.getWidth(), shape.position.y + shape.shape.bounds.getHeight() );
+      var shapePosition = shape.positionProperty.get();
+      var shapeBounds = new Bounds2(
+        shapePosition.x,
+        shapePosition.y,
+        shapePosition.x + shape.shape.bounds.getWidth(),
+        shapePosition.y + shape.shape.bounds.getHeight()
+      );
       return this.bounds.intersectsBounds( shapeBounds );
     },
 
@@ -155,7 +161,10 @@ define( function( require ) {
      * @param {MovableShape} movableShape A model shape
      */
     placeShape: function( movableShape ) {
-      assert && assert( movableShape.userControlled === false, 'Shapes can\'t be placed when still controlled by user.' );
+      assert && assert(
+        movableShape.userControlledProperty.get() === false,
+        'Shapes can\'t be placed when still controlled by user.'
+      );
       var self = this;
 
       // Only place the shape if it is of the correct color and is positioned so that it overlaps with the board.
@@ -164,14 +173,20 @@ define( function( require ) {
       }
 
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
-      movableShape.invisibleWhenStill = this.formComposite;
+      movableShape.invisibleWhenStillProperty.set( this.formComposite );
 
       // Determine where to place the shape on the board.
       var placementLocation = null;
-      for ( var surroundingPointsLevel = 0; surroundingPointsLevel < Math.max( this.numRows, this.numColumns ) && placementLocation === null; surroundingPointsLevel++ ) {
-        var surroundingPoints = this.getOuterSurroundingPoints( movableShape.position, surroundingPointsLevel );
+      for ( var surroundingPointsLevel = 0;
+            surroundingPointsLevel < Math.max( this.numRows, this.numColumns ) && placementLocation === null;
+            surroundingPointsLevel++ ) {
+
+        var surroundingPoints = this.getOuterSurroundingPoints(
+          movableShape.positionProperty.get(),
+          surroundingPointsLevel
+        );
         surroundingPoints.sort( function( p1, p2 ) {
-          return p1.distance( movableShape.position ) - p2.distance( movableShape.position );
+          return p1.distance( movableShape.positionProperty.get() ) - p2.distance( movableShape.positionProperty.get() );
         } );
         for ( var pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
           if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
@@ -202,7 +217,7 @@ define( function( require ) {
     addShapeDirectlyToCell: function( cellColumn, cellRow, movableShape ) {
 
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
-      movableShape.invisibleWhenStill = this.formComposite;
+      movableShape.invisibleWhenStillProperty.set( this.formComposite );
 
       // Add the shape by putting it on the list of incoming shapes and setting its destination.
       this.addIncomingShape( movableShape, this.cellToModelCoords( cellColumn, cellRow, false ) );
@@ -235,7 +250,10 @@ define( function( require ) {
     addResidentShape: function( movableShape, releaseOrphans ) {
 
       // Make sure that the shape is not moving
-      assert && assert( movableShape.position.equals( movableShape.destination ), 'Error: Shapes should not become residents until they have completed animating.' );
+      assert && assert(
+        movableShape.positionProperty.get().equals( movableShape.destination ),
+        'Error: Shapes should not become residents until they have completed animating.'
+      );
 
       // Made sure that the shape isn't already a resident.
       assert && assert( !this.isResidentShape( movableShape ), 'Error: Attempt to add shape that is already a resident.' );
@@ -258,7 +276,7 @@ define( function( require ) {
       self.updateCellOccupation( movableShape, 'remove' );
       self.updateAll();
 
-      if ( movableShape.userControlled ) {
+      if ( movableShape.userControlledProperty.get() ) {
 
         // Watch the shape so that we can do needed updates when the user releases it.
         movableShape.userControlledProperty.once( function( userControlled ) {
@@ -273,7 +291,7 @@ define( function( require ) {
     },
 
     // @private, add the shape to the list of incoming shapes and set up a listener to move it to resident shapes
-    addIncomingShape: function( movableShape, destination, releaseOrphans ){
+    addIncomingShape: function( movableShape, destination, releaseOrphans ) {
 
       var self = this;
 
@@ -281,7 +299,7 @@ define( function( require ) {
 
       // The remaining code in this method assumes that the shape is animating to the new location, and will cause
       // odd results if it isn't, so we double check it here.
-      assert && assert( movableShape.animating, 'Shape is is expected to be animating' );
+      assert && assert( movableShape.animatingProperty.get(), 'Shape is is expected to be animating' );
 
       // The shape is moving to a spot on the board.  We don't want to add it to the list of resident shapes yet, or we
       // may trigger a change to the exterior and interior perimeters, but we need to keep a reference to it so that
@@ -297,7 +315,7 @@ define( function( require ) {
           self.incomingShapes.splice( self.incomingShapes.indexOf( movableShape ), 1 );
           self.addResidentShape( movableShape, releaseOrphans );
           movableShape.animatingProperty.unlink( animationCompleteListener );
-          if ( self.updatesSuspended && self.incomingShapes.length === 0 ){
+          if ( self.updatesSuspended && self.incomingShapes.length === 0 ) {
             // updates had been suspended (for better performance), and the last incoming shapes was added, so resume updates
             self.updatesSuspended = false;
             self.updateAll();
@@ -948,7 +966,7 @@ define( function( require ) {
 
     // @private, Update perimeter points, placement locations, total area, and total perimeter.
     updateAll: function() {
-      if ( !this.updatesSuspended ){
+      if ( !this.updatesSuspended ) {
         this.updatePerimeters();
         this.updateAreaAndTotalPerimeter();
       }
@@ -961,7 +979,7 @@ define( function( require ) {
      * shape.
      * @public
      */
-    suspendUpdatesForBlockAdd: function(){
+    suspendUpdatesForBlockAdd: function() {
       this.updatesSuspended = true;
     },
 

@@ -125,7 +125,7 @@ define( function( require ) {
 
     function updatePickability(){
       // To avoid certain complications, this node should not be pickable if it is animating or fading.
-      self.pickable = !movableShape.animating && movableShape.fadeProportion === 0;
+      self.pickable = !movableShape.animatingProperty.get() && movableShape.fadeProportionProperty.get() === 0;
     }
 
     movableShape.animatingProperty.link( function() {
@@ -153,11 +153,11 @@ define( function( require ) {
       allowTouchSnag: true,
 
       startDrag: function( event, trail ) {
-        movableShape.userControlled = true;
+        movableShape.userControlledProperty.set( true );
       },
 
       endDrag: function( event, trail ) {
-        movableShape.userControlled = false;
+        movableShape.userControlledProperty.set( false );
       }
     } ) );
   }

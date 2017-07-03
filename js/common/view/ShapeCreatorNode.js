@@ -103,7 +103,7 @@ define( function( require ) {
     // Link the internal position property to the movable shape.
     shapePositionProperty.link( function( position ){
       if ( movableShape !== null ){
-        movableShape.position = position;
+        movableShape.positionProperty.set( position );
       }
     } );
 
@@ -144,7 +144,7 @@ define( function( require ) {
 
         // Create and add the new model element.
         movableShape = new MovableShape( shape, color, initialPosition );
-        movableShape.userControlled = true;
+        movableShape.userControlledProperty.set( true );
         addShapeToModel( movableShape );
 
         // If the creation count is limited, adjust the value and monitor the created shape for if/when it is returned.
@@ -153,11 +153,11 @@ define( function( require ) {
           ( function() {
             createdCountProperty.value++;
             var localRefToMovableShape = movableShape;
-            localRefToMovableShape.on( 'returnedToOrigin', function returnedToOriginListener() {
-              if ( !localRefToMovableShape.userControlled ) {
+            localRefToMovableShape.returnedToOriginEmitter.addListener( function returnedToOriginListener() {
+              if ( !localRefToMovableShape.userControlledProperty.get() ) {
                 // The shape has been returned to its origin.
                 createdCountProperty.value--;
-                localRefToMovableShape.off( 'returnedToOrigin', returnedToOriginListener );
+                localRefToMovableShape.returnedToOriginEmitter.removeListener( returnedToOriginListener );
               }
             } );
           } )();
@@ -165,7 +165,7 @@ define( function( require ) {
       },
 
       endDrag: function( event, trail ) {
-        movableShape.userControlled = false;
+        movableShape.userControlledProperty.set( false );
         movableShape = null;
       }
     } ) );

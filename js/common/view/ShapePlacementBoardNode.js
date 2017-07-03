@@ -57,8 +57,8 @@ define( function( require ) {
         // Add a representation of the shape.
         var representation = new Path( addedShape.shape, {
           fill: addedShape.color,
-          left: addedShape.position.x,
-          top: addedShape.position.y
+          left: addedShape.positionProperty.get().x,
+          top: addedShape.positionProperty.get().y
         } );
         shapesLayer.addChild( representation );
 

@@ -67,7 +67,7 @@ define( function( require ) {
   return inherit( PropertySet, AreaBuilderGameModel, {
 
       // @private - replace a composite shape with unit squares
-      replaceShapeWithUnitSquares: function( movableShape ){
+      replaceShapeWithUnitSquares: function( movableShape ) {
         var self = this;
         assert && assert(
           movableShape.shape.bounds.width > UNIT_SQUARE_LENGTH || movableShape.shape.bounds.height > UNIT_SQUARE_LENGTH,
@@ -105,14 +105,14 @@ define( function( require ) {
                 // This is a composite shape, meaning that it is made up of more than one unit square.  Rather than
                 // tracking these, the design team decided that they should decompose into individual unit squares once
                 // they have been placed.
-                if ( movableShape.animating ) {
+                if ( movableShape.animatingProperty.get() ) {
                   movableShape.animatingProperty.once( function( animating ) {
 
                     // Decompose the shape once it has landed on the board.  In the 'if' clause below, we test to make
                     // sure that the shape is actually on the board.  This is necessary because of a race condition
                     // where a shape can actually end up orphaned before it completes its animation sequence.  See
                     // https://github.com/phetsims/area-builder/issues/71.
-                    if ( !animating && self.shapePlacementBoard.isResidentShape( movableShape)) {
+                    if ( !animating && self.shapePlacementBoard.isResidentShape( movableShape ) ) {
                       self.replaceShapeWithUnitSquares( movableShape );
                     }
                   } );
@@ -133,15 +133,18 @@ define( function( require ) {
         } );
 
         // Remove the shape if it returns to its origin, since at that point it has essentially been 'put away'.
-        movableShape.on( 'returnedToOrigin', function() {
-          if ( !movableShape.userControlled ) {
+        movableShape.returnedToOriginEmitter.addListener( function() {
+          if ( !movableShape.userControlledProperty.get() ) {
             self.movableShapes.remove( movableShape );
           }
         } );
 
         // Another point at which the shape is removed is if it fades away.
-        movableShape.on( 'fadedAway', function() {
-          self.movableShapes.remove( movableShape );
+        movableShape.fadeProportionProperty.link( function fadeHandler( fadeProportion ) {
+          if ( fadeProportion === 1 ) {
+            self.movableShapes.remove( movableShape );
+            movableShape.fadeProportionProperty.unlink( fadeHandler );
+          }
         } );
       },
 
@@ -159,8 +162,8 @@ define( function( require ) {
         this.movableShapes.push( shape );
 
         // Remove this shape when it gets returned to its original location.
-        shape.on( 'returnedToOrigin', function() {
-          if ( !shape.userControlled ) {
+        shape.returnedToOriginEmitter.addListener( function() {
+          if ( !shape.userControlledProperty.get() ) {
             self.movableShapes.remove( shape );
           }
         } );

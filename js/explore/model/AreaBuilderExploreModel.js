@@ -133,16 +133,19 @@ define( function( require ) {
 
       // The shape will be removed from the model if and when it returns to its origination point.  This is how a shape
       // can be 'put back' into the bucket.
-      movableShape.on( 'returnedToOrigin', function() {
-        if ( !movableShape.userControlled ) {
+      movableShape.returnedToOriginEmitter.addListener( function() {
+        if ( !movableShape.userControlledProperty.get() ) {
           // The shape has been returned to the bucket.
           self.movableShapes.remove( movableShape );
         }
       } );
 
       // Another point at which the shape is removed is if it fades away.
-      movableShape.on( 'fadedAway', function() {
-        self.movableShapes.remove( movableShape );
+      movableShape.fadeProportionProperty.link( function fadeHandler( fadeProportion ) {
+        if ( fadeProportion === 1 ) {
+          self.movableShapes.remove( movableShape );
+          movableShape.fadeProportionProperty.unlink( fadeHandler );
+        }
       } );
     },
 
@@ -168,9 +171,10 @@ define( function( require ) {
         _.times( numColumns, function( columnIndex ) {
           _.times( numRows, function( rowIndex ) {
             movableShape = new MovableShape( UNIT_SQUARE_SHAPE, board.colorHandled, shapeOrigin );
-            movableShape.position = new Vector2(
+            movableShape.positionProperty.set( new Vector2(
               board.bounds.minX + columnIndex * UNIT_SQUARE_LENGTH,
-              board.bounds.minY + rowIndex * UNIT_SQUARE_LENGTH );
+              board.bounds.minY + rowIndex * UNIT_SQUARE_LENGTH
+            ) );
             self.addUserCreatedMovableShape( movableShape );
           } );
         } );

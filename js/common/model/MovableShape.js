@@ -12,8 +12,9 @@ define( function( require ) {
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Color = require( 'SCENERY/util/Color' );
+  var Emitter = require( 'AXON/Emitter' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -29,36 +30,34 @@ define( function( require ) {
   function MovableShape( shape, color, initialPosition ) {
     var self = this;
 
-    PropertySet.call( this, {
+    // Property that indicates where in model space the upper left corner of this shape is.  In general, this should
+    // not be set directly outside of this type, and should only be manipulated through the methods defined below.
+    this.positionProperty = new Property( initialPosition );
 
-      // Property that indicates where in model space the upper left corner of this shape is.  In general, this should
-      // not be set directly outside of this type, and should only be manipulated through the methods defined below.
-      position: initialPosition,
+    // Flag that tracks whether the user is dragging this shape around.  Should be set externally ; generally by the a
+    // view node.
+    this.userControlledProperty = new Property( false );
 
-      // Flag that tracks whether the user is dragging this shape around.  Should be set externally, generally by the a
-      // view node.
-      userControlled: false,
+    // Flag that indicates whether this element is animating from one location to another ; should not be set externally.
+    this.animatingProperty = new Property( false );
 
-      // Flag that indicates whether this element is animating from one location to another, should not be set externally.
-      animating: false,
+    // Value that indicates how faded out this shape is.  This is used as part of a feature where shapes can fade
+    // out.  Once fade has started ; it doesn't stop until it is fully faded ; i.e. the value is 1.  This should not be
+    // set externally.
+    this.fadeProportionProperty = new Property( 0 );
 
-      // Value that indicates how faded out this shape is.  This is used as part of a feature where shapes can fade
-      // out.  Once fade has started, it doesn't stop until it is fully faded, i.e. the value is 1.  This should not be
-      // set externally.
-      fadeProportion: 0,
-
-      // A flag that indicates whether this individual shape should become invisible when it is done animating.  This
-      // is generally used in cases where it becomes part of a larger composite shape that is depicted instead.
-      invisibleWhenStill: true
-    } );
+    // A flag that indicates whether this individual shape should become invisible when it is done animating.  This
+    // is generally used in cases where it becomes part of a larger composite shape that is depicted instead.
+    this.invisibleWhenStillProperty = new Property( true );
 
     // Destination is used for animation, and should be set through accessor methods only.
     this.destination = initialPosition.copy(); // @private
 
-    // Trigger an event whenever this shape returns to its original position.
+    // Emit an event whenever this shape returns to its original position.
+    this.returnedToOriginEmitter = new Emitter();
     this.positionProperty.lazyLink( function( position ) {
       if ( position.equals( initialPosition ) ) {
-        self.trigger( 'returnedToOrigin' );
+        self.returnedToOriginEmitter.emit();
       }
     } );
 
@@ -72,31 +71,31 @@ define( function( require ) {
 
   areaBuilder.register( 'MovableShape', MovableShape );
 
-  return inherit( PropertySet, MovableShape, {
+  return inherit( Object, MovableShape, {
 
     step: function( dt ) {
-      if ( !this.userControlled ) {
+      if ( !this.userControlledProperty.get() ) {
 
         // perform any animation
-        var distanceToDestination = this.position.distance( this.destination );
+        var currentPosition = this.positionProperty.get();
+        var distanceToDestination = currentPosition.distance( this.destination );
         if ( distanceToDestination > dt * AreaBuilderSharedConstants.ANIMATION_SPEED ) {
           // Move a step toward the destination.
-          var stepAngle = Math.atan2( this.destination.y - this.position.y, this.destination.x - this.position.x );
+          var stepAngle = Math.atan2( this.destination.y - currentPosition.y, this.destination.x - currentPosition.x );
           var stepVector = Vector2.createPolar( AreaBuilderSharedConstants.ANIMATION_SPEED * dt, stepAngle );
-          this.position = this.position.plus( stepVector );
+          this.positionProperty.set( currentPosition.plus( stepVector ) );
         }
-        else if ( this.animating ) {
+        else if ( this.animatingProperty.get() ) {
           // Less than one time step away, so just go to the destination.
-          this.position = this.destination;
-          this.animating = false;
+          this.positionProperty.set( this.destination );
+          this.animatingProperty.set( false );
         }
 
         // perform any fading
         if ( this.fading ) {
-          this.fadeProportion = Math.min( 1, this.fadeProportion + ( dt * FADE_RATE ) );
-          if ( this.fadeProportion >= 1 ) {
+          this.fadeProportionProperty.set( Math.min( 1, this.fadeProportionProperty.get() + ( dt * FADE_RATE ) ) );
+          if ( this.fadeProportionProperty.get() >= 1 ) {
             this.fading = false;
-            this.trigger( 'fadedAway' );
           }
         }
       }
@@ -110,11 +109,11 @@ define( function( require ) {
     setDestination: function( destination, animate ) {
       this.destination = destination;
       if ( animate ) {
-        this.animating = true;
+        this.animatingProperty.set( true );
       }
       else {
-        this.animating = false;
-        this.position = destination;
+        this.animatingProperty.set( false );
+        this.positionProperty.set( this.destination );
       }
     },
 
@@ -128,7 +127,7 @@ define( function( require ) {
 
     fadeAway: function() {
       this.fading = true;
-      this.fadeProportion = 0.0001; // this is done to make sure the shape is made unpickable as soon as fading starts
+      this.fadeProportionProperty.set( 0.0001 ); // this is done to make sure the shape is made unpickable as soon as fading starts
     },
 
     /**
@@ -149,8 +148,8 @@ define( function( require ) {
       for ( var column = 0; column < this.shape.bounds.width; column += squareLength ) {
         for ( var row = 0; row < this.shape.bounds.height; row += squareLength ) {
           var constituentShape = new MovableShape( unitSquareShape, this.color, this.positionProperty.initialValue );
-          constituentShape.setDestination( this.position.plusXY( column, row ), false );
-          constituentShape.invisibleWhenStill = this.invisibleWhenStill;
+          constituentShape.setDestination( this.positionProperty.get().plusXY( column, row ), false );
+          constituentShape.invisibleWhenStillProperty.set( this.invisibleWhenStillProperty.get() );
           shapes.push( constituentShape );
         }
       }

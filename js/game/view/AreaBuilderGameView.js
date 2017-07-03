@@ -724,8 +724,8 @@ define( function( require ) {
     // @private Returns true if any shape is animating or user controlled, false if not.
     isAnyShapeMoving: function() {
       for ( var i = 0; i < this.model.simSpecificModel.movableShapes.length; i++ ) {
-        if ( this.model.simSpecificModel.movableShapes.get( i ).animating ||
-             this.model.simSpecificModel.movableShapes.get( i ).userControlled ) {
+        if ( this.model.simSpecificModel.movableShapes.get( i ).animatingProperty.get() ||
+             this.model.simSpecificModel.movableShapes.get( i ).userControlledProperty.get() ) {
           return true;
         }
       }
