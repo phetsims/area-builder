@@ -218,17 +218,17 @@ define( function( require ) {
             break;
 
           case 'areaConstructed':
-            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.areaAndPerimeter.area;
+            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.areaAndPerimeterProperty.get().area;
             break;
 
           case 'areaAndPerimeterConstructed':
-            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.areaAndPerimeter.area &&
-                              challenge.buildSpec.perimeter === this.shapePlacementBoard.areaAndPerimeter.perimeter;
+            answerIsCorrect = challenge.buildSpec.area === this.shapePlacementBoard.areaAndPerimeterProperty.get().area &&
+                              challenge.buildSpec.perimeter === this.shapePlacementBoard.areaAndPerimeterProperty.get().perimeter;
             break;
 
           case 'areaAndProportionConstructed':
             userBuiltSpec = new BuildSpec(
-              this.shapePlacementBoard.areaAndPerimeter.area,
+              this.shapePlacementBoard.areaAndPerimeterProperty.get().area,
               null,
               {
                 color1: challenge.buildSpec.proportions.color1,
@@ -241,8 +241,8 @@ define( function( require ) {
 
           case 'areaPerimeterAndProportionConstructed':
             userBuiltSpec = new BuildSpec(
-              this.shapePlacementBoard.areaAndPerimeter.area,
-              this.shapePlacementBoard.areaAndPerimeter.perimeter,
+              this.shapePlacementBoard.areaAndPerimeterProperty.get().area,
+              this.shapePlacementBoard.areaAndPerimeterProperty.get().perimeter,
               {
                 color1: challenge.buildSpec.proportions.color1,
                 color2: challenge.buildSpec.proportions.color2,
@@ -290,10 +290,10 @@ define( function( require ) {
           this.shapePlacementBoard.showGridOnBackgroundShape = false; // Initially off, may be turned on when showing solution.
 
           // Set the board to either form composite shapes or allow free placement.
-          this.shapePlacementBoard.formComposite = challenge.backgroundShape === null;
+          this.shapePlacementBoard.formCompositeProperty.set( challenge.backgroundShape === null );
 
           // Set the color scheme of the composite so that the placed squares can be seen if needed.
-          if ( challenge.buildSpec && this.shapePlacementBoard.formComposite && challenge.userShapes ) {
+          if ( challenge.buildSpec && this.shapePlacementBoard.formCompositeProperty.get() && challenge.userShapes ) {
 
             // Make the perimeter color be a darker version of the first user shape.
             var perimeterColor = Color.toColor( challenge.userShapes[ 0 ].color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );

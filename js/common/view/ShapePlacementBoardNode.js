@@ -53,7 +53,7 @@ define( function( require ) {
     var shapesLayer = new Node();
     this.addChild( shapesLayer );
     shapePlacementBoard.residentShapes.addItemAddedListener( function( addedShape ) {
-      if ( shapePlacementBoard.formComposite ) {
+      if ( shapePlacementBoard.formCompositeProperty.get() ) {
         // Add a representation of the shape.
         var representation = new Path( addedShape.shape, {
           fill: addedShape.color,

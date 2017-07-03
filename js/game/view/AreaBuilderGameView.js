@@ -707,8 +707,8 @@ define( function( require ) {
     // @private Grab a snapshot of whatever the user has built or entered
     updateUserAnswer: function() {
       // Save the parameters of what the user has built, if they've built anything.
-      this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.area;
-      this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.perimeter;
+      this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().area;
+      this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().perimeter;
       var challenge = this.model.currentChallenge; // convenience var
       if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
         this.color1Proportion = this.model.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
@@ -907,7 +907,7 @@ define( function( require ) {
           this.checkAnswerButton.enabled = this.numberEntryControl.keypad.valueStringProperty.value.length > 0;
         }
         else {
-          this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeter.area > 0;
+          this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().area > 0;
         }
       }
     },

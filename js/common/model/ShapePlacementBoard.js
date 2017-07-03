@@ -17,7 +17,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -69,40 +69,40 @@ define( function( require ) {
     this.showGridProperty = showGridProperty;
     this.showDimensionsProperty = showDimensionsProperty;
 
-    // Set the initial fill and edge colors for the composite shape (defined in PropertySet below).
+    // Set the initial fill and edge colors for the composite shape (defined in Property declarations below).
     this.compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
     this.compositeShapeEdgeColor = this.compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
-    PropertySet.call( this, {
-      // @public boolean Read/Write value that controls whether the placement board moves individual shapes that are
-      // added to the board such that they form a single, contiguous, composite shape, or if it just snaps them to the
-      // grid. The perimeter and area values are only updated when this is set to true.
-      formComposite: true,
+    // @public boolean Read/Write value that controls whether the placement board moves individual shapes that are
+    // added to the board such that they form a single, contiguous, composite shape, or if it just snaps them to the
+    // grid. The perimeter and area values are only updated when this is set to true.
+    this.formCompositeProperty = new Property( true );
 
-      // @public Read-only property that indicates the area and perimeter of the composite shape.  These must be
-      // together in an object so that they can be updated simultaneously, otherwise race conditions can occur when
-      // evaluating challenges.
-      areaAndPerimeter: {
-        area: 0, // Number when valid, string when invalid.
-        perimeter: 0  // Number when valid, string when invalid.
-      },
-
-      // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by all
-      // of the individual shapes placed on the board by the user.
-      compositeShape: new PerimeterShape( [], [], unitSquareLength, {
-        fillColor: this.compositeShapeFillColor,
-        edgeColor: this.compositeShapeEdgeColor
-      } ),
-
-      // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
-      // other shapes.  The shape is positioned relative to this board, not in absolute model space.  It should be
-      // set through the method provided on this class rather than directly.
-      backgroundShape: new PerimeterShape( [], [], unitSquareLength, { fillColor: 'black' } ),
-
-      // @public Read/write value for controlling whether the background shape should show a grid when portrayed in the
-      // view.
-      showGridOnBackgroundShape: false
+    // @public Read-only property that indicates the area and perimeter of the composite shape.  These must be
+    // together in an object so that they can be updated simultaneously, otherwise race conditions can occur when
+    // evaluating challenges.
+    this.areaAndPerimeterProperty = new Property( {
+      area: 0, // Number when valid, string when invalid.
+      perimeter: 0  // Number when valid, string when invalid.
     } );
+
+    // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by all
+    // of the individual shapes placed on the board by the user.
+    this.compositeShapeProperty = new Property( new PerimeterShape( [], [], unitSquareLength, {
+      fillColor: this.compositeShapeFillColor,
+      edgeColor: this.compositeShapeEdgeColor
+    } ) );
+
+    // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
+    // other shapes.  The shape is positioned relative to this board, not in absolute model space.  It should be
+    // set through the method provided on this class rather than directly.
+    this.backgroundShapeProperty = new Property(
+      new PerimeterShape( [], [], unitSquareLength, { fillColor: 'black' } )
+    );
+
+    // @public Read/write value for controlling whether the background shape should show a grid when portrayed in the
+    // view.
+    this.showGridOnBackgroundShapeProperty = new Property( false );
 
     // Observable array of the shapes that have been placed on this board.
     this.residentShapes = new ObservableArray(); // @public, read only
@@ -140,7 +140,7 @@ define( function( require ) {
 
   areaBuilder.register( 'ShapePlacementBoard', ShapePlacementBoard );
 
-  return inherit( PropertySet, ShapePlacementBoard, {
+  return inherit( Object, ShapePlacementBoard, {
 
     // @private
     shapeOverlapsBoard: function( shape ) {
@@ -173,7 +173,7 @@ define( function( require ) {
       }
 
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
-      movableShape.invisibleWhenStillProperty.set( this.formComposite );
+      movableShape.invisibleWhenStillProperty.set( this.formCompositeProperty.get() );
 
       // Determine where to place the shape on the board.
       var placementLocation = null;
@@ -217,7 +217,7 @@ define( function( require ) {
     addShapeDirectlyToCell: function( cellColumn, cellRow, movableShape ) {
 
       // Set the shape's visibility behavior based on whether a composite shape is being depicted.
-      movableShape.invisibleWhenStillProperty.set( this.formComposite );
+      movableShape.invisibleWhenStillProperty.set( this.formCompositeProperty.get() );
 
       // Add the shape by putting it on the list of incoming shapes and setting its destination.
       this.addIncomingShape( movableShape, this.cellToModelCoords( cellColumn, cellRow, false ) );
@@ -392,30 +392,30 @@ define( function( require ) {
 
     // @private
     updateAreaAndTotalPerimeter: function() {
-      if ( this.compositeShape.exteriorPerimeters.length <= 1 ) {
+      if ( this.compositeShapeProperty.get().exteriorPerimeters.length <= 1 ) {
         var self = this;
         var totalArea = 0;
         this.residentShapes.forEach( function( residentShape ) {
           totalArea += residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
         } );
         var totalPerimeter = 0;
-        this.compositeShape.exteriorPerimeters.forEach( function( exteriorPerimeter ) {
+        this.compositeShapeProperty.get().exteriorPerimeters.forEach( function( exteriorPerimeter ) {
           totalPerimeter += exteriorPerimeter.length;
         } );
-        this.compositeShape.interiorPerimeters.forEach( function( interiorPerimeter ) {
+        this.compositeShapeProperty.get().interiorPerimeters.forEach( function( interiorPerimeter ) {
           totalPerimeter += interiorPerimeter.length;
         } );
-        this.areaAndPerimeter = {
+        this.areaAndPerimeterProperty.set( {
           area: totalArea,
           perimeter: totalPerimeter
-        };
+        } );
       }
       else {
         // Area and perimeter readings are currently invalid.
-        this.areaAndPerimeter = {
+        this.areaAndPerimeterProperty.set( {
           area: AreaBuilderSharedConstants.INVALID_VALUE,
           perimeter: AreaBuilderSharedConstants.INVALID_VALUE
-        };
+        } );
       }
     },
 
@@ -526,7 +526,7 @@ define( function( require ) {
       }
 
       // If this board is not set to consolidate shapes, we've done enough, and this location is valid.
-      if ( !this.formComposite ) {
+      if ( !this.formCompositeProperty.get() ) {
         return true;
       }
 
@@ -711,7 +711,7 @@ define( function( require ) {
       var self = this;
 
       // The perimeters can only be computed for a single consolidated shape.
-      if ( !this.formComposite || this.residentShapes.length === 0 ) {
+      if ( !this.formCompositeProperty.get() || this.residentShapes.length === 0 ) {
         this.perimeter = 0;
         this.compositeShapeProperty.reset();
       }
@@ -787,12 +787,12 @@ define( function( require ) {
 
         // Update externally visible properties.  Only update the perimeters if they have changed in order to minimize
         // work done in the view.
-        if ( !( this.perimeterListsEqual( exteriorPerimeters, this.compositeShape.exteriorPerimeters ) &&
-                this.perimeterListsEqual( interiorPerimeters, this.compositeShape.interiorPerimeters ) ) ) {
-          this.compositeShape = new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitSquareLength, {
+        if ( !( this.perimeterListsEqual( exteriorPerimeters, this.compositeShapeProperty.get().exteriorPerimeters ) &&
+                this.perimeterListsEqual( interiorPerimeters, this.compositeShapeProperty.get().interiorPerimeters ) ) ) {
+          this.compositeShapeProperty.set( new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitSquareLength, {
             fillColor: this.compositeShapeFillColor,
             edgeColor: this.compositeShapeEdgeColor
-          } );
+          } ) );
         }
       }
     },
@@ -890,7 +890,7 @@ define( function( require ) {
     releaseAnyOrphans: function() {
 
       // Orphans can only exist when operating in the 'formComposite' mode.
-      if ( this.formComposite ) {
+      if ( this.formCompositeProperty.get() ) {
         var self = this;
         var contiguousCellGroups = this.identifyContiguousCellGroups();
 
@@ -1003,10 +1003,10 @@ define( function( require ) {
         if ( centered ) {
           var xOffset = this.bounds.minX + Math.floor( ( ( this.bounds.width - perimeterShape.getWidth() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
           var yOffset = this.bounds.minY + Math.floor( ( ( this.bounds.height - perimeterShape.getHeight() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
-          this.backgroundShape = perimeterShape.translated( xOffset, yOffset );
+          this.backgroundShapeProperty.set( perimeterShape.translated( xOffset, yOffset ) );
         }
         else {
-          this.backgroundShape = perimeterShape;
+          this.backgroundShapeProperty.set( perimeterShape );
         }
       }
     }
