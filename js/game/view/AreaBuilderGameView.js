@@ -196,7 +196,7 @@ define( function( require ) {
 
     // Control visibility of elapsed time indicator in the scoreboard.
     this.model.timerEnabledProperty.link( function( timerEnabled ) {
-      self.scoreboard.visibilityControls.timeVisible = timerEnabled;
+      self.scoreboard.timeVisibleProperty.set( timerEnabled );
     } );
 
     // Add the button for returning to the level selection screen.

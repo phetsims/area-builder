@@ -14,7 +14,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -41,9 +41,7 @@ define( function( require ) {
     options = _.extend( { maxWidth: Number.POSITIVE_INFINITY }, options );
 
     // Properties that control which elements are visible and which are hidden.  This constitutes the primary API.
-    this.visibilityControls = new PropertySet( {
-      timeVisible: true
-    } );
+    this.timeVisibleProperty = new Property( true );
 
     // Create the labels
     var levelIndicator = new Text( '', {
@@ -79,7 +77,7 @@ define( function( require ) {
     this.addChild( vBox );
 
     // Add/remove the time indicator.
-    this.visibilityControls.timeVisibleProperty.link( function( timeVisible ) {
+    this.timeVisibleProperty.link( function( timeVisible ) {
       if ( timeVisible && !vBox.hasChild( elapsedTimeIndicator ) ) {
         // Insert just after the score indicator.
         vBox.insertChild( vBox.indexOfChild( scoreIndicator ) + 1, elapsedTimeIndicator );
