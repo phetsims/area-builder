@@ -136,7 +136,7 @@ define( function( require ) {
       touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
       listener: function() {
 
-        var challenge = gameModel.currentChallenge;
+        var challenge = gameModel.currentChallengeProperty.get();
         var shapeReleaseMode = 'fade';
 
         if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[ 0 ].creationLimit ) {
@@ -370,8 +370,8 @@ define( function( require ) {
 
       // If this is a 'built it' style challenge, and this is the first element being added to the board, add the
       // build spec to the banner so that the user can reference it as they add more shapes to the board.
-      if ( gameModel.currentChallenge.buildSpec && self.challengePromptBanner.buildSpecProperty.value === null ) {
-        self.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallenge.buildSpec;
+      if ( gameModel.currentChallengeProperty.get().buildSpec && self.challengePromptBanner.buildSpecProperty.value === null ) {
+        self.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallengeProperty.get().buildSpec;
       }
     } );
 
@@ -392,10 +392,10 @@ define( function( require ) {
       // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
       // window.
       if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON &&
-           self.model.currentChallenge.buildSpec &&
+           self.model.currentChallengeProperty.get().buildSpec &&
            self.okayToUpdateYouBuiltWindow ) {
         self.updateUserAnswer();
-        self.updateYouBuiltWindow( self.model.currentChallenge );
+        self.updateYouBuiltWindow( self.model.currentChallengeProperty.get() );
 
         // If the user has put all shapes away, check to see if they now have the correct answer.
         if ( !self.isAnyShapeMoving() ) {
@@ -428,7 +428,7 @@ define( function( require ) {
       // Hide all nodes - the appropriate ones will be shown later based on the current state.
       this.hideAllGameNodes();
 
-      var challenge = this.model.currentChallenge; // convenience var
+      var challenge = this.model.currentChallengeProperty.get(); // convenience var
 
       // Show the nodes appropriate to the state
       switch( gameState ) {
@@ -565,7 +565,7 @@ define( function( require ) {
       // Give the user the appropriate feedback.
       this.gameAudioPlayer.wrongAnswer();
       this.faceWithPointsNode.frown();
-      this.faceWithPointsNode.setPoints( this.model.score );
+      this.faceWithPointsNode.setPoints( this.model.scoreProperty.get() );
 
       if ( challenge.checkSpec === 'areaEntered' ) {
         // Set the keypad to allow the user to start entering a new value.
@@ -608,7 +608,7 @@ define( function( require ) {
       // Give the user the appropriate feedback
       this.gameAudioPlayer.wrongAnswer();
       this.faceWithPointsNode.frown();
-      this.faceWithPointsNode.setPoints( this.model.score );
+      this.faceWithPointsNode.setPoints( this.model.scoreProperty.get() );
 
       // For 'built it' style challenges, the user can still interact while in this state in case they want to try
       // to get it right.  In 'find the area' challenges, further interaction is disallowed.
@@ -663,10 +663,10 @@ define( function( require ) {
 
     // @private
     handleShowingLevelResultsState: function() {
-      if ( this.model.score === this.model.maxPossibleScore ) {
+      if ( this.model.scoreProperty.get() === this.model.maxPossibleScore ) {
         this.gameAudioPlayer.gameOverPerfectScore();
       }
-      else if ( this.model.score === 0 ) {
+      else if ( this.model.scoreProperty.get() === 0 ) {
         this.gameAudioPlayer.gameOverZeroScore();
       }
       else {
@@ -709,7 +709,7 @@ define( function( require ) {
       // Save the parameters of what the user has built, if they've built anything.
       this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().area;
       this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().perimeter;
-      var challenge = this.model.currentChallenge; // convenience var
+      var challenge = this.model.currentChallengeProperty.get(); // convenience var
       if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
         this.color1Proportion = this.model.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
       }
@@ -744,7 +744,7 @@ define( function( require ) {
         this.challengePromptBanner.reset();
         this.shapeCarouselLayer.removeAllChildren();
 
-        var challenge = this.model.currentChallenge; // Convenience var
+        var challenge = this.model.currentChallengeProperty.get(); // Convenience var
 
         // Set up the challenge prompt banner, which appears above the shape placement board.
         this.challengePromptBanner.titleTextProperty.value = challenge.buildSpec ? buildItString : findTheAreaString;
@@ -902,8 +902,8 @@ define( function( require ) {
 
     // @private
     updatedCheckButtonEnabledState: function() {
-      if ( this.model.currentChallenge ) {
-        if ( this.model.currentChallenge.checkSpec === 'areaEntered' ) {
+      if ( this.model.currentChallengeProperty.get() ) {
+        if ( this.model.currentChallengeProperty.get().checkSpec === 'areaEntered' ) {
           this.checkAnswerButton.enabled = this.numberEntryControl.keypad.valueStringProperty.value.length > 0;
         }
         else {
@@ -918,16 +918,16 @@ define( function( require ) {
 
       // Set a new "level completed" node based on the results.
       var levelCompletedNode = new LevelCompletedNode(
-        this.model.level,
-        this.model.score,
+        this.model.levelProperty.get(),
+        this.model.scoreProperty.get(),
         this.model.maxPossibleScore,
         this.model.challengesPerSet,
-        this.model.timerEnabled,
-        this.model.elapsedTime,
-        this.model.bestTimes[ this.model.level ],
+        this.model.timerEnabledProperty.get(),
+        this.model.elapsedTimeProperty.get(),
+        this.model.bestTimes[ this.model.levelProperty.get() ],
         self.model.newBestTime,
         function() {
-          self.model.gameState = GameState.CHOOSING_LEVEL;
+          self.model.gameStateProperty.set( GameState.CHOOSING_LEVEL );
           self.rootNode.removeChild( levelCompletedNode );
           levelCompletedNode = null;
         },

@@ -20,7 +20,6 @@ define( function( require ) {
   var GameState = require( 'AREA_BUILDER/game/model/GameState' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
-  var PropertySet = require( 'AXON/PropertySet' );
 
   /**
    * @param challengeFactory - Factory object that is used to create challenges, examine usage for details.
@@ -41,20 +40,17 @@ define( function( require ) {
       maxAttemptsPerChallenge: 2
     }, options );
 
-    PropertySet.call( this, {
-        soundEnabled: true,
-        timerEnabled: false,
-        level: 0, // Zero-based in the model, though levels appear to the user to start at 1.
-        challengeIndex: 0,
-        currentChallenge: null,
-        score: 0,
-        elapsedTime: 0,
+    // @public - model properties
+    this.soundEnabledProperty = new Property( true );
+    this.timerEnabledProperty = new Property( false );
+    this.levelProperty = new Property( 0 );
+    this.challengeIndexProperty = new Property( 0 );
+    this.currentChallengeProperty = new Property( null );
+    this.scoreProperty = new Property( 0 );
+    this.elapsedTimeProperty = new Property( 0 );
+    this.gameStateProperty = new Property( GameState.CHOOSING_LEVEL ); // Current state of the game, see GameState for valid values.
 
-        // Current state of the game, see GameState for valid values.
-        gameState: GameState.CHOOSING_LEVEL
-      }
-    );
-
+    // other public vars
     this.numberOfLevels = options.numberOfLevels; // @public
     this.challengesPerSet = options.challengesPerSet; // @public
     this.maxPointsPerChallenge = options.maxPointsPerChallenge; // @public
@@ -84,7 +80,7 @@ define( function( require ) {
 
   areaBuilder.register( 'QuizGameModel', QuizGameModel );
 
-  return inherit( PropertySet, QuizGameModel,
+  return inherit( Object, QuizGameModel,
     {
       // @private
       step: function( dt ) {
@@ -93,7 +89,14 @@ define( function( require ) {
 
       // reset this model
       reset: function() {
-        PropertySet.prototype.reset.call( this );
+        this.soundEnabledProperty.reset();
+        this.timerEnabledProperty.reset();
+        this.levelProperty.reset();
+        this.challengeIndexProperty.reset();
+        this.currentChallengeProperty.reset();
+        this.scoreProperty.reset();
+        this.elapsedTimeProperty.reset();
+        this.gameStateProperty.reset();
         this.bestScoreProperties.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
         this.bestTimes = [];
         var self = this;
@@ -104,9 +107,9 @@ define( function( require ) {
 
       // starts new level
       startLevel: function( level ) {
-        this.level = level;
-        this.score = 0;
-        this.challengeIndex = 0;
+        this.levelProperty.set( level );
+        this.scoreProperty.reset();
+        this.challengeIndexProperty.set( 0 );
         this.incorrectGuessesOnCurrentChallenge = 0;
         this.restartGameTimer();
 
@@ -114,20 +117,20 @@ define( function( require ) {
         this.challengeList = this.challengeFactory.generateChallengeSet( level, this.challengesPerSet );
 
         // Set up the model for the next challenge
-        this.currentChallenge = this.challengeList[ this.challengeIndex ];
+        this.currentChallengeProperty.set( this.challengeList[ this.challengeIndexProperty.get() ] );
 
         // Let the sim-specific model know that a new level is being started in case it needs to do any initialization.
         this.simSpecificModel.startLevel();
 
         // Change to new game state.
-        this.gameState = GameState.PRESENTING_INTERACTIVE_CHALLENGE;
+        this.gameStateProperty.set( GameState.PRESENTING_INTERACTIVE_CHALLENGE );
 
         // Flag set to indicate new best time, cleared each time a level is started.
         this.newBestTime = false;
       },
 
       setChoosingLevelState: function() {
-        this.gameState = GameState.CHOOSING_LEVEL;
+        this.gameStateProperty.set( GameState.CHOOSING_LEVEL );
       },
 
       getChallengeCurrentPointValue: function() {
@@ -136,7 +139,7 @@ define( function( require ) {
 
       // Check the user's proposed answer.
       checkAnswer: function( answer ) {
-        this.handleProposedAnswer( this.simSpecificModel.checkAnswer( this.currentChallenge ) );
+        this.handleProposedAnswer( this.simSpecificModel.checkAnswer( this.currentChallengeProperty.get() ) );
       },
 
       // @private
@@ -144,7 +147,7 @@ define( function( require ) {
         var pointsEarned = 0;
         if ( answerIsCorrect ) {
           // The user answered the challenge correctly.
-          this.gameState = GameState.SHOWING_CORRECT_ANSWER_FEEDBACK;
+          this.gameStateProperty.set( GameState.SHOWING_CORRECT_ANSWER_FEEDBACK );
           if ( this.incorrectGuessesOnCurrentChallenge === 0 ) {
             // User got it right the first time.
             pointsEarned = this.maxPointsPerChallenge;
@@ -153,16 +156,16 @@ define( function( require ) {
             // User got it wrong at first, but got it right now.
             pointsEarned = Math.max( this.maxPointsPerChallenge - this.incorrectGuessesOnCurrentChallenge, 0 );
           }
-          this.score = this.score + pointsEarned;
+          this.scoreProperty.value += pointsEarned;
         }
         else {
           // The user got it wrong.
           this.incorrectGuessesOnCurrentChallenge++;
           if ( this.incorrectGuessesOnCurrentChallenge < this.maxAttemptsPerChallenge ) {
-            this.gameState = GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN;
+            this.gameStateProperty.set( GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN );
           }
           else {
-            this.gameState = GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON;
+            this.gameStateProperty.set( GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON );
           }
         }
       },
@@ -170,47 +173,48 @@ define( function( require ) {
       // @private
       newGame: function() {
         this.stopGameTimer();
-        this.gameState = GameState.CHOOSING_LEVEL;
+        this.gameStateProperty.set( GameState.CHOOSING_LEVEL );
         this.incorrectGuessesOnCurrentChallenge = 0;
       },
 
       // Move to the next challenge in the current challenge set.
       nextChallenge: function() {
+        var currentLevel = this.levelProperty.get();
         this.incorrectGuessesOnCurrentChallenge = 0;
-        if ( this.challengeIndex + 1 < this.challengeList.length ) {
+        if ( this.challengeIndexProperty.get() + 1 < this.challengeList.length ) {
           // Move to the next challenge.
-          this.challengeIndex++;
-          this.currentChallenge = this.challengeList[ this.challengeIndex ];
-          this.gameState = GameState.PRESENTING_INTERACTIVE_CHALLENGE;
+          this.challengeIndexProperty.value++;
+          this.currentChallengeProperty.set( this.challengeList[ this.challengeIndexProperty.get() ] );
+          this.gameStateProperty.set( GameState.PRESENTING_INTERACTIVE_CHALLENGE );
         }
         else {
           // All challenges completed for this level.  See if this is a new best time and, if so, record it.
-          if ( this.score === this.maxPossibleScore ) {
+          if ( this.scoreProperty.get() === this.maxPossibleScore ) {
             // Perfect game.  See if new best time.
-            if ( this.bestTimes[ this.level ] === null || this.elapsedTime < this.bestTimes[ this.level ] ) {
-              this.newBestTime = this.bestTimes[ this.level ] !== null; // Don't set this flag for the first 'best time', only when the time improves.
-              this.bestTimes[ this.level ] = this.elapsedTime;
+            if ( this.bestTimes[ currentLevel ] === null || this.elapsedTimeProperty.get() < this.bestTimes[ currentLevel ] ) {
+              this.newBestTime = this.bestTimes[ currentLevel ] !== null; // Don't set this flag for the first 'best time', only when the time improves.
+              this.bestTimes[ currentLevel ] = this.elapsedTimeProperty.get();
             }
           }
-          this.bestScoreProperties[ this.level ].value = this.score;
+          this.bestScoreProperties[ currentLevel ].value = this.scoreProperty.get();
 
           // Done with this game, show the results.
-          this.gameState = GameState.SHOWING_LEVEL_RESULTS;
+          this.gameStateProperty.set( GameState.SHOWING_LEVEL_RESULTS );
         }
       },
 
       tryAgain: function() {
         this.simSpecificModel.tryAgain();
-        this.gameState = GameState.PRESENTING_INTERACTIVE_CHALLENGE;
+        this.gameStateProperty.set( GameState.PRESENTING_INTERACTIVE_CHALLENGE );
       },
 
       displayCorrectAnswer: function() {
 
         // Set the challenge to display the correct answer.
-        this.simSpecificModel.displayCorrectAnswer( this.currentChallenge );
+        this.simSpecificModel.displayCorrectAnswer( this.currentChallengeProperty.get() );
 
         // Update the game state.
-        this.gameState = GameState.DISPLAYING_CORRECT_ANSWER;
+        this.gameStateProperty.set( GameState.DISPLAYING_CORRECT_ANSWER );
       },
 
       // @private
@@ -218,9 +222,9 @@ define( function( require ) {
         if ( this.gameTimerId !== null ) {
           window.clearInterval( this.gameTimerId );
         }
-        this.elapsedTime = 0;
+        this.elapsedTimeProperty.set( 0 );
         var self = this;
-        this.gameTimerId = window.setInterval( function() { self.elapsedTime += 1; }, 1000 );
+        this.gameTimerId = window.setInterval( function() { self.elapsedTimeProperty.value += 1; }, 1000 );
       },
 
       // @private
