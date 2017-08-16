@@ -26,7 +26,8 @@ define( function( require ) {
       leadDesign: 'Karina K. R. Hensberry',
       softwareDevelopment: 'John Blanco',
       team: 'Bryce Gruneich, Amanda McGarry, Ariel Paul, Kathy Perkins, Beth Stade',
-      qualityAssurance: 'Steele Dalton, Amanda Davis, Oliver Nix, Oliver Orejola, \n Arnab Purkayastha, Amy Rouinfar, Bryan Yoelin'
+      qualityAssurance: 'Steele Dalton, Amanda Davis, Oliver Nix, Oliver Orejola, Arnab Purkayastha, ' +
+                        'Amy Rouinfar, Bryan Yoelin'
     }
   };
 
