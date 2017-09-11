@@ -16,11 +16,11 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Screen = require( 'JOIST/Screen' );
   var Shape = require( 'KITE/Shape' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var NAV_BAR_ICON_SIZE = Screen.MINIMUM_NAVBAR_ICON_SIZE;

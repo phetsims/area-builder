@@ -14,8 +14,8 @@ define( function( require ) {
   var AreaBuilderQueryParameters = require( 'AREA_BUILDER/common/AreaBuilderQueryParameters' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var ExploreNode = require( 'AREA_BUILDER/explore/view/ExploreNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );

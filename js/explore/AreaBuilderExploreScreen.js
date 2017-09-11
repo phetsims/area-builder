@@ -16,8 +16,8 @@ define( function( require ) {
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Screen = require( 'JOIST/Screen' );
   var Property = require( 'AXON/Property' );
+  var Screen = require( 'JOIST/Screen' );
 
   // strings
   var exploreString = require( 'string!AREA_BUILDER/explore' );

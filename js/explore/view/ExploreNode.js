@@ -23,8 +23,8 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Shape = require( 'KITE/Shape' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
-  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
+  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants

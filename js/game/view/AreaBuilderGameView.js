@@ -10,11 +10,12 @@ define( function( require ) {
 
   // modules
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
+  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
   var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
+  var Carousel = require( 'SUN/Carousel' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
@@ -22,27 +23,26 @@ define( function( require ) {
   var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
   var GameInfoBanner = require( 'AREA_BUILDER/game/view/GameInfoBanner' );
   var GameState = require( 'AREA_BUILDER/game/model/GameState' );
-  var Carousel = require( 'SUN/Carousel' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var NumberEntryControl = require( 'SCENERY_PHET/NumberEntryControl' );
   var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var NumberEntryControl = require( 'SCENERY_PHET/NumberEntryControl' );
   var Panel = require( 'SUN/Panel' );
+  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
-  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
+  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
   var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
   var YouBuiltWindow = require( 'AREA_BUILDER/game/view/YouBuiltWindow' );
   var YouEnteredWindow = require( 'AREA_BUILDER/game/view/YouEnteredWindow' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
 
   // strings
   var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );

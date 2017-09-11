@@ -18,9 +18,9 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var valuesString = require( 'string!AREA_BUILDER/values' );
   var areaString = require( 'string!AREA_BUILDER/area' );
   var perimeterString = require( 'string!AREA_BUILDER/perimeter' );
+  var valuesString = require( 'string!AREA_BUILDER/values' );
 
   // constants
   var DISPLAY_FONT = new PhetFont( 14 );

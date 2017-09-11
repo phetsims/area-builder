@@ -12,11 +12,11 @@ define( function( require ) {
   // modules
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
-  var Text = require( 'SCENERY/nodes/Text' );
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Text = require( 'SCENERY/nodes/Text' );
 
   // constants
   var X_MARGIN = 8;

@@ -20,9 +20,9 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var levelString = require( 'string!AREA_BUILDER/level' );
   var labelScoreString = require( 'string!VEGAS/label.score' );
   var labelTimeString = require( 'string!VEGAS/label.time' );
+  var levelString = require( 'string!AREA_BUILDER/level' );
   var pattern0Challenge1MaxString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
 
   /**

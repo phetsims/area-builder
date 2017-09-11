@@ -11,8 +11,8 @@ define( function( require ) {
 
   // modules
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings

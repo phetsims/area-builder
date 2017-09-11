@@ -19,8 +19,8 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
   var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
