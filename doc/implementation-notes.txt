@@ -1,8 +1,6 @@
 The model is designed using screen coordinates as the size so that no model-
 view transform is needed.
 
-PropertySet is used for model objects with two or more properties.
-
 In this sim, 'self' is being tried out as the way to make 'this' persistent
 and thus usable in closures, rather than 'thisModel', 'thisScreen' and so
 forth.
