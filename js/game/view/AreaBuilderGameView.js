@@ -62,7 +62,7 @@ define( function( require ) {
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );
-  var BUTTON_FILL = PhetColorScheme.PHET_LOGO_YELLOW;
+  var BUTTON_FILL = PhetColorScheme.BUTTON_YELLOW;
   var INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
