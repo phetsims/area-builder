@@ -104,14 +104,17 @@ define( function( require ) {
                 // tracking these, the design team decided that they should decompose into individual unit squares once
                 // they have been placed.
                 if ( movableShape.animatingProperty.get() ) {
-                  movableShape.animatingProperty.once( function( animating ) {
+                  movableShape.animatingProperty.lazyLink( function decomposeCompositeShape( animating ) {
 
-                    // Decompose the shape once it has landed on the board.  In the 'if' clause below, we test to make
-                    // sure that the shape is actually on the board.  This is necessary because of a race condition
-                    // where a shape can actually end up orphaned before it completes its animation sequence.  See
-                    // https://github.com/phetsims/area-builder/issues/71.
-                    if ( !animating && self.shapePlacementBoard.isResidentShape( movableShape ) ) {
-                      self.replaceShapeWithUnitSquares( movableShape );
+                    if ( !animating ) {
+
+                      // unhook this function
+                      movableShape.animatingProperty.unlink( decomposeCompositeShape );
+
+                      // replace this composite shape with individual unit squares
+                      if ( self.shapePlacementBoard.isResidentShape( movableShape ) ) {
+                        self.replaceShapeWithUnitSquares( movableShape );
+                      }
                     }
                   } );
                 }
