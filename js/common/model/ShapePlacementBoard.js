@@ -279,13 +279,14 @@ define( function( require ) {
       if ( movableShape.userControlledProperty.get() ) {
 
         // Watch the shape so that we can do needed updates when the user releases it.
-        movableShape.userControlledProperty.once( function( userControlled ) {
+        movableShape.userControlledProperty.lazyLink( function releaseOrphansIfDroppedOfBoard( userControlled ) {
           assert && assert( !userControlled, 'Unexpected transition of userControlled flag.' );
           if ( !self.shapeOverlapsBoard( movableShape ) ) {
             // This shape isn't coming back, so we need to trigger an orphan release.
             self.releaseAnyOrphans();
             self.updateAll();
           }
+          movableShape.userControlledProperty.unlink( releaseOrphansIfDroppedOfBoard );
         } );
       }
     },
@@ -947,15 +948,26 @@ define( function( require ) {
       } );
     },
 
-    //@private, adds a listener that will remove this shape from the board when the user grabs it.
+    /**
+     * adds a listener that will remove this shape from the board when the user grabs it
+     * @param {MovableShape} movableShape
+     * @private
+     */
     addRemovalListener: function( movableShape ) {
+
       var self = this;
-      var removalListener = function( userControlled ) {
-        assert && assert( userControlled === true, 'Should only see shapes become user controlled after being added to a placement board.' );
+
+      function removalListener( userControlled ) {
+        assert && assert(
+          userControlled === true,
+          'should only see shapes become user controlled after being added to a placement board'
+        );
         self.removeResidentShape( movableShape );
-      };
+        movableShape.userControlledProperty.unlink( removalListener );
+      }
+
       this.tagListener( removalListener );
-      movableShape.userControlledProperty.once( removalListener );
+      movableShape.userControlledProperty.lazyLink( removalListener );
     },
 
     // @public, set colors used for the composite shape shown for this board
