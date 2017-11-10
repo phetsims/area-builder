@@ -1,4 +1,4 @@
-// Copyright 2014-2016, University of Colorado Boulder
+// Copyright 2014-2017, University of Colorado Boulder
 
 /**
  * A Scenery node that represents a shape that is defined by lists of perimeter points.  The perimeter points are

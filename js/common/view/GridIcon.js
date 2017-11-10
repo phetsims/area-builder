@@ -1,4 +1,4 @@
-// Copyright 2014-2016, University of Colorado Boulder
+// Copyright 2014-2017, University of Colorado Boulder
 
 /**
  * A Scenery node that depicts a grid with squares on it.  This is used in several places in the simulation to create
