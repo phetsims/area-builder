@@ -19,7 +19,7 @@ define( function( require ) {
   var areaBuilderTitleString = require( 'string!AREA_BUILDER/area-builder.title' );
 
   // constants
-  var tandem = Tandem.createRootTandem();
+  var tandem = Tandem.rootTandem;
 
   var simOptions = {
     credits: {
