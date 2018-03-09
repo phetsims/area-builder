@@ -800,7 +800,7 @@ define( function( require ) {
 
     // @private
     perimeterPointsEqual: function( perimeter1, perimeter2 ) {
-      assert && assert( perimeter1 instanceof Array && perimeter2 instanceof Array, 'Invalid parameters for perimeterPointsEqual' );
+      assert && assert( Array.isArray(perimeter1) && Array.isArray(perimeter2), 'Invalid parameters for perimeterPointsEqual' );
       if ( perimeter1.length !== perimeter2.length ) {
         return false;
       }
@@ -811,7 +811,7 @@ define( function( require ) {
 
     // @private
     perimeterListsEqual: function( perimeterList1, perimeterList2 ) {
-      assert && assert( perimeterList1 instanceof Array && perimeterList2 instanceof Array, 'Invalid parameters for perimeterListsEqual' );
+      assert && assert( Array.isArray(perimeterList1) && Array.isArray(perimeterList2), 'Invalid parameters for perimeterListsEqual' );
       if ( perimeterList1.length !== perimeterList2.length ) {
         return false;
       }
