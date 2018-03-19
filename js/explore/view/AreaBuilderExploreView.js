@@ -21,7 +21,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
 
   // constants
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;
 
   /**
    * @param {AreaBuilderExploreModel} model
@@ -70,10 +70,9 @@ define( function( require ) {
 
     // Add the reset button.
     this.addChild( new ResetAllButton( {
-      radius: 20,
-      right: this.layoutBounds.width - 15,
-      bottom: this.layoutBounds.height - 15,
-      lineWidth: 1,
+      radius: AreaBuilderSharedConstants.RESET_BUTTON_RADIUS,
+      right: this.layoutBounds.width - AreaBuilderSharedConstants.CONTROLS_INSET,
+      bottom: this.layoutBounds.height - AreaBuilderSharedConstants.CONTROLS_INSET,
       listener: function() {
         centerExploreNode.reset();
         leftExploreNode.reset();

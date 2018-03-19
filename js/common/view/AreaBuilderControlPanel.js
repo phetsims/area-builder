@@ -40,7 +40,11 @@ define( function( require ) {
     this.dimensionsControlVisibleProperty = new Property( true );
 
     // Create the controls and labels
-    var gridCheckbox = new Checkbox( new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ), showGridProperty, { spacing: 15 } );
+    var gridCheckbox = new Checkbox(
+      new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ),
+      showGridProperty,
+      { spacing: 15 }
+    );
     this.dimensionsIcon = new DimensionsIcon(); // @public so that the icon style can be set
     var dimensionsCheckbox = new Checkbox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
 

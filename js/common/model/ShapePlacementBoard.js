@@ -690,7 +690,10 @@ define( function( require ) {
         if ( downLeftOccupied ) { marchingSquaresState |= 4; }
         if ( downRightOccupied ) { marchingSquaresState |= 8; }
 
-        assert && assert( marchingSquaresState !== 0 && marchingSquaresState !== 15, 'Marching squares algorithm reached invalid state.' );
+        assert && assert(
+        marchingSquaresState !== 0 && marchingSquaresState !== 15,
+          'Marching squares algorithm reached invalid state.'
+        );
 
         // Convert and add this point to the perimeter points.
         perimeterPoints.push( this.cellToModelCoords( scanWindow.x, scanWindow.y ) );

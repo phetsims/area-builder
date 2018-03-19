@@ -65,7 +65,7 @@ define( function( require ) {
   var BUTTON_FILL = PhetColorScheme.BUTTON_YELLOW;
   var INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
   var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = 15;
+  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;
   var ITEMS_PER_CAROUSEL_PAGE = 4;
   var BUTTON_TOUCH_AREA_DILATION = 7;
 
@@ -115,7 +115,7 @@ define( function( require ) {
         perfectScore: gameModel.maxPossibleScore,
         numLevels: gameModel.numberOfLevels,
         numButtonRows: 2,
-        controlsInset: 20
+        controlsInset: AreaBuilderSharedConstants.CONTROLS_INSET
       }
     );
     this.rootNode.addChild( this.startGameLevelNode );

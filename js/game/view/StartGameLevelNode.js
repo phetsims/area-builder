@@ -42,12 +42,19 @@ define( function( require ) {
    * @param {Object} [options] - See code below for options and default values.
    * @constructor
    */
-  function StartGameLevelNode( startLevelFunction, resetFunction, timerEnabledProperty, soundEnabledProperty, iconNodes, scores, options ) {
+  function StartGameLevelNode( startLevelFunction,
+                               resetFunction,
+                               timerEnabledProperty,
+                               soundEnabledProperty,
+                               iconNodes,
+                               scores,
+                               options ) {
 
     Node.call( this );
 
     options = _.extend( {
-      // Defaults
+
+      // defaults
       numLevels: 4,
       titleString: chooseYourLevelString,
       maxTitleWidth: 500,
@@ -102,7 +109,11 @@ define( function( require ) {
     this.addChild( soundToggleButton );
 
     // Reset button.
-    var resetButton = new ResetAllButton( { listener: resetFunction, radius: 22, touchAreaDilation: 7 } );
+    var resetButton = new ResetAllButton( {
+      listener: resetFunction,
+      radius: AreaBuilderSharedConstants.RESET_BUTTON_RADIUS,
+      touchAreaDilation: 7
+    } );
     this.addChild( resetButton );
 
     // Layout

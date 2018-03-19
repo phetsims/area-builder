@@ -13,10 +13,11 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
 
   var AreaBuilderSharedConstants = {
+
     // layout bounds used throughout the simulation for laying out the screens
     LAYOUT_BOUNDS: new Bounds2( 0, 0, 768, 464 ),
 
-    // Colors used for the various shapes
+    // colors used for the various shapes
     GREENISH_COLOR: '#33E16E',
     DARK_GREEN_COLOR: '#1A7137',
     PURPLISH_COLOR: '#9D87C9',
@@ -35,6 +36,8 @@ define( function( require ) {
     // various other constants
     BACKGROUND_COLOR: 'rgb( 225, 255, 255 )',
     CONTROL_PANEL_BACKGROUND_COLOR: 'rgb( 254, 241, 233 )',
+    RESET_BUTTON_RADIUS: 22,
+    CONTROLS_INSET: 15,
 
     UNIT_SQUARE_LENGTH: 32, // In screen coordinates, used in several places
 
