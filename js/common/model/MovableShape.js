@@ -23,7 +23,7 @@ define( function( require ) {
 
   /**
    * @param {Shape} shape
-   * @param {Color || String} color
+   * @param {Color || string} color
    * @param {Vector2} initialPosition
    * @constructor
    */

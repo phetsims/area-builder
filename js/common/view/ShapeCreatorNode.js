@@ -28,8 +28,8 @@ define( function( require ) {
 
   /**
    * @param {Shape} shape
-   * @param {String || Color} color
-   * @param {Function} addShapeToModel - A function for adding the created shape to the model
+   * @param {string || Color} color
+   * @param {function} addShapeToModel - A function for adding the created shape to the model
    * @param {Object} [options]
    * @constructor
    */

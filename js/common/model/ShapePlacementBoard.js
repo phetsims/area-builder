@@ -55,9 +55,9 @@ define( function( require ) {
    * @param {Dimension2} size
    * @param {number} unitSquareLength
    * @param {Vector2} position
-   * @param {String || Color} colorHandled A string or Color object, can be wildcard string ('*') for all colors
-   * @param {Property<Boolean>} showGridProperty
-   * @param {Property<Boolean>} showDimensionsProperty
+   * @param {string || Color} colorHandled A string or Color object, can be wildcard string ('*') for all colors
+   * @param {Property<boolean>} showGridProperty
+   * @param {Property<boolean>} showDimensionsProperty
    * @constructor
    */
   function ShapePlacementBoard( size, unitSquareLength, position, colorHandled, showGridProperty, showDimensionsProperty ) {
@@ -82,8 +82,8 @@ define( function( require ) {
     // together in an object so that they can be updated simultaneously, otherwise race conditions can occur when
     // evaluating challenges.
     this.areaAndPerimeterProperty = new Property( {
-      area: 0, // Number when valid, string when invalid.
-      perimeter: 0  // Number when valid, string when invalid.
+      area: 0, // {number||string} - number when valid, string when invalid
+      perimeter: 0  // {number||string} number when valid, string when invalid
     } );
 
     // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by all

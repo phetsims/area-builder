@@ -30,9 +30,9 @@ define( function( require ) {
   var CONTROL_BUTTON_TOUCH_AREA_DILATION = 4;
 
   /**
-   * @param {Function} startLevelFunction - Function used to initiate a game
+   * @param {function} startLevelFunction - Function used to initiate a game
    * level, will be called with a zero-based index value.
-   * @param {Function} resetFunction - Function to reset game and scores.
+   * @param {function} resetFunction - Function to reset game and scores.
    * @param {Property} timerEnabledProperty
    * @param {Property} soundEnabledProperty
    * @param {Array} iconNodes - Set of iconNodes to use on the buttons, sizes
