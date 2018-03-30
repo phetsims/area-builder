@@ -14,7 +14,7 @@ define( function( require ) {
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var LevelSelectionItemNode = require( 'VEGAS/LevelSelectionItemNode' );
+  var LevelSelectionItemNodeDeprecated = require( 'VEGAS/LevelSelectionItemNodeDeprecated' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -82,7 +82,7 @@ define( function( require ) {
 
     var buttons = new Array( options.numLevels );
     for ( var i = 0; i < options.numLevels; i++ ) {
-      buttons[ i ] = new LevelSelectionItemNode(
+      buttons[ i ] = new LevelSelectionItemNodeDeprecated(
         iconNodes[ i ],
         options.numStarsOnButtons,
         createLevelStartFunction( i ),
