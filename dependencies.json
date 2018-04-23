@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.6 Mon Apr 23 2018 15:07:25 GMT-0600 (MDT)",
+  "comment": "# area-builder 1.1.7-rc.1 Mon Apr 23 2018 17:01:14 GMT-0600 (MDT)",
   "area-builder": {
-    "sha": "bd2f69dc6057bb65d46c7d9df008e13e3389f034",
+    "sha": "9a3a78eaa2ce658e72252c8ba07f36593bd945f1",
     "branch": "1.1"
   },
   "assert": {
@@ -42,7 +42,7 @@
   },
   "scenery": {
     "sha": "1ebc42c46cebfa423a3fa65069b6634c46945916",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "scenery-phet": {
     "sha": "436bf61deca586ec23aaffa4811bf0333d262f4c",
