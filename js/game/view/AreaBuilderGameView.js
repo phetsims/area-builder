@@ -918,7 +918,7 @@ define( function( require ) {
 
       // Set a new "level completed" node based on the results.
       var levelCompletedNode = new LevelCompletedNode(
-        this.model.levelProperty.get(),
+        this.model.levelProperty.get() + 1,
         this.model.scoreProperty.get(),
         this.model.maxPossibleScore,
         this.model.challengesPerSet,
