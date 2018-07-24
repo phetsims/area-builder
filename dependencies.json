@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.7 Fri Apr 27 2018 14:16:23 GMT-0600 (MDT)",
+  "comment": "# area-builder 1.1.7 Tue Jul 24 2018 17:08:08 GMT-0600 (MDT)",
   "area-builder": {
-    "sha": "8403be58524839f9176ea259a67ec274411bcfd3",
+    "sha": "ec146e7473cf24c4c661ea54f388e645e3fb44f7",
     "branch": "1.1"
   },
   "assert": {
@@ -65,7 +65,7 @@
     "branch": "HEAD"
   },
   "vibe": {
-    "sha": "c55dfc142ee864cc67b04ced6300cccba9af92b2",
-    "branch": "HEAD"
+    "sha": "cd0295061e84322a133f2ddc945046a57adc1a14",
+    "branch": "area-builder-1.1"
   }
 }
