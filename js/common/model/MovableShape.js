@@ -39,7 +39,9 @@ define( function( require ) {
     this.userControlledProperty = new Property( false );
 
     // Flag that indicates whether this element is animating from one location to another ; should not be set externally.
-    this.animatingProperty = new Property( false );
+    this.animatingProperty = new Property( false, {
+      reentrant: true
+    } );
 
     // Value that indicates how faded out this shape is.  This is used as part of a feature where shapes can fade
     // out.  Once fade has started ; it doesn't stop until it is fully faded ; i.e. the value is 1.  This should not be
