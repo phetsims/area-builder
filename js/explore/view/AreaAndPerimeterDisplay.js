@@ -71,6 +71,7 @@ define( function( require ) {
 
     this.expandedProperty = new Property( true );
     AccordionBox.call( this, contentNode, {
+      cornerRadius: 3,
       titleNode: new Text( valuesString, { font: DISPLAY_FONT, maxWidth: MAX_TITLE_WIDTH } ),
       titleAlignX: 'left',
       contentAlign: 'left',
