@@ -12,6 +12,7 @@
   "phet": {
     "requirejsNamespace": "AREA_BUILDER",
     "phetLibs": [
+      "twixt",
       "vegas",
       "vibe"
     ],

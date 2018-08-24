@@ -841,7 +841,8 @@ define( function( require ) {
               centerX: this.shapeBoardOriginalBounds.centerX,
               top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
               fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-              hideDisabledButtons: true
+              hideDisabledButtons: true,
+              stepper: 'timer'
             } ) );
           }
           else {
