@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.9 Wed Aug 15 2018 12:46:29 GMT-0600 (MDT)",
+  "comment": "# area-builder 1.1.9 Fri Sep 21 2018 16:34:32 GMT-0600 (MDT)",
   "area-builder": {
-    "sha": "a32b32e58170fc91ed83731d66164dc7fc830581",
+    "sha": "bddc19255e1f5e2b2d6b52eb1d8b5f98e1f48995",
     "branch": "1.1"
   },
   "assert": {
@@ -17,8 +17,8 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "8cb1f74b89adbeecc34ee3efd7072b92cd74cd59",
-    "branch": "HEAD"
+    "sha": "f0d1a0fe9490f27e16011b6f7c3ba0880c287ba0",
+    "branch": "area-builder-1.1"
   },
   "dot": {
     "sha": "bf6f038bca1ea87f23a51c670474438ae282ac2c",
