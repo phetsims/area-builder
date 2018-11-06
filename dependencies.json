@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.11-rc.1 Tue Oct 30 2018 15:17:28 GMT-0600 (MDT)",
+  "comment": "# area-builder 1.1.11 Tue Nov 06 2018 10:32:38 GMT-0700 (MST)",
   "area-builder": {
-    "sha": "820dbf4b1f4990ae14452769cdc1c7feb823be2b",
+    "sha": "6f8ed9bab9f078f2d96ffdef5c91cdf5688c64cc",
     "branch": "1.1"
   },
   "assert": {
