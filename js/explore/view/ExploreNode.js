@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2018, University of Colorado Boulder
 
 /**
  * A composite node that depicts a shape placement board, a bucket containing shapes to go on the board, an area and
