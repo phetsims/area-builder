@@ -78,8 +78,7 @@ define( function( require ) {
         leftExploreNode.reset();
         rightExploreNode.reset();
         model.reset();
-      },
-      touchAreaDilation: 7
+      }
     } ) );
 
     // Add the layers where the movable shapes reside.

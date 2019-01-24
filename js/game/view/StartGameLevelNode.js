@@ -113,8 +113,7 @@ define( function( require ) {
     // Reset button.
     var resetButton = new ResetAllButton( {
       listener: resetFunction,
-      radius: AreaBuilderSharedConstants.RESET_BUTTON_RADIUS,
-      touchAreaDilation: 7
+      radius: AreaBuilderSharedConstants.RESET_BUTTON_RADIUS
     } );
     this.addChild( resetButton );
 
