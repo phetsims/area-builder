@@ -19,6 +19,7 @@ define( function( require ) {
   var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -381,8 +382,8 @@ define( function( require ) {
      * @param operation
      */
     updateCellOccupation: function( movableShape, operation ) {
-      var xIndex = Math.round( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
-      var yIndex = Math.round( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
+      var xIndex = Util.roundSymmetric( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
+      var yIndex = Util.roundSymmetric( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
       // Mark all cells occupied by this shape.
       for ( var row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
         for ( var column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
@@ -447,8 +448,8 @@ define( function( require ) {
       }
       for ( var i = 0; i < this.incomingShapes.length; i++ ) {
         var targetCell = this.modelToCellVector( this.incomingShapes[ i ].destination );
-        var normalizedWidth = Math.round( this.incomingShapes[ i ].shape.bounds.width / this.unitSquareLength );
-        var normalizedHeight = Math.round( this.incomingShapes[ i ].shape.bounds.height / this.unitSquareLength );
+        var normalizedWidth = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.width / this.unitSquareLength );
+        var normalizedHeight = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.height / this.unitSquareLength );
         if ( column >= targetCell.x && column < targetCell.x + normalizedWidth &&
              row >= targetCell.y && row < targetCell.y + normalizedHeight ) {
           return true;
@@ -501,8 +502,8 @@ define( function( require ) {
      */
     isValidToPlace: function( movableShape, location ) {
       var normalizedLocation = this.modelToCellVector( location );
-      var normalizedWidth = Math.round( movableShape.shape.bounds.width / this.unitSquareLength );
-      var normalizedHeight = Math.round( movableShape.shape.bounds.height / this.unitSquareLength );
+      var normalizedWidth = Util.roundSymmetric( movableShape.shape.bounds.width / this.unitSquareLength );
+      var normalizedHeight = Util.roundSymmetric( movableShape.shape.bounds.height / this.unitSquareLength );
       var row;
       var column;
 
@@ -631,8 +632,8 @@ define( function( require ) {
 
     //@private
     modelToCellCoords: function( x, y ) {
-      return new Vector2( Math.round( ( x - this.bounds.minX ) / this.unitSquareLength ),
-        Math.round( ( y - this.bounds.minY ) / this.unitSquareLength ) );
+      return new Vector2( Util.roundSymmetric( ( x - this.bounds.minX ) / this.unitSquareLength ),
+        Util.roundSymmetric( ( y - this.bounds.minY ) / this.unitSquareLength ) );
     },
 
     //@private

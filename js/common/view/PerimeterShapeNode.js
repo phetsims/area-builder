@@ -20,6 +20,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -180,8 +181,8 @@ define( function( require ) {
               };
 
               // Only include the labels that are integer values.
-              if ( Math.abs( Math.round( segmentLabelInfo.unitLength ) - segmentLabelInfo.unitLength ) < COMPARISON_TOLERANCE ) {
-                segmentLabelInfo.unitLength = Math.round( segmentLabelInfo.unitLength );
+              if ( Math.abs( Util.roundSymmetric( segmentLabelInfo.unitLength ) - segmentLabelInfo.unitLength ) < COMPARISON_TOLERANCE ) {
+                segmentLabelInfo.unitLength = Util.roundSymmetric( segmentLabelInfo.unitLength );
                 segmentLabelsInfo.push( segmentLabelInfo );
               }
             } while ( segment.endIndex !== 0 );
