@@ -38,8 +38,7 @@ define( function( require ) {
     var ellipseXRadius = NAV_BAR_ICON_SIZE.width * 0.125;
     var ellipseYRadius = ellipseXRadius * 0.3;
     var bucketDepth = ellipseXRadius * 0.75;
-    var bodyShape = new Shape().
-      moveTo( -ellipseXRadius ).
+    var bodyShape = new Shape().moveTo( -ellipseXRadius, 0 ).
       lineTo( -ellipseXRadius * 0.75, bucketDepth ).
       quadraticCurveTo( 0, bucketDepth + ellipseYRadius, ellipseXRadius * 0.75, bucketDepth ).
       lineTo( ellipseXRadius, 0 ).
