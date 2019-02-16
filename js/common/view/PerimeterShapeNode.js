@@ -198,7 +198,7 @@ define( function( require ) {
             var dimensionLabel = textNodePool[ segmentIndex ];
             dimensionLabel.visible = true;
             dimensionLabel.text = segmentLabelInfo.unitLength;
-            var labelPositionOffset = new Vector2();
+            var labelPositionOffset = new Vector2( 0, 0 );
             // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
             // containment testing unreliable if there is an edge on the same line as the containment test.  As a
             // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the

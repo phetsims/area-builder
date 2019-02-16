@@ -361,7 +361,7 @@ define( function( require ) {
 
     // Create a perimeter shape with a cutout in the top, bottom, left, or right side.
     function createUShapedPerimeterShape( x, y, width, height, sideWithCutout, cutoutWidth, cutoutHeight, cutoutOffset, fillColor ) {
-      var perimeterPoints = [ new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2(), new Vector2() ];
+      var perimeterPoints = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
 
       if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
         perimeterPoints[ 0 ].setXY( x, y );
