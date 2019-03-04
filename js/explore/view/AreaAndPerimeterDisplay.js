@@ -80,8 +80,10 @@ define( function( require ) {
       contentXMargin: 8,
       contentYMargin: 4,
       expandedProperty: this.expandedProperty,
-      buttonTouchAreaXDilation: 5,
-      buttonTouchAreaYDilation: 5
+      expandCollapseButtonOptions: {
+        touchAreaXDilation: 5,
+        touchAreaYDilation: 5
+      }
     } );
 
     this.mutate( options );
