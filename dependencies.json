@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.11 Tue Nov 06 2018 10:32:38 GMT-0700 (MST)",
+  "comment": "# area-builder 1.1.11 Tue Mar 05 2019 14:15:18 GMT-0500 (EST)",
   "area-builder": {
-    "sha": "6f8ed9bab9f078f2d96ffdef5c91cdf5688c64cc",
+    "sha": "f48f41f86572453bcddc30f97c9d151d73798ea5",
     "branch": "1.1"
   },
   "assert": {
@@ -13,8 +13,8 @@
     "branch": "HEAD"
   },
   "brand": {
-    "sha": "933206444340e4513efbde6c5f834373b09ef64f",
-    "branch": "HEAD"
+    "sha": "99122f0ef4bfd33ee85d80d611202bf48c6841ee",
+    "branch": "area-builder-1.1"
   },
   "chipper": {
     "sha": "f0d1a0fe9490f27e16011b6f7c3ba0880c287ba0",
@@ -25,8 +25,8 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "5b74b0d8d3f00c8715cd6eb8c2ee48bc0e700b21",
-    "branch": "HEAD"
+    "sha": "72cbf0a2a7cc51dd46c417e19066636a60ff1884",
+    "branch": "area-builder-1.1"
   },
   "kite": {
     "sha": "dce9765e6fcb535970ef17c1a1bcb8db95599b08",
