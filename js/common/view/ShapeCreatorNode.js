@@ -22,6 +22,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Vector2Property = require( 'DOT/Vector2Property' );
 
   // constants
   var BORDER_LINE_WIDTH = 1;
@@ -98,7 +99,7 @@ define( function( require ) {
     // variables used by the drag handler
     var parentScreenView = null; // needed for coordinate transforms
     var movableShape = null;
-    var shapePositionProperty = new Property( Vector2.ZERO );
+    var shapePositionProperty = new Vector2Property( Vector2.ZERO );
 
     // Link the internal position property to the movable shape.
     shapePositionProperty.link( function( position ){
