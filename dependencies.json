@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.11 Tue Mar 19 2019 15:31:19 GMT-0400 (EDT)",
+  "comment": "# area-builder 1.1.12-rc.1 Wed Mar 20 2019 12:11:30 GMT-0400 (EDT)",
   "area-builder": {
-    "sha": "0f3ace7fd2395a033d5363f6dd4ea207fcc953af",
+    "sha": "f27f1038feddb0d6d9d2b59fb930c066266ea977",
     "branch": "1.1"
   },
   "assert": {
@@ -18,7 +18,7 @@
   },
   "chipper": {
     "sha": "3d454cfc3d06876f760c9c7deafbed08cf18b0eb",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "dot": {
     "sha": "bf6f038bca1ea87f23a51c670474438ae282ac2c",
