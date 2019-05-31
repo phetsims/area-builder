@@ -24,7 +24,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var chooseYourLevelString = require( 'string!AREA_BUILDER/chooseYourLevel' );
+  var chooseYourLevelString = require( 'string!VEGAS/chooseYourLevel' );
 
   // constants
   var CONTROL_BUTTON_TOUCH_AREA_DILATION = 4;
