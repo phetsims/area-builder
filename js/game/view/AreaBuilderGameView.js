@@ -19,7 +19,7 @@ define( function( require ) {
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   var EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
-  var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
+  var GameAudioPlayerOld = require( 'VEGAS/GameAudioPlayerOld' );
   var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
   var GameInfoBanner = require( 'AREA_BUILDER/game/view/GameInfoBanner' );
   var GameState = require( 'AREA_BUILDER/game/model/GameState' );
@@ -79,7 +79,7 @@ define( function( require ) {
     self.model = gameModel;
 
     // Hook up the audio player to the sound settings.
-    this.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
+    this.gameAudioPlayer = new GameAudioPlayerOld( gameModel.soundEnabledProperty );
 
     // Create a root node and send to back so that the layout bounds box can be made visible if needed.
     this.rootNode = new Node();
