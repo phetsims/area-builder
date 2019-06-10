@@ -78,8 +78,8 @@ define( function( require ) {
     var self = this;
     self.model = gameModel;
 
-    // Hook up the audio player to the sound settings.
-    this.gameAudioPlayer = new GameAudioPlayer( gameModel.soundEnabledProperty );
+    // Create the game audio player.
+    this.gameAudioPlayer = new GameAudioPlayer();
 
     // Create a root node and send to back so that the layout bounds box can be made visible if needed.
     this.rootNode = new Node();
@@ -100,7 +100,6 @@ define( function( require ) {
       },
       function() { gameModel.reset(); },
       gameModel.timerEnabledProperty,
-      gameModel.soundEnabledProperty,
       [
         GameIconFactory.createIcon( 1 ),
         GameIconFactory.createIcon( 2 ),

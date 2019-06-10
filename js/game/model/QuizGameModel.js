@@ -41,7 +41,6 @@ define( function( require ) {
     }, options );
 
     // @public - model properties
-    this.soundEnabledProperty = new Property( true );
     this.timerEnabledProperty = new Property( false );
     this.levelProperty = new Property( 0 );
     this.challengeIndexProperty = new Property( 0 );
@@ -89,7 +88,6 @@ define( function( require ) {
 
       // reset this model
       reset: function() {
-        this.soundEnabledProperty.reset();
         this.timerEnabledProperty.reset();
         this.levelProperty.reset();
         this.challengeIndexProperty.reset();

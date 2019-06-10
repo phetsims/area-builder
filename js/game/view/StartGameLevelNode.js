@@ -33,7 +33,6 @@ define( function( require ) {
    * level, will be called with a zero-based index value.
    * @param {function} resetFunction - Function to reset game and scores.
    * @param {Property} timerEnabledProperty
-   * @param {Property} soundEnabledProperty
    * @param {Array} iconNodes - Set of iconNodes to use on the buttons, sizes
    * should be the same, length of array must match number of levels.
    * @param {Array} scores - Current scores, used to decide which stars to
@@ -44,7 +43,6 @@ define( function( require ) {
   function StartGameLevelNode( startLevelFunction,
                                resetFunction,
                                timerEnabledProperty,
-                               soundEnabledProperty,
                                iconNodes,
                                scores,
                                options ) {
