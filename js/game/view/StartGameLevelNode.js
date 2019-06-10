@@ -18,7 +18,6 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TimerToggleButton = require( 'SCENERY_PHET/buttons/TimerToggleButton' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -104,11 +103,6 @@ define( function( require ) {
       touchAreaYDilation: CONTROL_BUTTON_TOUCH_AREA_DILATION
     } );
     this.addChild( timerToggleButton );
-    var soundToggleButton = new SoundToggleButton( soundEnabledProperty, {
-      touchAreaXDilation: CONTROL_BUTTON_TOUCH_AREA_DILATION,
-      touchAreaYDilation: CONTROL_BUTTON_TOUCH_AREA_DILATION
-    } );
-    this.addChild( soundToggleButton );
 
     // Reset button.
     var resetButton = new ResetAllButton( {
@@ -134,10 +128,8 @@ define( function( require ) {
     resetButton.bottom = options.size.height - options.controlsInset;
     title.centerX = options.size.width / 2;
     title.centerY = buttons[ 0 ].top / 2;
-    soundToggleButton.left = options.controlsInset;
-    soundToggleButton.bottom = options.size.height - options.controlsInset;
     timerToggleButton.left = options.controlsInset;
-    timerToggleButton.bottom = soundToggleButton.top - 10;
+    timerToggleButton.bottom = options.size.height - options.controlsInset;
   }
 
   areaBuilder.register( 'StartGameLevelNode', StartGameLevelNode );
