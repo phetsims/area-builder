@@ -13,8 +13,7 @@
     "requirejsNamespace": "AREA_BUILDER",
     "phetLibs": [
       "twixt",
-      "vegas",
-      "vibe"
+      "vegas"
     ],
     "preload": [
       "../sherpa/lib/Tween-r12.js"
