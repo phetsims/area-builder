@@ -9,8 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
+  const Animation = require( 'TWIXT/Animation' );
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
+  const Easing = require( 'TWIXT/Easing' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -30,7 +32,7 @@ define( function( require ) {
   var LARGER_FONT = new PhetFont( { size: 24 } ); // Font for single line text
   var SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
   var TITLE_INDENT = 15; // Empirically determined.
-  var ANIMATION_TIME = 600; // In milliseconds
+  var ANIMATION_TIME = 0.6; // In seconds
 
   /**
    * @param {number} width
@@ -91,12 +93,24 @@ define( function( require ) {
     function moveTitleToSide() {
       if ( title.centerX === width / 2 ) {
         // Move the title over
-        new TWEEN.Tween( title ).to( { left: TITLE_INDENT }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start( phet.joist.elapsedTime );
+        new Animation( {
+          from: title.left,
+          to: TITLE_INDENT,
+          setValue: left => { title.left = left; },
+          duration: ANIMATION_TIME,
+          easing: Easing.CUBIC_IN_OUT
+        } ).start();
 
         // Fade in the build prompt if it is now set to be visible.
         if ( buildPrompt.visible ) {
           buildPrompt.opacity = 0;
-          new TWEEN.Tween( buildPrompt ).to( { opacity: 1 }, ANIMATION_TIME ).easing( TWEEN.Easing.Cubic.InOut ).start( phet.joist.elapsedTime );
+          new Animation( {
+            from: 0,
+            to: 1,
+            setValue: opacity => { buildPrompt.opacity = opacity; },
+            duration: ANIMATION_TIME,
+            easing: Easing.CUBIC_IN_OUT
+          } ).start();
         }
       }
     }
