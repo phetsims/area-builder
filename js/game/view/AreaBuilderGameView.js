@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  const Animation = require( 'TWIXT/Animation' );
   var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
   var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
@@ -17,6 +18,7 @@ define( function( require ) {
   var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
   var Carousel = require( 'SUN/Carousel' );
   var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
+  const Easing = require( 'TWIXT/Easing' );
   var EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
   var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
@@ -360,11 +362,13 @@ define( function( require ) {
       // If the initial build prompt is visible, hide it.
       if ( self.buildPromptPanel.opacity === 1 ) {
         // using a function instead, see Seasons sim, PanelNode.js for an example.
-        new TWEEN.Tween( { opacity: self.buildPromptPanel.opacity } )
-          .to( { opacity: 0 }, 500 )
-          .easing( TWEEN.Easing.Cubic.InOut )
-          .onUpdate( function() { self.buildPromptPanel.opacity = this.opacity; } )
-          .start( phet.joist.elapsedTime );
+        new Animation( {
+          from: self.buildPromptPanel.opacity,
+          to: 0,
+          setValue: opacity => { self.buildPromptPanel.opacity = opacity; },
+          duration: 0.5,
+          easing: Easing.CUBIC_IN_OUT
+        } ).start();
       }
 
       // If this is a 'built it' style challenge, and this is the first element being added to the board, add the
