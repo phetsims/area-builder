@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.14 Fri Jul 26 2019 12:37:15 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.15-rc.1 Wed Jul 31 2019 17:57:12 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "05b523da3c1ed35a57fcb38904c632f6524ac032",
+    "sha": "ec896a6af88a0c22f14860047d0d8c2f51415bf0",
     "branch": "1.1"
   },
   "assert": {
@@ -38,7 +38,7 @@
   },
   "phetcommon": {
     "sha": "99c3655bac7e074577f930d8f4c432b04110491c",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "phetmarks": {
     "sha": "3fdfece0fe0262594bb06856833b8b16be25deb8",
