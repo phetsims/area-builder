@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.15 Mon Aug 05 2019 14:19:49 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.15 Mon Aug 19 2019 12:19:56 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "9189f91fd07e60acefeca64c9ecca54de5cc8834",
+    "sha": "2be762e15c0422c5214e58bf7c0e133b0bf7ea6e",
     "branch": "1.1"
   },
   "assert": {
@@ -25,8 +25,8 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "72cbf0a2a7cc51dd46c417e19066636a60ff1884",
-    "branch": "HEAD"
+    "sha": "0b0f8cc32cbef3302036b06539aefac4c14e1603",
+    "branch": "area-builder-1.1"
   },
   "kite": {
     "sha": "dce9765e6fcb535970ef17c1a1bcb8db95599b08",
@@ -49,8 +49,8 @@
     "branch": "HEAD"
   },
   "scenery-phet": {
-    "sha": "436bf61deca586ec23aaffa4811bf0333d262f4c",
-    "branch": "HEAD"
+    "sha": "7def38a31b7322d5428bdb863937d941cf6d3c41",
+    "branch": "area-builder-1.1"
   },
   "sherpa": {
     "sha": "a7ccb78f3dd295502a298d7327bbd060f04852ef",
