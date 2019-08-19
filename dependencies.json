@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.15 Mon Aug 19 2019 12:19:56 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.16-rc.1 Mon Aug 19 2019 15:19:49 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "2be762e15c0422c5214e58bf7c0e133b0bf7ea6e",
+    "sha": "891d57719b18b6bb6d50f3e65ff92f8c333a1b45",
     "branch": "1.1"
   },
   "assert": {
@@ -26,7 +26,7 @@
   },
   "joist": {
     "sha": "0b0f8cc32cbef3302036b06539aefac4c14e1603",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "kite": {
     "sha": "dce9765e6fcb535970ef17c1a1bcb8db95599b08",
@@ -50,7 +50,7 @@
   },
   "scenery-phet": {
     "sha": "7def38a31b7322d5428bdb863937d941cf6d3c41",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "sherpa": {
     "sha": "a7ccb78f3dd295502a298d7327bbd060f04852ef",
