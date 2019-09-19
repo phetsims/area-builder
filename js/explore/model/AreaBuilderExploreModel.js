@@ -22,15 +22,15 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
-  var UNIT_SQUARE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
-  var SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 9, UNIT_SQUARE_LENGTH * 8 );
-  var LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 19, UNIT_SQUARE_LENGTH * 8 );
-  var PLAY_AREA_WIDTH = AreaBuilderSharedConstants.LAYOUT_BOUNDS.width;
-  var SPACE_BETWEEN_PLACEMENT_BOARDS = UNIT_SQUARE_LENGTH;
-  var BOARD_Y_POS = 70; // Empirically determined from looking at the layout
-  var BUCKET_SIZE = new Dimension2( 90, 45 );
-  var BOARD_TO_BUCKET_Y_SPACING = 45;
+  const UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
+  const UNIT_SQUARE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
+  const SMALL_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 9, UNIT_SQUARE_LENGTH * 8 );
+  const LARGE_BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 19, UNIT_SQUARE_LENGTH * 8 );
+  const PLAY_AREA_WIDTH = AreaBuilderSharedConstants.LAYOUT_BOUNDS.width;
+  const SPACE_BETWEEN_PLACEMENT_BOARDS = UNIT_SQUARE_LENGTH;
+  const BOARD_Y_POS = 70; // Empirically determined from looking at the layout
+  const BUCKET_SIZE = new Dimension2( 90, 45 );
+  const BOARD_TO_BUCKET_Y_SPACING = 45;
 
   /**
    * @constructor
@@ -75,7 +75,7 @@ define( require => {
     this.shapePlacementBoards = [ this.leftShapePlacementBoard, this.rightShapePlacementBoard, this.singleShapePlacementBoard ];
 
     // Create the buckets that will hold the shapes.
-    var bucketYPos = this.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
+    const bucketYPos = this.leftShapePlacementBoard.bounds.minY + SMALL_BOARD_SIZE.height + BOARD_TO_BUCKET_Y_SPACING;
     this.leftBucket = new Bucket( {
       position: new Vector2( this.leftShapePlacementBoard.bounds.minX + SMALL_BOARD_SIZE.width * 0.7, bucketYPos ),
       baseColor: '#000080',
@@ -105,8 +105,8 @@ define( require => {
     },
 
     placeShape: function( movableShape ) {
-      var shapePlaced = false;
-      for ( var i = 0; i < this.shapePlacementBoards.length && !shapePlaced; i++ ) {
+      let shapePlaced = false;
+      for ( let i = 0; i < this.shapePlacementBoards.length && !shapePlaced; i++ ) {
         shapePlaced = this.shapePlacementBoards[ i ].placeShape( movableShape );
       }
       if ( !shapePlaced ) {
@@ -121,7 +121,7 @@ define( require => {
      * @param movableShape
      */
     addUserCreatedMovableShape: function( movableShape ) {
-      var self = this;
+      const self = this;
       this.movableShapes.push( movableShape );
       movableShape.userControlledProperty.link( function( userControlled ) {
         if ( !userControlled ) {
@@ -151,12 +151,12 @@ define( require => {
      * fill the boards with unit squares, useful for debugging, not used in general operation of the sim
      */
     fillBoards: function() {
-      var self = this;
+      const self = this;
       this.shapePlacementBoards.forEach( function( board ) {
-        var numRows = board.bounds.height / UNIT_SQUARE_LENGTH;
-        var numColumns = board.bounds.width / UNIT_SQUARE_LENGTH;
-        var movableShape;
-        var shapeOrigin;
+        const numRows = board.bounds.height / UNIT_SQUARE_LENGTH;
+        const numColumns = board.bounds.width / UNIT_SQUARE_LENGTH;
+        let movableShape;
+        let shapeOrigin;
         if ( board === self.leftShapePlacementBoard ){
           shapeOrigin = self.leftBucket.position;
         }

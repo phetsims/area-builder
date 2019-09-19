@@ -19,7 +19,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var FADE_RATE = 2; // proportion per second
+  const FADE_RATE = 2; // proportion per second
 
   /**
    * @param {Shape} shape
@@ -28,7 +28,7 @@ define( require => {
    * @constructor
    */
   function MovableShape( shape, color, initialPosition ) {
-    var self = this;
+    const self = this;
 
     // Property that indicates where in model space the upper left corner of this shape is.  In general, this should
     // not be set directly outside of this type, and should only be manipulated through the methods defined below.
@@ -79,12 +79,12 @@ define( require => {
       if ( !this.userControlledProperty.get() ) {
 
         // perform any animation
-        var currentPosition = this.positionProperty.get();
-        var distanceToDestination = currentPosition.distance( this.destination );
+        const currentPosition = this.positionProperty.get();
+        const distanceToDestination = currentPosition.distance( this.destination );
         if ( distanceToDestination > dt * AreaBuilderSharedConstants.ANIMATION_SPEED ) {
           // Move a step toward the destination.
-          var stepAngle = Math.atan2( this.destination.y - currentPosition.y, this.destination.x - currentPosition.x );
-          var stepVector = Vector2.createPolar( AreaBuilderSharedConstants.ANIMATION_SPEED * dt, stepAngle );
+          const stepAngle = Math.atan2( this.destination.y - currentPosition.y, this.destination.x - currentPosition.x );
+          const stepVector = Vector2.createPolar( AreaBuilderSharedConstants.ANIMATION_SPEED * dt, stepAngle );
           this.positionProperty.set( currentPosition.plus( stepVector ) );
         }
         else if ( this.animatingProperty.get() ) {
@@ -145,11 +145,11 @@ define( require => {
     decomposeIntoSquares: function( squareLength ) {
       assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength === 0,
         'Error: A dimension of this movable shape is not an integer multiple of the provided dimension' );
-      var shapes = [];
-      var unitSquareShape = Shape.rect( 0, 0, squareLength, squareLength );
-      for ( var column = 0; column < this.shape.bounds.width; column += squareLength ) {
-        for ( var row = 0; row < this.shape.bounds.height; row += squareLength ) {
-          var constituentShape = new MovableShape( unitSquareShape, this.color, this.positionProperty.initialValue );
+      const shapes = [];
+      const unitSquareShape = Shape.rect( 0, 0, squareLength, squareLength );
+      for ( let column = 0; column < this.shape.bounds.width; column += squareLength ) {
+        for ( let row = 0; row < this.shape.bounds.height; row += squareLength ) {
+          const constituentShape = new MovableShape( unitSquareShape, this.color, this.positionProperty.initialValue );
           constituentShape.setDestination( this.positionProperty.get().plusXY( column, row ), false );
           constituentShape.invisibleWhenStillProperty.set( this.invisibleWhenStillProperty.get() );
           shapes.push( constituentShape );

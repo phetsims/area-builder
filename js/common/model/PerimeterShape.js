@@ -16,7 +16,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var FLOATING_POINT_ERR_TOLERANCE = 1e-6;
+  const FLOATING_POINT_ERR_TOLERANCE = 1e-6;
 
   // Utility function to compute the unit area of a perimeter shape.
   function calculateUnitArea( shape, unitLength ) {
@@ -31,10 +31,10 @@ define( require => {
     );
 
     // Compute the unit area by testing whether or not points on a sub-grid are contained in the shape.
-    var unitArea = 0;
-    var testPoint = new Vector2( 0, 0 );
-    for ( var row = 0; row * unitLength < shape.bounds.height; row++ ) {
-      for ( var column = 0; column * unitLength < shape.bounds.width; column++ ) {
+    let unitArea = 0;
+    const testPoint = new Vector2( 0, 0 );
+    for ( let row = 0; row * unitLength < shape.bounds.height; row++ ) {
+      for ( let column = 0; column * unitLength < shape.bounds.width; column++ ) {
         // Scan four points in the unit square.  This allows support for triangular 1/2 unit square shapes.  This is
         // in-lined rather than looped for the sake of efficiency, since this approach avoids vector allocations.
         testPoint.setXY( shape.bounds.minX + ( column + 0.25 ) * unitLength, shape.bounds.minY + ( row + 0.5 ) * unitLength );
@@ -69,8 +69,8 @@ define( require => {
    * @constructor
    */
   function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength, options ) {
-    var self = this;
-    var i;
+    const self = this;
+    let i;
 
     options = _.extend( {
       fillColor: null,
@@ -125,8 +125,8 @@ define( require => {
 
     // Returns a linearly translated version of this perimeter shape.
     translated: function( x, y ) {
-      var exteriorPerimeters = [];
-      var interiorPerimeters = [];
+      const exteriorPerimeters = [];
+      const interiorPerimeters = [];
       this.exteriorPerimeters.forEach( function( exteriorPerimeter, index ) {
         exteriorPerimeters.push( [] );
         exteriorPerimeter.forEach( function( point ) {

@@ -30,7 +30,7 @@ define( require => {
    */
   function AreaBuilderExploreScreen( tandem ) {
 
-    var options = {
+    const options = {
       name: exploreString,
       backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
       homeScreenIcon: new Image( exploreIcon ),

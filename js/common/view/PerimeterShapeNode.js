@@ -24,8 +24,8 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var DIMENSION_LABEL_FONT = new PhetFont( { size: 14 } );
-  var COMPARISON_TOLERANCE = 1E-6;
+  const DIMENSION_LABEL_FONT = new PhetFont( { size: 14 } );
+  const COMPARISON_TOLERANCE = 1E-6;
 
   // Utility function for identifying a perimeter segment with no bends.
   function identifySegment( perimeterPoints, startIndex ) {
@@ -36,15 +36,15 @@ define( require => {
     }
 
     // Set up initial portion of segment.
-    var segmentStartPoint = perimeterPoints[ startIndex ];
-    var endIndex = ( startIndex + 1 ) % perimeterPoints.length;
-    var segmentEndPoint = perimeterPoints[ endIndex ];
-    var previousAngle = Math.atan2( segmentEndPoint.y - segmentStartPoint.y, segmentEndPoint.x - segmentStartPoint.x );
-    var segmentComplete = false;
+    const segmentStartPoint = perimeterPoints[ startIndex ];
+    let endIndex = ( startIndex + 1 ) % perimeterPoints.length;
+    let segmentEndPoint = perimeterPoints[ endIndex ];
+    const previousAngle = Math.atan2( segmentEndPoint.y - segmentStartPoint.y, segmentEndPoint.x - segmentStartPoint.x );
+    let segmentComplete = false;
 
     while ( !segmentComplete && endIndex !== 0 ) {
-      var candidatePoint = perimeterPoints[ ( endIndex + 1 ) % perimeterPoints.length ];
-      var angleToCandidatePoint = Math.atan2( candidatePoint.y - segmentEndPoint.y, candidatePoint.x - segmentEndPoint.x );
+      const candidatePoint = perimeterPoints[ ( endIndex + 1 ) % perimeterPoints.length ];
+      const angleToCandidatePoint = Math.atan2( candidatePoint.y - segmentEndPoint.y, candidatePoint.x - segmentEndPoint.x );
       if ( previousAngle === angleToCandidatePoint ) {
         // This point is an extension of the current segment.
         segmentEndPoint = candidatePoint;
@@ -75,28 +75,28 @@ define( require => {
 
     Node.call( this );
 
-    var perimeterDefinesViableShapeProperty = new Property( false );
+    const perimeterDefinesViableShapeProperty = new Property( false );
 
     // Set up the shape, edge, and grid, which will be updated as the perimeter changes.  The order in which these
     // are added is important for proper layering.
-    var perimeterShapeNode = new Path( null );
+    const perimeterShapeNode = new Path( null );
     this.addChild( perimeterShapeNode );
-    var grid = new Grid( maxBounds, unitSquareLength, {
+    const grid = new Grid( maxBounds, unitSquareLength, {
       lineDash: [ 0, 3, 1, 0 ], // Tweaked to work well with unit size
       stroke: 'black'
     } );
     this.addChild( grid );
-    var perimeterNode = new Path( null, { lineWidth: 2 } );
+    const perimeterNode = new Path( null, { lineWidth: 2 } );
     this.addChild( perimeterNode );
-    var dimensionsLayer = new Node();
+    const dimensionsLayer = new Node();
     this.addChild( dimensionsLayer );
 
     // Create a pool of text nodes that will be used to portray the dimension values.  This is done as a performance
     // optimization, since changing text nodes is more efficient that recreating them on each update.
-    var textNodePool = [];
+    const textNodePool = [];
 
     function addDimensionLabelNode() {
-      var textNode = new Text( '', { font: DIMENSION_LABEL_FONT, centerX: maxBounds.centerX, centerY: maxBounds.centerY } );
+      const textNode = new Text( '', { font: DIMENSION_LABEL_FONT, centerX: maxBounds.centerX, centerY: maxBounds.centerY } );
       textNode.visible = false;
       textNodePool.push( textNode );
       dimensionsLayer.addChild( textNode );
@@ -106,7 +106,7 @@ define( require => {
 
     // Define function for updating the appearance of the perimeter shape.
     function update() {
-      var i;
+      let i;
 
       // Update the colors
       assert && assert( perimeterShapeProperty.value.fillColor || perimeterShapeProperty.value.edgeColor,
@@ -115,7 +115,7 @@ define( require => {
       perimeterNode.stroke = perimeterShapeProperty.value.edgeColor;
 
       // Define the shape of the outer perimeter.
-      var mainShape = new Shape();
+      const mainShape = new Shape();
       perimeterShapeProperty.value.exteriorPerimeters.forEach( function( exteriorPerimeters ) {
         mainShape.moveToPoint( exteriorPerimeters[ 0 ] );
         for ( i = 1; i < exteriorPerimeters.length; i++ ) {
@@ -158,20 +158,20 @@ define( require => {
         if ( perimeterShapeProperty.value.exteriorPerimeters.length === 1 ) {
 
           // Create a list of the perimeters to be labeled.
-          var perimetersToLabel = [];
+          const perimetersToLabel = [];
           perimetersToLabel.push( perimeterShapeProperty.value.exteriorPerimeters[ 0 ] );
           perimeterShapeProperty.value.interiorPerimeters.forEach( function( interiorPerimeter ) {
             perimetersToLabel.push( interiorPerimeter );
           } );
 
           // Identify the segments in each of the perimeters, exterior and interior, to be labeled.
-          var segmentLabelsInfo = [];
+          const segmentLabelsInfo = [];
           perimetersToLabel.forEach( function( perimeterToLabel ) {
-            var segment = { startIndex: 0, endIndex: 0 };
+            let segment = { startIndex: 0, endIndex: 0 };
             do {
               segment = identifySegment( perimeterToLabel, segment.endIndex );
               // Only put labels on segments that have integer lengths.
-              var segmentLabelInfo = {
+              const segmentLabelInfo = {
                 unitLength: perimeterToLabel[ segment.startIndex ].distance( perimeterToLabel[ segment.endIndex ] ) / unitSquareLength,
                 position: new Vector2( ( perimeterToLabel[ segment.startIndex ].x + perimeterToLabel[ segment.endIndex ].x ) / 2,
                   ( perimeterToLabel[ segment.startIndex ].y + perimeterToLabel[ segment.endIndex ].y ) / 2 ),
@@ -195,15 +195,15 @@ define( require => {
 
           // Get labels from the pool and place them on each segment, just outside of the shape.
           segmentLabelsInfo.forEach( function( segmentLabelInfo, segmentIndex ) {
-            var dimensionLabel = textNodePool[ segmentIndex ];
+            const dimensionLabel = textNodePool[ segmentIndex ];
             dimensionLabel.visible = true;
             dimensionLabel.text = segmentLabelInfo.unitLength;
-            var labelPositionOffset = new Vector2( 0, 0 );
+            const labelPositionOffset = new Vector2( 0, 0 );
             // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
             // containment testing unreliable if there is an edge on the same line as the containment test.  As a
             // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the
             // label offset itself can be used for the test.  See https://github.com/phetsims/kite/issues/3.
-            var containmentTestOffset;
+            let containmentTestOffset;
             if ( segmentLabelInfo.edgeAngle === 0 || segmentLabelInfo.edgeAngle === Math.PI ) {
               // Label is on horizontal edge, so use height to determine offset.
               labelPositionOffset.setXY( 0, dimensionLabel.height / 2 );

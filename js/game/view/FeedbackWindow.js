@@ -19,11 +19,11 @@ define( require => {
   const Text = require( 'SCENERY/nodes/Text' );
 
   // constants
-  var X_MARGIN = 8;
-  var TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-  var NORMAL_TEXT_FONT = new PhetFont( { size: 18 } );
-  var CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
-  var INCORRECT_ANSWER_BACKGROUND_COLOR = PhetColorScheme.PHET_LOGO_YELLOW;
+  const X_MARGIN = 8;
+  const TITLE_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+  const NORMAL_TEXT_FONT = new PhetFont( { size: 18 } );
+  const CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
+  const INCORRECT_ANSWER_BACKGROUND_COLOR = PhetColorScheme.PHET_LOGO_YELLOW;
 
   /**
    * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the

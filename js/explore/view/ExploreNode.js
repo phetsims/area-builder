@@ -28,11 +28,11 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;
-  var IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
-  var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
-  var UNIT_RECTANGLE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
-  var SHAPE_CREATOR_OFFSET_POSITIONS = [
+  const SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;
+  const IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
+  const UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
+  const UNIT_RECTANGLE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
+  const SHAPE_CREATOR_OFFSET_POSITIONS = [
     // Offsets used for initial position of shape, relative to bucket hole center.  Empirically determined.
     new Vector2( -20 - UNIT_SQUARE_LENGTH / 2, 0 - UNIT_SQUARE_LENGTH / 2 ),
     new Vector2( -10 - UNIT_SQUARE_LENGTH / 2, -2 - UNIT_SQUARE_LENGTH / 2 ),
@@ -65,14 +65,14 @@ define( require => {
     // Verify that the shape placement board is set up to handle a specific color, rather than all colors, since other
     // code below depends on this.
     assert && assert( shapePlacementBoard.colorHandled !== '*' );
-    var shapeColor = Color.toColor( shapePlacementBoard.colorHandled );
+    const shapeColor = Color.toColor( shapePlacementBoard.colorHandled );
 
     Node.call( this );
 
     // Create the nodes that will be used to layer things visually.
-    var backLayer = new Node();
+    const backLayer = new Node();
     this.addChild( backLayer );
-    var movableShapesLayer;
+    let movableShapesLayer;
     if ( !options.shapesLayer ) {
       movableShapesLayer = new Node( { layerSplit: true } ); // Force the moving shape into a separate layer for performance reasons.
       this.addChild( movableShapesLayer );
@@ -81,14 +81,14 @@ define( require => {
       // Assume that this layer was added to the scene graph elsewhere, and doesn't need to be added here.
       movableShapesLayer = options.shapesLayer;
     }
-    var bucketFrontLayer = new Node();
+    const bucketFrontLayer = new Node();
     this.addChild( bucketFrontLayer );
-    var singleBoardControlsLayer = new Node();
+    const singleBoardControlsLayer = new Node();
     this.addChild( singleBoardControlsLayer );
 
     // Add the node that represents the shape placement board.  This is positioned based on this model location, and
     // all other nodes (such as the bucket) are positioned relative to this.
-    var shapePlacementBoardNode = new ShapePlacementBoardNode( shapePlacementBoard );
+    const shapePlacementBoardNode = new ShapePlacementBoardNode( shapePlacementBoard );
     backLayer.addChild( shapePlacementBoardNode );
 
     // Add the area and perimeter display
@@ -104,9 +104,9 @@ define( require => {
     this.addChild( this.areaAndPerimeterDisplay );
 
     // Add the bucket view elements
-    var bucketFront = new BucketFront( bucket, IDENTITY_TRANSFORM );
+    const bucketFront = new BucketFront( bucket, IDENTITY_TRANSFORM );
     bucketFrontLayer.addChild( bucketFront );
-    var bucketHole = new BucketHole( bucket, IDENTITY_TRANSFORM );
+    const bucketHole = new BucketHole( bucket, IDENTITY_TRANSFORM );
     backLayer.addChild( bucketHole );
 
     // Add the shape creator nodes.  These must be added after the bucket hole for proper layering.
@@ -133,7 +133,7 @@ define( require => {
       if ( addedShape.color.equals( shapeColor ) ) {
 
         // Create and add the view representation for this shape.
-        var shapeNode = new ShapeNode( addedShape, options.shapeDragBounds );
+        const shapeNode = new ShapeNode( addedShape, options.shapeDragBounds );
         movableShapesLayer.addChild( shapeNode );
 
         // Move the shape to the front of this layer when grabbed by the user.

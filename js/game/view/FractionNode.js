@@ -40,7 +40,7 @@ define( require => {
     this.addChild( this.numeratorNode );
     this.denominatorNode = new Text( '0', { font: options.font, fill: options.color } );
     this.addChild( this.denominatorNode );
-    var fractionBarWidth = options.fractionBarWidthProportion * Math.max( this.numeratorNode.width, this.denominatorNode.width );
+    const fractionBarWidth = options.fractionBarWidthProportion * Math.max( this.numeratorNode.width, this.denominatorNode.width );
     this.fractionBarNode = new Line( 0, 0, fractionBarWidth, 0, {
       stroke: options.color,
       lineWidth: options.fractionBarLineWidth

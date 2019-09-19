@@ -23,7 +23,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MOVEMENT_VECTORS = {
+  const MOVEMENT_VECTORS = {
     // This sim is using screen conventions, meaning positive Y indicates down.
     up: new Vector2( 0, -1 ),
     down: new Vector2( 0, 1 ),
@@ -33,7 +33,7 @@ define( require => {
 
   // Functions used for scanning the edge of the perimeter.  These are a key component of the "marching squares"
   // algorithm that is used for perimeter traversal, see the function where they are used for more information.
-  var SCAN_AREA_MOVEMENT_FUNCTIONS = [
+  const SCAN_AREA_MOVEMENT_FUNCTIONS = [
     null,                                            // 0
     function() { return MOVEMENT_VECTORS.up; },      // 1
     function() { return MOVEMENT_VECTORS.right; },   // 2
@@ -123,9 +123,9 @@ define( require => {
     // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
     // locations on this board where shapes may be placed.
     this.cells = []; //@private
-    for ( var column = 0; column < this.numColumns; column++ ) {
-      var currentRow = [];
-      for ( var row = 0; row < this.numRows; row++ ) {
+    for ( let column = 0; column < this.numColumns; column++ ) {
+      const currentRow = [];
+      for ( let row = 0; row < this.numRows; row++ ) {
         // Add an object that defines the information internally tracked for each cell.
         currentRow.push( {
           column: column,
@@ -145,8 +145,8 @@ define( require => {
 
     // @private
     shapeOverlapsBoard: function( shape ) {
-      var shapePosition = shape.positionProperty.get();
-      var shapeBounds = new Bounds2(
+      const shapePosition = shape.positionProperty.get();
+      const shapeBounds = new Bounds2(
         shapePosition.x,
         shapePosition.y,
         shapePosition.x + shape.shape.bounds.getWidth(),
@@ -166,7 +166,7 @@ define( require => {
         movableShape.userControlledProperty.get() === false,
         'Shapes can\'t be placed when still controlled by user.'
       );
-      var self = this;
+      const self = this;
 
       // Only place the shape if it is of the correct color and is positioned so that it overlaps with the board.
       if ( ( this.colorHandled !== '*' && !movableShape.color.equals( this.colorHandled ) ) || !this.shapeOverlapsBoard( movableShape ) ) {
@@ -177,19 +177,19 @@ define( require => {
       movableShape.invisibleWhenStillProperty.set( this.formCompositeProperty.get() );
 
       // Determine where to place the shape on the board.
-      var placementLocation = null;
-      for ( var surroundingPointsLevel = 0;
+      let placementLocation = null;
+      for ( let surroundingPointsLevel = 0;
             surroundingPointsLevel < Math.max( this.numRows, this.numColumns ) && placementLocation === null;
             surroundingPointsLevel++ ) {
 
-        var surroundingPoints = this.getOuterSurroundingPoints(
+        const surroundingPoints = this.getOuterSurroundingPoints(
           movableShape.positionProperty.get(),
           surroundingPointsLevel
         );
         surroundingPoints.sort( function( p1, p2 ) {
           return p1.distance( movableShape.positionProperty.get() ) - p2.distance( movableShape.positionProperty.get() );
         } );
-        for ( var pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
+        for ( let pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
           if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
             placementLocation = surroundingPoints[ pointIndex ];
           }
@@ -230,19 +230,19 @@ define( require => {
      * @param color
      */
     getProportionOfColor: function( color ) {
-      var self = this;
-      var compareColor = Color.toColor( color );
-      var totalArea = 0;
-      var areaOfSpecifiedColor = 0;
+      const self = this;
+      const compareColor = Color.toColor( color );
+      let totalArea = 0;
+      let areaOfSpecifiedColor = 0;
       this.residentShapes.forEach( function( residentShape ) {
-        var areaOfShape = residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
+        const areaOfShape = residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
         totalArea += areaOfShape;
         if ( compareColor.equals( residentShape.color ) ) {
           areaOfSpecifiedColor += areaOfShape;
         }
       } );
 
-      var proportion = new Fraction( areaOfSpecifiedColor, totalArea );
+      const proportion = new Fraction( areaOfSpecifiedColor, totalArea );
       proportion.reduce();
       return proportion;
     },
@@ -272,7 +272,7 @@ define( require => {
     //@private, remove the specified shape from the shape placement board
     removeResidentShape: function( movableShape ) {
       assert && assert( this.isResidentShape( movableShape ), 'Error: Attempt to remove shape that is not a resident.' );
-      var self = this;
+      const self = this;
       this.residentShapes.remove( movableShape );
       self.updateCellOccupation( movableShape, 'remove' );
       self.updateAll();
@@ -295,7 +295,7 @@ define( require => {
     // @private, add the shape to the list of incoming shapes and set up a listener to move it to resident shapes
     addIncomingShape: function( movableShape, destination, releaseOrphans ) {
 
-      var self = this;
+      const self = this;
 
       movableShape.setDestination( destination, true );
 
@@ -349,8 +349,8 @@ define( require => {
     // TODO: This is rather ugly.  Work with SR to improve or find alternative, or to bake into Axon.  Maybe a map.
     // @private, remove all observers from a property that have been tagged by this shape placement board.
     removeTaggedObservers: function( property ) {
-      var self = this;
-      var taggedObservers = [];
+      const self = this;
+      const taggedObservers = [];
       property.changedEmitter.listeners.forEach( function( observer ) {
         if ( self.listenerTagMatches( observer ) ) {
           taggedObservers.push( observer );
@@ -371,7 +371,7 @@ define( require => {
 
     // @private Function for getting the occupant of the specified cell, does bounds checking.
     getCellOccupant: function( column, row ) {
-      var cell = this.getCell( column, row );
+      const cell = this.getCell( column, row );
       return cell ? cell.occupiedBy : null;
     },
 
@@ -382,11 +382,11 @@ define( require => {
      * @param operation
      */
     updateCellOccupation: function( movableShape, operation ) {
-      var xIndex = Util.roundSymmetric( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
-      var yIndex = Util.roundSymmetric( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
+      const xIndex = Util.roundSymmetric( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
+      const yIndex = Util.roundSymmetric( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
       // Mark all cells occupied by this shape.
-      for ( var row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
-        for ( var column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
+      for ( let row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
+        for ( let column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
           this.cells[ xIndex + column ][ yIndex + row ].occupiedBy = operation === 'add' ? movableShape : null;
         }
       }
@@ -395,12 +395,12 @@ define( require => {
     // @private
     updateAreaAndTotalPerimeter: function() {
       if ( this.compositeShapeProperty.get().exteriorPerimeters.length <= 1 ) {
-        var self = this;
-        var totalArea = 0;
+        const self = this;
+        let totalArea = 0;
         this.residentShapes.forEach( function( residentShape ) {
           totalArea += residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
         } );
-        var totalPerimeter = 0;
+        let totalPerimeter = 0;
         this.compositeShapeProperty.get().exteriorPerimeters.forEach( function( exteriorPerimeter ) {
           totalPerimeter += exteriorPerimeter.length;
         } );
@@ -446,10 +446,10 @@ define( require => {
       if ( this.isCellOccupied( column, row ) ) {
         return true;
       }
-      for ( var i = 0; i < this.incomingShapes.length; i++ ) {
-        var targetCell = this.modelToCellVector( this.incomingShapes[ i ].destination );
-        var normalizedWidth = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.width / this.unitSquareLength );
-        var normalizedHeight = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.height / this.unitSquareLength );
+      for ( let i = 0; i < this.incomingShapes.length; i++ ) {
+        const targetCell = this.modelToCellVector( this.incomingShapes[ i ].destination );
+        const normalizedWidth = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.width / this.unitSquareLength );
+        const normalizedHeight = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.height / this.unitSquareLength );
         if ( column >= targetCell.x && column < targetCell.x + normalizedWidth &&
              row >= targetCell.y && row < targetCell.y + normalizedHeight ) {
           return true;
@@ -466,19 +466,19 @@ define( require => {
      * @param levelsRemoved
      */
     getOuterSurroundingPoints: function( point, levelsRemoved ) {
-      var self = this;
-      var normalizedPoints = [];
+      const self = this;
+      const normalizedPoints = [];
 
       // Get the closest point in cell coordinates.
-      var normalizedStartingPoint = new Vector2(
+      const normalizedStartingPoint = new Vector2(
         Math.floor( ( point.x - this.bounds.minX ) / this.unitSquareLength ) - levelsRemoved,
         Math.floor( ( point.y - this.bounds.minY ) / this.unitSquareLength ) - levelsRemoved
       );
 
-      var squareSize = ( levelsRemoved + 1 ) * 2;
+      const squareSize = ( levelsRemoved + 1 ) * 2;
 
-      for ( var row = 0; row < squareSize; row++ ) {
-        for ( var column = 0; column < squareSize; column++ ) {
+      for ( let row = 0; row < squareSize; row++ ) {
+        for ( let column = 0; column < squareSize; column++ ) {
           if ( ( row === 0 || row === squareSize - 1 || column === 0 || column === squareSize - 1 ) &&
                ( column + normalizedStartingPoint.x <= this.numColumns && row + normalizedStartingPoint.y <= this.numRows ) ) {
             // This is an outer point, and is valid, so include it.
@@ -487,7 +487,7 @@ define( require => {
         }
       }
 
-      var outerSurroundingPoints = [];
+      const outerSurroundingPoints = [];
       normalizedPoints.forEach( function( p ) { outerSurroundingPoints.push( self.cellToModelVector( p ) ); } );
       return outerSurroundingPoints;
     },
@@ -501,11 +501,11 @@ define( require => {
      * @returns {boolean}
      */
     isValidToPlace: function( movableShape, location ) {
-      var normalizedLocation = this.modelToCellVector( location );
-      var normalizedWidth = Util.roundSymmetric( movableShape.shape.bounds.width / this.unitSquareLength );
-      var normalizedHeight = Util.roundSymmetric( movableShape.shape.bounds.height / this.unitSquareLength );
-      var row;
-      var column;
+      const normalizedLocation = this.modelToCellVector( location );
+      const normalizedWidth = Util.roundSymmetric( movableShape.shape.bounds.width / this.unitSquareLength );
+      const normalizedHeight = Util.roundSymmetric( movableShape.shape.bounds.height / this.unitSquareLength );
+      let row;
+      let column;
 
       // Return false if the shape would go off the board if placed at this location.
       if ( normalizedLocation.x < 0 || normalizedLocation.x + normalizedWidth > this.numColumns ||
@@ -557,9 +557,9 @@ define( require => {
      * 'jumpHome'.  'jumpHome' is the default.
      */
     releaseAllShapes: function( releaseMode ) {
-      var self = this;
+      const self = this;
 
-      var shapesToRelease = [];
+      const shapesToRelease = [];
 
       // Remove all listeners added to the shapes by this placement board.
       this.residentShapes.forEach( function( shape ) {
@@ -576,8 +576,8 @@ define( require => {
       this.incomingShapes.length = 0;
 
       // Clear the cell array that tracks occupancy.
-      for ( var row = 0; row < this.numRows; row++ ) {
-        for ( var column = 0; column < this.numColumns; column++ ) {
+      for ( let row = 0; row < this.numRows; row++ ) {
+        for ( let column = 0; column < this.numColumns; column++ ) {
           this.cells[ column ][ row ].occupiedBy = null;
         }
       }
@@ -643,9 +643,9 @@ define( require => {
 
     //@private
     createShapeFromPerimeterPoints: function( perimeterPoints ) {
-      var perimeterShape = new Shape();
+      const perimeterShape = new Shape();
       perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
-      for ( var i = 1; i < perimeterPoints.length; i++ ) {
+      for ( let i = 1; i < perimeterPoints.length; i++ ) {
         perimeterShape.lineToPoint( perimeterPoints[ i ] );
       }
       perimeterShape.close(); // Shouldn't be needed, but best to be sure.
@@ -654,10 +654,10 @@ define( require => {
 
     //@private
     createShapeFromPerimeterList: function( perimeters ) {
-      var perimeterShape = new Shape();
+      const perimeterShape = new Shape();
       perimeters.forEach( function( perimeterPoints ) {
         perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
-        for ( var i = 1; i < perimeterPoints.length; i++ ) {
+        for ( let i = 1; i < perimeterPoints.length; i++ ) {
           perimeterShape.lineToPoint( perimeterPoints[ i ] );
         }
         perimeterShape.close();
@@ -672,20 +672,20 @@ define( require => {
      * @private
      */
     scanPerimeter: function( windowStart ) {
-      var scanWindow = windowStart.copy();
-      var scanComplete = false;
-      var perimeterPoints = [];
-      var previousMovementVector = MOVEMENT_VECTORS.up; // Init this way allows algorithm to work for interior perimeters.
+      const scanWindow = windowStart.copy();
+      let scanComplete = false;
+      const perimeterPoints = [];
+      let previousMovementVector = MOVEMENT_VECTORS.up; // Init this way allows algorithm to work for interior perimeters.
       while ( !scanComplete ) {
 
         // Scan the current four-pixel area.
-        var upLeftOccupied = this.isCellOccupied( scanWindow.x - 1, scanWindow.y - 1 );
-        var upRightOccupied = this.isCellOccupied( scanWindow.x, scanWindow.y - 1 );
-        var downLeftOccupied = this.isCellOccupied( scanWindow.x - 1, scanWindow.y );
-        var downRightOccupied = this.isCellOccupied( scanWindow.x, scanWindow.y );
+        const upLeftOccupied = this.isCellOccupied( scanWindow.x - 1, scanWindow.y - 1 );
+        const upRightOccupied = this.isCellOccupied( scanWindow.x, scanWindow.y - 1 );
+        const downLeftOccupied = this.isCellOccupied( scanWindow.x - 1, scanWindow.y );
+        const downRightOccupied = this.isCellOccupied( scanWindow.x, scanWindow.y );
 
         // Map the scan to the one of 16 possible states.
-        var marchingSquaresState = 0;
+        let marchingSquaresState = 0;
         if ( upLeftOccupied ) { marchingSquaresState |= 1; }
         if ( upRightOccupied ) { marchingSquaresState |= 2; }
         if ( downLeftOccupied ) { marchingSquaresState |= 4; }
@@ -700,7 +700,7 @@ define( require => {
         perimeterPoints.push( this.cellToModelCoords( scanWindow.x, scanWindow.y ) );
 
         // Move the scan window to the next location.
-        var movementVector = SCAN_AREA_MOVEMENT_FUNCTIONS[ marchingSquaresState ]( previousMovementVector );
+        const movementVector = SCAN_AREA_MOVEMENT_FUNCTIONS[ marchingSquaresState ]( previousMovementVector );
         scanWindow.add( movementVector );
         previousMovementVector = movementVector;
 
@@ -713,7 +713,7 @@ define( require => {
 
     // @private, Update the exterior and interior perimeters.
     updatePerimeters: function() {
-      var self = this;
+      const self = this;
 
       // The perimeters can only be computed for a single consolidated shape.
       if ( !this.formCompositeProperty.get() || this.residentShapes.length === 0 ) {
@@ -721,17 +721,17 @@ define( require => {
         this.compositeShapeProperty.reset();
       }
       else { // Do the full-blown perimeter calculation
-        var row;
-        var column;
-        var exteriorPerimeters = [];
+        let row;
+        let column;
+        const exteriorPerimeters = [];
 
         // Identify each outer perimeter.  There may be more than one if the user is moving a shape that was previously
         // on this board, since any orphaned shapes are not released until the move is complete.
-        var contiguousCellGroups = this.identifyContiguousCellGroups();
+        const contiguousCellGroups = this.identifyContiguousCellGroups();
         contiguousCellGroups.forEach( function( cellGroup ) {
 
           // Find the top left square of this group to use as a starting point.
-          var topLeftCell = null;
+          let topLeftCell = null;
           cellGroup.forEach( function( cell ) {
             if ( topLeftCell === null || cell.row < topLeftCell.row || ( cell.row === topLeftCell.row && cell.column < topLeftCell.column ) ) {
               topLeftCell = cell;
@@ -739,18 +739,18 @@ define( require => {
           } );
 
           // Scan the outer perimeter and add to list.
-          var topLeftCellOfGroup = new Vector2( topLeftCell.column, topLeftCell.row );
+          const topLeftCellOfGroup = new Vector2( topLeftCell.column, topLeftCell.row );
           exteriorPerimeters.push( self.scanPerimeter( topLeftCellOfGroup ) );
         } );
 
         // Scan for empty spaces enclosed within the outer perimeter(s).
-        var outlineShape = this.createShapeFromPerimeterList( exteriorPerimeters );
-        var enclosedSpaces = [];
+        const outlineShape = this.createShapeFromPerimeterList( exteriorPerimeters );
+        let enclosedSpaces = [];
         for ( row = 0; row < this.numRows; row++ ) {
           for ( column = 0; column < this.numColumns; column++ ) {
             if ( !this.isCellOccupied( column, row ) ) {
               // This cell is empty.  Test if it is within the outline perimeter.
-              var cellCenterInModel = this.cellToModelCoords( column, row ).addXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
+              const cellCenterInModel = this.cellToModelCoords( column, row ).addXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
               if ( outlineShape.containsPoint( cellCenterInModel ) ) {
                 enclosedSpaces.push( new Vector2( column, row ) );
               }
@@ -759,7 +759,7 @@ define( require => {
         }
 
         // Map the internal perimeters
-        var interiorPerimeters = [];
+        const interiorPerimeters = [];
         while ( enclosedSpaces.length > 0 ) {
 
           // Locate the top left most space
@@ -771,15 +771,15 @@ define( require => {
           } );
 
           // Map the interior perimeter.
-          var enclosedPerimeterPoints = this.scanPerimeter( topLeftSpace );
+          const enclosedPerimeterPoints = this.scanPerimeter( topLeftSpace );
           interiorPerimeters.push( enclosedPerimeterPoints );
 
           // Identify and save all spaces not enclosed by this perimeter.
           var perimeterShape = this.createShapeFromPerimeterPoints( enclosedPerimeterPoints );
           var leftoverEmptySpaces = [];
           enclosedSpaces.forEach( function( enclosedSpace ) {
-            var positionPoint = self.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
-            var centerPoint = positionPoint.plusXY( self.unitSquareLength / 2, self.unitSquareLength / 2 );
+            const positionPoint = self.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
+            const centerPoint = positionPoint.plusXY( self.unitSquareLength / 2, self.unitSquareLength / 2 );
             if ( !perimeterShape.containsPoint( centerPoint ) ) {
               // This space is not contained in the perimeter that was just mapped.
               leftoverEmptySpaces.push( enclosedSpace );
@@ -819,7 +819,7 @@ define( require => {
       if ( perimeterList1.length !== perimeterList2.length ) {
         return false;
       }
-      var self = this;
+      const self = this;
       return perimeterList1.every( function( perimeterPoints, index ) {
         return self.perimeterPointsEqual( perimeterPoints, perimeterList2[ index ] );
       } );
@@ -839,7 +839,7 @@ define( require => {
     identifyAdjacentOccupiedCells: function( startCell, cellGroup ) {
       assert && assert( startCell.occupiedBy !== null, 'Usage error: Unoccupied cell passed to group identification.' );
       assert && assert( !startCell.cataloged, 'Usage error: Cataloged cell passed to group identification algorithm.' );
-      var self = this;
+      const self = this;
 
       // Catalog this cell.
       cellGroup.push( startCell );
@@ -847,8 +847,8 @@ define( require => {
 
       // Check occupancy of each of the four adjecent cells.
       Object.keys( MOVEMENT_VECTORS ).forEach( function( key ) {
-        var movementVector = MOVEMENT_VECTORS[ key ];
-        var adjacentCell = self.getCell( startCell.column + movementVector.x, startCell.row + movementVector.y );
+        const movementVector = MOVEMENT_VECTORS[ key ];
+        const adjacentCell = self.getCell( startCell.column + movementVector.x, startCell.row + movementVector.y );
         if ( adjacentCell !== null && adjacentCell.occupiedBy !== null && !adjacentCell.cataloged ) {
           self.identifyAdjacentOccupiedCells( adjacentCell, cellGroup );
         }
@@ -863,10 +863,10 @@ define( require => {
     identifyContiguousCellGroups: function() {
 
       // Make a list of locations for all occupied cells.
-      var ungroupedOccupiedCells = [];
-      for ( var row = 0; row < this.numRows; row++ ) {
-        for ( var column = 0; column < this.numColumns; column++ ) {
-          var cell = this.cells[ column ][ row ];
+      let ungroupedOccupiedCells = [];
+      for ( let row = 0; row < this.numRows; row++ ) {
+        for ( let column = 0; column < this.numColumns; column++ ) {
+          const cell = this.cells[ column ][ row ];
           if ( cell.occupiedBy !== null ) {
             ungroupedOccupiedCells.push( this.cells[ column ][ row ] );
             // Clear the flag used by the search algorithm.
@@ -876,9 +876,9 @@ define( require => {
       }
 
       // Identify the interconnected groups of cells.
-      var contiguousCellGroups = [];
+      const contiguousCellGroups = [];
       while ( ungroupedOccupiedCells.length > 0 ) {
-        var cellGroup = [];
+        const cellGroup = [];
         this.identifyAdjacentOccupiedCells( ungroupedOccupiedCells[ 0 ], cellGroup );
         contiguousCellGroups.push( cellGroup );
         ungroupedOccupiedCells = _.difference( ungroupedOccupiedCells, cellGroup );
@@ -896,12 +896,12 @@ define( require => {
 
       // Orphans can only exist when operating in the 'formComposite' mode.
       if ( this.formCompositeProperty.get() ) {
-        var self = this;
-        var contiguousCellGroups = this.identifyContiguousCellGroups();
+        const self = this;
+        const contiguousCellGroups = this.identifyContiguousCellGroups();
 
         if ( contiguousCellGroups.length > 1 ) {
           // There are orphans that should be released.  Determine which ones.
-          var indexOfRetainedGroup = 0;
+          let indexOfRetainedGroup = 0;
           contiguousCellGroups.forEach( function( group, index ) {
             if ( group.length > contiguousCellGroups[ indexOfRetainedGroup ].length ) {
               indexOfRetainedGroup = index;
@@ -911,7 +911,7 @@ define( require => {
           contiguousCellGroups.forEach( function( group, groupIndex ) {
             if ( groupIndex !== indexOfRetainedGroup ) {
               group.forEach( function( cell ) {
-                var movableShape = cell.occupiedBy;
+                const movableShape = cell.occupiedBy;
                 if ( movableShape !== null ) { // Need to test in case a previously released shape covered multiple cells.
                   self.releaseShape( movableShape );
                   movableShape.returnToOrigin( true );
@@ -934,7 +934,7 @@ define( require => {
      */
     replaceShapeWithUnitSquares: function( originalShape, unitSquares ) {
       assert && assert( this.isResidentShape( originalShape ), 'Error: Specified shape to be replaced does not appear to be present.' );
-      var self = this;
+      const self = this;
 
       // The following add and remove operations do not use the add and remove methods in order to avoid releasing
       // orphans (which could cause undesired behavior) and attribute updates (which are unnecessary).
@@ -959,7 +959,7 @@ define( require => {
      */
     addRemovalListener: function( movableShape ) {
 
-      var self = this;
+      const self = this;
 
       function removalListener( userControlled ) {
         assert && assert(
@@ -1017,8 +1017,8 @@ define( require => {
         assert && assert( perimeterShape.getWidth() % this.unitSquareLength === 0 && perimeterShape.getHeight() % this.unitSquareLength === 0,
           'Background shape width and height must be integer multiples of the unit square size.' );
         if ( centered ) {
-          var xOffset = this.bounds.minX + Math.floor( ( ( this.bounds.width - perimeterShape.getWidth() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
-          var yOffset = this.bounds.minY + Math.floor( ( ( this.bounds.height - perimeterShape.getHeight() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          const xOffset = this.bounds.minX + Math.floor( ( ( this.bounds.width - perimeterShape.getWidth() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
+          const yOffset = this.bounds.minY + Math.floor( ( ( this.bounds.height - perimeterShape.getHeight() ) / 2 ) / this.unitSquareLength ) * this.unitSquareLength;
           this.backgroundShapeProperty.set( perimeterShape.translated( xOffset, yOffset ) );
         }
         else {

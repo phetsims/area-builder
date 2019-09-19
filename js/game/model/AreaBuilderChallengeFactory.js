@@ -22,56 +22,56 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords
+  const UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords
 
   function AreaBuilderChallengeFactory() {
 
-    var random = phet.joist.random;
+    const random = phet.joist.random;
 
     // Basic shapes used in the 'creator kits'.
-    var UNIT_SQUARE_SHAPE = new Shape()
+    const UNIT_SQUARE_SHAPE = new Shape()
       .moveTo( 0, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
       .lineTo( 0, UNIT_SQUARE_LENGTH )
       .close();
-    var HORIZONTAL_DOUBLE_SQUARE_SHAPE = new Shape()
+    const HORIZONTAL_DOUBLE_SQUARE_SHAPE = new Shape()
       .moveTo( 0, 0 )
       .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
       .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH )
       .lineTo( 0, UNIT_SQUARE_LENGTH )
       .close();
-    var VERTICAL_DOUBLE_SQUARE_SHAPE = new Shape()
+    const VERTICAL_DOUBLE_SQUARE_SHAPE = new Shape()
       .moveTo( 0, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH * 2 )
       .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
       .close();
-    var QUAD_SQUARE_SHAPE = new Shape()
+    const QUAD_SQUARE_SHAPE = new Shape()
       .moveTo( 0, 0 )
       .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
       .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
       .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
       .close();
-    var RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
+    const RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
       .moveTo( UNIT_SQUARE_LENGTH, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
       .lineTo( 0, UNIT_SQUARE_LENGTH )
       .lineTo( UNIT_SQUARE_LENGTH, 0 )
       .close();
-    var LEFT_BOTTOM_TRIANGLE_SHAPE = new Shape()
+    const LEFT_BOTTOM_TRIANGLE_SHAPE = new Shape()
       .moveTo( 0, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
       .lineTo( 0, UNIT_SQUARE_LENGTH )
       .lineTo( 0, 0 )
       .close();
-    var RIGHT_TOP_TRIANGLE_SHAPE = new Shape()
+    const RIGHT_TOP_TRIANGLE_SHAPE = new Shape()
       .moveTo( 0, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
       .lineTo( 0, 0 )
       .close();
-    var LEFT_TOP_TRIANGLE_SHAPE = new Shape()
+    const LEFT_TOP_TRIANGLE_SHAPE = new Shape()
       .moveTo( 0, 0 )
       .lineTo( UNIT_SQUARE_LENGTH, 0 )
       .lineTo( 0, UNIT_SQUARE_LENGTH )
@@ -79,7 +79,7 @@ define( require => {
       .close();
 
     // Shape kit with a set of basic shapes and a default color.
-    var BASIC_RECTANGLES_SHAPE_KIT = [
+    const BASIC_RECTANGLES_SHAPE_KIT = [
       {
         shape: UNIT_SQUARE_SHAPE,
         color: AreaBuilderSharedConstants.GREENISH_COLOR
@@ -98,7 +98,7 @@ define( require => {
       }
     ];
 
-    var RECTANGLES_AND_TRIANGLES_SHAPE_KIT = [
+    const RECTANGLES_AND_TRIANGLES_SHAPE_KIT = [
       {
         shape: HORIZONTAL_DOUBLE_SQUARE_SHAPE,
         color: AreaBuilderSharedConstants.GREENISH_COLOR
@@ -130,7 +130,7 @@ define( require => {
     ];
 
     // Color chooser for selecting randomized colors for 'find the area' challenges.
-    var FIND_THE_AREA_COLOR_CHOOSER = {
+    const FIND_THE_AREA_COLOR_CHOOSER = {
       colorList: random.shuffle( [
         new Color( AreaBuilderSharedConstants.PALE_BLUE_COLOR ),
         new Color( AreaBuilderSharedConstants.PINKISH_COLOR ),
@@ -143,7 +143,7 @@ define( require => {
         if ( this.index >= this.colorList.length ) {
           // Time to shuffle the color list.  Make sure that when we do, the color that was at the end of the previous
           // list isn't at the beginning of this one, or we'll get two of the same colors in a row.
-          var lastColor = this.colorList[ this.colorList.length - 1 ];
+          const lastColor = this.colorList[ this.colorList.length - 1 ];
           do {
             this.colorList = random.shuffle( this.colorList );
           } while ( this.colorList[ 0 ] === lastColor );
@@ -156,7 +156,7 @@ define( require => {
     };
 
     // Color chooser for selecting randomized colors for 'build it' style challenges.
-    var BUILD_IT_COLOR_CHOOSER = {
+    const BUILD_IT_COLOR_CHOOSER = {
       colorList: random.shuffle( [
         new Color( AreaBuilderSharedConstants.GREENISH_COLOR ),
         new Color( AreaBuilderSharedConstants.PINKISH_COLOR ),
@@ -168,7 +168,7 @@ define( require => {
         if ( this.index >= this.colorList.length ) {
           // Time to shuffle the color list.  Make sure that when we do, the color that was at the end of the previous
           // list isn't at the beginning of this one, or we'll get two of the same colors in a row.
-          var lastColor = this.colorList[ this.colorList.length - 1 ];
+          const lastColor = this.colorList[ this.colorList.length - 1 ];
           do {
             this.colorList = random.shuffle( this.colorList );
           } while ( this.colorList[ 0 ] === lastColor );
@@ -181,7 +181,7 @@ define( require => {
     };
 
     // Color pair chooser, used for selecting randomized colors for two tone 'build it' challenges.
-    var COLOR_PAIR_CHOOSER = {
+    const COLOR_PAIR_CHOOSER = {
       colorPairList: random.shuffle( [
         {
           color1: AreaBuilderSharedConstants.GREENISH_COLOR,
@@ -204,7 +204,7 @@ define( require => {
       nextColorPair: function() {
         if ( this.index >= this.colorPairList.length ) {
           // Time to shuffle the list.
-          var lastColorPair = this.colorPairList[ this.colorPairList.length - 1 ];
+          const lastColorPair = this.colorPairList[ this.colorPairList.length - 1 ];
           do {
             this.colorPairList = random.shuffle( this.colorPairList );
           } while ( this.colorPairList[ 0 ] === lastColorPair );
@@ -225,9 +225,9 @@ define( require => {
 
     // Create a solution spec (a.k.a. an example solution) that represents a rectangle with the specified origin and size.
     function createMonochromeRectangularSolutionSpec( x, y, width, height, color ) {
-      var solutionSpec = [];
-      for ( var column = 0; column < width; column++ ) {
-        for ( var row = 0; row < height; row++ ) {
+      const solutionSpec = [];
+      for ( let column = 0; column < width; column++ ) {
+        for ( let row = 0; row < height; row++ ) {
           solutionSpec.push( {
             cellColumn: column + x,
             cellRow: row + y,
@@ -240,9 +240,9 @@ define( require => {
 
     // Create a solution spec (a.k.a. an example solution) for a two-tone challenge
     function createTwoColorRectangularSolutionSpec( x, y, width, height, color1, color2, color1proportion ) {
-      var solutionSpec = [];
-      for ( var row = 0; row < height; row++ ) {
-        for ( var column = 0; column < width; column++ ) {
+      const solutionSpec = [];
+      for ( let row = 0; row < height; row++ ) {
+        for ( let column = 0; column < width; column++ ) {
           solutionSpec.push( {
             cellColumn: column + x,
             cellRow: row + y,
@@ -255,7 +255,7 @@ define( require => {
 
     // Function for creating a 'shape kit' of the basic shapes of the specified color.
     function createBasicRectanglesShapeKit( color ) {
-      var kit = [];
+      const kit = [];
       BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
         kit.push( { shape: kitElement.shape, color: color } );
       } );
@@ -263,14 +263,14 @@ define( require => {
     }
 
     function createTwoToneRectangleBuildKit( color1, color2 ) {
-      var kit = [];
+      const kit = [];
       BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
-        var color1Element = {
+        const color1Element = {
           shape: kitElement.shape,
           color: color1
         };
         kit.push( color1Element );
-        var color2Element = {
+        const color2Element = {
           shape: kitElement.shape,
           color: color2
         };
@@ -280,9 +280,9 @@ define( require => {
     }
 
     function flipPerimeterPointsHorizontally( perimeterPointList ) {
-      var reflectedPoints = [];
-      var minX = Number.POSITIVE_INFINITY;
-      var maxX = Number.NEGATIVE_INFINITY;
+      const reflectedPoints = [];
+      let minX = Number.POSITIVE_INFINITY;
+      let maxX = Number.NEGATIVE_INFINITY;
       perimeterPointList.forEach( function( point ) {
         minX = Math.min( point.x, minX );
         maxX = Math.max( point.x, maxX );
@@ -294,9 +294,9 @@ define( require => {
     }
 
     function flipPerimeterPointsVertically( perimeterPointList ) {
-      var reflectedPoints = [];
-      var minY = Number.POSITIVE_INFINITY;
-      var maxY = Number.NEGATIVE_INFINITY;
+      const reflectedPoints = [];
+      let minY = Number.POSITIVE_INFINITY;
+      let maxY = Number.NEGATIVE_INFINITY;
       perimeterPointList.forEach( function( point ) {
         minY = Math.min( point.y, minY );
         maxY = Math.max( point.y, maxY );
@@ -336,7 +336,7 @@ define( require => {
     function createLShapedPerimeterShape( x, y, width, height, missingCorner, widthMissing, heightMissing, fillColor ) {
       assert && assert( width > widthMissing && height > heightMissing, 'Invalid parameters' );
 
-      var perimeterPoints = [
+      let perimeterPoints = [
         new Vector2( x + widthMissing, y ),
         new Vector2( x + width, y ),
         new Vector2( x + width, y + height ),
@@ -361,7 +361,7 @@ define( require => {
 
     // Create a perimeter shape with a cutout in the top, bottom, left, or right side.
     function createUShapedPerimeterShape( x, y, width, height, sideWithCutout, cutoutWidth, cutoutHeight, cutoutOffset, fillColor ) {
-      var perimeterPoints = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
+      let perimeterPoints = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
 
       if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
         perimeterPoints[ 0 ].setXY( x, y );
@@ -397,13 +397,13 @@ define( require => {
     }
 
     function createPerimeterShapeWithHole( x, y, width, height, holeWidth, holeHeight, holeXOffset, holeYOffset, fillColor ) {
-      var exteriorPerimeterPoints = [
+      const exteriorPerimeterPoints = [
         new Vector2( x, y ),
         new Vector2( x + width, y ),
         new Vector2( x + width, y + height ),
         new Vector2( x, y + height )
       ];
-      var interiorPerimeterPoints = [
+      const interiorPerimeterPoints = [
         // Have to draw hole in opposite direction for it to appear.
         new Vector2( x + holeXOffset, y + holeYOffset ),
         new Vector2( x + holeXOffset, y + holeYOffset + holeHeight ),
@@ -418,7 +418,7 @@ define( require => {
     }
 
     function createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( x, y, edgeLength, cornerPosition, fillColor ) {
-      var perimeterPoints = [ new Vector2( x, y ), new Vector2( x + edgeLength, y ), new Vector2( x, y + edgeLength ) ];
+      let perimeterPoints = [ new Vector2( x, y ), new Vector2( x + edgeLength, y ), new Vector2( x, y + edgeLength ) ];
       if ( cornerPosition === 'rightTop' || cornerPosition === 'rightBottom' ) {
         perimeterPoints = flipPerimeterPointsHorizontally( perimeterPoints );
       }
@@ -433,7 +433,7 @@ define( require => {
     }
 
     function createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( x, y, hypotenuseLength, cornerPosition, fillColor ) {
-      var perimeterPoints;
+      let perimeterPoints;
       if ( cornerPosition === 'centerTop' || cornerPosition === 'centerBottom' ) {
         perimeterPoints = [ new Vector2( x, y ), new Vector2( x + hypotenuseLength, y ),
           new Vector2( x + hypotenuseLength / 2, y + hypotenuseLength / 2 ) ];
@@ -466,7 +466,7 @@ define( require => {
     function createShapeWithDiagonalAndMissingCorner( x, y, width, height, diagonalPosition, diagonalSquareLength, cutWidth, cutHeight, fillColor ) {
       assert && assert( width - diagonalSquareLength >= cutWidth && height - diagonalSquareLength >= cutHeight, 'Invalid parameters' );
 
-      var perimeterPoints = [];
+      let perimeterPoints = [];
       // Draw shape with diagonal in lower right corner, starting in upper right corner.
       perimeterPoints.push( new Vector2( x + width, y ) );
       perimeterPoints.push( new Vector2( x + width, y + height - diagonalSquareLength ) );
@@ -521,8 +521,8 @@ define( require => {
 
     // Test the challenge against the history of recently generated challenges to see if it is unique.
     function isChallengeUnique( challenge ) {
-      var challengeIsUnique = true;
-      for ( var i = 0; i < challengeHistory.length; i++ ) {
+      let challengeIsUnique = true;
+      for ( let i = 0; i < challengeHistory.length; i++ ) {
         if ( isChallengeSimilar( challenge, challengeHistory[ i ] ) ) {
           challengeIsUnique = false;
           break;
@@ -534,14 +534,14 @@ define( require => {
     function generateBuildAreaChallenge() {
 
       // Create a unique challenge
-      var challenge;
-      var width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height = 0;
+      let challenge;
+      const width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      let height = 0;
       while ( width * height < 8 || width * height > 36 ) {
         height = random.nextIntBetween( 0, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       }
-      var color = BUILD_IT_COLOR_CHOOSER.nextColor();
-      var exampleSolution = createMonochromeRectangularSolutionSpec(
+      const color = BUILD_IT_COLOR_CHOOSER.nextColor();
+      const exampleSolution = createMonochromeRectangularSolutionSpec(
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
         width,
@@ -559,31 +559,31 @@ define( require => {
     function generateTwoRectangleBuildAreaAndPerimeterChallenge() {
 
       // Create first rectangle dimensions
-      var width1 = random.nextIntBetween( 2, 6 );
-      var height1;
+      const width1 = random.nextIntBetween( 2, 6 );
+      let height1;
       do {
         height1 = random.nextIntBetween( 1, 4 );
       } while ( width1 % 2 === height1 % 2 );
 
       // Create second rectangle dimensions
-      var width2 = 0;
+      let width2 = 0;
       do {
         width2 = random.nextIntBetween( 1, 6 );
       } while ( width1 + width2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height2;
+      let height2;
       do {
         height2 = random.nextIntBetween( 1, 6 );
       } while ( width2 % 2 === height2 % 2 || height1 + height2 > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
       // Choose the amount of overlap
-      var overlap = random.nextIntBetween( 1, Math.min( width1, width2 ) - 1 );
+      const overlap = random.nextIntBetween( 1, Math.min( width1, width2 ) - 1 );
 
-      var left = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - ( width1 + width2 - overlap ) ) / 2 );
-      var top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
+      const left = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - ( width1 + width2 - overlap ) ) / 2 );
+      const top = Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - ( height1 + height2 ) ) / 2 );
 
       // Create a solution spec by merging specs for each of the rectangles together.
-      var color = BUILD_IT_COLOR_CHOOSER.nextColor();
-      var solutionSpec = createMonochromeRectangularSolutionSpec( left, top, width1, height1, color ).concat(
+      const color = BUILD_IT_COLOR_CHOOSER.nextColor();
+      const solutionSpec = createMonochromeRectangularSolutionSpec( left, top, width1, height1, color ).concat(
         createMonochromeRectangularSolutionSpec( left + width1 - overlap, top + height1, width2, height2, color ) );
 
       return ( AreaBuilderGameChallenge.createBuildAreaAndPerimeterChallenge( width1 * height1 + width2 * height2,
@@ -592,8 +592,8 @@ define( require => {
 
     function generateBuildAreaAndPerimeterChallenge() {
 
-      var width;
-      var height;
+      let width;
+      let height;
 
       // Width can be any value from 3 to 8 excluding 7, see design doc.
       do {
@@ -605,9 +605,9 @@ define( require => {
         height = random.nextIntBetween( 3, 8 );
       } while ( width * height < 12 || width * height > 36 || height === 7 || height > AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
 
-      var color = BUILD_IT_COLOR_CHOOSER.nextColor();
+      const color = BUILD_IT_COLOR_CHOOSER.nextColor();
 
-      var exampleSolution = createMonochromeRectangularSolutionSpec(
+      const exampleSolution = createMonochromeRectangularSolutionSpec(
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
         width,
@@ -619,45 +619,45 @@ define( require => {
     }
 
     function generateRectangularFindAreaChallenge() {
-      var width;
-      var height;
+      let width;
+      let height;
       do {
         width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
         height = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
       } while ( width * height < 16 || width * height > 36 );
-      var perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      const perimeterShape = createRectangularPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
 
       return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
     }
 
     function generateLShapedFindAreaChallenge() {
-      var width;
-      var height;
+      let width;
+      let height;
       do {
         width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
         height = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
       } while ( width * height < 16 || width * height > 36 );
-      var missingWidth = random.nextIntBetween( 1, width - 1 );
-      var missingHeight = random.nextIntBetween( 1, height - 1 );
-      var missingCorner = randomElement( [ 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
-      var perimeterShape = createLShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      const missingWidth = random.nextIntBetween( 1, width - 1 );
+      const missingHeight = random.nextIntBetween( 1, height - 1 );
+      const missingCorner = randomElement( [ 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
+      const perimeterShape = createLShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         missingCorner, missingWidth * UNIT_SQUARE_LENGTH, missingHeight * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
 
       return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, BASIC_RECTANGLES_SHAPE_KIT );
     }
 
     function generateUShapedFindAreaChallenge() {
-      var width;
-      var height;
+      let width;
+      let height;
       do {
         width = random.nextIntBetween( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
         height = random.nextIntBetween( 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       } while ( width * height < 16 || width * height > 36 );
-      var sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
-      var cutoutWidth;
-      var cutoutHeight;
-      var cutoutOffset;
+      const sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
+      let cutoutWidth;
+      let cutoutHeight;
+      let cutoutOffset;
       if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
         cutoutWidth = random.nextIntBetween( 2, width - 1 );
         cutoutHeight = random.nextIntBetween( 1, height - 2 );
@@ -668,7 +668,7 @@ define( require => {
         cutoutHeight = random.nextIntBetween( 2, height - 1 );
         cutoutOffset = random.nextIntBetween( 1, width - cutoutWidth - 1 );
       }
-      var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      const perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH,
         cutoutOffset * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
 
@@ -676,17 +676,17 @@ define( require => {
     }
 
     function generateOShapedFindAreaChallenge() {
-      var width;
-      var height;
+      let width;
+      let height;
       do {
         width = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
         height = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
       } while ( width * height < 16 || width * height > 36 );
-      var holeWidth = random.nextIntBetween( 1, width - 2 );
-      var holeHeight = random.nextIntBetween( 1, height - 2 );
-      var holeXOffset = random.nextIntBetween( 1, width - holeWidth - 1 );
-      var holeYOffset = random.nextIntBetween( 1, height - holeHeight - 1 );
-      var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      const holeWidth = random.nextIntBetween( 1, width - 2 );
+      const holeHeight = random.nextIntBetween( 1, height - 2 );
+      const holeXOffset = random.nextIntBetween( 1, width - holeWidth - 1 );
+      const holeYOffset = random.nextIntBetween( 1, height - holeHeight - 1 );
+      const perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
         holeYOffset * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
 
@@ -694,21 +694,21 @@ define( require => {
     }
 
     function generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge() {
-      var cornerPosition = randomElement( [ 'leftTop', 'rightTop', 'rightBottom', 'leftBottom' ] );
-      var edgeLength = 0;
+      const cornerPosition = randomElement( [ 'leftTop', 'rightTop', 'rightBottom', 'leftBottom' ] );
+      let edgeLength = 0;
       do {
         edgeLength = random.nextIntBetween( 4, Math.min( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2,
           AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 ) );
       } while ( edgeLength % 2 !== 0 );
-      var perimeterShape = createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( 0, 0,
+      const perimeterShape = createPerimeterShapeSlantedHypotenuseRightIsoscelesTriangle( 0, 0,
         edgeLength * UNIT_SQUARE_LENGTH, cornerPosition, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
       return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, RECTANGLES_AND_TRIANGLES_SHAPE_KIT );
     }
 
     function generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge() {
-      var cornerPosition = randomElement( [ 'centerTop', 'rightCenter', 'centerBottom', 'leftCenter' ] );
-      var hypotenuseLength = 0;
-      var maxHypotenuse;
+      const cornerPosition = randomElement( [ 'centerTop', 'rightCenter', 'centerBottom', 'leftCenter' ] );
+      let hypotenuseLength = 0;
+      let maxHypotenuse;
       if ( cornerPosition === 'centerTop' || cornerPosition === 'centerBottom' ) {
         maxHypotenuse = AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4;
       }
@@ -718,18 +718,18 @@ define( require => {
       do {
         hypotenuseLength = random.nextIntBetween( 2, maxHypotenuse );
       } while ( hypotenuseLength % 2 !== 0 );
-      var perimeterShape = createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( 0, 0,
+      const perimeterShape = createPerimeterShapeLevelHypotenuseRightIsoscelesTriangle( 0, 0,
         hypotenuseLength * UNIT_SQUARE_LENGTH, cornerPosition, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
       return AreaBuilderGameChallenge.createFindAreaChallenge( perimeterShape, RECTANGLES_AND_TRIANGLES_SHAPE_KIT );
     }
 
     function generateLargeRectWithChipMissingChallenge() {
-      var width = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
-      var sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
-      var cutoutWidth;
-      var cutoutHeight;
-      var cutoutOffset;
+      const width = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      const height = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      const sideWithCutout = randomElement( [ 'left', 'right', 'top', 'bottom' ] );
+      let cutoutWidth;
+      let cutoutHeight;
+      let cutoutOffset;
       if ( sideWithCutout === 'left' || sideWithCutout === 'right' ) {
         cutoutWidth = 1;
         cutoutHeight = random.nextIntBetween( 1, 3 );
@@ -740,7 +740,7 @@ define( require => {
         cutoutHeight = 1;
         cutoutOffset = random.nextIntBetween( 1, width - cutoutWidth - 1 );
       }
-      var perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      const perimeterShape = createUShapedPerimeterShape( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         sideWithCutout, cutoutWidth * UNIT_SQUARE_LENGTH, cutoutHeight * UNIT_SQUARE_LENGTH,
         cutoutOffset * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
 
@@ -748,10 +748,10 @@ define( require => {
     }
 
     function generateLargeRectWithSmallHoleMissingChallenge() {
-      var width = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
-      var height = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
-      var holeWidth;
-      var holeHeight;
+      const width = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
+      const height = random.nextIntBetween( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 2 );
+      let holeWidth;
+      let holeHeight;
       if ( random.nextDouble() < 0.5 ) {
         holeWidth = random.nextIntBetween( 1, 3 );
         holeHeight = 1;
@@ -760,9 +760,9 @@ define( require => {
         holeHeight = random.nextIntBetween( 1, 3 );
         holeWidth = 1;
       }
-      var holeXOffset = random.nextIntBetween( 1, width - holeWidth - 1 );
-      var holeYOffset = random.nextIntBetween( 1, height - holeHeight - 1 );
-      var perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
+      const holeXOffset = random.nextIntBetween( 1, width - holeWidth - 1 );
+      const holeYOffset = random.nextIntBetween( 1, height - holeHeight - 1 );
+      const perimeterShape = createPerimeterShapeWithHole( 0, 0, width * UNIT_SQUARE_LENGTH, height * UNIT_SQUARE_LENGTH,
         holeWidth * UNIT_SQUARE_LENGTH, holeHeight * UNIT_SQUARE_LENGTH, holeXOffset * UNIT_SQUARE_LENGTH,
         holeYOffset * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
 
@@ -774,17 +774,17 @@ define( require => {
     }
 
     function generateShapeWithDiagonalFindAreaChallenge() {
-      var width = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
-      var height = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
-      var diagonalPosition = randomElement( [ 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
-      var diagonalSquareLength = 2;
+      const width = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 4 );
+      const height = random.nextIntBetween( 3, AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - 4 );
+      const diagonalPosition = randomElement( [ 'leftTop', 'rightTop', 'leftBottom', 'rightBottom' ] );
+      let diagonalSquareLength = 2;
       if ( height > 4 && width > 4 && random.nextDouble() > 0.5 ) {
         diagonalSquareLength = 4;
       }
-      var cutWidth = random.nextIntBetween( 1, width - diagonalSquareLength );
-      var cutHeight = random.nextIntBetween( 1, height - diagonalSquareLength );
+      const cutWidth = random.nextIntBetween( 1, width - diagonalSquareLength );
+      const cutHeight = random.nextIntBetween( 1, height - diagonalSquareLength );
 
-      var perimeterShape = createShapeWithDiagonalAndMissingCorner( 0, 0, width * UNIT_SQUARE_LENGTH,
+      const perimeterShape = createShapeWithDiagonalAndMissingCorner( 0, 0, width * UNIT_SQUARE_LENGTH,
         height * UNIT_SQUARE_LENGTH, diagonalPosition, diagonalSquareLength * UNIT_SQUARE_LENGTH,
         cutWidth * UNIT_SQUARE_LENGTH, cutHeight * UNIT_SQUARE_LENGTH, FIND_THE_AREA_COLOR_CHOOSER.nextColor() );
 
@@ -801,11 +801,11 @@ define( require => {
 
     function generateProportionalBuildAreaChallenge( difficulty, includePerimeter ) {
       assert && assert( difficulty === 'easy' || difficulty === 'harder' );
-      var width;
-      var height;
+      let width;
+      let height;
 
       // Randomly generate width, height, and the possible factors from which a proportional challenge can be created.
-      var factors = [];
+      const factors = [];
       do {
         height = random.nextIntBetween( 3, 6 );
         if ( height === 3 ) {
@@ -815,11 +815,11 @@ define( require => {
           width = random.nextIntBetween( 2, 10 );
         }
 
-        var minFactor = difficulty === 'easy' ? 2 : 5;
-        var maxFactor = difficulty === 'easy' ? 4 : 9;
+        const minFactor = difficulty === 'easy' ? 2 : 5;
+        const maxFactor = difficulty === 'easy' ? 4 : 9;
 
-        var area = width * height;
-        for ( var i = minFactor; i <= maxFactor; i++ ) {
+        const area = width * height;
+        for ( let i = minFactor; i <= maxFactor; i++ ) {
           if ( area % i === 0 ) {
             // This is a factor of the area.
             factors.push( i );
@@ -828,18 +828,18 @@ define( require => {
       } while ( factors.length === 0 );
 
       // Choose the fractional proportion.
-      var fractionDenominator = randomElement( factors );
-      var color1FractionNumerator;
+      const fractionDenominator = randomElement( factors );
+      let color1FractionNumerator;
       do {
         color1FractionNumerator = random.nextIntBetween( 1, fractionDenominator - 1 );
       } while ( Util.gcd( color1FractionNumerator, fractionDenominator ) > 1 );
-      var color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
+      const color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
 
       // Choose the colors for this challenge
-      var colorPair = COLOR_PAIR_CHOOSER.nextColorPair();
+      const colorPair = COLOR_PAIR_CHOOSER.nextColorPair();
 
       // Create the example solution
-      var exampleSolution = createTwoColorRectangularSolutionSpec(
+      const exampleSolution = createTwoColorRectangularSolutionSpec(
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - width ) / 2 ),
         Math.floor( ( AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT - height ) / 2 ),
         width,
@@ -849,7 +849,7 @@ define( require => {
         color1Fraction.getValue()
       );
 
-      var userShapes = createTwoToneRectangleBuildKit( colorPair.color1, colorPair.color2 );
+      const userShapes = createTwoToneRectangleBuildKit( colorPair.color1, colorPair.color2 );
 
       // Build the challenge from all the pieces.
       if ( includePerimeter ) {
@@ -875,9 +875,9 @@ define( require => {
 
     // Use the provided generation function to create challenges until a unique one has been created.
     function generateUniqueChallenge( generationFunction ) {
-      var challenge;
-      var uniqueChallengeGenerated = false;
-      var attempts = 0;
+      let challenge;
+      let uniqueChallengeGenerated = false;
+      let attempts = 0;
       while ( !uniqueChallengeGenerated ) {
         challenge = generationFunction();
         attempts++;
@@ -906,7 +906,7 @@ define( require => {
 
       // Limit the number of shapes to the length of the larger side.  This encourages certain strategies.
       assert && assert( challenge.backgroundShape.exteriorPerimeters.length === 1, 'Unexpected configuration for background shape.' );
-      var perimeterShape = new PerimeterShape( challenge.backgroundShape.exteriorPerimeters, [], UNIT_SQUARE_LENGTH );
+      const perimeterShape = new PerimeterShape( challenge.backgroundShape.exteriorPerimeters, [], UNIT_SQUARE_LENGTH );
       challenge.userShapes[ 0 ].creationLimit = Math.max( perimeterShape.getWidth() / UNIT_SQUARE_LENGTH,
         perimeterShape.getHeight() / UNIT_SQUARE_LENGTH );
       return challenge;
@@ -921,8 +921,8 @@ define( require => {
      * @returns {Array}
      */
     this.generateChallengeSet = function( level, numChallenges ) {
-      var challengeSet = [];
-      var tempChallenge;
+      let challengeSet = [];
+      let tempChallenge;
       switch( level ) {
         case 0:
           _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );

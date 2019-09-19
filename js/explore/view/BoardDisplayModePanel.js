@@ -22,8 +22,8 @@ define( require => {
 
   // utility function for creating the icons used on this panel
   function createIcon( color, rectangleLength, rectanglePositions ) {
-    var edgeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
-    var content = new Node();
+    const edgeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+    const content = new Node();
     rectanglePositions.forEach( function( position ) {
       content.addChild( new Rectangle( 0, 0, rectangleLength, rectangleLength, 0, 0, {
         fill: color,
@@ -41,13 +41,13 @@ define( require => {
    */
   function BoardDisplayModePanel( boardDisplayModeProperty ) {
 
-    var singleBoardIcon = createIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
+    const singleBoardIcon = createIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
       new Vector2( 0, 1 ),
       new Vector2( 1, 0 ),
       new Vector2( 1, 1 )
     ] );
 
-    var dualBoardIcon = new HBox( {
+    const dualBoardIcon = new HBox( {
         children: [
           createIcon( AreaBuilderSharedConstants.GREENISH_COLOR, 6, [
             new Vector2( 0, 0 ),

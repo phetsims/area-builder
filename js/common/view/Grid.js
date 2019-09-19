@@ -22,7 +22,7 @@ define( require => {
    * @constructor
    */
   function Grid( bounds, spacing, options ) {
-    var gridShape = new Shape();
+    const gridShape = new Shape();
 
     // Add the vertical lines
     for ( var i = bounds.minX + spacing; i < bounds.minX + bounds.width; i += spacing ) {

@@ -23,8 +23,8 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  var BACKGROUND_COLOR = AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR;
-  var PANEL_OPTIONS = { fill: BACKGROUND_COLOR, yMargin: 10, xMargin: 20 };
+  const BACKGROUND_COLOR = AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR;
+  const PANEL_OPTIONS = { fill: BACKGROUND_COLOR, yMargin: 10, xMargin: 20 };
 
   /**
    * @param showGridProperty
@@ -40,16 +40,16 @@ define( require => {
     this.dimensionsControlVisibleProperty = new Property( true );
 
     // Create the controls and labels
-    var gridCheckbox = new Checkbox(
+    const gridCheckbox = new Checkbox(
       new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ),
       showGridProperty,
       { spacing: 15 }
     );
     this.dimensionsIcon = new DimensionsIcon(); // @public so that the icon style can be set
-    var dimensionsCheckbox = new Checkbox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
+    const dimensionsCheckbox = new Checkbox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
 
     // Create the panel.
-    var vBox = new VBox( {
+    const vBox = new VBox( {
       children: [
         gridCheckbox,
         dimensionsCheckbox

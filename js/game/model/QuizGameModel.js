@@ -29,7 +29,7 @@ define( require => {
    * @constructor
    */
   function QuizGameModel( challengeFactory, simSpecificModel, options ) {
-    var self = this;
+    const self = this;
     this.challengeFactory = challengeFactory; // @private
     this.simSpecificModel = simSpecificModel; // @public
 
@@ -97,7 +97,7 @@ define( require => {
         this.gameStateProperty.reset();
         this.bestScoreProperties.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
         this.bestTimes = [];
-        var self = this;
+        const self = this;
         _.times( this.numberOfLevels, function() {
           self.bestTimes.push( null );
         } );
@@ -142,7 +142,7 @@ define( require => {
 
       // @private
       handleProposedAnswer: function( answerIsCorrect ) {
-        var pointsEarned = 0;
+        let pointsEarned = 0;
         if ( answerIsCorrect ) {
           // The user answered the challenge correctly.
           this.gameStateProperty.set( GameState.SHOWING_CORRECT_ANSWER_FEEDBACK );
@@ -177,7 +177,7 @@ define( require => {
 
       // Move to the next challenge in the current challenge set.
       nextChallenge: function() {
-        var currentLevel = this.levelProperty.get();
+        const currentLevel = this.levelProperty.get();
         this.incorrectGuessesOnCurrentChallenge = 0;
         if ( this.challengeIndexProperty.get() + 1 < this.challengeList.length ) {
           // Move to the next challenge.
@@ -221,7 +221,7 @@ define( require => {
           window.clearInterval( this.gameTimerId );
         }
         this.elapsedTimeProperty.set( 0 );
-        var self = this;
+        const self = this;
         this.gameTimerId = window.setInterval( function() { self.elapsedTimeProperty.value += 1; }, 1000 );
       },
 

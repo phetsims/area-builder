@@ -27,9 +27,9 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels
-  var BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 12, UNIT_SQUARE_LENGTH * 8 );
-  var UNIT_SQUARE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
+  const UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels
+  const BOARD_SIZE = new Dimension2( UNIT_SQUARE_LENGTH * 12, UNIT_SQUARE_LENGTH * 8 );
+  const UNIT_SQUARE_SHAPE = Shape.rect( 0, 0, UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH );
 
   /**
    * @constructor
@@ -66,14 +66,14 @@ define( require => {
 
       // @private - replace a composite shape with unit squares
       replaceShapeWithUnitSquares: function( movableShape ) {
-        var self = this;
+        const self = this;
         assert && assert(
           movableShape.shape.bounds.width > UNIT_SQUARE_LENGTH || movableShape.shape.bounds.height > UNIT_SQUARE_LENGTH,
           'This method should not be called for non-composite shapes'
         );
 
         // break the shape into the constituent squares
-        var constituentShapes = movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH );
+        const constituentShapes = movableShape.decomposeIntoSquares( UNIT_SQUARE_LENGTH );
 
         // add the newly created squares to this model
         constituentShapes.forEach( function( shape ) { self.addUserCreatedMovableShape( shape ); } );
@@ -92,7 +92,7 @@ define( require => {
        * @param movableShape
        */
       addUserCreatedMovableShape: function( movableShape ) {
-        var self = this;
+        const self = this;
         this.movableShapes.push( movableShape );
 
         movableShape.userControlledProperty.lazyLink( function( userControlled ) {
@@ -158,8 +158,8 @@ define( require => {
        * @private
        */
       addUnitSquareDirectlyToBoard: function( cellColumn, cellRow, color ) {
-        var self = this;
-        var shape = new MovableShape( UNIT_SQUARE_SHAPE, color, this.solutionShapeOrigin );
+        const self = this;
+        const shape = new MovableShape( UNIT_SQUARE_SHAPE, color, this.solutionShapeOrigin );
         this.movableShapes.push( shape );
 
         // Remove this shape when it gets returned to its original location.
@@ -186,7 +186,7 @@ define( require => {
 
       // @public
       displayCorrectAnswer: function( challenge ) {
-        var self = this;
+        const self = this;
         if ( challenge.buildSpec ) {
 
           // clear whatever the user had added
@@ -210,8 +210,8 @@ define( require => {
       // @public
       checkAnswer: function( challenge ) {
 
-        var answerIsCorrect = false;
-        var userBuiltSpec;
+        let answerIsCorrect = false;
+        let userBuiltSpec;
         switch( challenge.checkSpec ) {
 
           case 'areaEntered':
@@ -297,9 +297,9 @@ define( require => {
           if ( challenge.buildSpec && this.shapePlacementBoard.formCompositeProperty.get() && challenge.userShapes ) {
 
             // Make the perimeter color be a darker version of the first user shape.
-            var perimeterColor = Color.toColor( challenge.userShapes[ 0 ].color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+            const perimeterColor = Color.toColor( challenge.userShapes[ 0 ].color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
-            var fillColor;
+            let fillColor;
             if ( challenge.buildSpec.proportions ) {
               // The composite shape needs to be see through so that the original shapes can be seen.  This allows
               // multiple colors to be depicted, but generally doesn't look quite as good.

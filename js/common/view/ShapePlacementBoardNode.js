@@ -27,11 +27,11 @@ define( require => {
     Node.call( this );
 
     // Create and add the board itself.
-    var board = Rectangle.bounds( shapePlacementBoard.bounds, { fill: 'white', stroke: 'black' } );
+    const board = Rectangle.bounds( shapePlacementBoard.bounds, { fill: 'white', stroke: 'black' } );
     this.addChild( board );
 
     // Create and add the grid
-    var grid = new Grid( shapePlacementBoard.bounds, shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
+    const grid = new Grid( shapePlacementBoard.bounds, shapePlacementBoard.unitSquareLength, { stroke: '#C0C0C0' } );
     this.addChild( grid );
 
     // Track and update the grid visibility
@@ -50,12 +50,12 @@ define( require => {
     // Monitor the shapes added by the user to the board and create an equivalent shape with no edges for each.  This
     // may seem a little odd - why hide the shapes that the user placed and depict them with essentially the same
     // thing minus the edge stroke?  The reason is that this makes layering and control of visual modes much easier.
-    var shapesLayer = new Node();
+    const shapesLayer = new Node();
     this.addChild( shapesLayer );
     shapePlacementBoard.residentShapes.addItemAddedListener( function( addedShape ) {
       if ( shapePlacementBoard.formCompositeProperty.get() ) {
         // Add a representation of the shape.
-        var representation = new Path( addedShape.shape, {
+        const representation = new Path( addedShape.shape, {
           fill: addedShape.color,
           left: addedShape.positionProperty.get().x,
           top: addedShape.positionProperty.get().y

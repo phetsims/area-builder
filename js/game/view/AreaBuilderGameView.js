@@ -63,13 +63,13 @@ define( require => {
   const yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
 
   // constants
-  var BUTTON_FONT = new PhetFont( 18 );
-  var BUTTON_FILL = PhetColorScheme.BUTTON_YELLOW;
-  var INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
-  var GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-  var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;
-  var ITEMS_PER_CAROUSEL_PAGE = 4;
-  var BUTTON_TOUCH_AREA_DILATION = 7;
+  const BUTTON_FONT = new PhetFont( 18 );
+  const BUTTON_FILL = PhetColorScheme.BUTTON_YELLOW;
+  const INFO_BANNER_HEIGHT = 60; // Height of the prompt and solution banners, empirically determined.
+  const GOAL_PROMPT_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+  const SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;
+  const ITEMS_PER_CAROUSEL_PAGE = 4;
+  const BUTTON_TOUCH_AREA_DILATION = 7;
 
   /**
    * @param {AreaBuilderGameModel} gameModel
@@ -77,7 +77,7 @@ define( require => {
    */
   function AreaBuilderGameView( gameModel ) {
     ScreenView.call( this, { layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
-    var self = this;
+    const self = this;
     self.model = gameModel;
 
     // Create the game audio player.
@@ -137,8 +137,8 @@ define( require => {
       touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
       listener: function() {
 
-        var challenge = gameModel.currentChallengeProperty.get();
-        var shapeReleaseMode = 'fade';
+        const challenge = gameModel.currentChallengeProperty.get();
+        let shapeReleaseMode = 'fade';
 
         if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[ 0 ].creationLimit ) {
 
@@ -235,7 +235,7 @@ define( require => {
 
     // Add and lay out the game control buttons.
     this.gameControlButtons = [];
-    var buttonOptions = {
+    const buttonOptions = {
       font: BUTTON_FONT,
       baseColor: BUTTON_FILL,
       cornerRadius: 4,
@@ -284,8 +284,8 @@ define( require => {
     }, buttonOptions ) );
     this.gameControlButtons.push( this.showASolutionButton );
 
-    var buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
-    var buttonBottom = this.shapeBoard.bottom;
+    const buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
+    const buttonBottom = this.shapeBoard.bottom;
     this.gameControlButtons.forEach( function( button ) {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
@@ -332,11 +332,11 @@ define( require => {
     gameModel.simSpecificModel.movableShapes.addItemAddedListener( function( addedShape ) {
 
       // Create and add the view representation for this shape.
-      var shapeNode = new ShapeNode( addedShape, self.layoutBounds );
+      const shapeNode = new ShapeNode( addedShape, self.layoutBounds );
       self.challengeLayer.addChild( shapeNode );
 
       // Add a listener that handles changes to the userControlled state.
-      var userControlledListener = function( userControlled ) {
+      const userControlledListener = function( userControlled ) {
         if ( userControlled ) {
           shapeNode.moveToFront();
 
@@ -431,7 +431,7 @@ define( require => {
       // Hide all nodes - the appropriate ones will be shown later based on the current state.
       this.hideAllGameNodes();
 
-      var challenge = this.model.currentChallengeProperty.get(); // convenience var
+      const challenge = this.model.currentChallengeProperty.get(); // convenience var
 
       // Show the nodes appropriate to the state
       switch( gameState ) {
@@ -481,7 +481,7 @@ define( require => {
       this.presentChallenge();
 
       // Make a list of the nodes to be shown in this state.
-      var nodesToShow = [
+      const nodesToShow = [
         this.scoreboard,
         this.controlPanel,
         this.checkAnswerButton,
@@ -513,7 +513,7 @@ define( require => {
     handleShowingCorrectAnswerFeedbackState: function( challenge ) {
 
       // Make a list of the nodes to be shown in this state.
-      var nodesToShow = [
+      const nodesToShow = [
         this.scoreboard,
         this.controlPanel,
         this.nextButton,
@@ -547,7 +547,7 @@ define( require => {
     handleShowingIncorrectAnswerFeedbackTryAgainState: function( challenge ) {
 
       // Make a list of the nodes to be shown in this state.
-      var nodesToShow = [
+      const nodesToShow = [
         this.scoreboard,
         this.controlPanel,
         this.tryAgainButton,
@@ -583,7 +583,7 @@ define( require => {
     handleShowingIncorrectAnswerFeedbackMoveOnState: function( challenge ) {
 
       // Make a list of the nodes to be shown in this state.
-      var nodesToShow = [
+      const nodesToShow = [
         this.scoreboard,
         this.controlPanel,
         this.challengePromptBanner,
@@ -626,7 +626,7 @@ define( require => {
     // @private
     handleDisplayingCorrectAnswerState: function( challenge ) {
       // Make a list of the nodes to be shown in this state.
-      var nodesToShow = [
+      const nodesToShow = [
         this.scoreboard,
         this.controlPanel,
         this.nextButton,
@@ -683,7 +683,7 @@ define( require => {
     // @private Update the window that depicts what the user has built.
     updateYouBuiltWindow: function( challenge ) {
       assert && assert( challenge.buildSpec, 'This method should only be called for challenges that include a build spec.' );
-      var userBuiltSpec = new BuildSpec(
+      const userBuiltSpec = new BuildSpec(
         this.areaOfUserCreatedShape,
         challenge.buildSpec.perimeter ? this.perimeterOfUserCreatedShape : null,
         challenge.buildSpec.proportions ? {
@@ -712,7 +712,7 @@ define( require => {
       // Save the parameters of what the user has built, if they've built anything.
       this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().area;
       this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().perimeter;
-      var challenge = this.model.currentChallengeProperty.get(); // convenience var
+      const challenge = this.model.currentChallengeProperty.get(); // convenience var
       if ( challenge.buildSpec && challenge.buildSpec.proportions ) {
         this.color1Proportion = this.model.simSpecificModel.getProportionOfColor( challenge.buildSpec.proportions.color1 );
       }
@@ -726,7 +726,7 @@ define( require => {
 
     // @private Returns true if any shape is animating or user controlled, false if not.
     isAnyShapeMoving: function() {
-      for ( var i = 0; i < this.model.simSpecificModel.movableShapes.length; i++ ) {
+      for ( let i = 0; i < this.model.simSpecificModel.movableShapes.length; i++ ) {
         if ( this.model.simSpecificModel.movableShapes.get( i ).animatingProperty.get() ||
              this.model.simSpecificModel.movableShapes.get( i ).userControlledProperty.get() ) {
           return true;
@@ -738,7 +738,7 @@ define( require => {
     // @private, Present the challenge to the user and set things up so that they can submit their answer.
     presentChallenge: function() {
 
-      var self = this;
+      const self = this;
 
       if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
 
@@ -747,7 +747,7 @@ define( require => {
         this.challengePromptBanner.reset();
         this.shapeCarouselLayer.removeAllChildren();
 
-        var challenge = this.model.currentChallengeProperty.get(); // Convenience var
+        const challenge = this.model.currentChallengeProperty.get(); // Convenience var
 
         // Set up the challenge prompt banner, which appears above the shape placement board.
         this.challengePromptBanner.titleTextProperty.value = challenge.buildSpec ? buildItString : findTheAreaString;
@@ -757,15 +757,15 @@ define( require => {
 
           this.buildPromptVBox.removeAllChildren();
           this.buildPromptVBox.addChild( this.yourGoalTitle );
-          var areaGoalNode = new Text( StringUtils.format( areaEqualsString, challenge.buildSpec.area ), {
+          const areaGoalNode = new Text( StringUtils.format( areaEqualsString, challenge.buildSpec.area ), {
             font: GOAL_PROMPT_FONT,
             maxWidth: this.shapeBoardOriginalBounds.width * 0.9
           } );
           if ( challenge.buildSpec.proportions ) {
-            var areaPrompt = new Node();
+            const areaPrompt = new Node();
             areaPrompt.addChild( areaGoalNode );
             areaGoalNode.text = areaGoalNode.text + ',';
-            var colorProportionsPrompt = new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
+            const colorProportionsPrompt = new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
               challenge.buildSpec.proportions.color2, challenge.buildSpec.proportions.color1Proportion, {
                 font: new PhetFont( { size: 16, weight: 'bold' } ),
                 left: areaGoalNode.width + 10,
@@ -819,9 +819,9 @@ define( require => {
 
         // Create the carousel if included as part of this challenge
         if ( challenge.userShapes !== null ) {
-          var creatorNodes = [];
+          const creatorNodes = [];
           challenge.userShapes.forEach( function( userShapeSpec ) {
-            var creatorNodeOptions = {
+            const creatorNodeOptions = {
               gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH,
               shapeDragBounds: self.layoutBounds,
               nonMovingAncestor: self.shapeCarouselLayer
@@ -849,7 +849,7 @@ define( require => {
           }
           else {
             // Add a non-scrolling panel
-            var creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
+            const creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
             this.shapeCarouselLayer.addChild( new Panel( creatorNodeHBox, {
               centerX: this.shapeBoardOriginalBounds.centerX,
               top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
@@ -917,7 +917,7 @@ define( require => {
 
     // @private
     showLevelResultsNode: function() {
-      var self = this;
+      const self = this;
 
       // Set a new "level completed" node based on the results.
       var levelCompletedNode = new LevelCompletedNode(

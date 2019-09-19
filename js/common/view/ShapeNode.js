@@ -22,11 +22,11 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var SHADOW_COLOR = 'rgba( 50, 50, 50, 0.5 )';
-  var SHADOW_OFFSET = new Vector2( 5, 5 );
-  var OPACITY_OF_TRANSLUCENT_SHAPES = 0.65; // Value empirically determined.
-  var UNIT_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
-  var BORDER_LINE_WIDTH = 1;
+  const SHADOW_COLOR = 'rgba( 50, 50, 50, 0.5 )';
+  const SHADOW_OFFSET = new Vector2( 5, 5 );
+  const OPACITY_OF_TRANSLUCENT_SHAPES = 0.65; // Value empirically determined.
+  const UNIT_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH;
+  const BORDER_LINE_WIDTH = 1;
 
   /**
    * @param {MovableShape} movableShape
@@ -35,7 +35,7 @@ define( require => {
    */
   function ShapeNode( movableShape, dragBounds ) {
     Node.call( this, { cursor: 'pointer' } );
-    var self = this;
+    const self = this;
     this.color = movableShape.color; // @public
 
     // Set up the mouse and touch areas for this node so that this can still be grabbed when invisible.
@@ -43,18 +43,18 @@ define( require => {
     this.mouseArea = movableShape.shape;
 
     // Set up a root node whose visibility and opacity will be manipulated below.
-    var rootNode = new Node();
+    const rootNode = new Node();
     this.addChild( rootNode );
 
     // Create the shadow
-    var shadow = new Path( movableShape.shape, {
+    const shadow = new Path( movableShape.shape, {
       fill: SHADOW_COLOR,
       leftTop: SHADOW_OFFSET
     } );
     rootNode.addChild( shadow );
 
     // Create the primary representation
-    var representation = new Path( movableShape.shape, {
+    const representation = new Path( movableShape.shape, {
       fill: movableShape.color,
       stroke: Color.toColor( movableShape.color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       lineWidth: 1,
@@ -75,7 +75,7 @@ define( require => {
 
     // Because a composite shape is often used to depict the overall shape when a shape is on the placement board, this
     // element may become invisible unless it is user controlled, animating, or fading.
-    var visibleProperty = new DerivedProperty( [
+    const visibleProperty = new DerivedProperty( [
         movableShape.userControlledProperty,
         movableShape.animatingProperty,
         movableShape.fadeProportionProperty,
@@ -85,7 +85,7 @@ define( require => {
       } );
 
     // Opacity is also a derived property, range is 0 to 1.
-    var opacityProperty = new DerivedProperty( [
+    const opacityProperty = new DerivedProperty( [
         movableShape.userControlledProperty,
         movableShape.animatingProperty,
         movableShape.fadeProportionProperty ],
@@ -115,7 +115,7 @@ define( require => {
       rootNode.visible = visible;
     } );
 
-    var shadowVisibilityProperty = new DerivedProperty(
+    const shadowVisibilityProperty = new DerivedProperty(
       [ movableShape.userControlledProperty, movableShape.animatingProperty ],
       function( userControlled, animating ) {
         return ( userControlled || animating );
@@ -137,7 +137,7 @@ define( require => {
     } );
 
     // Adjust the drag bounds to compensate for the shape that that the entire shape will stay in bounds.
-    var shapeDragBounds = new Bounds2(
+    const shapeDragBounds = new Bounds2(
       dragBounds.minX,
       dragBounds.minY,
       dragBounds.maxX - movableShape.shape.bounds.width,

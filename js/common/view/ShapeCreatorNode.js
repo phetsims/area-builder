@@ -25,7 +25,7 @@ define( require => {
   const Vector2Property = require( 'DOT/Vector2Property' );
 
   // constants
-  var BORDER_LINE_WIDTH = 1;
+  const BORDER_LINE_WIDTH = 1;
 
   /**
    * @param {Shape} shape
@@ -37,7 +37,7 @@ define( require => {
   function ShapeCreatorNode( shape, color, addShapeToModel, options ) {
     assert && assert( shape.bounds.minX === 0 && shape.bounds.minY === 0, 'Error: Shape is expected to be located at 0, 0' );
     Node.call( this, { cursor: 'pointer' } );
-    var self = this;
+    const self = this;
 
     options = _.extend( {
 
@@ -72,7 +72,7 @@ define( require => {
     }
 
     // Create the node that the user will click upon to add a model element to the view.
-    var representation = new Path( shape, {
+    const representation = new Path( shape, {
       fill: color,
       stroke: Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR ),
       lineWidth: BORDER_LINE_WIDTH,
@@ -82,14 +82,14 @@ define( require => {
 
     // Add grid if specified.
     if ( options.gridSpacing ) {
-      var gridNode = new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), options.gridSpacing, {
+      const gridNode = new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), options.gridSpacing, {
         lineDash: [ 0, 3, 1, 0 ],
         stroke: 'black'
       } );
       this.addChild( gridNode );
     }
 
-    var createdCountProperty = new Property( 0 ); // Used to track the number of shapes created and not returned.
+    const createdCountProperty = new Property( 0 ); // Used to track the number of shapes created and not returned.
 
     // If the created count exceeds the max, make this node invisible (which also makes it unusable).
     createdCountProperty.link( function( numCreated ) {
@@ -97,9 +97,9 @@ define( require => {
     } );
 
     // variables used by the drag handler
-    var parentScreenView = null; // needed for coordinate transforms
-    var movableShape = null;
-    var shapePositionProperty = new Vector2Property( Vector2.ZERO );
+    let parentScreenView = null; // needed for coordinate transforms
+    let movableShape = null;
+    const shapePositionProperty = new Vector2Property( Vector2.ZERO );
 
     // Link the internal position property to the movable shape.
     shapePositionProperty.link( function( position ){
@@ -109,7 +109,7 @@ define( require => {
     } );
 
     // Adjust the drag bounds to compensate for the shape that that the entire shape will stay in bounds.
-    var shapeDragBounds = options.shapeDragBounds.copy();
+    const shapeDragBounds = options.shapeDragBounds.copy();
     shapeDragBounds.setMaxX( shapeDragBounds.maxX - shape.bounds.width );
     shapeDragBounds.setMaxY( shapeDragBounds.maxY - shape.bounds.height );
 
@@ -126,7 +126,7 @@ define( require => {
         if ( !parentScreenView ) {
 
           // Find the parent screen view by moving up the scene graph.
-          var testNode = self;
+          let testNode = self;
           while ( testNode !== null ) {
             if ( testNode instanceof ScreenView ) {
               parentScreenView = testNode;
@@ -138,9 +138,9 @@ define( require => {
         }
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
-        var upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
-        var initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
-        var initialPosition = parentScreenView.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
+        const upperLeftCornerGlobal = self.parentToGlobalPoint( self.leftTop );
+        const initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
+        const initialPosition = parentScreenView.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
         shapePositionProperty.value = initialPosition;
 
         // Create and add the new model element.
@@ -153,7 +153,7 @@ define( require => {
           // Use an IIFE to keep a reference of the movable shape in a closure.
           ( function() {
             createdCountProperty.value++;
-            var localRefToMovableShape = movableShape;
+            const localRefToMovableShape = movableShape;
             localRefToMovableShape.returnedToOriginEmitter.addListener( function returnedToOriginListener() {
               if ( !localRefToMovableShape.userControlledProperty.get() ) {
                 // The shape has been returned to its origin.

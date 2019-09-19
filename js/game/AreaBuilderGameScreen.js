@@ -29,7 +29,7 @@ define( require => {
 
   function AreaBuilderGameScreen( tandem ) {
 
-    var options = {
+    const options = {
       name: gameString,
       backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
       homeScreenIcon: new Image( gameIcon ),

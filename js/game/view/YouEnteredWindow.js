@@ -19,7 +19,7 @@ define( require => {
   const youEnteredString = require( 'string!AREA_BUILDER/youEntered' );
 
   // constants
-  var LINE_SPACING = 5;
+  const LINE_SPACING = 5;
 
   /**
    * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the

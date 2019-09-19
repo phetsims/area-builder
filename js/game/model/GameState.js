@@ -11,7 +11,7 @@ define( require => {
   // modules
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
 
-  var GameState = {
+  const GameState = {
     CHOOSING_LEVEL: 'choosingLevel',
     PRESENTING_INTERACTIVE_CHALLENGE: 'presentingInteractiveChallenge',
     SHOWING_CORRECT_ANSWER_FEEDBACK: 'showingCorrectAnswerFeedback',

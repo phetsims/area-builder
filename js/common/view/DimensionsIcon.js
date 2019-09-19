@@ -22,11 +22,11 @@ define( require => {
   const Text = require( 'SCENERY/nodes/Text' );
 
   // constants
-  var UNIT_LENGTH = 10; // in screen coordinates
-  var WIDTH = 3 * UNIT_LENGTH;
-  var HEIGHT = 2 * UNIT_LENGTH; // in screen coordinates
-  var LABEL_FONT = new PhetFont( 10 );
-  var DEFAULT_FILL_COLOR = AreaBuilderSharedConstants.GREENISH_COLOR;
+  const UNIT_LENGTH = 10; // in screen coordinates
+  const WIDTH = 3 * UNIT_LENGTH;
+  const HEIGHT = 2 * UNIT_LENGTH; // in screen coordinates
+  const LABEL_FONT = new PhetFont( 10 );
+  const DEFAULT_FILL_COLOR = AreaBuilderSharedConstants.GREENISH_COLOR;
 
   /**
    * @param {Object} [options]
@@ -67,7 +67,7 @@ define( require => {
 
     setColor: function( color ) {
       this.singleRectNode.fill = color;
-      var strokeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+      const strokeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
       this.singleRectNode.stroke = strokeColor;
       this.grid.stroke = strokeColor;
     }

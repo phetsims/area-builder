@@ -30,7 +30,7 @@ define( require => {
   function GridIcon( columns, rows, cellLength, shapeFillColor, occupiedCells, options ) {
 
     Node.call( this );
-    var self = this;
+    const self = this;
 
     options = _.extend( {
       // defaults

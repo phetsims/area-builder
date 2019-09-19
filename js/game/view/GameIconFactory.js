@@ -15,10 +15,10 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var NUM_COLUMNS = 8;
-  var NUM_ROWS = 9;
-  var CELL_LENGTH = 3;
-  var GRID_ICON_OPTIONS = {
+  const NUM_COLUMNS = 8;
+  const NUM_ROWS = 9;
+  const CELL_LENGTH = 3;
+  const GRID_ICON_OPTIONS = {
     gridStroke: '#dddddd',
     gridLineWidth: 0.25,
     shapeLineWidth: 0.25
@@ -27,10 +27,10 @@ define( require => {
   /**
    * Static object, not meant to be instantiated.
    */
-  var GameIconFactory = {
+  const GameIconFactory = {
     createIcon: function( level ) {
-      var color;
-      var occupiedCells;
+      let color;
+      let occupiedCells;
       switch( level ) {
         case 1:
           color = AreaBuilderSharedConstants.ORANGISH_COLOR;

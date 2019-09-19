@@ -23,10 +23,10 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var NAV_BAR_ICON_SIZE = Screen.MINIMUM_NAVBAR_ICON_SIZE;
-  var GRID_STROKE = null;
-  var SHAPE_LINE_WIDTH = 1;
-  var GRID_OPTIONS = {
+  const NAV_BAR_ICON_SIZE = Screen.MINIMUM_NAVBAR_ICON_SIZE;
+  const GRID_STROKE = null;
+  const SHAPE_LINE_WIDTH = 1;
+  const GRID_OPTIONS = {
     backgroundStroke: 'black',
     backgroundLineWidth: 0.5,
     gridStroke: GRID_STROKE,
@@ -34,11 +34,11 @@ define( require => {
   };
 
   function createBucketIcon( options ) {
-    var icon = new Node();
-    var ellipseXRadius = NAV_BAR_ICON_SIZE.width * 0.125;
-    var ellipseYRadius = ellipseXRadius * 0.3;
-    var bucketDepth = ellipseXRadius * 0.75;
-    var bodyShape = new Shape().moveTo( -ellipseXRadius, 0 ).
+    const icon = new Node();
+    const ellipseXRadius = NAV_BAR_ICON_SIZE.width * 0.125;
+    const ellipseYRadius = ellipseXRadius * 0.3;
+    const bucketDepth = ellipseXRadius * 0.75;
+    const bodyShape = new Shape().moveTo( -ellipseXRadius, 0 ).
       lineTo( -ellipseXRadius * 0.75, bucketDepth ).
       quadraticCurveTo( 0, bucketDepth + ellipseYRadius, ellipseXRadius * 0.75, bucketDepth ).
       lineTo( ellipseXRadius, 0 ).
@@ -55,11 +55,11 @@ define( require => {
   /**
    * Static object, not meant to be instantiated.
    */
-  var AreaBuilderIconFactory = {
+  const AreaBuilderIconFactory = {
     createExploreScreenNavBarIcon: function() {
 
       // root node
-      var icon = new Node();
+      const icon = new Node();
 
       // background
       icon.addChild( new Rectangle( 0, 0, NAV_BAR_ICON_SIZE.width, NAV_BAR_ICON_SIZE.height, 0, 0, {
@@ -67,14 +67,14 @@ define( require => {
       } ) );
 
       // left shape placement board and shapes
-      var unitSquareLength = 15;
-      var leftBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
+      const unitSquareLength = 15;
+      const leftBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 ), new Vector2( 1, 2 )
       ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.05, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
       icon.addChild( leftBoard );
 
       // right shape placement board and shapes
-      var rightBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.PURPLISH_COLOR, [
+      const rightBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.PURPLISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 )
       ], _.extend( { right: NAV_BAR_ICON_SIZE.width * 0.95, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
       icon.addChild( rightBoard );
@@ -91,7 +91,7 @@ define( require => {
     createGameScreenNavBarIcon: function() {
 
       // root node
-      var icon = new Node();
+      const icon = new Node();
 
       // background
       icon.addChild( new Rectangle( 0, 0, NAV_BAR_ICON_SIZE.width, NAV_BAR_ICON_SIZE.height, 0, 0, {
@@ -99,8 +99,8 @@ define( require => {
       } ) );
 
       // shape placement board and shapes
-      var unitSquareLength = 12;
-      var shapePlacementBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
+      const unitSquareLength = 12;
+      const shapePlacementBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 ), new Vector2( 2, 2 )
       ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.075, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
       icon.addChild( shapePlacementBoard );
@@ -112,7 +112,7 @@ define( require => {
       } ) );
 
       // shape carousel
-      var shapeCarousel = new Rectangle( 0, 0, NAV_BAR_ICON_SIZE.width * 0.5, NAV_BAR_ICON_SIZE.height * 0.25, 1, 1, {
+      const shapeCarousel = new Rectangle( 0, 0, NAV_BAR_ICON_SIZE.width * 0.5, NAV_BAR_ICON_SIZE.height * 0.25, 1, 1, {
         fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
         stroke: 'black',
         lineWidth: 0.5,
@@ -122,9 +122,9 @@ define( require => {
       icon.addChild( shapeCarousel );
 
       // shapes on the shape carousel
-      var shapeFill = AreaBuilderSharedConstants.GREENISH_COLOR;
-      var shapeStroke = new Color( shapeFill ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
-      var shapes = new HBox( {
+      const shapeFill = AreaBuilderSharedConstants.GREENISH_COLOR;
+      const shapeStroke = new Color( shapeFill ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+      const shapes = new HBox( {
         children: [
           new Rectangle( 0, 0, unitSquareLength, unitSquareLength, 0, 0, {
             fill: shapeFill,

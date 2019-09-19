@@ -12,7 +12,7 @@ define( require => {
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const Bounds2 = require( 'DOT/Bounds2' );
 
-  var AreaBuilderSharedConstants = {
+  const AreaBuilderSharedConstants = {
 
     // layout bounds used throughout the simulation for laying out the screens
     LAYOUT_BOUNDS: new Bounds2( 0, 0, 768, 464 ),

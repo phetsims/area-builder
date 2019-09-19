@@ -11,7 +11,7 @@ define( require => {
   // modules
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
 
-  var AreaBuilderQueryParameters = QueryStringMachine.getAll( {
+  const AreaBuilderQueryParameters = QueryStringMachine.getAll( {
 
     // fill the shape placement boards on the 'Explore' screen during startup, useful for testing
     prefillBoards: { type: 'flag' }

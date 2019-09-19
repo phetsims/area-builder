@@ -23,9 +23,9 @@ define( require => {
   const valuesString = require( 'string!AREA_BUILDER/values' );
 
   // constants
-  var DISPLAY_FONT = new PhetFont( 14 );
-  var MAX_CONTENT_WIDTH = 200; // empirically determined, supports translation
-  var MAX_TITLE_WIDTH = 190; // empirically determined, supports translation
+  const DISPLAY_FONT = new PhetFont( 14 );
+  const MAX_CONTENT_WIDTH = 200; // empirically determined, supports translation
+  const MAX_TITLE_WIDTH = 190; // empirically determined, supports translation
 
   /**
    * @param {Property<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
@@ -40,12 +40,12 @@ define( require => {
       maxWidth: Number.POSITIVE_INFINITY
     }, options );
 
-    var contentNode = new Node();
-    var areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
-    var perimeterCaption = new Text( perimeterString, { font: DISPLAY_FONT } );
-    var tempTwoDigitString = new Text( '999', { font: DISPLAY_FONT } );
-    var areaReadout = new Text( '', { font: DISPLAY_FONT, fill: areaTextColor } );
-    var perimeterReadout = new Text( '', { font: DISPLAY_FONT, fill: perimeterTextColor } );
+    const contentNode = new Node();
+    const areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
+    const perimeterCaption = new Text( perimeterString, { font: DISPLAY_FONT } );
+    const tempTwoDigitString = new Text( '999', { font: DISPLAY_FONT } );
+    const areaReadout = new Text( '', { font: DISPLAY_FONT, fill: areaTextColor } );
+    const perimeterReadout = new Text( '', { font: DISPLAY_FONT, fill: perimeterTextColor } );
 
     contentNode.addChild( areaCaption );
     perimeterCaption.left = areaCaption.left;
@@ -53,7 +53,7 @@ define( require => {
     contentNode.addChild( perimeterCaption );
     contentNode.addChild( areaReadout );
     contentNode.addChild( perimeterReadout );
-    var readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 8 + tempTwoDigitString.width;
+    const readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 8 + tempTwoDigitString.width;
 
     areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
       areaReadout.text = areaAndPerimeter.area;

@@ -20,9 +20,9 @@ define( require => {
   const Shape = require( 'KITE/Shape' );
 
   // constants
-  var MULTI_LINE_SPACING = 5; // Empirically determined to look good
-  var SINGLE_LINE_SPACING = 12; // Empirically determined to look good
-  var PROMPT_TO_COLOR_SPACING = 4; // Empirically determined to look good
+  const MULTI_LINE_SPACING = 5; // Empirically determined to look good
+  const SINGLE_LINE_SPACING = 12; // Empirically determined to look good
+  const PROMPT_TO_COLOR_SPACING = 4; // Empirically determined to look good
 
   /**
    * @param {string || Color} color1 - Color value for the 1st color patch
@@ -47,14 +47,14 @@ define( require => {
     } );
     this.addChild( this.color1FractionNode );
 
-    var color2Proportion = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
+    const color2Proportion = new Fraction( color1Proportion.denominator - color1Proportion.numerator, color1Proportion.denominator );
     this.color2FractionNode = new FractionNode( color2Proportion, {
       font: options.font,
       color: options.textFill
     } );
     this.addChild( this.color2FractionNode );
 
-    var colorPatchShape = Shape.ellipse( 0, 0, this.color1FractionNode.bounds.height * 0.5, this.color1FractionNode.bounds.height * 0.35 );
+    const colorPatchShape = Shape.ellipse( 0, 0, this.color1FractionNode.bounds.height * 0.5, this.color1FractionNode.bounds.height * 0.35 );
     this.color1Patch = new Path( colorPatchShape, {
       fill: color1,
       left: this.color1FractionNode.right + PROMPT_TO_COLOR_SPACING,

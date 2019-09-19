@@ -27,12 +27,12 @@ define( require => {
   const perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
 
   // constants
-  var TEXT_FILL_COLOR = 'white';
-  var TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
-  var LARGER_FONT = new PhetFont( { size: 24 } ); // Font for single line text
-  var SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
-  var TITLE_INDENT = 15; // Empirically determined.
-  var ANIMATION_TIME = 0.6; // In seconds
+  const TEXT_FILL_COLOR = 'white';
+  const TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
+  const LARGER_FONT = new PhetFont( { size: 24 } ); // Font for single line text
+  const SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
+  const TITLE_INDENT = 15; // Empirically determined.
+  const ANIMATION_TIME = 0.6; // In seconds
 
   /**
    * @param {number} width
@@ -42,7 +42,7 @@ define( require => {
    * @constructor
    */
   function GameInfoBanner( width, height, backgroundColor, options ) {
-    var self = this;
+    const self = this;
     Rectangle.call( this, 0, 0, width, height, 0, 0, { fill: backgroundColor } );
 
     // @public These properties are the main API for this class, and they control what is and isn't shown on the banner.
@@ -51,7 +51,7 @@ define( require => {
     this.areaToFindProperty = new Property( null );
 
     // Define the title.
-    var title = new Text( this.titleTextProperty.value, {
+    const title = new Text( this.titleTextProperty.value, {
       font: TITLE_FONT,
       fill: TEXT_FILL_COLOR,
       centerY: height / 2,
@@ -74,14 +74,14 @@ define( require => {
     } );
 
     // Define the build prompt, which is shown in both the challenge prompt and the solution.
-    var buildPrompt = new Node();
+    const buildPrompt = new Node();
     this.addChild( buildPrompt );
-    var maxBuildPromptWidth = width / 2; // the build prompt has to fit in the banner with the title
-    var areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
+    const maxBuildPromptWidth = width / 2; // the build prompt has to fit in the banner with the title
+    const areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
     buildPrompt.addChild( areaPrompt );
-    var perimeterPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
+    const perimeterPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
     buildPrompt.addChild( perimeterPrompt );
-    var colorProportionPrompt = new ColorProportionsPrompt( 'black', 'white',
+    const colorProportionPrompt = new ColorProportionsPrompt( 'black', 'white',
       new Fraction( 1, 1 ), {
         font: new PhetFont( { size: 11 } ),
         textFill: TEXT_FILL_COLOR,
@@ -118,8 +118,8 @@ define( require => {
     // Function that positions the build prompt such that its visible bounds are centered in the space to the left of
     // the title.
     function positionBuildPrompt() {
-      var centerX = ( TITLE_INDENT + title.width + width - TITLE_INDENT ) / 2;
-      var centerY = height / 2;
+      const centerX = ( TITLE_INDENT + title.width + width - TITLE_INDENT ) / 2;
+      const centerY = height / 2;
       buildPrompt.setScaleMagnitude( 1 );
       if ( buildPrompt.width > maxBuildPromptWidth ) {
         // scale the build prompt to fit with the title on the banner

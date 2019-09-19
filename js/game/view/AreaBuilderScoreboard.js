@@ -44,28 +44,28 @@ define( require => {
     this.timeVisibleProperty = new Property( true );
 
     // Create the labels
-    var levelIndicator = new Text( '', {
+    const levelIndicator = new Text( '', {
       font: new PhetFont( { size: 20, weight: 'bold' } ),
       maxWidth: options.maxWidth
     } );
     levelProperty.link( function( level ) {
       levelIndicator.text = StringUtils.format( levelString, level + 1 );
     } );
-    var currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } ), maxWidth: options.maxWidth } );
+    const currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } ), maxWidth: options.maxWidth } );
     problemNumberProperty.link( function( currentChallenge ) {
       currentChallengeIndicator.text = StringUtils.format( pattern0Challenge1MaxString, currentChallenge + 1, problemsPerLevel );
     } );
-    var scoreIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
+    const scoreIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     scoreProperty.link( function( score ) {
       scoreIndicator.text = StringUtils.format( labelScoreString, score );
     } );
-    var elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
+    const elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     elapsedTimeProperty.link( function( elapsedTime ) {
       elapsedTimeIndicator.text = StringUtils.format( labelTimeString, GameTimer.formatTime( elapsedTime ) );
     } );
 
     // Create the panel.
-    var vBox = new VBox( {
+    const vBox = new VBox( {
       children: [
         levelIndicator,
         currentChallengeIndicator,
