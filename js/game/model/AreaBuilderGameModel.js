@@ -9,22 +9,22 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
-  var Color = require( 'SCENERY/util/Color' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Property = require( 'AXON/Property' );
-  var Shape = require( 'KITE/Shape' );
-  var ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
+  const Color = require( 'SCENERY/util/Color' );
+  const Dimension2 = require( 'DOT/Dimension2' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Property = require( 'AXON/Property' );
+  const Shape = require( 'KITE/Shape' );
+  const ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords, which are roughly pixels

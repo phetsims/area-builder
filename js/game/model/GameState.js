@@ -5,11 +5,11 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
 
   var GameState = {
     CHOOSING_LEVEL: 'choosingLevel',

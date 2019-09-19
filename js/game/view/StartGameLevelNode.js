@@ -7,23 +7,23 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var TimerToggleButton = require( 'SCENERY_PHET/buttons/TimerToggleButton' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const TimerToggleButton = require( 'SCENERY_PHET/buttons/TimerToggleButton' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var chooseYourLevelString = require( 'string!VEGAS/chooseYourLevel' );
+  const chooseYourLevelString = require( 'string!VEGAS/chooseYourLevel' );
 
   // constants
   var CONTROL_BUTTON_TOUCH_AREA_DILATION = 4;

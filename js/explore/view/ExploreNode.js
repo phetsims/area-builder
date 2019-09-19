@@ -6,26 +6,26 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AreaAndPerimeterDisplay = require( 'AREA_BUILDER/explore/view/AreaAndPerimeterDisplay' );
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
-  var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
-  var Color = require( 'SCENERY/util/Color' );
-  var EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Shape = require( 'KITE/Shape' );
-  var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
-  var ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
-  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const AreaAndPerimeterDisplay = require( 'AREA_BUILDER/explore/view/AreaAndPerimeterDisplay' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
+  const BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
+  const Color = require( 'SCENERY/util/Color' );
+  const EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Shape = require( 'KITE/Shape' );
+  const ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
+  const ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
+  const ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;

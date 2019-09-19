@@ -6,21 +6,21 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Checkbox = require( 'SUN/Checkbox' );
-  var DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
-  var Grid = require( 'AREA_BUILDER/common/view/Grid' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Panel = require( 'SUN/Panel' );
-  var Property = require( 'AXON/Property' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const Checkbox = require( 'SUN/Checkbox' );
+  const DimensionsIcon = require( 'AREA_BUILDER/common/view/DimensionsIcon' );
+  const Grid = require( 'AREA_BUILDER/common/view/Grid' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Panel = require( 'SUN/Panel' );
+  const Property = require( 'AXON/Property' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
   var BACKGROUND_COLOR = AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR;

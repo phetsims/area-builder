@@ -6,14 +6,14 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
 
   /**
    * @param {Object} toolSpec An object that specifies which tools are available to the user.  It should have three

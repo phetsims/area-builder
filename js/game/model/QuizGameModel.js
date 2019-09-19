@@ -12,14 +12,14 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var GameState = require( 'AREA_BUILDER/game/model/GameState' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const GameState = require( 'AREA_BUILDER/game/model/GameState' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Property = require( 'AXON/Property' );
 
   /**
    * @param challengeFactory - Factory object that is used to create challenges, examine usage for details.

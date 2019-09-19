@@ -5,62 +5,62 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
   const Animation = require( 'TWIXT/Animation' );
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
-  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
-  var AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
-  var Carousel = require( 'SUN/Carousel' );
-  var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
+  const AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  const AreaBuilderScoreboard = require( 'AREA_BUILDER/game/view/AreaBuilderScoreboard' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const BuildSpec = require( 'AREA_BUILDER/game/model/BuildSpec' );
+  const Carousel = require( 'SUN/Carousel' );
+  const ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   const Easing = require( 'TWIXT/Easing' );
-  var EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
-  var FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
-  var GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
-  var GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
-  var GameInfoBanner = require( 'AREA_BUILDER/game/view/GameInfoBanner' );
-  var GameState = require( 'AREA_BUILDER/game/model/GameState' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var NumberEntryControl = require( 'SCENERY_PHET/NumberEntryControl' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
-  var ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
-  var ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
-  var StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var YouBuiltWindow = require( 'AREA_BUILDER/game/view/YouBuiltWindow' );
-  var YouEnteredWindow = require( 'AREA_BUILDER/game/view/YouEnteredWindow' );
+  const EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
+  const FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
+  const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
+  const GameIconFactory = require( 'AREA_BUILDER/game/view/GameIconFactory' );
+  const GameInfoBanner = require( 'AREA_BUILDER/game/view/GameInfoBanner' );
+  const GameState = require( 'AREA_BUILDER/game/model/GameState' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const NumberEntryControl = require( 'SCENERY_PHET/NumberEntryControl' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const ShapeCreatorNode = require( 'AREA_BUILDER/common/view/ShapeCreatorNode' );
+  const ShapeNode = require( 'AREA_BUILDER/common/view/ShapeNode' );
+  const ShapePlacementBoardNode = require( 'AREA_BUILDER/common/view/ShapePlacementBoardNode' );
+  const StartGameLevelNode = require( 'AREA_BUILDER/game/view/StartGameLevelNode' );
+  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
+  const YouBuiltWindow = require( 'AREA_BUILDER/game/view/YouBuiltWindow' );
+  const YouEnteredWindow = require( 'AREA_BUILDER/game/view/YouEnteredWindow' );
 
   // strings
-  var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
-  var areaQuestionString = require( 'string!AREA_BUILDER/areaQuestion' );
-  var aSolutionColonString = require( 'string!AREA_BUILDER/aSolutionColon' );
-  var aSolutionString = require( 'string!AREA_BUILDER/aSolution' );
-  var buildItString = require( 'string!AREA_BUILDER/buildIt' );
-  var checkString = require( 'string!VEGAS/check' );
-  var findTheAreaString = require( 'string!AREA_BUILDER/findTheArea' );
-  var nextString = require( 'string!VEGAS/next' );
-  var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
-  var solutionColonString = require( 'string!AREA_BUILDER/solutionColon' );
-  var solutionString = require( 'string!AREA_BUILDER/solution' );
-  var startOverString = require( 'string!AREA_BUILDER/startOver' );
-  var tryAgainString = require( 'string!VEGAS/tryAgain' );
-  var yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
+  const areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
+  const areaQuestionString = require( 'string!AREA_BUILDER/areaQuestion' );
+  const aSolutionColonString = require( 'string!AREA_BUILDER/aSolutionColon' );
+  const aSolutionString = require( 'string!AREA_BUILDER/aSolution' );
+  const buildItString = require( 'string!AREA_BUILDER/buildIt' );
+  const checkString = require( 'string!VEGAS/check' );
+  const findTheAreaString = require( 'string!AREA_BUILDER/findTheArea' );
+  const nextString = require( 'string!VEGAS/next' );
+  const perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
+  const solutionColonString = require( 'string!AREA_BUILDER/solutionColon' );
+  const solutionString = require( 'string!AREA_BUILDER/solution' );
+  const startOverString = require( 'string!AREA_BUILDER/startOver' );
+  const tryAgainString = require( 'string!VEGAS/tryAgain' );
+  const yourGoalString = require( 'string!AREA_BUILDER/yourGoal' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 18 );

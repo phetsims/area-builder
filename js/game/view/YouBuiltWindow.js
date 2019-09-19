@@ -6,22 +6,22 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
-  var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
+  const FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
+  const Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
-  var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
-  var youBuiltString = require( 'string!AREA_BUILDER/youBuilt' );
+  const areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
+  const perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
+  const youBuiltString = require( 'string!AREA_BUILDER/youBuilt' );
 
   // constants
   var LINE_SPACING = 5;

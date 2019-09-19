@@ -5,22 +5,22 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AccordionBox = require( 'SUN/AccordionBox' );
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  const AccordionBox = require( 'SUN/AccordionBox' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
+  const Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var areaString = require( 'string!AREA_BUILDER/area' );
-  var perimeterString = require( 'string!AREA_BUILDER/perimeter' );
-  var valuesString = require( 'string!AREA_BUILDER/values' );
+  const areaString = require( 'string!AREA_BUILDER/area' );
+  const perimeterString = require( 'string!AREA_BUILDER/perimeter' );
+  const valuesString = require( 'string!AREA_BUILDER/values' );
 
   // constants
   var DISPLAY_FONT = new PhetFont( 14 );

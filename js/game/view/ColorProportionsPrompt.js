@@ -6,18 +6,18 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var Fraction = require( 'PHETCOMMON/model/Fraction' );
-  var FractionNode = require( 'AREA_BUILDER/game/view/FractionNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Shape = require( 'KITE/Shape' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
+  const FractionNode = require( 'AREA_BUILDER/game/view/FractionNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Shape = require( 'KITE/Shape' );
 
   // constants
   var MULTI_LINE_SPACING = 5; // Empirically determined to look good

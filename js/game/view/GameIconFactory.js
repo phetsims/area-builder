@@ -5,14 +5,14 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var GridIcon = require( 'AREA_BUILDER/common/view/GridIcon' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const GridIcon = require( 'AREA_BUILDER/common/view/GridIcon' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var NUM_COLUMNS = 8;

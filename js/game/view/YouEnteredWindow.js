@@ -6,17 +6,17 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const FeedbackWindow = require( 'AREA_BUILDER/game/view/FeedbackWindow' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var youEnteredString = require( 'string!AREA_BUILDER/youEntered' );
+  const youEnteredString = require( 'string!AREA_BUILDER/youEntered' );
 
   // constants
   var LINE_SPACING = 5;

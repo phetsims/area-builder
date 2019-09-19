@@ -5,20 +5,20 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
-  var AreaBuilderQueryParameters = require( 'AREA_BUILDER/common/AreaBuilderQueryParameters' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
-  var ExploreNode = require( 'AREA_BUILDER/explore/view/ExploreNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ScreenView = require( 'JOIST/ScreenView' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderControlPanel = require( 'AREA_BUILDER/common/view/AreaBuilderControlPanel' );
+  const AreaBuilderQueryParameters = require( 'AREA_BUILDER/common/AreaBuilderQueryParameters' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const BoardDisplayModePanel = require( 'AREA_BUILDER/explore/view/BoardDisplayModePanel' );
+  const ExploreNode = require( 'AREA_BUILDER/explore/view/ExploreNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const ScreenView = require( 'JOIST/ScreenView' );
 
   // constants
   var SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_INSET;

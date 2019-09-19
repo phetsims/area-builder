@@ -5,21 +5,21 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
-  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Color = require( 'SCENERY/util/Color' );
-  var Fraction = require( 'PHETCOMMON/model/Fraction' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
-  var Shape = require( 'KITE/Shape' );
-  var Util = require( 'DOT/Util' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderGameChallenge = require( 'AREA_BUILDER/game/model/AreaBuilderGameChallenge' );
+  const AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const Color = require( 'SCENERY/util/Color' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
+  const Shape = require( 'KITE/Shape' );
+  const Util = require( 'DOT/Util' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In screen coords

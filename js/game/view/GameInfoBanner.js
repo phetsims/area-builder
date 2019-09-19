@@ -5,26 +5,26 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
   const Animation = require( 'TWIXT/Animation' );
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
   const Easing = require( 'TWIXT/Easing' );
-  var Fraction = require( 'PHETCOMMON/model/Fraction' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
+  const Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
-  var perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
+  const areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
+  const perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
 
   // constants
   var TEXT_FILL_COLOR = 'white';

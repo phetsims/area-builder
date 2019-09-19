@@ -5,12 +5,12 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var Bounds2 = require( 'DOT/Bounds2' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const Bounds2 = require( 'DOT/Bounds2' );
 
   var AreaBuilderSharedConstants = {
 

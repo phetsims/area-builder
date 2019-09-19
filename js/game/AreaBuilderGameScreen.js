@@ -5,27 +5,27 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // imports
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderChallengeFactory = require( 'AREA_BUILDER/game/model/AreaBuilderChallengeFactory' );
-  var AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
-  var AreaBuilderGameView = require( 'AREA_BUILDER/game/view/AreaBuilderGameView' );
-  var AreaBuilderIconFactory = require( 'AREA_BUILDER/common/view/AreaBuilderIconFactory' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
-  var Screen = require( 'JOIST/Screen' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderChallengeFactory = require( 'AREA_BUILDER/game/model/AreaBuilderChallengeFactory' );
+  const AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
+  const AreaBuilderGameView = require( 'AREA_BUILDER/game/view/AreaBuilderGameView' );
+  const AreaBuilderIconFactory = require( 'AREA_BUILDER/common/view/AreaBuilderIconFactory' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Property = require( 'AXON/Property' );
+  const QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
+  const Screen = require( 'JOIST/Screen' );
 
   // strings
-  var gameString = require( 'string!AREA_BUILDER/game' );
+  const gameString = require( 'string!AREA_BUILDER/game' );
 
   // images
-  var gameIcon = require( 'image!AREA_BUILDER/game-icon.png' );
+  const gameIcon = require( 'image!AREA_BUILDER/game-icon.png' );
 
   function AreaBuilderGameScreen( tandem ) {
 

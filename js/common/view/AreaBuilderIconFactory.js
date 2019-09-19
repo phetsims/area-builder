@@ -4,23 +4,23 @@
  * This file contains the code used to generate the screen icons that need to be produced in code in order to look half
  * decent.
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Color = require( 'SCENERY/util/Color' );
-  var FaceNode = require( 'SCENERY_PHET/FaceNode' );
-  var GridIcon = require( 'AREA_BUILDER/common/view/GridIcon' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Screen = require( 'JOIST/Screen' );
-  var Shape = require( 'KITE/Shape' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const Color = require( 'SCENERY/util/Color' );
+  const FaceNode = require( 'SCENERY_PHET/FaceNode' );
+  const GridIcon = require( 'AREA_BUILDER/common/view/GridIcon' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const Screen = require( 'JOIST/Screen' );
+  const Shape = require( 'KITE/Shape' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var NAV_BAR_ICON_SIZE = Screen.MINIMUM_NAVBAR_ICON_SIZE;

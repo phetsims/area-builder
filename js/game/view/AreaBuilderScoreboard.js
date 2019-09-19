@@ -5,25 +5,25 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var GameTimer = require( 'VEGAS/GameTimer' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const GameTimer = require( 'VEGAS/GameTimer' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
+  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var labelScoreString = require( 'string!VEGAS/label.score' );
-  var labelTimeString = require( 'string!VEGAS/label.time' );
-  var levelString = require( 'string!AREA_BUILDER/level' );
-  var pattern0Challenge1MaxString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
+  const labelScoreString = require( 'string!VEGAS/label.score' );
+  const labelTimeString = require( 'string!VEGAS/label.time' );
+  const levelString = require( 'string!AREA_BUILDER/level' );
+  const pattern0Challenge1MaxString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
 
   /**
    * @param levelProperty

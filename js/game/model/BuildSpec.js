@@ -6,15 +6,15 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  var AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  var Color = require( 'SCENERY/util/Color' );
-  var Fraction = require( 'PHETCOMMON/model/Fraction' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
+  const Color = require( 'SCENERY/util/Color' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
+  const inherit = require( 'PHET_CORE/inherit' );
 
   /**
    * @param {number} area - Area of the shape that the user should construct from smaller shapes
