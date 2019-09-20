@@ -534,7 +534,6 @@ define( require => {
     function generateBuildAreaChallenge() {
 
       // Create a unique challenge
-      let challenge;
       const width = random.nextIntBetween( 2, AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH - 2 );
       let height = 0;
       while ( width * height < 8 || width * height > 36 ) {
@@ -548,7 +547,7 @@ define( require => {
         height,
         color
       );
-      challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, createBasicRectanglesShapeKit( color ), exampleSolution );
+      const challenge = AreaBuilderGameChallenge.createBuildAreaChallenge( width * height, createBasicRectanglesShapeKit( color ), exampleSolution );
       return challenge;
     }
 
