@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * The 'Game' screen in the Area Builder simulation. Conforms to the contract specified in joist/Screen.

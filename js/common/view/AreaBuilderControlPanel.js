@@ -1,4 +1,4 @@
-// Copyright 2014-2018, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * Panel that contains controls for turning various tools on and off for the Area Builder game. It is dynamic in the

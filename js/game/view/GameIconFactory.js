@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * Static factory for creating the number-on-a-grid icons used in the level selection screen of the Area Builder game.
