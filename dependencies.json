@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.17 Mon Sep 23 2019 14:16:48 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.18-rc.1 Tue Sep 24 2019 10:21:26 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "ecd0d9b2e3fad46eaeee869a20d55362b510c643",
+    "sha": "420ad5ad13c480398da8535644965e2959bffa88",
     "branch": "1.1"
   },
   "assert": {
@@ -46,7 +46,7 @@
   },
   "scenery": {
     "sha": "4a65c37fa3fd0e2d72e3372314d82650542e5430",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "scenery-phet": {
     "sha": "7def38a31b7322d5428bdb863937d941cf6d3c41",
