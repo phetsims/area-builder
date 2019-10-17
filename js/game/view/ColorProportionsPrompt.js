@@ -14,6 +14,7 @@ define( require => {
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionNode = require( 'AREA_BUILDER/game/view/FractionNode' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -35,7 +36,7 @@ define( require => {
   function ColorProportionsPrompt( color1, color2, color1Proportion, options ) {
     Node.call( this );
 
-    options = _.extend( {
+    options = merge( {
       font: new PhetFont( { size: 18 } ),
       textFill: 'black',
       multiLine: false

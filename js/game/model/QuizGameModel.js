@@ -19,6 +19,7 @@ define( require => {
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const GameState = require( 'AREA_BUILDER/game/model/GameState' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
 
   /**
@@ -33,7 +34,7 @@ define( require => {
     this.challengeFactory = challengeFactory; // @private
     this.simSpecificModel = simSpecificModel; // @public
 
-    options = _.extend( {
+    options = merge( {
       numberOfLevels: 6,
       challengesPerSet: 6,
       maxPointsPerChallenge: 2,

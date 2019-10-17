@@ -15,6 +15,7 @@ define( require => {
   const GridIcon = require( 'AREA_BUILDER/common/view/GridIcon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -70,13 +71,13 @@ define( require => {
       const unitSquareLength = 15;
       const leftBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 ), new Vector2( 1, 2 )
-      ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.05, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
+      ], merge( { left: NAV_BAR_ICON_SIZE.width * 0.05, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
       icon.addChild( leftBoard );
 
       // right shape placement board and shapes
       const rightBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.PURPLISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 )
-      ], _.extend( { right: NAV_BAR_ICON_SIZE.width * 0.95, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
+      ], merge( { right: NAV_BAR_ICON_SIZE.width * 0.95, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
       icon.addChild( rightBoard );
 
       // left bucket
@@ -102,7 +103,7 @@ define( require => {
       const unitSquareLength = 12;
       const shapePlacementBoard = new GridIcon( 4, 4, unitSquareLength, AreaBuilderSharedConstants.GREENISH_COLOR, [
         new Vector2( 1, 1 ), new Vector2( 2, 1 ), new Vector2( 2, 2 )
-      ], _.extend( { left: NAV_BAR_ICON_SIZE.width * 0.075, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
+      ], merge( { left: NAV_BAR_ICON_SIZE.width * 0.075, top: NAV_BAR_ICON_SIZE.height * 0.1 }, GRID_OPTIONS ) );
       icon.addChild( shapePlacementBoard );
 
       // smiley face

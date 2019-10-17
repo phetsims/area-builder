@@ -12,6 +12,7 @@ define( require => {
   // modules
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
@@ -36,7 +37,7 @@ define( require => {
    */
   function FeedbackWindow( title, maxWidth, options ) {
 
-    options = _.extend( {
+    options = merge( {
       fill: INCORRECT_ANSWER_BACKGROUND_COLOR,
       stroke: 'black',
       xMargin: X_MARGIN

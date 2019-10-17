@@ -15,6 +15,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const Grid = require( 'AREA_BUILDER/common/view/Grid' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const MovableDragHandler = require( 'SCENERY_PHET/input/MovableDragHandler' );
   const MovableShape = require( 'AREA_BUILDER/common/model/MovableShape' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -39,7 +40,7 @@ define( require => {
     Node.call( this, { cursor: 'pointer' } );
     const self = this;
 
-    options = _.extend( {
+    options = merge( {
 
       // Spacing of the grid, if any, that should be shown on the creator node.  Null indicates no grid.
       gridSpacing: null,

@@ -12,6 +12,7 @@ define( require => {
   // modules
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -72,7 +73,7 @@ define( require => {
     const self = this;
     let i;
 
-    options = _.extend( {
+    options = merge( {
       fillColor: null,
       edgeColor: null
     }, options ); // Make sure options is defined.

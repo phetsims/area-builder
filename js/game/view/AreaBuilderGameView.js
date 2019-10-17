@@ -28,6 +28,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const inherit = require( 'PHET_CORE/inherit' );
   const LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberEntryControl = require( 'SCENERY_PHET/NumberEntryControl' );
   const Panel = require( 'SUN/Panel' );
@@ -243,7 +244,7 @@ define( require => {
       touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
       maxWidth: ( this.layoutBounds.maxX - this.shapeBoardOriginalBounds.maxX ) * 0.9
     };
-    this.checkAnswerButton = new TextPushButton( checkString, _.extend( {
+    this.checkAnswerButton = new TextPushButton( checkString, merge( {
       listener: function() {
         self.updateUserAnswer();
         gameModel.checkAnswer();
@@ -251,7 +252,7 @@ define( require => {
     }, buttonOptions ) );
     this.gameControlButtons.push( this.checkAnswerButton );
 
-    this.nextButton = new TextPushButton( nextString, _.extend( {
+    this.nextButton = new TextPushButton( nextString, merge( {
       listener: function() {
         self.numberEntryControl.clear();
         gameModel.nextChallenge();
@@ -259,7 +260,7 @@ define( require => {
     }, buttonOptions ) );
     this.gameControlButtons.push( this.nextButton );
 
-    this.tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
+    this.tryAgainButton = new TextPushButton( tryAgainString, merge( {
       listener: function() {
         self.numberEntryControl.clear();
         gameModel.tryAgain();
@@ -268,7 +269,7 @@ define( require => {
     this.gameControlButtons.push( this.tryAgainButton );
 
     // Solution button for 'find the area' style of challenge, which has one specific answer.
-    this.solutionButton = new TextPushButton( solutionString, _.extend( {
+    this.solutionButton = new TextPushButton( solutionString, merge( {
       listener: function() {
         gameModel.displayCorrectAnswer();
       }
@@ -276,7 +277,7 @@ define( require => {
     this.gameControlButtons.push( this.solutionButton );
 
     // Solution button for 'build it' style of challenge, which has many potential answers.
-    this.showASolutionButton = new TextPushButton( aSolutionString, _.extend( {
+    this.showASolutionButton = new TextPushButton( aSolutionString, merge( {
       listener: function() {
         self.okayToUpdateYouBuiltWindow = false;
         gameModel.displayCorrectAnswer();

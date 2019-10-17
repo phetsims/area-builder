@@ -12,6 +12,7 @@ define( require => {
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const GameTimer = require( 'VEGAS/GameTimer' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Property = require( 'AXON/Property' );
@@ -38,7 +39,7 @@ define( require => {
                                   elapsedTimeProperty, options ) {
     Node.call( this );
 
-    options = _.extend( { maxWidth: Number.POSITIVE_INFINITY }, options );
+    options = merge( { maxWidth: Number.POSITIVE_INFINITY }, options );
 
     // Properties that control which elements are visible and which are hidden.  This constitutes the primary API.
     this.timeVisibleProperty = new Property( true );

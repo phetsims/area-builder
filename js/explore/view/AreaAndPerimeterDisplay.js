@@ -12,6 +12,7 @@ define( require => {
   const AccordionBox = require( 'SUN/AccordionBox' );
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Property = require( 'AXON/Property' );
@@ -36,7 +37,7 @@ define( require => {
    */
   function AreaAndPerimeterDisplay( areaAndPerimeterProperty, areaTextColor, perimeterTextColor, options ) {
 
-    options = _.extend( {
+    options = merge( {
       maxWidth: Number.POSITIVE_INFINITY
     }, options );
 

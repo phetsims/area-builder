@@ -12,6 +12,7 @@ define( require => {
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const inherit = require( 'PHET_CORE/inherit' );
   const Line = require( 'SCENERY/nodes/Line' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -23,7 +24,7 @@ define( require => {
    */
   function FractionNode( fraction, options ) {
     Node.call( this );
-    options = _.extend( {
+    options = merge( {
       // default options
       font: new PhetFont( { size: 18 } ),
       color: 'black',

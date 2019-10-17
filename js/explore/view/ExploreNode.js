@@ -19,6 +19,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const EraserButton = require( 'SCENERY_PHET/buttons/EraserButton' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Shape = require( 'KITE/Shape' );
@@ -51,7 +52,7 @@ define( require => {
    */
   function ExploreNode( shapePlacementBoard, addShapeToModel, movableShapeList, bucket, options ) {
 
-    options = _.extend( {
+    options = merge( {
 
       // drag bounds for the shapes that can go on the board
       shapeDragBounds: Bounds2.EVERYTHING,

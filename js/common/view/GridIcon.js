@@ -15,6 +15,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const Grid = require( 'AREA_BUILDER/common/view/Grid' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
@@ -32,7 +33,7 @@ define( require => {
     Node.call( this );
     const self = this;
 
-    options = _.extend( {
+    options = merge( {
       // defaults
       gridStroke: 'black',
       gridLineWidth: 1,
