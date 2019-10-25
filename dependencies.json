@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.19-rc.1 Tue Oct 15 2019 16:56:30 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.19 Fri Oct 25 2019 16:49:23 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "f37ae3698cf00c726a0706e7f4497ed99a82dd0f",
+    "sha": "57493732f7dfdea59bee3f067ca6a7bcf0817519",
     "branch": "1.1"
   },
   "assert": {
