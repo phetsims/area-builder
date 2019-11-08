@@ -21,6 +21,7 @@ define( require => {
   const inherit = require( 'PHET_CORE/inherit' );
   const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
+  const timer = require( 'AXON/timer' );
 
   /**
    * @param challengeFactory - Factory object that is used to create challenges, examine usage for details.
@@ -223,7 +224,7 @@ define( require => {
         }
         this.elapsedTimeProperty.set( 0 );
         const self = this;
-        this.gameTimerId = window.setInterval( function() { self.elapsedTimeProperty.value += 1; }, 1000 );
+        this.gameTimerId = timer.setInterval( function() { self.elapsedTimeProperty.value += 1; }, 1000 );
       },
 
       // @private
