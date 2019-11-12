@@ -28,8 +28,7 @@ define( require => {
       team: 'Bryce Gruneich, Amanda McGarry, Ariel Paul, Kathy Perkins, Beth Stade',
       qualityAssurance: 'Steele Dalton, Amanda Davis, Oliver Nix, Oliver Orejola, Arnab Purkayastha, ' +
                         'Amy Rouinfar, Bryan Yoelin'
-    },
-    supportsSound: true
+    }
   };
 
   SimLauncher.launch( function() {
