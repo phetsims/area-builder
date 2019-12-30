@@ -20,7 +20,7 @@ define( require => {
   const Property = require( 'AXON/Property' );
   const Shape = require( 'KITE/Shape' );
   const Text = require( 'SCENERY/nodes/Text' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -181,8 +181,8 @@ define( require => {
               };
 
               // Only include the labels that are integer values.
-              if ( Math.abs( Util.roundSymmetric( segmentLabelInfo.unitLength ) - segmentLabelInfo.unitLength ) < COMPARISON_TOLERANCE ) {
-                segmentLabelInfo.unitLength = Util.roundSymmetric( segmentLabelInfo.unitLength );
+              if ( Math.abs( Utils.roundSymmetric( segmentLabelInfo.unitLength ) - segmentLabelInfo.unitLength ) < COMPARISON_TOLERANCE ) {
+                segmentLabelInfo.unitLength = Utils.roundSymmetric( segmentLabelInfo.unitLength );
                 segmentLabelsInfo.push( segmentLabelInfo );
               }
             } while ( segment.endIndex !== 0 );

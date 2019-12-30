@@ -18,7 +18,7 @@ define( require => {
   const inherit = require( 'PHET_CORE/inherit' );
   const PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   const Shape = require( 'KITE/Shape' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -831,7 +831,7 @@ define( require => {
       let color1FractionNumerator;
       do {
         color1FractionNumerator = random.nextIntBetween( 1, fractionDenominator - 1 );
-      } while ( Util.gcd( color1FractionNumerator, fractionDenominator ) > 1 );
+      } while ( Utils.gcd( color1FractionNumerator, fractionDenominator ) > 1 );
       const color1Fraction = new Fraction( color1FractionNumerator, fractionDenominator );
 
       // Choose the colors for this challenge

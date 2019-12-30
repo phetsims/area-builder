@@ -19,7 +19,7 @@ define( require => {
   const PerimeterShape = require( 'AREA_BUILDER/common/model/PerimeterShape' );
   const Property = require( 'AXON/Property' );
   const Shape = require( 'KITE/Shape' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -382,8 +382,8 @@ define( require => {
      * @param operation
      */
     updateCellOccupation: function( movableShape, operation ) {
-      const xIndex = Util.roundSymmetric( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
-      const yIndex = Util.roundSymmetric( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
+      const xIndex = Utils.roundSymmetric( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
+      const yIndex = Utils.roundSymmetric( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
       // Mark all cells occupied by this shape.
       for ( let row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
         for ( let column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
@@ -448,8 +448,8 @@ define( require => {
       }
       for ( let i = 0; i < this.incomingShapes.length; i++ ) {
         const targetCell = this.modelToCellVector( this.incomingShapes[ i ].destination );
-        const normalizedWidth = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.width / this.unitSquareLength );
-        const normalizedHeight = Util.roundSymmetric( this.incomingShapes[ i ].shape.bounds.height / this.unitSquareLength );
+        const normalizedWidth = Utils.roundSymmetric( this.incomingShapes[ i ].shape.bounds.width / this.unitSquareLength );
+        const normalizedHeight = Utils.roundSymmetric( this.incomingShapes[ i ].shape.bounds.height / this.unitSquareLength );
         if ( column >= targetCell.x && column < targetCell.x + normalizedWidth &&
              row >= targetCell.y && row < targetCell.y + normalizedHeight ) {
           return true;
@@ -502,8 +502,8 @@ define( require => {
      */
     isValidToPlace: function( movableShape, location ) {
       const normalizedLocation = this.modelToCellVector( location );
-      const normalizedWidth = Util.roundSymmetric( movableShape.shape.bounds.width / this.unitSquareLength );
-      const normalizedHeight = Util.roundSymmetric( movableShape.shape.bounds.height / this.unitSquareLength );
+      const normalizedWidth = Utils.roundSymmetric( movableShape.shape.bounds.width / this.unitSquareLength );
+      const normalizedHeight = Utils.roundSymmetric( movableShape.shape.bounds.height / this.unitSquareLength );
       let row;
       let column;
 
@@ -632,8 +632,8 @@ define( require => {
 
     //@private
     modelToCellCoords: function( x, y ) {
-      return new Vector2( Util.roundSymmetric( ( x - this.bounds.minX ) / this.unitSquareLength ),
-        Util.roundSymmetric( ( y - this.bounds.minY ) / this.unitSquareLength ) );
+      return new Vector2( Utils.roundSymmetric( ( x - this.bounds.minX ) / this.unitSquareLength ),
+        Utils.roundSymmetric( ( y - this.bounds.minY ) / this.unitSquareLength ) );
     },
 
     //@private
