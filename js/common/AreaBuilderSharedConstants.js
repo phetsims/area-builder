@@ -12,6 +12,9 @@ define( require => {
   const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
   const Bounds2 = require( 'DOT/Bounds2' );
 
+  // strings
+  const invalidValueString = require( 'string!AREA_BUILDER/invalidValue' );
+
   const AreaBuilderSharedConstants = {
 
     // layout bounds used throughout the simulation for laying out the screens
@@ -42,7 +45,7 @@ define( require => {
     UNIT_SQUARE_LENGTH: 32, // In screen coordinates, used in several places
 
     // string used to indicate an invalid value for area and perimeter
-    INVALID_VALUE: require( 'string!AREA_BUILDER/invalidValue' )
+    INVALID_VALUE: invalidValueString
   };
 
   areaBuilder.register( 'AreaBuilderSharedConstants', AreaBuilderSharedConstants );
