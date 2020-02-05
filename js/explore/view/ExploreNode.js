@@ -47,7 +47,7 @@ define( require => {
    * @param {function} addShapeToModel - Function for adding a newly created shape to the model.
    * @param {ObservableArray} movableShapeList - The array that tracks the movable shapes.
    * @param {Bucket} bucket - Model of the bucket that is to be portrayed
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function ExploreNode( shapePlacementBoard, addShapeToModel, movableShapeList, bucket, options ) {
