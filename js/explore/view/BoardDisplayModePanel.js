@@ -69,9 +69,11 @@ define( require => {
       new VBox( {
         children: [
           new ABSwitch( boardDisplayModeProperty, 'single', singleBoardIcon, 'dual', dualBoardIcon, {
-            switchSize: new Dimension2( 36, 18 ),
-            thumbTouchAreaXDilation: 5,
-            thumbTouchAreaYDilation: 5
+            toggleSwitchOptions: {
+              size: new Dimension2( 36, 18 ),
+              thumbTouchAreaXDilation: 5,
+              thumbTouchAreaYDilation: 5
+            }
           } )
         ],
         spacing: 10 // Empirically determined

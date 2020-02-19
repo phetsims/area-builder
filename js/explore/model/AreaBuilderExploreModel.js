@@ -19,6 +19,7 @@ define( require => {
   const Property = require( 'AXON/Property' );
   const Shape = require( 'KITE/Shape' );
   const ShapePlacementBoard = require( 'AREA_BUILDER/common/model/ShapePlacementBoard' );
+  const StringProperty = require( 'AXON/StringProperty' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -39,7 +40,7 @@ define( require => {
 
     this.showShapeBoardGridsProperty = new Property( true ); // @public
     this.showDimensionsProperty = new Property( true ); // @public
-    this.boardDisplayModeProperty = new Property( 'single' ); // @public, value values are 'single' and 'dual'
+    this.boardDisplayModeProperty = new StringProperty( 'single' ); // @public, value values are 'single' and 'dual'
 
     this.movableShapes = new ObservableArray(); // @public
     this.unitSquareLength = UNIT_SQUARE_LENGTH; // @public, @final
