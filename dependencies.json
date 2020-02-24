@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.19 Mon Feb 24 2020 14:01:25 GMT-0700 (Mountain Standard Time)",
+  "comment": "# area-builder 1.1.20-rc.1 Mon Feb 24 2020 14:40:16 GMT-0700 (Mountain Standard Time)",
   "area-builder": {
-    "sha": "780cfe9e26ec7a005ce9968ac0962fc3f558d6e7",
+    "sha": "598e6fcf52fb27f655c129406e3f2df54378d978",
     "branch": "1.1"
   },
   "assert": {
@@ -66,7 +66,7 @@
   },
   "vegas": {
     "sha": "32591f0eb187933ecff9051920fed38a913b673b",
-    "branch": "area-builder-1.1"
+    "branch": "HEAD"
   },
   "vibe": {
     "sha": "b7f457e446d68eea18cf7321ec7f00dcf1c588db",
