@@ -20,9 +20,9 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var levelString = require( 'string!AREA_BUILDER/level' );
-  var labelScoreString = require( 'string!VEGAS/label.score' );
+  var labelScorePatternString = require( 'string!VEGAS/label.scorePattern' );
   var labelTimeString = require( 'string!VEGAS/label.time' );
+  var levelString = require( 'string!AREA_BUILDER/level' );
   var pattern0Challenge1MaxString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
 
   /**
@@ -59,7 +59,7 @@ define( function( require ) {
     } );
     var scoreIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     scoreProperty.link( function( score ) {
-      scoreIndicator.text = StringUtils.format( labelScoreString, score );
+      scoreIndicator.text = StringUtils.format( labelScorePatternString, score );
     } );
     var elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     elapsedTimeProperty.link( function( elapsedTime ) {
