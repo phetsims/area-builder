@@ -21,7 +21,7 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  const labelScoreString = require( 'string!VEGAS/label.score' );
+  const labelScorePatternString = require( 'string!VEGAS/label.scorePattern' );
   const labelTimeString = require( 'string!VEGAS/label.time' );
   const levelString = require( 'string!AREA_BUILDER/level' );
   const pattern0Challenge1MaxString = require( 'string!AREA_BUILDER/pattern.0challenge.1max' );
@@ -58,7 +58,7 @@ define( require => {
     } );
     const scoreIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     scoreProperty.link( function( score ) {
-      scoreIndicator.text = StringUtils.format( labelScoreString, score );
+      scoreIndicator.text = StringUtils.format( labelScorePatternString, score );
     } );
     const elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     elapsedTimeProperty.link( function( elapsedTime ) {
