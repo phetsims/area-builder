@@ -91,7 +91,7 @@ define( require => {
         movableShape.fadeProportionProperty ],
       function( userControlled, animating, fadeProportion ) {
         if ( userControlled || animating ) {
-          // The shape is either being dragged by the user or is moving to a location, so should be fully opaque.
+          // The shape is either being dragged by the user or is moving to a position, so should be fully opaque.
           return 1;
         }
         else if ( fadeProportion > 0 ) {

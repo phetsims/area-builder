@@ -121,7 +121,7 @@ define( require => {
 
     // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
     // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
-    // locations on this board where shapes may be placed.
+    // positions on this board where shapes may be placed.
     this.cells = []; //@private
     for ( let column = 0; column < this.numColumns; column++ ) {
       const currentRow = [];
@@ -177,9 +177,9 @@ define( require => {
       movableShape.invisibleWhenStillProperty.set( this.formCompositeProperty.get() );
 
       // Determine where to place the shape on the board.
-      let placementLocation = null;
+      let placementPosition = null;
       for ( let surroundingPointsLevel = 0;
-            surroundingPointsLevel < Math.max( this.numRows, this.numColumns ) && placementLocation === null;
+            surroundingPointsLevel < Math.max( this.numRows, this.numColumns ) && placementPosition === null;
             surroundingPointsLevel++ ) {
 
         const surroundingPoints = this.getOuterSurroundingPoints(
@@ -189,19 +189,19 @@ define( require => {
         surroundingPoints.sort( function( p1, p2 ) {
           return p1.distance( movableShape.positionProperty.get() ) - p2.distance( movableShape.positionProperty.get() );
         } );
-        for ( let pointIndex = 0; pointIndex < surroundingPoints.length && placementLocation === null; pointIndex++ ) {
+        for ( let pointIndex = 0; pointIndex < surroundingPoints.length && placementPosition === null; pointIndex++ ) {
           if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
-            placementLocation = surroundingPoints[ pointIndex ];
+            placementPosition = surroundingPoints[ pointIndex ];
           }
         }
       }
-      if ( placementLocation === null ) {
-        // No valid location found - bail out.
+      if ( placementPosition === null ) {
+        // No valid position found - bail out.
         return false;
       }
 
       // add this shape to the list of incoming shapes
-      this.addIncomingShape( movableShape, placementLocation, true );
+      this.addIncomingShape( movableShape, placementPosition, true );
 
       // If we made it to here, placement succeeded.
       return true;
@@ -299,13 +299,13 @@ define( require => {
 
       movableShape.setDestination( destination, true );
 
-      // The remaining code in this method assumes that the shape is animating to the new location, and will cause
+      // The remaining code in this method assumes that the shape is animating to the new position, and will cause
       // odd results if it isn't, so we double check it here.
       assert && assert( movableShape.animatingProperty.get(), 'Shape is is expected to be animating' );
 
       // The shape is moving to a spot on the board.  We don't want to add it to the list of resident shapes yet, or we
       // may trigger a change to the exterior and interior perimeters, but we need to keep a reference to it so that
-      // the valid placement locations can be updated, especially in multi-touch environments.  So, basically, there is
+      // the valid placement positions can be updated, especially in multi-touch environments.  So, basically, there is
       // an intermediate 'holding place' for incoming shapes.
       this.incomingShapes.push( movableShape );
 
@@ -493,27 +493,27 @@ define( require => {
     },
 
     /**
-     * Determine whether it is valid to place the given shape at the given location.  For placement to be valid, the
+     * Determine whether it is valid to place the given shape at the given position.  For placement to be valid, the
      * shape can't overlap with any other shape, and must share at least one side with an occupied space.
      *
      * @param movableShape
-     * @param location
+     * @param position
      * @returns {boolean}
      */
-    isValidToPlace: function( movableShape, location ) {
-      const normalizedLocation = this.modelToCellVector( location );
+    isValidToPlace: function( movableShape, position ) {
+      const normalizedPosition = this.modelToCellVector( position );
       const normalizedWidth = Utils.roundSymmetric( movableShape.shape.bounds.width / this.unitSquareLength );
       const normalizedHeight = Utils.roundSymmetric( movableShape.shape.bounds.height / this.unitSquareLength );
       let row;
       let column;
 
-      // Return false if the shape would go off the board if placed at this location.
-      if ( normalizedLocation.x < 0 || normalizedLocation.x + normalizedWidth > this.numColumns ||
-           normalizedLocation.y < 0 || normalizedLocation.y + normalizedHeight > this.numRows ) {
+      // Return false if the shape would go off the board if placed at this position.
+      if ( normalizedPosition.x < 0 || normalizedPosition.x + normalizedWidth > this.numColumns ||
+           normalizedPosition.y < 0 || normalizedPosition.y + normalizedHeight > this.numRows ) {
         return false;
       }
 
-      // If there are no other shapes on the board, any location on the board is valid.
+      // If there are no other shapes on the board, any position on the board is valid.
       if ( this.residentShapes.length === 0 ) {
         return true;
       }
@@ -521,13 +521,13 @@ define( require => {
       // Return false if this shape overlaps any previously placed shapes.
       for ( row = 0; row < normalizedHeight; row++ ) {
         for ( column = 0; column < normalizedWidth; column++ ) {
-          if ( this.isCellOccupiedNowOrSoon( normalizedLocation.x + column, normalizedLocation.y + row ) ) {
+          if ( this.isCellOccupiedNowOrSoon( normalizedPosition.x + column, normalizedPosition.y + row ) ) {
             return false;
           }
         }
       }
 
-      // If this board is not set to consolidate shapes, we've done enough, and this location is valid.
+      // If this board is not set to consolidate shapes, we've done enough, and this position is valid.
       if ( !this.formCompositeProperty.get() ) {
         return true;
       }
@@ -537,10 +537,10 @@ define( require => {
       for ( row = 0; row < normalizedHeight; row++ ) {
         for ( column = 0; column < normalizedWidth; column++ ) {
           if (
-            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column, normalizedLocation.y + row - 1 ) ||
-            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column - 1, normalizedLocation.y + row ) ||
-            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column + 1, normalizedLocation.y + row ) ||
-            this.isCellOccupiedNowOrSoon( normalizedLocation.x + column, normalizedLocation.y + row + 1 )
+            this.isCellOccupiedNowOrSoon( normalizedPosition.x + column, normalizedPosition.y + row - 1 ) ||
+            this.isCellOccupiedNowOrSoon( normalizedPosition.x + column - 1, normalizedPosition.y + row ) ||
+            this.isCellOccupiedNowOrSoon( normalizedPosition.x + column + 1, normalizedPosition.y + row ) ||
+            this.isCellOccupiedNowOrSoon( normalizedPosition.x + column, normalizedPosition.y + row + 1 )
           ) {
             return true;
           }
@@ -551,7 +551,7 @@ define( require => {
     },
 
     /**
-     * Release all the shapes that are currently on this board and send them to their home location.
+     * Release all the shapes that are currently on this board and send them to their home positions.
      * @public
      * @param releaseMode - Controls what the shapes do after release, options are 'fade', 'animateHome', and
      * 'jumpHome'.  'jumpHome' is the default.
@@ -699,7 +699,7 @@ define( require => {
         // Convert and add this point to the perimeter points.
         perimeterPoints.push( this.cellToModelCoords( scanWindow.x, scanWindow.y ) );
 
-        // Move the scan window to the next location.
+        // Move the scan window to the next position.
         const movementVector = SCAN_AREA_MOVEMENT_FUNCTIONS[ marchingSquaresState ]( previousMovementVector );
         scanWindow.add( movementVector );
         previousMovementVector = movementVector;
@@ -862,7 +862,7 @@ define( require => {
      */
     identifyContiguousCellGroups: function() {
 
-      // Make a list of locations for all occupied cells.
+      // Make a list of positions for all occupied cells.
       let ungroupedOccupiedCells = [];
       for ( let row = 0; row < this.numRows; row++ ) {
         for ( let column = 0; column < this.numColumns; column++ ) {
@@ -890,7 +890,7 @@ define( require => {
     /**
      * Release any shapes that are resident on the board but that don't share at least one edge with the largest
      * composite shape on the board.  Such shapes are referred to as 'orphans' and, when release, they are sent back to
-     * the location where they were created.
+     * the position where they were created.
      */
     releaseAnyOrphans: function() {
 
@@ -980,7 +980,7 @@ define( require => {
       this.compositeShapeEdgeColor = edgeColor;
     },
 
-    // @private, Update perimeter points, placement locations, total area, and total perimeter.
+    // @private, Update perimeter points, placement positions, total area, and total perimeter.
     updateAll: function() {
       if ( !this.updatesSuspended ) {
         this.updatePerimeters();

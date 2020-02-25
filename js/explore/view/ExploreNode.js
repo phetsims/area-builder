@@ -87,7 +87,7 @@ define( require => {
     const singleBoardControlsLayer = new Node();
     this.addChild( singleBoardControlsLayer );
 
-    // Add the node that represents the shape placement board.  This is positioned based on this model location, and
+    // Add the node that represents the shape placement board.  This is positioned based on this model position, and
     // all other nodes (such as the bucket) are positioned relative to this.
     const shapePlacementBoardNode = new ShapePlacementBoardNode( shapePlacementBoard );
     backLayer.addChild( shapePlacementBoardNode );

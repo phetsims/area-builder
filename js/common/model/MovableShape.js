@@ -38,7 +38,7 @@ define( require => {
     // view node.
     this.userControlledProperty = new Property( false );
 
-    // Flag that indicates whether this element is animating from one location to another ; should not be set externally.
+    // Flag that indicates whether this element is animating from one position to another ; should not be set externally.
     this.animatingProperty = new Property( false, {
       reentrant: true
     } );

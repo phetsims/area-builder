@@ -55,7 +55,7 @@ define( require => {
     // @public Array where shapes that are added by the user are tracked.
     this.movableShapes = new ObservableArray();
 
-    // @private The location from which squares that animate onto the board to show a solution should emerge.  The
+    // @private The position from which squares that animate onto the board to show a solution should emerge.  The
     // offset is empirically determined to be somewhere in the carousel.
     this.solutionShapeOrigin = new Vector2( this.shapePlacementBoard.bounds.left + 30, this.shapePlacementBoard.bounds.maxY + 30 );
   }
@@ -150,8 +150,8 @@ define( require => {
       },
 
       /**
-       * Add a unit square directly to the shape placement board in the specified cell location (as opposed to model
-       * location).  This was created to enable solutions to game challenges to be shown, but may have other uses.
+       * Add a unit square directly to the shape placement board in the specified cell position (as opposed to model
+       * position).  This was created to enable solutions to game challenges to be shown, but may have other uses.
        * @param cellColumn
        * @param cellRow
        * @param color
@@ -162,7 +162,7 @@ define( require => {
         const shape = new MovableShape( UNIT_SQUARE_SHAPE, color, this.solutionShapeOrigin );
         this.movableShapes.push( shape );
 
-        // Remove this shape when it gets returned to its original location.
+        // Remove this shape when it gets returned to its original position.
         shape.returnedToOriginEmitter.addListener( function() {
           if ( !shape.userControlledProperty.get() ) {
             self.movableShapes.remove( shape );
