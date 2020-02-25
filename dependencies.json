@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.20-rc.1 Mon Feb 24 2020 14:40:16 GMT-0700 (Mountain Standard Time)",
+  "comment": "# area-builder 1.1.20 Tue Feb 25 2020 00:38:50 GMT-0700 (Mountain Standard Time)",
   "area-builder": {
-    "sha": "598e6fcf52fb27f655c129406e3f2df54378d978",
+    "sha": "ab41564f15428a51afe00ae28dfd45d486e8c460",
     "branch": "1.1"
   },
   "assert": {
