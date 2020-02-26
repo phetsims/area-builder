@@ -1,4 +1,4 @@
-// Copyright 2014-2019, University of Colorado Boulder
+// Copyright 2014-2020, University of Colorado Boulder
 
 /**
  * Model of a rectangular board (like a white board or bulletin board) upon which various smaller shapes can be placed.
