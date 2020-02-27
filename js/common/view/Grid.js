@@ -6,40 +6,37 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const Shape = require( 'KITE/Shape' );
+import Shape from '../../../../kite/js/Shape.js';
+import inherit from '../../../../phet-core/js/inherit.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
+import areaBuilder from '../../areaBuilder.js';
 
-  /**
-   * @param {Bounds2} bounds
-   * @param {number} spacing
-   * @param {Object} [options]
-   * @constructor
-   */
-  function Grid( bounds, spacing, options ) {
-    const gridShape = new Shape();
+/**
+ * @param {Bounds2} bounds
+ * @param {number} spacing
+ * @param {Object} [options]
+ * @constructor
+ */
+function Grid( bounds, spacing, options ) {
+  const gridShape = new Shape();
 
-    // Add the vertical lines
-    for ( var i = bounds.minX + spacing; i < bounds.minX + bounds.width; i += spacing ) {
-      gridShape.moveTo( i, bounds.minY );
-      gridShape.lineTo( i, bounds.minY + bounds.height );
-    }
-
-    // Add the horizontal lines
-    for ( i = bounds.minY + spacing; i < bounds.minY + bounds.height; i += spacing ) {
-      gridShape.moveTo( bounds.minX, i );
-      gridShape.lineTo( bounds.minX + bounds.width, i );
-    }
-
-    Path.call( this, gridShape, options );
+  // Add the vertical lines
+  for ( var i = bounds.minX + spacing; i < bounds.minX + bounds.width; i += spacing ) {
+    gridShape.moveTo( i, bounds.minY );
+    gridShape.lineTo( i, bounds.minY + bounds.height );
   }
 
-  areaBuilder.register( 'Grid', Grid );
+  // Add the horizontal lines
+  for ( i = bounds.minY + spacing; i < bounds.minY + bounds.height; i += spacing ) {
+    gridShape.moveTo( bounds.minX, i );
+    gridShape.lineTo( bounds.minX + bounds.width, i );
+  }
 
-  return inherit( Path, Grid );
-} );
+  Path.call( this, gridShape, options );
+}
+
+areaBuilder.register( 'Grid', Grid );
+
+inherit( Path, Grid );
+export default Grid;

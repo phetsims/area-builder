@@ -5,46 +5,42 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  const AreaBuilderExploreModel = require( 'AREA_BUILDER/explore/model/AreaBuilderExploreModel' );
-  const AreaBuilderExploreView = require( 'AREA_BUILDER/explore/view/AreaBuilderExploreView' );
-  const AreaBuilderIconFactory = require( 'AREA_BUILDER/common/view/AreaBuilderIconFactory' );
-  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Property = require( 'AXON/Property' );
-  const Screen = require( 'JOIST/Screen' );
+import Property from '../../../axon/js/Property.js';
+import Screen from '../../../joist/js/Screen.js';
+import inherit from '../../../phet-core/js/inherit.js';
+import Image from '../../../scenery/js/nodes/Image.js';
+import exploreIcon from '../../images/explore-icon_png.js';
+import areaBuilderStrings from '../area-builder-strings.js';
+import areaBuilder from '../areaBuilder.js';
+import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
+import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
+import AreaBuilderExploreModel from './model/AreaBuilderExploreModel.js';
+import AreaBuilderExploreView from './view/AreaBuilderExploreView.js';
 
-  // strings
-  const exploreString = require( 'string!AREA_BUILDER/explore' );
+const exploreString = areaBuilderStrings.explore;
 
-  // images
-  const exploreIcon = require( 'image!AREA_BUILDER/explore-icon.png' );
 
-  /**
-   * @constructor
-   */
-  function AreaBuilderExploreScreen( tandem ) {
+/**
+ * @constructor
+ */
+function AreaBuilderExploreScreen( tandem ) {
 
-    const options = {
-      name: exploreString,
-      backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
-      homeScreenIcon: new Image( exploreIcon ),
-      navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
-      tandem: tandem
-    };
+  const options = {
+    name: exploreString,
+    backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
+    homeScreenIcon: new Image( exploreIcon ),
+    navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
+    tandem: tandem
+  };
 
-    Screen.call( this,
-      function() { return new AreaBuilderExploreModel(); },
-      function( model ) { return new AreaBuilderExploreView( model ); },
-      options );
-  }
+  Screen.call( this,
+    function() { return new AreaBuilderExploreModel(); },
+    function( model ) { return new AreaBuilderExploreView( model ); },
+    options );
+}
 
-  areaBuilder.register( 'AreaBuilderExploreScreen', AreaBuilderExploreScreen );
+areaBuilder.register( 'AreaBuilderExploreScreen', AreaBuilderExploreScreen );
 
-  return inherit( Screen, AreaBuilderExploreScreen );
-} );
+inherit( Screen, AreaBuilderExploreScreen );
+export default AreaBuilderExploreScreen;

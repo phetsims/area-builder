@@ -5,213 +5,209 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Animation = require( 'TWIXT/Animation' );
-  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  const ColorProportionsPrompt = require( 'AREA_BUILDER/game/view/ColorProportionsPrompt' );
-  const Easing = require( 'TWIXT/Easing' );
-  const Fraction = require( 'PHETCOMMON/model/Fraction' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const Property = require( 'AXON/Property' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  const Text = require( 'SCENERY/nodes/Text' );
+import Property from '../../../../axon/js/Property.js';
+import inherit from '../../../../phet-core/js/inherit.js';
+import Fraction from '../../../../phetcommon/js/model/Fraction.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
+import areaBuilderStrings from '../../area-builder-strings.js';
+import areaBuilder from '../../areaBuilder.js';
+import ColorProportionsPrompt from './ColorProportionsPrompt.js';
 
-  // strings
-  const areaEqualsString = require( 'string!AREA_BUILDER/areaEquals' );
-  const perimeterEqualsString = require( 'string!AREA_BUILDER/perimeterEquals' );
+const areaEqualsString = areaBuilderStrings.areaEquals;
+const perimeterEqualsString = areaBuilderStrings.perimeterEquals;
 
-  // constants
-  const TEXT_FILL_COLOR = 'white';
-  const TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
-  const LARGER_FONT = new PhetFont( { size: 24 } ); // Font for single line text
-  const SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
-  const TITLE_INDENT = 15; // Empirically determined.
-  const ANIMATION_TIME = 0.6; // In seconds
+// constants
+const TEXT_FILL_COLOR = 'white';
+const TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } ); // Font used for the title
+const LARGER_FONT = new PhetFont( { size: 24 } ); // Font for single line text
+const SMALLER_FONT = new PhetFont( { size: 18 } ); // Font for two-line text
+const TITLE_INDENT = 15; // Empirically determined.
+const ANIMATION_TIME = 0.6; // In seconds
 
-  /**
-   * @param {number} width
-   * @param {number} height
-   * @param {string} backgroundColor
-   * @param {Object} [options]
-   * @constructor
-   */
-  function GameInfoBanner( width, height, backgroundColor, options ) {
-    const self = this;
-    Rectangle.call( this, 0, 0, width, height, 0, 0, { fill: backgroundColor } );
+/**
+ * @param {number} width
+ * @param {number} height
+ * @param {string} backgroundColor
+ * @param {Object} [options]
+ * @constructor
+ */
+function GameInfoBanner( width, height, backgroundColor, options ) {
+  const self = this;
+  Rectangle.call( this, 0, 0, width, height, 0, 0, { fill: backgroundColor } );
 
-    // @public These properties are the main API for this class, and they control what is and isn't shown on the banner.
-    this.titleTextProperty = new Property( '' );
-    this.buildSpecProperty = new Property( null );
-    this.areaToFindProperty = new Property( null );
+  // @public These properties are the main API for this class, and they control what is and isn't shown on the banner.
+  this.titleTextProperty = new Property( '' );
+  this.buildSpecProperty = new Property( null );
+  this.areaToFindProperty = new Property( null );
 
-    // Define the title.
-    const title = new Text( this.titleTextProperty.value, {
-      font: TITLE_FONT,
-      fill: TEXT_FILL_COLOR,
-      centerY: height / 2,
-      maxWidth: width * 0.3 // must be small enough that the prompt can also fit on the banner
+  // Define the title.
+  const title = new Text( this.titleTextProperty.value, {
+    font: TITLE_FONT,
+    fill: TEXT_FILL_COLOR,
+    centerY: height / 2,
+    maxWidth: width * 0.3 // must be small enough that the prompt can also fit on the banner
+  } );
+  this.addChild( title );
+
+  // Update the title when the title text changes.
+  this.titleTextProperty.link( function( titleText ) {
+    title.text = titleText;
+    title.centerY = height / 2;
+    if ( self.buildSpecProperty.value === null && self.areaToFindProperty.value === null ) {
+      // There is no build spec are area to find, so center the title in the banner.
+      title.centerX = width / 2;
+    }
+    else {
+      // There is a build spec, so the title should be on the left to make room.
+      title.left = TITLE_INDENT;
+    }
+  } );
+
+  // Define the build prompt, which is shown in both the challenge prompt and the solution.
+  const buildPrompt = new Node();
+  this.addChild( buildPrompt );
+  const maxBuildPromptWidth = width / 2; // the build prompt has to fit in the banner with the title
+  const areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
+  buildPrompt.addChild( areaPrompt );
+  const perimeterPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
+  buildPrompt.addChild( perimeterPrompt );
+  const colorProportionPrompt = new ColorProportionsPrompt( 'black', 'white',
+    new Fraction( 1, 1 ), {
+      font: new PhetFont( { size: 11 } ),
+      textFill: TEXT_FILL_COLOR,
+      top: 0
     } );
-    this.addChild( title );
+  buildPrompt.addChild( colorProportionPrompt );
 
-    // Update the title when the title text changes.
-    this.titleTextProperty.link( function( titleText ) {
-      title.text = titleText;
-      title.centerY = height / 2;
-      if ( self.buildSpecProperty.value === null && self.areaToFindProperty.value === null ) {
-        // There is no build spec are area to find, so center the title in the banner.
-        title.centerX = width / 2;
-      }
-      else {
-        // There is a build spec, so the title should be on the left to make room.
-        title.left = TITLE_INDENT;
-      }
-    } );
+  // Function that moves the title from the center of the banner to the left side if it isn't already there.
+  function moveTitleToSide() {
+    if ( title.centerX === width / 2 ) {
+      // Move the title over
+      new Animation( {
+        from: title.left,
+        to: TITLE_INDENT,
+        setValue: left => { title.left = left; },
+        duration: ANIMATION_TIME,
+        easing: Easing.CUBIC_IN_OUT
+      } ).start();
 
-    // Define the build prompt, which is shown in both the challenge prompt and the solution.
-    const buildPrompt = new Node();
-    this.addChild( buildPrompt );
-    const maxBuildPromptWidth = width / 2; // the build prompt has to fit in the banner with the title
-    const areaPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
-    buildPrompt.addChild( areaPrompt );
-    const perimeterPrompt = new Text( '', { font: SMALLER_FONT, fill: TEXT_FILL_COLOR, top: 0 } );
-    buildPrompt.addChild( perimeterPrompt );
-    const colorProportionPrompt = new ColorProportionsPrompt( 'black', 'white',
-      new Fraction( 1, 1 ), {
-        font: new PhetFont( { size: 11 } ),
-        textFill: TEXT_FILL_COLOR,
-        top: 0
-      } );
-    buildPrompt.addChild( colorProportionPrompt );
-
-    // Function that moves the title from the center of the banner to the left side if it isn't already there.
-    function moveTitleToSide() {
-      if ( title.centerX === width / 2 ) {
-        // Move the title over
+      // Fade in the build prompt if it is now set to be visible.
+      if ( buildPrompt.visible ) {
+        buildPrompt.opacity = 0;
         new Animation( {
-          from: title.left,
-          to: TITLE_INDENT,
-          setValue: left => { title.left = left; },
+          from: 0,
+          to: 1,
+          setValue: opacity => { buildPrompt.opacity = opacity; },
           duration: ANIMATION_TIME,
           easing: Easing.CUBIC_IN_OUT
         } ).start();
-
-        // Fade in the build prompt if it is now set to be visible.
-        if ( buildPrompt.visible ) {
-          buildPrompt.opacity = 0;
-          new Animation( {
-            from: 0,
-            to: 1,
-            setValue: opacity => { buildPrompt.opacity = opacity; },
-            duration: ANIMATION_TIME,
-            easing: Easing.CUBIC_IN_OUT
-          } ).start();
-        }
       }
     }
-
-    // Function that positions the build prompt such that its visible bounds are centered in the space to the left of
-    // the title.
-    function positionBuildPrompt() {
-      const centerX = ( TITLE_INDENT + title.width + width - TITLE_INDENT ) / 2;
-      const centerY = height / 2;
-      buildPrompt.setScaleMagnitude( 1 );
-      if ( buildPrompt.width > maxBuildPromptWidth ) {
-        // scale the build prompt to fit with the title on the banner
-        buildPrompt.setScaleMagnitude( maxBuildPromptWidth / buildPrompt.width );
-      }
-      buildPrompt.left += centerX - buildPrompt.visibleBounds.centerX;
-      buildPrompt.top += centerY - buildPrompt.visibleBounds.centerY;
-    }
-
-    // Update the prompt or solution text based on the build spec.
-    this.buildSpecProperty.link( function( buildSpec ) {
-      assert && assert( self.areaToFindProperty.value === null, 'Can\'t display area to find and build spec at the same time.' );
-      assert && assert( buildSpec === null || buildSpec.area, 'Area must be specified in the build spec' );
-      if ( buildSpec !== null ) {
-        areaPrompt.text = StringUtils.format( areaEqualsString, buildSpec.area );
-        areaPrompt.visible = true;
-        if ( !buildSpec.perimeter && !buildSpec.proportions ) {
-          areaPrompt.font = LARGER_FONT;
-          perimeterPrompt.visible = false;
-          colorProportionPrompt.visible = false;
-        }
-        else {
-          areaPrompt.font = SMALLER_FONT;
-          if ( buildSpec.perimeter ) {
-            perimeterPrompt.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
-            perimeterPrompt.visible = true;
-          }
-          else {
-            perimeterPrompt.visible = false;
-          }
-          if ( buildSpec.proportions ) {
-            areaPrompt.text += ',';
-            colorProportionPrompt.color1 = buildSpec.proportions.color1;
-            colorProportionPrompt.color2 = buildSpec.proportions.color2;
-            colorProportionPrompt.color1Proportion = buildSpec.proportions.color1Proportion;
-            colorProportionPrompt.visible = true;
-          }
-          else {
-            colorProportionPrompt.visible = false;
-          }
-        }
-
-        // Update the layout
-        perimeterPrompt.top = areaPrompt.bottom + areaPrompt.height * 0.25; // Spacing empirically determined.
-        colorProportionPrompt.left = areaPrompt.right + 10; // Spacing empirically determined
-        colorProportionPrompt.centerY = areaPrompt.centerY;
-        positionBuildPrompt();
-
-        // Make sure the title is over on the left side.
-        moveTitleToSide();
-      }
-      else {
-        areaPrompt.visible = self.areaToFindProperty.value !== null;
-        perimeterPrompt.visible = false;
-        colorProportionPrompt.visible = false;
-      }
-    } );
-
-    // Update the area indication (used in solution for 'find the area' challenges).
-    this.areaToFindProperty.link( function( areaToFind ) {
-      assert && assert( self.buildSpecProperty.value === null, 'Can\'t display area to find and build spec at the same time.' );
-      if ( areaToFind !== null ) {
-        areaPrompt.text = StringUtils.format( areaEqualsString, areaToFind );
-        areaPrompt.font = LARGER_FONT;
-        areaPrompt.visible = true;
-
-        // The other prompts (perimeter and color proportions) are not shown in this situation.
-        perimeterPrompt.visible = false;
-        colorProportionPrompt.visible = false;
-
-        // Place the build prompt where it needs to go.
-        positionBuildPrompt();
-
-        // Make sure the title is over on the left side.
-        moveTitleToSide();
-      }
-      else {
-        areaPrompt.visible = self.buildSpecProperty.value !== null;
-      }
-    } );
-
-    // Pass options through to parent class.
-    this.mutate( options );
   }
 
-  areaBuilder.register( 'GameInfoBanner', GameInfoBanner );
+  // Function that positions the build prompt such that its visible bounds are centered in the space to the left of
+  // the title.
+  function positionBuildPrompt() {
+    const centerX = ( TITLE_INDENT + title.width + width - TITLE_INDENT ) / 2;
+    const centerY = height / 2;
+    buildPrompt.setScaleMagnitude( 1 );
+    if ( buildPrompt.width > maxBuildPromptWidth ) {
+      // scale the build prompt to fit with the title on the banner
+      buildPrompt.setScaleMagnitude( maxBuildPromptWidth / buildPrompt.width );
+    }
+    buildPrompt.left += centerX - buildPrompt.visibleBounds.centerX;
+    buildPrompt.top += centerY - buildPrompt.visibleBounds.centerY;
+  }
 
-  return inherit( Rectangle, GameInfoBanner, {
-    reset: function() {
-      this.titleTextProperty.reset();
-      this.buildSpecProperty.reset();
-      this.areaToFindProperty.reset();
+  // Update the prompt or solution text based on the build spec.
+  this.buildSpecProperty.link( function( buildSpec ) {
+    assert && assert( self.areaToFindProperty.value === null, 'Can\'t display area to find and build spec at the same time.' );
+    assert && assert( buildSpec === null || buildSpec.area, 'Area must be specified in the build spec' );
+    if ( buildSpec !== null ) {
+      areaPrompt.text = StringUtils.format( areaEqualsString, buildSpec.area );
+      areaPrompt.visible = true;
+      if ( !buildSpec.perimeter && !buildSpec.proportions ) {
+        areaPrompt.font = LARGER_FONT;
+        perimeterPrompt.visible = false;
+        colorProportionPrompt.visible = false;
+      }
+      else {
+        areaPrompt.font = SMALLER_FONT;
+        if ( buildSpec.perimeter ) {
+          perimeterPrompt.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
+          perimeterPrompt.visible = true;
+        }
+        else {
+          perimeterPrompt.visible = false;
+        }
+        if ( buildSpec.proportions ) {
+          areaPrompt.text += ',';
+          colorProportionPrompt.color1 = buildSpec.proportions.color1;
+          colorProportionPrompt.color2 = buildSpec.proportions.color2;
+          colorProportionPrompt.color1Proportion = buildSpec.proportions.color1Proportion;
+          colorProportionPrompt.visible = true;
+        }
+        else {
+          colorProportionPrompt.visible = false;
+        }
+      }
+
+      // Update the layout
+      perimeterPrompt.top = areaPrompt.bottom + areaPrompt.height * 0.25; // Spacing empirically determined.
+      colorProportionPrompt.left = areaPrompt.right + 10; // Spacing empirically determined
+      colorProportionPrompt.centerY = areaPrompt.centerY;
+      positionBuildPrompt();
+
+      // Make sure the title is over on the left side.
+      moveTitleToSide();
+    }
+    else {
+      areaPrompt.visible = self.areaToFindProperty.value !== null;
+      perimeterPrompt.visible = false;
+      colorProportionPrompt.visible = false;
     }
   } );
+
+  // Update the area indication (used in solution for 'find the area' challenges).
+  this.areaToFindProperty.link( function( areaToFind ) {
+    assert && assert( self.buildSpecProperty.value === null, 'Can\'t display area to find and build spec at the same time.' );
+    if ( areaToFind !== null ) {
+      areaPrompt.text = StringUtils.format( areaEqualsString, areaToFind );
+      areaPrompt.font = LARGER_FONT;
+      areaPrompt.visible = true;
+
+      // The other prompts (perimeter and color proportions) are not shown in this situation.
+      perimeterPrompt.visible = false;
+      colorProportionPrompt.visible = false;
+
+      // Place the build prompt where it needs to go.
+      positionBuildPrompt();
+
+      // Make sure the title is over on the left side.
+      moveTitleToSide();
+    }
+    else {
+      areaPrompt.visible = self.buildSpecProperty.value !== null;
+    }
+  } );
+
+  // Pass options through to parent class.
+  this.mutate( options );
+}
+
+areaBuilder.register( 'GameInfoBanner', GameInfoBanner );
+
+export default inherit( Rectangle, GameInfoBanner, {
+  reset: function() {
+    this.titleTextProperty.reset();
+    this.buildSpecProperty.reset();
+    this.areaToFindProperty.reset();
+  }
 } );

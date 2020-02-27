@@ -5,19 +5,15 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
+import areaBuilder from '../areaBuilder.js';
 
-  const AreaBuilderQueryParameters = QueryStringMachine.getAll( {
+const AreaBuilderQueryParameters = QueryStringMachine.getAll( {
 
-    // fill the shape placement boards on the 'Explore' screen during startup, useful for testing
-    prefillBoards: { type: 'flag' }
-  } );
-
-  areaBuilder.register( 'AreaBuilderQueryParameters', AreaBuilderQueryParameters );
-
-  return AreaBuilderQueryParameters;
+  // fill the shape placement boards on the 'Explore' screen during startup, useful for testing
+  prefillBoards: { type: 'flag' }
 } );
+
+areaBuilder.register( 'AreaBuilderQueryParameters', AreaBuilderQueryParameters );
+
+export default AreaBuilderQueryParameters;

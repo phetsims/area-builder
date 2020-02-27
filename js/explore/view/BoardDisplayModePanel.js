@@ -3,85 +3,82 @@
 /**
  * Panel that contains a switch that is used to switch between the two exploration modes.
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const ABSwitch = require( 'SUN/ABSwitch' );
-  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  const Color = require( 'SCENERY/util/Color' );
-  const Dimension2 = require( 'DOT/Dimension2' );
-  const HBox = require( 'SCENERY/nodes/HBox' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const Panel = require( 'SUN/Panel' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const VBox = require( 'SCENERY/nodes/VBox' );
-  const Vector2 = require( 'DOT/Vector2' );
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import inherit from '../../../../phet-core/js/inherit.js';
+import HBox from '../../../../scenery/js/nodes/HBox.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import VBox from '../../../../scenery/js/nodes/VBox.js';
+import Color from '../../../../scenery/js/util/Color.js';
+import ABSwitch from '../../../../sun/js/ABSwitch.js';
+import Panel from '../../../../sun/js/Panel.js';
+import areaBuilder from '../../areaBuilder.js';
+import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 
-  // utility function for creating the icons used on this panel
-  function createIcon( color, rectangleLength, rectanglePositions ) {
-    const edgeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
-    const content = new Node();
-    rectanglePositions.forEach( function( position ) {
-      content.addChild( new Rectangle( 0, 0, rectangleLength, rectangleLength, 0, 0, {
-        fill: color,
-        stroke: edgeColor,
-        left: position.x * rectangleLength,
-        top: position.y * rectangleLength
-      } ) );
-    } );
-    return new Panel( content, { fill: 'white', stroke: 'black', cornerRadius: 0, backgroundPickable: true } );
-  }
+// utility function for creating the icons used on this panel
+function createIcon( color, rectangleLength, rectanglePositions ) {
+  const edgeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+  const content = new Node();
+  rectanglePositions.forEach( function( position ) {
+    content.addChild( new Rectangle( 0, 0, rectangleLength, rectangleLength, 0, 0, {
+      fill: color,
+      stroke: edgeColor,
+      left: position.x * rectangleLength,
+      top: position.y * rectangleLength
+    } ) );
+  } );
+  return new Panel( content, { fill: 'white', stroke: 'black', cornerRadius: 0, backgroundPickable: true } );
+}
 
-  /**
-   *
-   * @constructor
-   */
-  function BoardDisplayModePanel( boardDisplayModeProperty ) {
+/**
+ *
+ * @constructor
+ */
+function BoardDisplayModePanel( boardDisplayModeProperty ) {
 
-    const singleBoardIcon = createIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
-      new Vector2( 0, 1 ),
-      new Vector2( 1, 0 ),
-      new Vector2( 1, 1 )
-    ] );
+  const singleBoardIcon = createIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
+    new Vector2( 0, 1 ),
+    new Vector2( 1, 0 ),
+    new Vector2( 1, 1 )
+  ] );
 
-    const dualBoardIcon = new HBox( {
-        children: [
-          createIcon( AreaBuilderSharedConstants.GREENISH_COLOR, 6, [
-            new Vector2( 0, 0 ),
-            new Vector2( 1, 0 ),
-            new Vector2( 1, 1 )
-          ] ),
-          createIcon( AreaBuilderSharedConstants.PURPLISH_COLOR, 6, [
-            new Vector2( 0, 0 ),
-            new Vector2( 0, 1 ),
-            new Vector2( 1, 0 ),
-            new Vector2( 1, 1 )
-          ] )
-        ],
-        spacing: 3
-      }
-    );
+  const dualBoardIcon = new HBox( {
+      children: [
+        createIcon( AreaBuilderSharedConstants.GREENISH_COLOR, 6, [
+          new Vector2( 0, 0 ),
+          new Vector2( 1, 0 ),
+          new Vector2( 1, 1 )
+        ] ),
+        createIcon( AreaBuilderSharedConstants.PURPLISH_COLOR, 6, [
+          new Vector2( 0, 0 ),
+          new Vector2( 0, 1 ),
+          new Vector2( 1, 0 ),
+          new Vector2( 1, 1 )
+        ] )
+      ],
+      spacing: 3
+    }
+  );
 
-    Panel.call( this,
-      new VBox( {
-        children: [
-          new ABSwitch( boardDisplayModeProperty, 'single', singleBoardIcon, 'dual', dualBoardIcon, {
-            toggleSwitchOptions: {
-              size: new Dimension2( 36, 18 ),
-              thumbTouchAreaXDilation: 5,
-              thumbTouchAreaYDilation: 5
-            }
-          } )
-        ],
-        spacing: 10 // Empirically determined
-      } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR, cornerRadius: 4 }
-    );
-  }
+  Panel.call( this,
+    new VBox( {
+      children: [
+        new ABSwitch( boardDisplayModeProperty, 'single', singleBoardIcon, 'dual', dualBoardIcon, {
+          toggleSwitchOptions: {
+            size: new Dimension2( 36, 18 ),
+            thumbTouchAreaXDilation: 5,
+            thumbTouchAreaYDilation: 5
+          }
+        } )
+      ],
+      spacing: 10 // Empirically determined
+    } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR, cornerRadius: 4 }
+  );
+}
 
-  areaBuilder.register( 'BoardDisplayModePanel', BoardDisplayModePanel );
+areaBuilder.register( 'BoardDisplayModePanel', BoardDisplayModePanel );
 
-  return inherit( Panel, BoardDisplayModePanel );
-} );
+inherit( Panel, BoardDisplayModePanel );
+export default BoardDisplayModePanel;

@@ -5,45 +5,41 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  const AreaBuilderChallengeFactory = require( 'AREA_BUILDER/game/model/AreaBuilderChallengeFactory' );
-  const AreaBuilderGameModel = require( 'AREA_BUILDER/game/model/AreaBuilderGameModel' );
-  const AreaBuilderGameView = require( 'AREA_BUILDER/game/view/AreaBuilderGameView' );
-  const AreaBuilderIconFactory = require( 'AREA_BUILDER/common/view/AreaBuilderIconFactory' );
-  const AreaBuilderSharedConstants = require( 'AREA_BUILDER/common/AreaBuilderSharedConstants' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Property = require( 'AXON/Property' );
-  const QuizGameModel = require( 'AREA_BUILDER/game/model/QuizGameModel' );
-  const Screen = require( 'JOIST/Screen' );
+import Property from '../../../axon/js/Property.js';
+import Screen from '../../../joist/js/Screen.js';
+import inherit from '../../../phet-core/js/inherit.js';
+import Image from '../../../scenery/js/nodes/Image.js';
+import gameIcon from '../../images/game-icon_png.js';
+import areaBuilderStrings from '../area-builder-strings.js';
+import areaBuilder from '../areaBuilder.js';
+import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
+import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
+import AreaBuilderChallengeFactory from './model/AreaBuilderChallengeFactory.js';
+import AreaBuilderGameModel from './model/AreaBuilderGameModel.js';
+import QuizGameModel from './model/QuizGameModel.js';
+import AreaBuilderGameView from './view/AreaBuilderGameView.js';
 
-  // strings
-  const gameString = require( 'string!AREA_BUILDER/game' );
+const gameString = areaBuilderStrings.game;
 
-  // images
-  const gameIcon = require( 'image!AREA_BUILDER/game-icon.png' );
 
-  function AreaBuilderGameScreen( tandem ) {
+function AreaBuilderGameScreen( tandem ) {
 
-    const options = {
-      name: gameString,
-      backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
-      homeScreenIcon: new Image( gameIcon ),
-      navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
-      tandem: tandem
-    };
+  const options = {
+    name: gameString,
+    backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
+    homeScreenIcon: new Image( gameIcon ),
+    navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
+    tandem: tandem
+  };
 
-    Screen.call( this,
-      function() { return new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ); },
-      function( model ) { return new AreaBuilderGameView( model ); },
-      options );
-  }
+  Screen.call( this,
+    function() { return new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ); },
+    function( model ) { return new AreaBuilderGameView( model ); },
+    options );
+}
 
-  areaBuilder.register( 'AreaBuilderGameScreen', AreaBuilderGameScreen );
+areaBuilder.register( 'AreaBuilderGameScreen', AreaBuilderGameScreen );
 
-  return inherit( Screen, AreaBuilderGameScreen );
-} );
+inherit( Screen, AreaBuilderGameScreen );
+export default AreaBuilderGameScreen;

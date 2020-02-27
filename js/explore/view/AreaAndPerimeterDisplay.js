@@ -5,96 +5,92 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const AccordionBox = require( 'SUN/AccordionBox' );
-  const areaBuilder = require( 'AREA_BUILDER/areaBuilder' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const merge = require( 'PHET_CORE/merge' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const Property = require( 'AXON/Property' );
-  const Text = require( 'SCENERY/nodes/Text' );
+import Property from '../../../../axon/js/Property.js';
+import inherit from '../../../../phet-core/js/inherit.js';
+import merge from '../../../../phet-core/js/merge.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
+import AccordionBox from '../../../../sun/js/AccordionBox.js';
+import areaBuilderStrings from '../../area-builder-strings.js';
+import areaBuilder from '../../areaBuilder.js';
 
-  // strings
-  const areaString = require( 'string!AREA_BUILDER/area' );
-  const perimeterString = require( 'string!AREA_BUILDER/perimeter' );
-  const valuesString = require( 'string!AREA_BUILDER/values' );
+const areaString = areaBuilderStrings.area;
+const perimeterString = areaBuilderStrings.perimeter;
+const valuesString = areaBuilderStrings.values;
 
-  // constants
-  const DISPLAY_FONT = new PhetFont( 14 );
-  const MAX_CONTENT_WIDTH = 200; // empirically determined, supports translation
-  const MAX_TITLE_WIDTH = 190; // empirically determined, supports translation
+// constants
+const DISPLAY_FONT = new PhetFont( 14 );
+const MAX_CONTENT_WIDTH = 200; // empirically determined, supports translation
+const MAX_TITLE_WIDTH = 190; // empirically determined, supports translation
 
-  /**
-   * @param {Property<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
-   * @param {Color} areaTextColor
-   * @param {Color} perimeterTextColor
-   * @param {Object} [options]
-   * @constructor
-   */
-  function AreaAndPerimeterDisplay( areaAndPerimeterProperty, areaTextColor, perimeterTextColor, options ) {
+/**
+ * @param {Property<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
+ * @param {Color} areaTextColor
+ * @param {Color} perimeterTextColor
+ * @param {Object} [options]
+ * @constructor
+ */
+function AreaAndPerimeterDisplay( areaAndPerimeterProperty, areaTextColor, perimeterTextColor, options ) {
 
-    options = merge( {
-      maxWidth: Number.POSITIVE_INFINITY
-    }, options );
+  options = merge( {
+    maxWidth: Number.POSITIVE_INFINITY
+  }, options );
 
-    const contentNode = new Node();
-    const areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
-    const perimeterCaption = new Text( perimeterString, { font: DISPLAY_FONT } );
-    const tempTwoDigitString = new Text( '999', { font: DISPLAY_FONT } );
-    const areaReadout = new Text( '', { font: DISPLAY_FONT, fill: areaTextColor } );
-    const perimeterReadout = new Text( '', { font: DISPLAY_FONT, fill: perimeterTextColor } );
+  const contentNode = new Node();
+  const areaCaption = new Text( areaString, { font: DISPLAY_FONT } );
+  const perimeterCaption = new Text( perimeterString, { font: DISPLAY_FONT } );
+  const tempTwoDigitString = new Text( '999', { font: DISPLAY_FONT } );
+  const areaReadout = new Text( '', { font: DISPLAY_FONT, fill: areaTextColor } );
+  const perimeterReadout = new Text( '', { font: DISPLAY_FONT, fill: perimeterTextColor } );
 
-    contentNode.addChild( areaCaption );
-    perimeterCaption.left = areaCaption.left;
-    perimeterCaption.top = areaCaption.bottom + 5;
-    contentNode.addChild( perimeterCaption );
-    contentNode.addChild( areaReadout );
-    contentNode.addChild( perimeterReadout );
-    const readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 8 + tempTwoDigitString.width;
+  contentNode.addChild( areaCaption );
+  perimeterCaption.left = areaCaption.left;
+  perimeterCaption.top = areaCaption.bottom + 5;
+  contentNode.addChild( perimeterCaption );
+  contentNode.addChild( areaReadout );
+  contentNode.addChild( perimeterReadout );
+  const readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 8 + tempTwoDigitString.width;
 
-    areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
-      areaReadout.text = areaAndPerimeter.area;
-      areaReadout.bottom = areaCaption.bottom;
-      areaReadout.right = readoutsRightEdge;
-      perimeterReadout.text = areaAndPerimeter.perimeter;
-      perimeterReadout.bottom = perimeterCaption.bottom;
-      perimeterReadout.right = readoutsRightEdge;
-    } );
+  areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
+    areaReadout.text = areaAndPerimeter.area;
+    areaReadout.bottom = areaCaption.bottom;
+    areaReadout.right = readoutsRightEdge;
+    perimeterReadout.text = areaAndPerimeter.perimeter;
+    perimeterReadout.bottom = perimeterCaption.bottom;
+    perimeterReadout.right = readoutsRightEdge;
+  } );
 
-    // in support of translation, scale the content node if it's too big
-    if ( contentNode.width > MAX_CONTENT_WIDTH ){
-      contentNode.scale( MAX_CONTENT_WIDTH / contentNode.width );
-    }
-
-    this.expandedProperty = new Property( true );
-    AccordionBox.call( this, contentNode, {
-      cornerRadius: 3,
-      titleNode: new Text( valuesString, { font: DISPLAY_FONT, maxWidth: MAX_TITLE_WIDTH } ),
-      titleAlignX: 'left',
-      contentAlign: 'left',
-      fill: 'white',
-      showTitleWhenExpanded: false,
-      contentXMargin: 8,
-      contentYMargin: 4,
-      expandedProperty: this.expandedProperty,
-      expandCollapseButtonOptions: {
-        touchAreaXDilation: 10,
-        touchAreaYDilation: 10
-      }
-    } );
-
-    this.mutate( options );
+  // in support of translation, scale the content node if it's too big
+  if ( contentNode.width > MAX_CONTENT_WIDTH ) {
+    contentNode.scale( MAX_CONTENT_WIDTH / contentNode.width );
   }
 
-  areaBuilder.register( 'AreaAndPerimeterDisplay', AreaAndPerimeterDisplay );
-
-  return inherit( AccordionBox, AreaAndPerimeterDisplay, {
-    reset: function() {
-      this.expandedProperty.reset();
+  this.expandedProperty = new Property( true );
+  AccordionBox.call( this, contentNode, {
+    cornerRadius: 3,
+    titleNode: new Text( valuesString, { font: DISPLAY_FONT, maxWidth: MAX_TITLE_WIDTH } ),
+    titleAlignX: 'left',
+    contentAlign: 'left',
+    fill: 'white',
+    showTitleWhenExpanded: false,
+    contentXMargin: 8,
+    contentYMargin: 4,
+    expandedProperty: this.expandedProperty,
+    expandCollapseButtonOptions: {
+      touchAreaXDilation: 10,
+      touchAreaYDilation: 10
     }
   } );
+
+  this.mutate( options );
+}
+
+areaBuilder.register( 'AreaAndPerimeterDisplay', AreaAndPerimeterDisplay );
+
+export default inherit( AccordionBox, AreaAndPerimeterDisplay, {
+  reset: function() {
+    this.expandedProperty.reset();
+  }
 } );
