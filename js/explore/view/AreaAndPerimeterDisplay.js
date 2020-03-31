@@ -13,7 +13,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import areaBuilderStrings from '../../area-builder-strings.js';
+import areaBuilderStrings from '../../areaBuilderStrings.js';
 import areaBuilder from '../../areaBuilder.js';
 
 const areaString = areaBuilderStrings.area;

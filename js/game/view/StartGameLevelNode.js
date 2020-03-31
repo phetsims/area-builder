@@ -17,7 +17,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
-import vegasStrings from '../../../../vegas/js/vegas-strings.js';
+import vegasStrings from '../../../../vegas/js/vegasStrings.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 

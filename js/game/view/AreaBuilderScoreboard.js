@@ -15,8 +15,8 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import GameTimer from '../../../../vegas/js/GameTimer.js';
-import vegasStrings from '../../../../vegas/js/vegas-strings.js';
-import areaBuilderStrings from '../../area-builder-strings.js';
+import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import areaBuilderStrings from '../../areaBuilderStrings.js';
 import areaBuilder from '../../areaBuilder.js';
 
 const labelScorePatternString = vegasStrings.label.scorePattern;

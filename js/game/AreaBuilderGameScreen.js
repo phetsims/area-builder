@@ -11,7 +11,7 @@ import Screen from '../../../joist/js/Screen.js';
 import inherit from '../../../phet-core/js/inherit.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import gameIcon from '../../images/game-icon_png.js';
-import areaBuilderStrings from '../area-builder-strings.js';
+import areaBuilderStrings from '../areaBuilderStrings.js';
 import areaBuilder from '../areaBuilder.js';
 import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
 import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';

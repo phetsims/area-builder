@@ -9,7 +9,7 @@
 import Sim from '../../joist/js/Sim.js';
 import SimLauncher from '../../joist/js/SimLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import areaBuilderStrings from './area-builder-strings.js';
+import areaBuilderStrings from './areaBuilderStrings.js';
 import AreaBuilderExploreScreen from './explore/AreaBuilderExploreScreen.js';
 import AreaBuilderGameScreen from './game/AreaBuilderGameScreen.js';
 

@@ -7,7 +7,7 @@
  */
 
 import Bounds2 from '../../../dot/js/Bounds2.js';
-import areaBuilderStrings from '../area-builder-strings.js';
+import areaBuilderStrings from '../areaBuilderStrings.js';
 import areaBuilder from '../areaBuilder.js';
 
 const invalidValueString = areaBuilderStrings.invalidValue;
