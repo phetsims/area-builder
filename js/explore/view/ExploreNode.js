@@ -154,8 +154,10 @@ function ExploreNode( shapePlacementBoard, addShapeToModel, movableShapeList, bu
 
 areaBuilder.register( 'ExploreNode', ExploreNode );
 
-export default inherit( Node, ExploreNode, {
+inherit( Node, ExploreNode, {
   reset: function() {
     this.areaAndPerimeterDisplay.reset();
   }
 } );
+
+export default ExploreNode;

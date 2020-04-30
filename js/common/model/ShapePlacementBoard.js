@@ -138,7 +138,7 @@ function ShapePlacementBoard( size, unitSquareLength, position, colorHandled, sh
 
 areaBuilder.register( 'ShapePlacementBoard', ShapePlacementBoard );
 
-export default inherit( Object, ShapePlacementBoard, {
+inherit( Object, ShapePlacementBoard, {
 
   // @private
   shapeOverlapsBoard: function( shape ) {
@@ -1024,3 +1024,5 @@ export default inherit( Object, ShapePlacementBoard, {
     }
   }
 } );
+
+export default ShapePlacementBoard;

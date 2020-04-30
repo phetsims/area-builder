@@ -204,10 +204,12 @@ function GameInfoBanner( width, height, backgroundColor, options ) {
 
 areaBuilder.register( 'GameInfoBanner', GameInfoBanner );
 
-export default inherit( Rectangle, GameInfoBanner, {
+inherit( Rectangle, GameInfoBanner, {
   reset: function() {
     this.titleTextProperty.reset();
     this.buildSpecProperty.reset();
     this.areaToFindProperty.reset();
   }
 } );
+
+export default GameInfoBanner;

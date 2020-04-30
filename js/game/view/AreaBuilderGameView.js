@@ -422,7 +422,7 @@ function AreaBuilderGameView( gameModel ) {
 
 areaBuilder.register( 'AreaBuilderGameView', AreaBuilderGameView );
 
-export default inherit( ScreenView, AreaBuilderGameView, {
+inherit( ScreenView, AreaBuilderGameView, {
 
   // @private, When the game state changes, update the view with the appropriate buttons and readouts.
   handleGameStateChange: function( gameState ) {
@@ -942,3 +942,5 @@ export default inherit( ScreenView, AreaBuilderGameView, {
     this.rootNode.addChild( levelCompletedNode );
   }
 } );
+
+export default AreaBuilderGameView;

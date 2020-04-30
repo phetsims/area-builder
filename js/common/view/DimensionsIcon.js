@@ -55,7 +55,7 @@ function DimensionsIcon( options ) {
 
 areaBuilder.register( 'DimensionsIcon', DimensionsIcon );
 
-export default inherit( Node, DimensionsIcon, {
+inherit( Node, DimensionsIcon, {
 
   setGridVisible: function( gridVisible ) {
     assert && assert( typeof ( gridVisible ) === 'boolean' );
@@ -69,3 +69,5 @@ export default inherit( Node, DimensionsIcon, {
     this.grid.stroke = strokeColor;
   }
 } );
+
+export default DimensionsIcon;

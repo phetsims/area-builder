@@ -80,7 +80,7 @@ function ColorProportionsPrompt( color1, color2, color1Proportion, options ) {
 
 areaBuilder.register( 'ColorProportionsPrompt', ColorProportionsPrompt );
 
-export default inherit( Node, ColorProportionsPrompt, {
+inherit( Node, ColorProportionsPrompt, {
 
   set color1( color ) {
     this.color1Patch.fill = color;
@@ -108,3 +108,5 @@ export default inherit( Node, ColorProportionsPrompt, {
   }
 
 } );
+
+export default ColorProportionsPrompt;

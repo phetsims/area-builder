@@ -51,7 +51,7 @@ function FractionNode( fraction, options ) {
 
 areaBuilder.register( 'FractionNode', FractionNode );
 
-export default inherit( Node, FractionNode, {
+inherit( Node, FractionNode, {
 
   // @private
   update: function() {
@@ -80,3 +80,5 @@ export default inherit( Node, FractionNode, {
   }
 
 } );
+
+export default FractionNode;

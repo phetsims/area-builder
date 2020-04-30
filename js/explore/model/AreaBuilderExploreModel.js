@@ -96,7 +96,7 @@ function AreaBuilderExploreModel() {
 
 areaBuilder.register( 'AreaBuilderExploreModel', AreaBuilderExploreModel );
 
-export default inherit( Object, AreaBuilderExploreModel, {
+inherit( Object, AreaBuilderExploreModel, {
 
   step: function( dt ) {
     this.movableShapes.forEach( function( movableShape ) { movableShape.step( dt ); } );
@@ -186,3 +186,5 @@ export default inherit( Object, AreaBuilderExploreModel, {
     this.movableShapes.clear();
   }
 } );
+
+export default AreaBuilderExploreModel;

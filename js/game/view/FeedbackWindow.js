@@ -55,7 +55,7 @@ function FeedbackWindow( title, maxWidth, options ) {
 
 areaBuilder.register( 'FeedbackWindow', FeedbackWindow );
 
-export default inherit( Panel, FeedbackWindow, {
+inherit( Panel, FeedbackWindow, {
 
     /**
      * Set the background color of this window based on whether or not the information being displayed is the correct
@@ -73,3 +73,5 @@ export default inherit( Panel, FeedbackWindow, {
     NORMAL_TEXT_FONT: NORMAL_TEXT_FONT // Font used in this window for text that is not the title.
   }
 );
+
+export default FeedbackWindow;

@@ -67,7 +67,7 @@ function YouBuiltWindow( maxWidth, options ) {
 
 areaBuilder.register( 'YouBuiltWindow', YouBuiltWindow );
 
-export default inherit( FeedbackWindow, YouBuiltWindow, {
+inherit( FeedbackWindow, YouBuiltWindow, {
 
   // @private
   proportionSpecsAreEqual: function( buildSpec1, buildSpec2 ) {
@@ -141,3 +141,5 @@ export default inherit( FeedbackWindow, YouBuiltWindow, {
     this.currentBuildSpec = buildSpec;
   }
 } );
+
+export default YouBuiltWindow;

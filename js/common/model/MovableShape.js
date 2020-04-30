@@ -70,7 +70,7 @@ function MovableShape( shape, color, initialPosition ) {
 
 areaBuilder.register( 'MovableShape', MovableShape );
 
-export default inherit( Object, MovableShape, {
+inherit( Object, MovableShape, {
 
   step: function( dt ) {
     if ( !this.userControlledProperty.get() ) {
@@ -155,3 +155,5 @@ export default inherit( Object, MovableShape, {
     return shapes;
   }
 } );
+
+export default MovableShape;

@@ -39,7 +39,7 @@ function BuildSpec( area, perimeter, colorProportionsSpec ) {
 
 areaBuilder.register( 'BuildSpec', BuildSpec );
 
-export default inherit( Object, BuildSpec, {
+inherit( Object, BuildSpec, {
   equals: function( that ) {
 
     if ( !( that instanceof BuildSpec ) ) { return false; }
@@ -101,3 +101,5 @@ export default inherit( Object, BuildSpec, {
     );
   }
 } );
+
+export default BuildSpec;

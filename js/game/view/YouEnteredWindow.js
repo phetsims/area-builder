@@ -43,7 +43,7 @@ function YouEnteredWindow( maxWidth, options ) {
 
 areaBuilder.register( 'YouEnteredWindow', YouEnteredWindow );
 
-export default inherit( FeedbackWindow, YouEnteredWindow, {
+inherit( FeedbackWindow, YouEnteredWindow, {
 
   // @public
   setValueEntered: function( valueEntered ) {
@@ -51,3 +51,5 @@ export default inherit( FeedbackWindow, YouEnteredWindow, {
     this.valueEnteredNode.centerX = this.titleNode.centerX;
   }
 } );
+
+export default YouEnteredWindow;

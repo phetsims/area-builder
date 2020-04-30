@@ -59,7 +59,7 @@ function AreaBuilderGameModel() {
 
 areaBuilder.register( 'AreaBuilderGameModel', AreaBuilderGameModel );
 
-export default inherit( Object, AreaBuilderGameModel, {
+inherit( Object, AreaBuilderGameModel, {
 
     // @private - replace a composite shape with unit squares
     replaceShapeWithUnitSquares: function( movableShape ) {
@@ -329,3 +329,5 @@ export default inherit( Object, AreaBuilderGameModel, {
     UNIT_SQUARE_LENGTH: UNIT_SQUARE_LENGTH
   }
 );
+
+export default AreaBuilderGameModel;

@@ -119,7 +119,7 @@ function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength, opt
 
 areaBuilder.register( 'PerimeterShape', PerimeterShape );
 
-export default inherit( Object, PerimeterShape, {
+inherit( Object, PerimeterShape, {
 
   // Returns a linearly translated version of this perimeter shape.
   translated: function( x, y ) {
@@ -151,3 +151,5 @@ export default inherit( Object, PerimeterShape, {
     return this.kiteShape.bounds.height;
   }
 } );
+
+export default PerimeterShape;

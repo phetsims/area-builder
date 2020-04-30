@@ -89,8 +89,10 @@ function AreaAndPerimeterDisplay( areaAndPerimeterProperty, areaTextColor, perim
 
 areaBuilder.register( 'AreaAndPerimeterDisplay', AreaAndPerimeterDisplay );
 
-export default inherit( AccordionBox, AreaAndPerimeterDisplay, {
+inherit( AccordionBox, AreaAndPerimeterDisplay, {
   reset: function() {
     this.expandedProperty.reset();
   }
 } );
+
+export default AreaAndPerimeterDisplay;
