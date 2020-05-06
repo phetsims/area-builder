@@ -9,7 +9,6 @@
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import areaBuilder from '../../areaBuilder.js';
@@ -982,4 +981,4 @@ function AreaBuilderChallengeFactory() {
 
 areaBuilder.register( 'AreaBuilderChallengeFactory', AreaBuilderChallengeFactory );
 
-export default inherit( Object, AreaBuilderChallengeFactory, {}, {} );
+export default AreaBuilderChallengeFactory;
