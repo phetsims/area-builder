@@ -7,7 +7,7 @@
  */
 
 import Sim from '../../joist/js/Sim.js';
-import SimLauncher from '../../joist/js/SimLauncher.js';
+import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import areaBuilderStrings from './areaBuilderStrings.js';
 import AreaBuilderExploreScreen from './explore/AreaBuilderExploreScreen.js';
@@ -28,7 +28,7 @@ const simOptions = {
   }
 };
 
-SimLauncher.launch( function() {
+simLauncher.launch( function() {
   // create and start the sim
   new Sim( areaBuilderTitleString, [
     new AreaBuilderExploreScreen( tandem.createTandem( 'exploreScreen' ) ),
