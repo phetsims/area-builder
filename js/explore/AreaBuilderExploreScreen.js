@@ -8,6 +8,7 @@
 
 import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import inherit from '../../../phet-core/js/inherit.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import exploreIcon from '../../images/explore-icon_png.js';
@@ -29,7 +30,10 @@ function AreaBuilderExploreScreen( tandem ) {
   const options = {
     name: exploreString,
     backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
-    homeScreenIcon: new Image( exploreIcon ),
+    homeScreenIcon: new ScreenIcon( new Image( exploreIcon ), {
+      maxIconWidthProportion: 1,
+      maxIconHeightProportion: 1
+    } ),
     navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
     tandem: tandem
   };

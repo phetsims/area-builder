@@ -8,6 +8,7 @@
 
 import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import inherit from '../../../phet-core/js/inherit.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import gameIcon from '../../images/game-icon_png.js';
@@ -28,7 +29,10 @@ function AreaBuilderGameScreen( tandem ) {
   const options = {
     name: gameString,
     backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
-    homeScreenIcon: new Image( gameIcon ),
+    homeScreenIcon: new ScreenIcon( new Image( gameIcon ), {
+      maxIconWidthProportion: 1,
+      maxIconHeightProportion: 1
+    } ),
     navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
     tandem: tandem
   };

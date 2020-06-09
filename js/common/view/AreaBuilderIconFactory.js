@@ -7,6 +7,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Screen from '../../../../joist/js/Screen.js';
+import ScreenIcon from '../../../../joist/js/ScreenIcon.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import FaceNode from '../../../../scenery-phet/js/FaceNode.js';
@@ -79,7 +80,10 @@ const AreaBuilderIconFactory = {
     // right bucket
     icon.addChild( createBucketIcon( { centerX: rightBoard.centerX, top: rightBoard.bottom + 2 } ) );
 
-    return icon;
+    return new ScreenIcon( icon, {
+      maxIconWidthProportion: 1,
+      maxIconHeightProportion: 1
+    } );
   },
 
   createGameScreenNavBarIcon: function() {
@@ -143,7 +147,10 @@ const AreaBuilderIconFactory = {
 
     shapeCarousel.addChild( shapes );
 
-    return icon;
+    return new ScreenIcon( icon, {
+      maxIconWidthProportion: 1,
+      maxIconHeightProportion: 1
+    } );
   }
 };
 
