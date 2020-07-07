@@ -601,7 +601,7 @@ inherit( Object, ShapePlacementBoard, {
 
   // @public - check if a shape is resident on the board
   isResidentShape: function( shape ) {
-    return this.residentShapes.contains( shape );
+    return this.residentShapes.includes( shape );
   },
 
   // @private
