@@ -14,7 +14,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
-import timer from '../../../../axon/js/timer.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import areaBuilder from '../../areaBuilder.js';
@@ -220,7 +220,7 @@ inherit( Object, QuizGameModel, {
     }
     this.elapsedTimeProperty.set( 0 );
     const self = this;
-    this.gameTimerId = timer.setInterval( function() { self.elapsedTimeProperty.value += 1; }, 1000 );
+    this.gameTimerId = stepTimer.setInterval( function() { self.elapsedTimeProperty.value += 1; }, 1000 );
   },
 
   // @private
