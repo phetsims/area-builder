@@ -9,11 +9,10 @@
 import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import inherit from '../../../phet-core/js/inherit.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import exploreIcon from '../../images/explore-icon_png.js';
-import areaBuilderStrings from '../areaBuilderStrings.js';
 import areaBuilder from '../areaBuilder.js';
+import areaBuilderStrings from '../areaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
 import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
 import AreaBuilderExploreModel from './model/AreaBuilderExploreModel.js';
@@ -21,30 +20,27 @@ import AreaBuilderExploreView from './view/AreaBuilderExploreView.js';
 
 const exploreString = areaBuilderStrings.explore;
 
+class AreaBuilderExploreScreen extends Screen {
+  constructor( tandem ) {
 
-/**
- * @constructor
- */
-function AreaBuilderExploreScreen( tandem ) {
+    const options = {
+      name: exploreString,
+      backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
+      homeScreenIcon: new ScreenIcon( new Image( exploreIcon ), {
+        maxIconWidthProportion: 1,
+        maxIconHeightProportion: 1
+      } ),
+      navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
+      tandem: tandem
+    };
 
-  const options = {
-    name: exploreString,
-    backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
-    homeScreenIcon: new ScreenIcon( new Image( exploreIcon ), {
-      maxIconWidthProportion: 1,
-      maxIconHeightProportion: 1
-    } ),
-    navigationBarIcon: AreaBuilderIconFactory.createExploreScreenNavBarIcon(),
-    tandem: tandem
-  };
-
-  Screen.call( this,
-    function() { return new AreaBuilderExploreModel(); },
-    function( model ) { return new AreaBuilderExploreView( model ); },
-    options );
+    super(
+      function() { return new AreaBuilderExploreModel(); },
+      function( model ) { return new AreaBuilderExploreView( model ); },
+      options
+    );
+  }
 }
 
 areaBuilder.register( 'AreaBuilderExploreScreen', AreaBuilderExploreScreen );
-
-inherit( Screen, AreaBuilderExploreScreen );
 export default AreaBuilderExploreScreen;

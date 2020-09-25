@@ -9,11 +9,10 @@
 import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import inherit from '../../../phet-core/js/inherit.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import gameIcon from '../../images/game-icon_png.js';
-import areaBuilderStrings from '../areaBuilderStrings.js';
 import areaBuilder from '../areaBuilder.js';
+import areaBuilderStrings from '../areaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
 import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
 import AreaBuilderChallengeFactory from './model/AreaBuilderChallengeFactory.js';
@@ -23,27 +22,27 @@ import AreaBuilderGameView from './view/AreaBuilderGameView.js';
 
 const gameString = areaBuilderStrings.game;
 
+class AreaBuilderGameScreen extends Screen {
+  constructor( tandem ) {
 
-function AreaBuilderGameScreen( tandem ) {
+    const options = {
+      name: gameString,
+      backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
+      homeScreenIcon: new ScreenIcon( new Image( gameIcon ), {
+        maxIconWidthProportion: 1,
+        maxIconHeightProportion: 1
+      } ),
+      navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
+      tandem: tandem
+    };
 
-  const options = {
-    name: gameString,
-    backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
-    homeScreenIcon: new ScreenIcon( new Image( gameIcon ), {
-      maxIconWidthProportion: 1,
-      maxIconHeightProportion: 1
-    } ),
-    navigationBarIcon: AreaBuilderIconFactory.createGameScreenNavBarIcon(),
-    tandem: tandem
-  };
-
-  Screen.call( this,
-    function() { return new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ); },
-    function( model ) { return new AreaBuilderGameView( model ); },
-    options );
+    super(
+      function() { return new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ); },
+      function( model ) { return new AreaBuilderGameView( model ); },
+      options
+    );
+  }
 }
 
 areaBuilder.register( 'AreaBuilderGameScreen', AreaBuilderGameScreen );
-
-inherit( Screen, AreaBuilderGameScreen );
 export default AreaBuilderGameScreen;
