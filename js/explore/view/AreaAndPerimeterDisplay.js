@@ -34,7 +34,19 @@ class AreaAndPerimeterDisplay extends AccordionBox {
   constructor( areaAndPerimeterProperty, areaTextColor, perimeterTextColor, options ) {
 
     options = merge( {
-      maxWidth: Number.POSITIVE_INFINITY
+      maxWidth: Number.POSITIVE_INFINITY,
+      cornerRadius: 3,
+      titleNode: new Text( valuesString, { font: DISPLAY_FONT, maxWidth: MAX_TITLE_WIDTH } ),
+      titleAlignX: 'left',
+      contentAlign: 'left',
+      fill: 'white',
+      showTitleWhenExpanded: false,
+      contentXMargin: 8,
+      contentYMargin: 4,
+      expandCollapseButtonOptions: {
+        touchAreaXDilation: 10,
+        touchAreaYDilation: 10
+      }
     }, options );
 
     const contentNode = new Node();
@@ -66,22 +78,7 @@ class AreaAndPerimeterDisplay extends AccordionBox {
       contentNode.scale( MAX_CONTENT_WIDTH / contentNode.width );
     }
 
-    super( contentNode, {
-      cornerRadius: 3,
-      titleNode: new Text( valuesString, { font: DISPLAY_FONT, maxWidth: MAX_TITLE_WIDTH } ),
-      titleAlignX: 'left',
-      contentAlign: 'left',
-      fill: 'white',
-      showTitleWhenExpanded: false,
-      contentXMargin: 8,
-      contentYMargin: 4,
-      expandCollapseButtonOptions: {
-        touchAreaXDilation: 10,
-        touchAreaYDilation: 10
-      }
-    } );
-
-    this.mutate( options );
+    super( contentNode, options );
   }
 }
 
