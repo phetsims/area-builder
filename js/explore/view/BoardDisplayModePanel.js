@@ -6,7 +6,6 @@
 
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
@@ -16,6 +15,51 @@ import ABSwitch from '../../../../sun/js/ABSwitch.js';
 import Panel from '../../../../sun/js/Panel.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
+
+class BoardDisplayModePanel extends Panel {
+
+  constructor( boardDisplayModeProperty ) {
+
+    const singleBoardIcon = createIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
+      new Vector2( 0, 1 ),
+      new Vector2( 1, 0 ),
+      new Vector2( 1, 1 )
+    ] );
+
+    const dualBoardIcon = new HBox( {
+        children: [
+          createIcon( AreaBuilderSharedConstants.GREENISH_COLOR, 6, [
+            new Vector2( 0, 0 ),
+            new Vector2( 1, 0 ),
+            new Vector2( 1, 1 )
+          ] ),
+          createIcon( AreaBuilderSharedConstants.PURPLISH_COLOR, 6, [
+            new Vector2( 0, 0 ),
+            new Vector2( 0, 1 ),
+            new Vector2( 1, 0 ),
+            new Vector2( 1, 1 )
+          ] )
+        ],
+        spacing: 3
+      }
+    );
+
+    super(
+      new VBox( {
+        children: [
+          new ABSwitch( boardDisplayModeProperty, 'single', singleBoardIcon, 'dual', dualBoardIcon, {
+            toggleSwitchOptions: {
+              size: new Dimension2( 36, 18 ),
+              thumbTouchAreaXDilation: 5,
+              thumbTouchAreaYDilation: 5
+            }
+          } )
+        ],
+        spacing: 10 // Empirically determined
+      } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR, cornerRadius: 4 }
+    );
+  }
+}
 
 // utility function for creating the icons used on this panel
 function createIcon( color, rectangleLength, rectanglePositions ) {
@@ -32,53 +76,5 @@ function createIcon( color, rectangleLength, rectanglePositions ) {
   return new Panel( content, { fill: 'white', stroke: 'black', cornerRadius: 0, backgroundPickable: true } );
 }
 
-/**
- *
- * @constructor
- */
-function BoardDisplayModePanel( boardDisplayModeProperty ) {
-
-  const singleBoardIcon = createIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
-    new Vector2( 0, 1 ),
-    new Vector2( 1, 0 ),
-    new Vector2( 1, 1 )
-  ] );
-
-  const dualBoardIcon = new HBox( {
-      children: [
-        createIcon( AreaBuilderSharedConstants.GREENISH_COLOR, 6, [
-          new Vector2( 0, 0 ),
-          new Vector2( 1, 0 ),
-          new Vector2( 1, 1 )
-        ] ),
-        createIcon( AreaBuilderSharedConstants.PURPLISH_COLOR, 6, [
-          new Vector2( 0, 0 ),
-          new Vector2( 0, 1 ),
-          new Vector2( 1, 0 ),
-          new Vector2( 1, 1 )
-        ] )
-      ],
-      spacing: 3
-    }
-  );
-
-  Panel.call( this,
-    new VBox( {
-      children: [
-        new ABSwitch( boardDisplayModeProperty, 'single', singleBoardIcon, 'dual', dualBoardIcon, {
-          toggleSwitchOptions: {
-            size: new Dimension2( 36, 18 ),
-            thumbTouchAreaXDilation: 5,
-            thumbTouchAreaYDilation: 5
-          }
-        } )
-      ],
-      spacing: 10 // Empirically determined
-    } ), { fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR, cornerRadius: 4 }
-  );
-}
-
 areaBuilder.register( 'BoardDisplayModePanel', BoardDisplayModePanel );
-
-inherit( Panel, BoardDisplayModePanel );
 export default BoardDisplayModePanel;
