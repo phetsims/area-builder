@@ -7,12 +7,11 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
 import areaBuilder from '../../areaBuilder.js';
+import areaBuilderStrings from '../../areaBuilderStrings.js';
 import ColorProportionsPrompt from './ColorProportionsPrompt.js';
 import FeedbackWindow from './FeedbackWindow.js';
 
@@ -23,54 +22,51 @@ const youBuiltString = areaBuilderStrings.youBuilt;
 // constants
 const LINE_SPACING = 5;
 
-/**
- * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
- * contents are added later when the build spec is set.
- *
- * @param maxWidth
- * @param {Object} [options]
- * @constructor
- */
-function YouBuiltWindow( maxWidth, options ) {
+class YouBuiltWindow extends FeedbackWindow {
 
-  FeedbackWindow.call( this, youBuiltString, maxWidth, options );
+  /**
+   * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
+   * contents are added later when the build spec is set.
+   *
+   * @param maxWidth
+   * @param {Object} [options]
+   */
+  constructor( maxWidth, options ) {
 
-  // Keep a snapshot of the currently portrayed build spec so that we can only update the portions that need it.
-  this.currentBuildSpec = null;
+    super( youBuiltString, maxWidth, options );
 
-  // area text
-  this.areaTextNode = new Text( StringUtils.format( areaEqualsString, 99 ), {
-    font: FeedbackWindow.NORMAL_TEXT_FONT,
-    top: this.titleNode.bottom + LINE_SPACING
-  } );
-  if ( this.areaTextNode.width + 2 * FeedbackWindow.X_MARGIN > maxWidth ) {
-    // Scale this text to fit in the window.  Not an issue in English, but could be needed in translated versions.
-    this.areaTextNode.scale( ( maxWidth - 2 * FeedbackWindow.X_MARGIN ) / this.areaTextNode.width );
+    // Keep a snapshot of the currently portrayed build spec so that we can only update the portions that need it.
+    this.currentBuildSpec = null;
+
+    // area text
+    this.areaTextNode = new Text( StringUtils.format( areaEqualsString, 99 ), {
+      font: FeedbackWindow.NORMAL_TEXT_FONT,
+      top: this.titleNode.bottom + LINE_SPACING
+    } );
+    if ( this.areaTextNode.width + 2 * FeedbackWindow.X_MARGIN > maxWidth ) {
+      // Scale this text to fit in the window.  Not an issue in English, but could be needed in translated versions.
+      this.areaTextNode.scale( ( maxWidth - 2 * FeedbackWindow.X_MARGIN ) / this.areaTextNode.width );
+    }
+    this.contentNode.addChild( this.areaTextNode );
+
+    // perimeter text
+    this.perimeterTextNode = new Text( StringUtils.format( perimeterEqualsString, 99 ), {
+      font: FeedbackWindow.NORMAL_TEXT_FONT
+    } );
+    if ( this.perimeterTextNode.width + 2 * FeedbackWindow.X_MARGIN > maxWidth ) {
+      // Scale this text to fit in the window.  Not an issue in English, but could be needed in translated versions.
+      this.perimeterTextNode.scale( ( maxWidth - 2 * FeedbackWindow.X_MARGIN ) / this.perimeterTextNode.width );
+    }
+
+    // proportion info is initially set to null, added and removed when needed.
+    this.proportionsInfoNode = null;
+
+    // Handle options, mostly those relating to position.
+    this.mutate( options );
   }
-  this.contentNode.addChild( this.areaTextNode );
-
-  // perimeter text
-  this.perimeterTextNode = new Text( StringUtils.format( perimeterEqualsString, 99 ), {
-    font: FeedbackWindow.NORMAL_TEXT_FONT
-  } );
-  if ( this.perimeterTextNode.width + 2 * FeedbackWindow.X_MARGIN > maxWidth ) {
-    // Scale this text to fit in the window.  Not an issue in English, but could be needed in translated versions.
-    this.perimeterTextNode.scale( ( maxWidth - 2 * FeedbackWindow.X_MARGIN ) / this.perimeterTextNode.width );
-  }
-
-  // proportion info is initially set to null, added and removed when needed.
-  this.proportionsInfoNode = null;
-
-  // Handle options, mostly those relating to position.
-  this.mutate( options );
-}
-
-areaBuilder.register( 'YouBuiltWindow', YouBuiltWindow );
-
-inherit( FeedbackWindow, YouBuiltWindow, {
 
   // @private
-  proportionSpecsAreEqual: function( buildSpec1, buildSpec2 ) {
+  proportionSpecsAreEqual( buildSpec1, buildSpec2 ) {
 
     // If one of the build specs is null and the other isn't, they aren't equal.
     if ( ( buildSpec1 === null && buildSpec2 !== null ) || ( buildSpec1 !== null && buildSpec2 === null ) ) {
@@ -97,10 +93,10 @@ inherit( FeedbackWindow, YouBuiltWindow, {
     return ( buildSpec1.proportions.color1.equals( buildSpec2.proportions.color1 ) &&
              buildSpec1.proportions.color2.equals( buildSpec2.proportions.color2 ) &&
              buildSpec1.proportions.color1Proportion.equals( buildSpec2.proportions.color1Proportion ) );
-  },
+  }
 
   // @public Sets the build spec that is currently being portrayed in the window.
-  setBuildSpec: function( buildSpec ) {
+  setBuildSpec( buildSpec ) {
 
     // Set the area value, which is always shown.
     this.areaTextNode.text = StringUtils.format( areaEqualsString, buildSpec.area );
@@ -140,6 +136,7 @@ inherit( FeedbackWindow, YouBuiltWindow, {
     // Save a reference to this build spec.
     this.currentBuildSpec = buildSpec;
   }
-} );
+}
 
+areaBuilder.register( 'YouBuiltWindow', YouBuiltWindow );
 export default YouBuiltWindow;

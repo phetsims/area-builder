@@ -7,7 +7,6 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -23,65 +22,62 @@ const NORMAL_TEXT_FONT = new PhetFont( { size: 18 } );
 const CORRECT_ANSWER_BACKGROUND_COLOR = 'white';
 const INCORRECT_ANSWER_BACKGROUND_COLOR = PhetColorScheme.PHET_LOGO_YELLOW;
 
-/**
- * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
- * contents are added later when the build spec is set.
- *
- * @param {string} title
- * @param {number} maxWidth
- * @param {Object} [options]
- * @constructor
- */
-function FeedbackWindow( title, maxWidth, options ) {
+class FeedbackWindow extends Panel {
 
-  options = merge( {
-    fill: INCORRECT_ANSWER_BACKGROUND_COLOR,
-    stroke: 'black',
-    xMargin: X_MARGIN
-  }, options );
+  /**
+   * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
+   * contents are added later when the build spec is set.
+   *
+   * @param {string} title
+   * @param {number} maxWidth
+   * @param {Object} [options]
+   */
+  constructor( title, maxWidth, options ) {
 
-  const contentNode = new Node();
+    options = merge( {
+      fill: INCORRECT_ANSWER_BACKGROUND_COLOR,
+      stroke: 'black',
+      xMargin: X_MARGIN
+    }, options );
 
-  // @protected subclasses will do layout relative to this.titleNode
-  const titleNode = new Text( title, { font: TITLE_FONT } );
-  titleNode.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / titleNode.width, 1 ) );
-  titleNode.top = 5;
-  contentNode.addChild( titleNode );
+    const contentNode = new Node();
 
-  // Invoke super constructor - called here because content with no bounds doesn't work.  This does not pass through
-  // position options - that needs to be handled in descendant classes.
-  Panel.call( this, contentNode, {
-    fill: options.fill,
-    stroke: options.stroke,
-    xMargin: options.xMargin
-  } );
+    // @protected subclasses will do layout relative to this.titleNode
+    const titleNode = new Text( title, { font: TITLE_FONT } );
+    titleNode.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / titleNode.width, 1 ) );
+    titleNode.top = 5;
+    contentNode.addChild( titleNode );
 
-  // @protected subclasses will addChild and removeChild
-  this.contentNode = contentNode;
+    // Invoke super constructor - called here because content with no bounds doesn't work.  This does not pass through
+    // position options - that needs to be handled in descendant classes.
+    super( contentNode, {
+      fill: options.fill,
+      stroke: options.stroke,
+      xMargin: options.xMargin
+    } );
 
-  // @protected subclasses will do layout relative to this.titleNode
-  this.titleNode = titleNode;
+    // @protected subclasses will addChild and removeChild
+    this.contentNode = contentNode;
+
+    // @protected subclasses will do layout relative to this.titleNode
+    this.titleNode = titleNode;
+  }
+
+  /**
+   * Set the background color of this window based on whether or not the information being displayed is the correct
+   * answer.
+   *
+   * @param userAnswerIsCorrect
+   * @public
+   */
+  setColorBasedOnAnswerCorrectness( userAnswerIsCorrect ) {
+    this.background.fill = userAnswerIsCorrect ? CORRECT_ANSWER_BACKGROUND_COLOR : INCORRECT_ANSWER_BACKGROUND_COLOR;
+  }
 }
 
+// @protected for use by subclasses
+FeedbackWindow.X_MARGIN = X_MARGIN; // Must be visible to subtypes so that max width can be calculated and, if necessary, scaled.
+FeedbackWindow.NORMAL_TEXT_FONT = NORMAL_TEXT_FONT; // Font used in this window for text that is not the title.
+
 areaBuilder.register( 'FeedbackWindow', FeedbackWindow );
-
-inherit( Panel, FeedbackWindow, {
-
-    /**
-     * Set the background color of this window based on whether or not the information being displayed is the correct
-     * answer.
-     *
-     * @param userAnswerIsCorrect
-     */
-    setColorBasedOnAnswerCorrectness: function( userAnswerIsCorrect ) {
-      this.background.fill = userAnswerIsCorrect ? CORRECT_ANSWER_BACKGROUND_COLOR : INCORRECT_ANSWER_BACKGROUND_COLOR;
-    }
-  },
-  {
-    // Statics
-    X_MARGIN: X_MARGIN, // Must be visible to subtypes so that max width can be calculated and, if necessary, scaled.
-    NORMAL_TEXT_FONT: NORMAL_TEXT_FONT // Font used in this window for text that is not the title.
-  }
-);
-
 export default FeedbackWindow;

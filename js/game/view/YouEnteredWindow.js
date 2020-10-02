@@ -7,10 +7,9 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
 import areaBuilder from '../../areaBuilder.js';
+import areaBuilderStrings from '../../areaBuilderStrings.js';
 import FeedbackWindow from './FeedbackWindow.js';
 
 const youEnteredString = areaBuilderStrings.youEntered;
@@ -18,38 +17,36 @@ const youEnteredString = areaBuilderStrings.youEntered;
 // constants
 const LINE_SPACING = 5;
 
-/**
- * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
- * contents are added later when the build spec is set.
- *
- * @param maxWidth
- * @param {Object} [options]
- * @constructor
- */
-function YouEnteredWindow( maxWidth, options ) {
+class YouEnteredWindow extends FeedbackWindow {
 
-  FeedbackWindow.call( this, youEnteredString, maxWidth, options );
+  /**
+   * Constructor for the window that shows the user what they built.  It is constructed with no contents, and the
+   * contents are added later when the build spec is set.
+   *
+   * @param maxWidth
+   * @param {Object} [options]
+   */
+  constructor( maxWidth, options ) {
 
-  // value entered text
-  this.valueEnteredNode = new Text( ( 99 ), {
-    font: FeedbackWindow.NORMAL_TEXT_FONT,
-    top: this.titleNode.bottom + LINE_SPACING
-  } );
-  this.contentNode.addChild( this.valueEnteredNode );
+    super( youEnteredString, maxWidth, options );
 
-  // Handle options, mostly those relating to position.
-  this.mutate( options );
-}
+    // value entered text
+    this.valueEnteredNode = new Text( ( 99 ), {
+      font: FeedbackWindow.NORMAL_TEXT_FONT,
+      top: this.titleNode.bottom + LINE_SPACING
+    } );
+    this.contentNode.addChild( this.valueEnteredNode );
 
-areaBuilder.register( 'YouEnteredWindow', YouEnteredWindow );
-
-inherit( FeedbackWindow, YouEnteredWindow, {
+    // Handle options, mostly those relating to position.
+    this.mutate( options );
+  }
 
   // @public
-  setValueEntered: function( valueEntered ) {
+  setValueEntered( valueEntered ) {
     this.valueEnteredNode.text = valueEntered.toString();
     this.valueEnteredNode.centerX = this.titleNode.centerX;
   }
-} );
+}
 
+areaBuilder.register( 'YouEnteredWindow', YouEnteredWindow );
 export default YouEnteredWindow;
