@@ -40,10 +40,11 @@ function FeedbackWindow( title, maxWidth, options ) {
     xMargin: X_MARGIN
   }, options );
 
-  this.contentNode = new Node(); // @private
+  // @protected subclasses will addChild and removeChild
+  this.contentNode = new Node();
 
-  // title
-  this.titleNode = new Text( title, { font: TITLE_FONT } ); // @private
+  // @protected subclasses will do layout relative to this.titleNode
+  this.titleNode = new Text( title, { font: TITLE_FONT } );
   this.titleNode.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / this.titleNode.width, 1 ) );
   this.titleNode.top = 5;
   this.contentNode.addChild( this.titleNode );
