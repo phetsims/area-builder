@@ -40,18 +40,27 @@ function FeedbackWindow( title, maxWidth, options ) {
     xMargin: X_MARGIN
   }, options );
 
-  // @protected subclasses will addChild and removeChild
-  this.contentNode = new Node();
+  const contentNode = new Node();
 
   // @protected subclasses will do layout relative to this.titleNode
-  this.titleNode = new Text( title, { font: TITLE_FONT } );
-  this.titleNode.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / this.titleNode.width, 1 ) );
-  this.titleNode.top = 5;
-  this.contentNode.addChild( this.titleNode );
+  const titleNode = new Text( title, { font: TITLE_FONT } );
+  titleNode.scale( Math.min( ( maxWidth - 2 * X_MARGIN ) / titleNode.width, 1 ) );
+  titleNode.top = 5;
+  contentNode.addChild( titleNode );
 
   // Invoke super constructor - called here because content with no bounds doesn't work.  This does not pass through
   // position options - that needs to be handled in descendant classes.
-  Panel.call( this, this.contentNode, { fill: options.fill, stroke: options.stroke, xMargin: options.xMargin } );
+  Panel.call( this, contentNode, {
+    fill: options.fill,
+    stroke: options.stroke,
+    xMargin: options.xMargin
+  } );
+
+  // @protected subclasses will addChild and removeChild
+  this.contentNode = contentNode;
+
+  // @protected subclasses will do layout relative to this.titleNode
+  this.titleNode = titleNode;
 }
 
 areaBuilder.register( 'FeedbackWindow', FeedbackWindow );
