@@ -6,7 +6,7 @@
  * @author John Blanco
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -39,7 +39,7 @@ function AreaBuilderExploreModel() {
   this.showDimensionsProperty = new Property( true ); // @public
   this.boardDisplayModeProperty = new StringProperty( 'single' ); // @public, value values are 'single' and 'dual'
 
-  this.movableShapes = new ObservableArray(); // @public
+  this.movableShapes = createObservableArray(); // @public
   this.unitSquareLength = UNIT_SQUARE_LENGTH; // @public, @final
 
   // Create the shape placement boards. Each boardDisplayMode has its own set of boards and buckets so that state can

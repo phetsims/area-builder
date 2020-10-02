@@ -10,7 +10,7 @@
  * @author John Blanco
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -50,7 +50,7 @@ function AreaBuilderGameModel() {
   );
 
   // @public Array where shapes that are added by the user are tracked.
-  this.movableShapes = new ObservableArray();
+  this.movableShapes = createObservableArray();
 
   // @private The position from which squares that animate onto the board to show a solution should emerge.  The
   // offset is empirically determined to be somewhere in the carousel.

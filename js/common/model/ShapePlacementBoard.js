@@ -6,7 +6,7 @@
  * @author John Blanco
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -103,7 +103,7 @@ function ShapePlacementBoard( size, unitSquareLength, position, colorHandled, sh
   this.showGridOnBackgroundShapeProperty = new Property( false );
 
   // Observable array of the shapes that have been placed on this board.
-  this.residentShapes = new ObservableArray(); // @public, read only
+  this.residentShapes = createObservableArray(); // @public, read only
 
   // Non-dynamic public values.
   this.unitSquareLength = unitSquareLength; // @public
