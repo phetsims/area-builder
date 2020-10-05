@@ -1,7 +1,7 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * Base class for a node that looks like a window and provide the user with feedback about what they have entered
+ * Base class for a node that looks like a window and provides the user with feedback about what they have entered
  * during the challenge.
  *
  * @author John Blanco
