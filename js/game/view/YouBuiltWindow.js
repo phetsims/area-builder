@@ -60,9 +60,6 @@ class YouBuiltWindow extends FeedbackWindow {
 
     // proportion info is initially set to null, added and removed when needed.
     this.proportionsInfoNode = null;
-
-    // Handle options, mostly those relating to position.
-    this.mutate( options );
   }
 
   // @private

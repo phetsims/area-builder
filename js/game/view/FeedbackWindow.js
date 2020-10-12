@@ -50,11 +50,7 @@ class FeedbackWindow extends Panel {
 
     // Invoke super constructor - called here because content with no bounds doesn't work.  This does not pass through
     // position options - that needs to be handled in descendant classes.
-    super( contentNode, {
-      fill: options.fill,
-      stroke: options.stroke,
-      xMargin: options.xMargin
-    } );
+    super( contentNode, options );
 
     // @protected subclasses will addChild and removeChild
     this.contentNode = contentNode;
