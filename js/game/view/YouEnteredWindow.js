@@ -36,9 +36,6 @@ class YouEnteredWindow extends FeedbackWindow {
       top: this.titleNode.bottom + LINE_SPACING
     } );
     this.contentNode.addChild( this.valueEnteredNode );
-
-    // Handle options, mostly those relating to position.
-    this.mutate( options );
   }
 
   // @public
