@@ -7,7 +7,6 @@
  */
 
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
@@ -28,8 +27,8 @@ import Easing from '../../../../twixt/js/Easing.js';
 import GameAudioPlayer from '../../../../vegas/js/GameAudioPlayer.js';
 import LevelCompletedNode from '../../../../vegas/js/LevelCompletedNode.js';
 import vegasStrings from '../../../../vegas/js/vegasStrings.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
 import areaBuilder from '../../areaBuilder.js';
+import areaBuilderStrings from '../../areaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import AreaBuilderControlPanel from '../../common/view/AreaBuilderControlPanel.js';
 import ShapeCreatorNode from '../../common/view/ShapeCreatorNode.js';
@@ -70,362 +69,359 @@ const SPACE_AROUND_SHAPE_PLACEMENT_BOARD = AreaBuilderSharedConstants.CONTROLS_I
 const ITEMS_PER_CAROUSEL_PAGE = 4;
 const BUTTON_TOUCH_AREA_DILATION = 7;
 
-/**
- * @param {AreaBuilderGameModel} gameModel
- * @constructor
- */
-function AreaBuilderGameView( gameModel ) {
-  ScreenView.call( this, { layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
-  const self = this;
-  self.model = gameModel;
+class AreaBuilderGameView extends ScreenView {
 
-  // Create the game audio player.
-  this.gameAudioPlayer = new GameAudioPlayer();
+  /**
+   * @param {AreaBuilderGameModel} gameModel
+   */
+  constructor( gameModel ) {
+    super( { layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
+    const self = this;
+    self.model = gameModel;
 
-  // Create a root node and send to back so that the layout bounds box can be made visible if needed.
-  this.rootNode = new Node();
-  this.addChild( self.rootNode );
-  this.rootNode.moveToBack();
+    // Create the game audio player.
+    this.gameAudioPlayer = new GameAudioPlayer();
 
-  // Add layers used to control game appearance.
-  this.controlLayer = new Node();
-  this.rootNode.addChild( this.controlLayer );
-  this.challengeLayer = new Node();
-  this.rootNode.addChild( this.challengeLayer );
+    // Create a root node and send to back so that the layout bounds box can be made visible if needed.
+    this.rootNode = new Node();
+    this.addChild( self.rootNode );
+    this.rootNode.moveToBack();
 
-  // Add the node that allows the user to choose a game level to play.
-  this.startGameLevelNode = new StartGameLevelNode(
-    function( level ) {
-      self.numberEntryControl.clear();
-      gameModel.startLevel( level );
-    },
-    function() { gameModel.reset(); },
-    gameModel.timerEnabledProperty,
-    [
-      GameIconFactory.createIcon( 1 ),
-      GameIconFactory.createIcon( 2 ),
-      GameIconFactory.createIcon( 3 ),
-      GameIconFactory.createIcon( 4 ),
-      GameIconFactory.createIcon( 5 ),
-      GameIconFactory.createIcon( 6 )
-    ],
-    gameModel.bestScoreProperties,
-    {
-      numStarsOnButtons: gameModel.challengesPerSet,
-      perfectScore: gameModel.maxPossibleScore,
-      numLevels: gameModel.numberOfLevels,
-      numButtonRows: 2,
-      controlsInset: AreaBuilderSharedConstants.CONTROLS_INSET
-    }
-  );
-  this.rootNode.addChild( this.startGameLevelNode );
+    // Add layers used to control game appearance.
+    this.controlLayer = new Node();
+    this.rootNode.addChild( this.controlLayer );
+    this.challengeLayer = new Node();
+    this.rootNode.addChild( this.challengeLayer );
 
-  // Set up the constant portions of the challenge view.
-  this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
-  this.shapeBoardOriginalBounds = this.shapeBoard.bounds.copy(); // Necessary because the shape board's bounds can vary when shapes are placed.
-  this.maxShapeBoardTextWidth = this.shapeBoardOriginalBounds.width * 0.9;
-  this.yourGoalTitle = new Text( yourGoalString, {
-    font: new PhetFont( { size: 24, weight: 'bold' } ),
-    maxWidth: this.maxShapeBoardTextWidth
-  } );
-  this.challengeLayer.addChild( this.shapeBoard );
-  this.eraserButton = new EraserButton( {
-    right: this.shapeBoard.left,
-    top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
-    touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
-    touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
-    listener: function() {
-
-      const challenge = gameModel.currentChallengeProperty.get();
-      let shapeReleaseMode = 'fade';
-
-      if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[ 0 ].creationLimit ) {
-
-        // In the case where there is a limited number of shapes, have them animate back to the carousel instead of
-        // fading away so that the user understands that the stash is being replenished.
-        shapeReleaseMode = 'animateHome';
-      }
-      gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( shapeReleaseMode );
-
-      // If the game was showing the user incorrect feedback when they pressed this button, auto-advance to the
-      // next state.
-      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
+    // Add the node that allows the user to choose a game level to play.
+    this.startGameLevelNode = new StartGameLevelNode(
+      function( level ) {
         self.numberEntryControl.clear();
-        gameModel.tryAgain();
+        gameModel.startLevel( level );
+      },
+      function() { gameModel.reset(); },
+      gameModel.timerEnabledProperty,
+      [
+        GameIconFactory.createIcon( 1 ),
+        GameIconFactory.createIcon( 2 ),
+        GameIconFactory.createIcon( 3 ),
+        GameIconFactory.createIcon( 4 ),
+        GameIconFactory.createIcon( 5 ),
+        GameIconFactory.createIcon( 6 )
+      ],
+      gameModel.bestScoreProperties,
+      {
+        numStarsOnButtons: gameModel.challengesPerSet,
+        perfectScore: gameModel.maxPossibleScore,
+        numLevels: gameModel.numberOfLevels,
+        numButtonRows: 2,
+        controlsInset: AreaBuilderSharedConstants.CONTROLS_INSET
       }
-    }
-  } );
-  this.challengeLayer.addChild( this.eraserButton );
-  this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
-  this.challengeLayer.addChild( this.youBuiltWindow );
-  this.youEnteredWindow = new YouEnteredWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
-  this.challengeLayer.addChild( this.youEnteredWindow );
-  this.challengePromptBanner = new GameInfoBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, '#1b1464', {
-    left: this.shapeBoard.left,
-    bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
-  } );
-  this.challengeLayer.addChild( this.challengePromptBanner );
-  this.solutionBanner = new GameInfoBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, '#fbb03b', {
-    left: this.shapeBoard.left,
-    bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
-  } );
-  this.challengeLayer.addChild( this.solutionBanner );
+    );
+    this.rootNode.addChild( this.startGameLevelNode );
 
-  // Add the control panel
-  this.controlPanel = new AreaBuilderControlPanel(
-    gameModel.simSpecificModel.showGridOnBoardProperty,
-    gameModel.simSpecificModel.showDimensionsProperty,
-    { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, bottom: this.shapeBoard.bottom }
-  );
-  this.controlLayer.addChild( this.controlPanel );
+    // Set up the constant portions of the challenge view.
+    this.shapeBoard = new ShapePlacementBoardNode( gameModel.simSpecificModel.shapePlacementBoard );
+    this.shapeBoardOriginalBounds = this.shapeBoard.bounds.copy(); // Necessary because the shape board's bounds can vary when shapes are placed.
+    this.maxShapeBoardTextWidth = this.shapeBoardOriginalBounds.width * 0.9;
+    this.yourGoalTitle = new Text( yourGoalString, {
+      font: new PhetFont( { size: 24, weight: 'bold' } ),
+      maxWidth: this.maxShapeBoardTextWidth
+    } );
+    this.challengeLayer.addChild( this.shapeBoard );
+    this.eraserButton = new EraserButton( {
+      right: this.shapeBoard.left,
+      top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
+      touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
+      listener: function() {
 
-  // Add the scoreboard.
-  this.scoreboard = new AreaBuilderScoreboard(
-    gameModel.levelProperty,
-    gameModel.challengeIndexProperty,
-    gameModel.challengesPerSet,
-    gameModel.scoreProperty,
-    gameModel.elapsedTimeProperty,
-    {
-      centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2,
-      top: this.shapeBoard.top,
-      maxWidth: this.controlPanel.width
-    }
-  );
-  this.controlLayer.addChild( this.scoreboard );
+        const challenge = gameModel.currentChallengeProperty.get();
+        let shapeReleaseMode = 'fade';
 
-  // Control visibility of elapsed time indicator in the scoreboard.
-  this.model.timerEnabledProperty.link( function( timerEnabled ) {
-    self.scoreboard.timeVisibleProperty.set( timerEnabled );
-  } );
+        if ( challenge.checkSpec === 'areaEntered' && challenge.userShapes && challenge.userShapes[ 0 ].creationLimit ) {
 
-  // Add the button for returning to the level selection screen.
-  this.controlLayer.addChild( new RectangularPushButton( {
-    content: new Text( startOverString, { font: BUTTON_FONT, maxWidth: this.controlPanel.width } ),
-    touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
-    touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
-    listener: function() {
-      gameModel.simSpecificModel.reset();
-      gameModel.setChoosingLevelState();
-    },
-    baseColor: BUTTON_FILL,
-    centerX: this.scoreboard.centerX,
-    centerY: this.solutionBanner.centerY
-  } ) );
+          // In the case where there is a limited number of shapes, have them animate back to the carousel instead of
+          // fading away so that the user understands that the stash is being replenished.
+          shapeReleaseMode = 'animateHome';
+        }
+        gameModel.simSpecificModel.shapePlacementBoard.releaseAllShapes( shapeReleaseMode );
 
-  // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
-  this.buildPromptVBox = new VBox( {
-    children: [
-      this.yourGoalTitle
-    ],
-    spacing: 20
-  } );
-  this.buildPromptPanel = new Panel( this.buildPromptVBox, {
-    stroke: null,
-    xMargin: 10,
-    yMargin: 10
-  } );
-  this.challengeLayer.addChild( this.buildPromptPanel );
-
-  // Define some variables for taking a snapshot of the user's solution.
-  this.areaOfUserCreatedShape = 0;
-  this.perimeterOfUserCreatedShape = 0;
-  this.color1Proportion = null;
-
-  // Add and lay out the game control buttons.
-  this.gameControlButtons = [];
-  const buttonOptions = {
-    font: BUTTON_FONT,
-    baseColor: BUTTON_FILL,
-    cornerRadius: 4,
-    touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
-    touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
-    maxWidth: ( this.layoutBounds.maxX - this.shapeBoardOriginalBounds.maxX ) * 0.9
-  };
-  this.checkAnswerButton = new TextPushButton( checkString, merge( {
-    listener: function() {
-      self.updateUserAnswer();
-      gameModel.checkAnswer();
-    }
-  }, buttonOptions ) );
-  this.gameControlButtons.push( this.checkAnswerButton );
-
-  this.nextButton = new TextPushButton( nextString, merge( {
-    listener: function() {
-      self.numberEntryControl.clear();
-      gameModel.nextChallenge();
-    }
-  }, buttonOptions ) );
-  this.gameControlButtons.push( this.nextButton );
-
-  this.tryAgainButton = new TextPushButton( tryAgainString, merge( {
-    listener: function() {
-      self.numberEntryControl.clear();
-      gameModel.tryAgain();
-    }
-  }, buttonOptions ) );
-  this.gameControlButtons.push( this.tryAgainButton );
-
-  // Solution button for 'find the area' style of challenge, which has one specific answer.
-  this.solutionButton = new TextPushButton( solutionString, merge( {
-    listener: function() {
-      gameModel.displayCorrectAnswer();
-    }
-  }, buttonOptions ) );
-  this.gameControlButtons.push( this.solutionButton );
-
-  // Solution button for 'build it' style of challenge, which has many potential answers.
-  this.showASolutionButton = new TextPushButton( aSolutionString, merge( {
-    listener: function() {
-      self.okayToUpdateYouBuiltWindow = false;
-      gameModel.displayCorrectAnswer();
-    }
-  }, buttonOptions ) );
-  this.gameControlButtons.push( this.showASolutionButton );
-
-  const buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
-  const buttonBottom = this.shapeBoard.bottom;
-  this.gameControlButtons.forEach( function( button ) {
-    button.centerX = buttonCenterX;
-    button.bottom = buttonBottom;
-    self.controlLayer.addChild( button );
-  } );
-
-  // Add the number entry control, which is only visible on certain challenge types.
-  this.numberEntryControl = new NumberEntryControl( {
-    centerX: buttonCenterX,
-    bottom: this.checkAnswerButton.top - 10
-  } );
-  this.challengeLayer.addChild( this.numberEntryControl );
-  this.areaQuestionPrompt = new Text( areaQuestionString, { // This prompt goes with the number entry control.
-    font: new PhetFont( 20 ),
-    centerX: this.numberEntryControl.centerX,
-    bottom: this.numberEntryControl.top - 10,
-    maxWidth: this.numberEntryControl.width
-  } );
-  this.challengeLayer.addChild( this.areaQuestionPrompt );
-
-  this.numberEntryControl.keypad.valueStringProperty.link( function( valueString ) {
-
-    // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
-    // this case, we go ahead and make the state transition to the next state.
-    if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
-      gameModel.tryAgain();
-    }
-
-    // Update the state of the 'Check' button when the user enters new digits.
-    self.updatedCheckButtonEnabledState();
-  } );
-
-  // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
-  this.faceWithPointsNode = new FaceWithPointsNode( {
-    faceDiameter: 85,
-    pointsAlignment: 'rightBottom',
-    centerX: buttonCenterX,
-    top: buttonBottom + 20,
-    pointsFont: new PhetFont( { size: 20, weight: 'bold' } )
-  } );
-  this.addChild( this.faceWithPointsNode );
-
-  // Handle comings and goings of model shapes.
-  gameModel.simSpecificModel.movableShapes.addItemAddedListener( function( addedShape ) {
-
-    // Create and add the view representation for this shape.
-    const shapeNode = new ShapeNode( addedShape, self.layoutBounds );
-    self.challengeLayer.addChild( shapeNode );
-
-    // Add a listener that handles changes to the userControlled state.
-    const userControlledListener = function( userControlled ) {
-      if ( userControlled ) {
-        shapeNode.moveToFront();
-
-        // If the game was in the state where it was prompting the user to try again, and the user started
-        // interacting with shapes without pressing the 'Try Again' button, go ahead and make the state change
-        // automatically.
+        // If the game was showing the user incorrect feedback when they pressed this button, auto-advance to the
+        // next state.
         if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
+          self.numberEntryControl.clear();
           gameModel.tryAgain();
         }
       }
-    };
-    addedShape.userControlledProperty.link( userControlledListener );
+    } );
+    this.challengeLayer.addChild( this.eraserButton );
+    this.youBuiltWindow = new YouBuiltWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
+    this.challengeLayer.addChild( this.youBuiltWindow );
+    this.youEnteredWindow = new YouEnteredWindow( this.layoutBounds.width - this.shapeBoard.right - 14 );
+    this.challengeLayer.addChild( this.youEnteredWindow );
+    this.challengePromptBanner = new GameInfoBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, '#1b1464', {
+      left: this.shapeBoard.left,
+      bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
+    } );
+    this.challengeLayer.addChild( this.challengePromptBanner );
+    this.solutionBanner = new GameInfoBanner( this.shapeBoard.width, INFO_BANNER_HEIGHT, '#fbb03b', {
+      left: this.shapeBoard.left,
+      bottom: this.shapeBoard.top - SPACE_AROUND_SHAPE_PLACEMENT_BOARD
+    } );
+    this.challengeLayer.addChild( this.solutionBanner );
 
-    // Add the removal listener for if and when this shape is removed from the model.
-    gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
-      if ( removedShape === addedShape ) {
-        self.challengeLayer.removeChild( shapeNode );
-        addedShape.userControlledProperty.unlink( userControlledListener );
-        gameModel.simSpecificModel.movableShapes.removeItemRemovedListener( removalListener );
+    // Add the control panel
+    this.controlPanel = new AreaBuilderControlPanel(
+      gameModel.simSpecificModel.showGridOnBoardProperty,
+      gameModel.simSpecificModel.showDimensionsProperty,
+      { centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2, bottom: this.shapeBoard.bottom }
+    );
+    this.controlLayer.addChild( this.controlPanel );
+
+    // Add the scoreboard.
+    this.scoreboard = new AreaBuilderScoreboard(
+      gameModel.levelProperty,
+      gameModel.challengeIndexProperty,
+      gameModel.challengesPerSet,
+      gameModel.scoreProperty,
+      gameModel.elapsedTimeProperty,
+      {
+        centerX: ( this.layoutBounds.x + this.shapeBoard.left ) / 2,
+        top: this.shapeBoard.top,
+        maxWidth: this.controlPanel.width
+      }
+    );
+    this.controlLayer.addChild( this.scoreboard );
+
+    // Control visibility of elapsed time indicator in the scoreboard.
+    this.model.timerEnabledProperty.link( function( timerEnabled ) {
+      self.scoreboard.timeVisibleProperty.set( timerEnabled );
+    } );
+
+    // Add the button for returning to the level selection screen.
+    this.controlLayer.addChild( new RectangularPushButton( {
+      content: new Text( startOverString, { font: BUTTON_FONT, maxWidth: this.controlPanel.width } ),
+      touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
+      listener: function() {
+        gameModel.simSpecificModel.reset();
+        gameModel.setChoosingLevelState();
+      },
+      baseColor: BUTTON_FILL,
+      centerX: this.scoreboard.centerX,
+      centerY: this.solutionBanner.centerY
+    } ) );
+
+    // Add the 'Build Prompt' node that is shown temporarily over the board to instruct the user about what to build.
+    this.buildPromptVBox = new VBox( {
+      children: [
+        this.yourGoalTitle
+      ],
+      spacing: 20
+    } );
+    this.buildPromptPanel = new Panel( this.buildPromptVBox, {
+      stroke: null,
+      xMargin: 10,
+      yMargin: 10
+    } );
+    this.challengeLayer.addChild( this.buildPromptPanel );
+
+    // Define some variables for taking a snapshot of the user's solution.
+    this.areaOfUserCreatedShape = 0;
+    this.perimeterOfUserCreatedShape = 0;
+    this.color1Proportion = null;
+
+    // Add and lay out the game control buttons.
+    this.gameControlButtons = [];
+    const buttonOptions = {
+      font: BUTTON_FONT,
+      baseColor: BUTTON_FILL,
+      cornerRadius: 4,
+      touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
+      touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
+      maxWidth: ( this.layoutBounds.maxX - this.shapeBoardOriginalBounds.maxX ) * 0.9
+    };
+    this.checkAnswerButton = new TextPushButton( checkString, merge( {
+      listener: function() {
+        self.updateUserAnswer();
+        gameModel.checkAnswer();
+      }
+    }, buttonOptions ) );
+    this.gameControlButtons.push( this.checkAnswerButton );
+
+    this.nextButton = new TextPushButton( nextString, merge( {
+      listener: function() {
+        self.numberEntryControl.clear();
+        gameModel.nextChallenge();
+      }
+    }, buttonOptions ) );
+    this.gameControlButtons.push( this.nextButton );
+
+    this.tryAgainButton = new TextPushButton( tryAgainString, merge( {
+      listener: function() {
+        self.numberEntryControl.clear();
+        gameModel.tryAgain();
+      }
+    }, buttonOptions ) );
+    this.gameControlButtons.push( this.tryAgainButton );
+
+    // Solution button for 'find the area' style of challenge, which has one specific answer.
+    this.solutionButton = new TextPushButton( solutionString, merge( {
+      listener: function() {
+        gameModel.displayCorrectAnswer();
+      }
+    }, buttonOptions ) );
+    this.gameControlButtons.push( this.solutionButton );
+
+    // Solution button for 'build it' style of challenge, which has many potential answers.
+    this.showASolutionButton = new TextPushButton( aSolutionString, merge( {
+      listener: function() {
+        self.okayToUpdateYouBuiltWindow = false;
+        gameModel.displayCorrectAnswer();
+      }
+    }, buttonOptions ) );
+    this.gameControlButtons.push( this.showASolutionButton );
+
+    const buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
+    const buttonBottom = this.shapeBoard.bottom;
+    this.gameControlButtons.forEach( function( button ) {
+      button.centerX = buttonCenterX;
+      button.bottom = buttonBottom;
+      self.controlLayer.addChild( button );
+    } );
+
+    // Add the number entry control, which is only visible on certain challenge types.
+    this.numberEntryControl = new NumberEntryControl( {
+      centerX: buttonCenterX,
+      bottom: this.checkAnswerButton.top - 10
+    } );
+    this.challengeLayer.addChild( this.numberEntryControl );
+    this.areaQuestionPrompt = new Text( areaQuestionString, { // This prompt goes with the number entry control.
+      font: new PhetFont( 20 ),
+      centerX: this.numberEntryControl.centerX,
+      bottom: this.numberEntryControl.top - 10,
+      maxWidth: this.numberEntryControl.width
+    } );
+    this.challengeLayer.addChild( this.areaQuestionPrompt );
+
+    this.numberEntryControl.keypad.valueStringProperty.link( function( valueString ) {
+
+      // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
+      // this case, we go ahead and make the state transition to the next state.
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
+        gameModel.tryAgain();
+      }
+
+      // Update the state of the 'Check' button when the user enters new digits.
+      self.updatedCheckButtonEnabledState();
+    } );
+
+    // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
+    this.faceWithPointsNode = new FaceWithPointsNode( {
+      faceDiameter: 85,
+      pointsAlignment: 'rightBottom',
+      centerX: buttonCenterX,
+      top: buttonBottom + 20,
+      pointsFont: new PhetFont( { size: 20, weight: 'bold' } )
+    } );
+    this.addChild( this.faceWithPointsNode );
+
+    // Handle comings and goings of model shapes.
+    gameModel.simSpecificModel.movableShapes.addItemAddedListener( function( addedShape ) {
+
+      // Create and add the view representation for this shape.
+      const shapeNode = new ShapeNode( addedShape, self.layoutBounds );
+      self.challengeLayer.addChild( shapeNode );
+
+      // Add a listener that handles changes to the userControlled state.
+      const userControlledListener = function( userControlled ) {
+        if ( userControlled ) {
+          shapeNode.moveToFront();
+
+          // If the game was in the state where it was prompting the user to try again, and the user started
+          // interacting with shapes without pressing the 'Try Again' button, go ahead and make the state change
+          // automatically.
+          if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
+            gameModel.tryAgain();
+          }
+        }
+      };
+      addedShape.userControlledProperty.link( userControlledListener );
+
+      // Add the removal listener for if and when this shape is removed from the model.
+      gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
+        if ( removedShape === addedShape ) {
+          self.challengeLayer.removeChild( shapeNode );
+          addedShape.userControlledProperty.unlink( userControlledListener );
+          gameModel.simSpecificModel.movableShapes.removeItemRemovedListener( removalListener );
+        }
+      } );
+
+      // If the initial build prompt is visible, hide it.
+      if ( self.buildPromptPanel.opacity === 1 ) {
+        // using a function instead, see Seasons sim, PanelNode.js for an example.
+        new Animation( {
+          from: self.buildPromptPanel.opacity,
+          to: 0,
+          setValue: opacity => { self.buildPromptPanel.opacity = opacity; },
+          duration: 0.5,
+          easing: Easing.CUBIC_IN_OUT
+        } ).start();
+      }
+
+      // If this is a 'built it' style challenge, and this is the first element being added to the board, add the
+      // build spec to the banner so that the user can reference it as they add more shapes to the board.
+      if ( gameModel.currentChallengeProperty.get().buildSpec && self.challengePromptBanner.buildSpecProperty.value === null ) {
+        self.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallengeProperty.get().buildSpec;
       }
     } );
 
-    // If the initial build prompt is visible, hide it.
-    if ( self.buildPromptPanel.opacity === 1 ) {
-      // using a function instead, see Seasons sim, PanelNode.js for an example.
-      new Animation( {
-        from: self.buildPromptPanel.opacity,
-        to: 0,
-        setValue: opacity => { self.buildPromptPanel.opacity = opacity; },
-        duration: 0.5,
-        easing: Easing.CUBIC_IN_OUT
-      } ).start();
-    }
-
-    // If this is a 'built it' style challenge, and this is the first element being added to the board, add the
-    // build spec to the banner so that the user can reference it as they add more shapes to the board.
-    if ( gameModel.currentChallengeProperty.get().buildSpec && self.challengePromptBanner.buildSpecProperty.value === null ) {
-      self.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallengeProperty.get().buildSpec;
-    }
-  } );
-
-  gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function() {
-    // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being given
-    // the opportunity to view a solution, and the user just removed a piece, check if they now have the correct
-    // answer.
-    if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && !self.isAnyShapeMoving() ) {
-      self.model.checkAnswer();
-    }
-  } );
-
-  gameModel.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
-
-    self.updatedCheckButtonEnabledState();
-
-    // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
-    // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
-    // window.
-    if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON &&
-         self.model.currentChallengeProperty.get().buildSpec &&
-         self.okayToUpdateYouBuiltWindow ) {
-      self.updateUserAnswer();
-      self.updateYouBuiltWindow( self.model.currentChallengeProperty.get() );
-
-      // If the user has put all shapes away, check to see if they now have the correct answer.
-      if ( !self.isAnyShapeMoving() ) {
+    gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function() {
+      // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being given
+      // the opportunity to view a solution, and the user just removed a piece, check if they now have the correct
+      // answer.
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && !self.isAnyShapeMoving() ) {
         self.model.checkAnswer();
       }
-    }
-  } );
+    } );
 
-  // Various other initialization
-  this.levelCompletedNode = null; // @private
-  this.shapeCarouselLayer = new Node(); // @private
-  this.challengeLayer.addChild( this.shapeCarouselLayer );
-  this.clearDimensionsControlOnNextChallenge = false; // @private
+    gameModel.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
 
-  // Hook up the update function for handling changes to game state.
-  gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
+      self.updatedCheckButtonEnabledState();
 
-  // Set up a flag to block updates of the 'You Built' window when showing the solution.  This is necessary because
-  // adding the shapes to the board in order to show the solution triggers updates of this window.
-  this.okayToUpdateYouBuiltWindow = true; // @private
-}
+      // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
+      // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
+      // window.
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON &&
+           self.model.currentChallengeProperty.get().buildSpec &&
+           self.okayToUpdateYouBuiltWindow ) {
+        self.updateUserAnswer();
+        self.updateYouBuiltWindow( self.model.currentChallengeProperty.get() );
 
-areaBuilder.register( 'AreaBuilderGameView', AreaBuilderGameView );
+        // If the user has put all shapes away, check to see if they now have the correct answer.
+        if ( !self.isAnyShapeMoving() ) {
+          self.model.checkAnswer();
+        }
+      }
+    } );
 
-inherit( ScreenView, AreaBuilderGameView, {
+    // Various other initialization
+    this.levelCompletedNode = null; // @private
+    this.shapeCarouselLayer = new Node(); // @private
+    this.challengeLayer.addChild( this.shapeCarouselLayer );
+    this.clearDimensionsControlOnNextChallenge = false; // @private
+
+    // Hook up the update function for handling changes to game state.
+    gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
+
+    // Set up a flag to block updates of the 'You Built' window when showing the solution.  This is necessary because
+    // adding the shapes to the board in order to show the solution triggers updates of this window.
+    this.okayToUpdateYouBuiltWindow = true; // @private
+  }
 
   // @private, When the game state changes, update the view with the appropriate buttons and readouts.
-  handleGameStateChange: function( gameState ) {
+  handleGameStateChange( gameState ) {
 
     // Hide all nodes - the appropriate ones will be shown later based on the current state.
     this.hideAllGameNodes();
@@ -466,16 +462,16 @@ inherit( ScreenView, AreaBuilderGameView, {
       default:
         throw new Error( 'Unhandled game state: ' + gameState );
     }
-  },
+  }
 
   // @private
-  handleChoosingLevelState: function() {
+  handleChoosingLevelState() {
     this.show( [ this.startGameLevelNode ] );
     this.hideChallenge();
-  },
+  }
 
   // @private
-  handlePresentingInteractiveChallengeState: function( challenge ) {
+  handlePresentingInteractiveChallengeState( challenge ) {
     this.challengeLayer.pickable = null; // Pass through, prunes subtree, see Scenery documentation for details.
     this.presentChallenge();
 
@@ -506,10 +502,10 @@ inherit( ScreenView, AreaBuilderGameView, {
       this.model.simSpecificModel.showDimensionsProperty.set( false );
       this.clearDimensionsControlOnNextChallenge = false;
     }
-  },
+  }
 
   // @private
-  handleShowingCorrectAnswerFeedbackState: function( challenge ) {
+  handleShowingCorrectAnswerFeedbackState( challenge ) {
 
     // Make a list of the nodes to be shown in this state.
     const nodesToShow = [
@@ -540,10 +536,10 @@ inherit( ScreenView, AreaBuilderGameView, {
 
     // Make the nodes visible
     this.show( nodesToShow );
-  },
+  }
 
   // @private
-  handleShowingIncorrectAnswerFeedbackTryAgainState: function( challenge ) {
+  handleShowingIncorrectAnswerFeedbackTryAgainState( challenge ) {
 
     // Make a list of the nodes to be shown in this state.
     const nodesToShow = [
@@ -576,10 +572,10 @@ inherit( ScreenView, AreaBuilderGameView, {
 
     // Show the nodes
     this.show( nodesToShow );
-  },
+  }
 
   // @private
-  handleShowingIncorrectAnswerFeedbackMoveOnState: function( challenge ) {
+  handleShowingIncorrectAnswerFeedbackMoveOnState( challenge ) {
 
     // Make a list of the nodes to be shown in this state.
     const nodesToShow = [
@@ -620,10 +616,10 @@ inherit( ScreenView, AreaBuilderGameView, {
 
     // Show the nodes.
     this.show( nodesToShow );
-  },
+  }
 
   // @private
-  handleDisplayingCorrectAnswerState: function( challenge ) {
+  handleDisplayingCorrectAnswerState( challenge ) {
     // Make a list of the nodes to be shown in this state.
     const nodesToShow = [
       this.scoreboard,
@@ -661,10 +657,10 @@ inherit( ScreenView, AreaBuilderGameView, {
 
     // Show the nodes.
     this.show( nodesToShow );
-  },
+  }
 
   // @private
-  handleShowingLevelResultsState: function() {
+  handleShowingLevelResultsState() {
     if ( this.model.scoreProperty.get() === this.model.maxPossibleScore ) {
       this.gameAudioPlayer.gameOverPerfectScore();
     }
@@ -677,10 +673,10 @@ inherit( ScreenView, AreaBuilderGameView, {
 
     this.showLevelResultsNode();
     this.hideChallenge();
-  },
+  }
 
   // @private Update the window that depicts what the user has built.
-  updateYouBuiltWindow: function( challenge ) {
+  updateYouBuiltWindow( challenge ) {
     assert && assert( challenge.buildSpec, 'This method should only be called for challenges that include a build spec.' );
     const userBuiltSpec = new BuildSpec(
       this.areaOfUserCreatedShape,
@@ -695,19 +691,19 @@ inherit( ScreenView, AreaBuilderGameView, {
     this.youBuiltWindow.setColorBasedOnAnswerCorrectness( userBuiltSpec.equals( challenge.buildSpec ) );
     this.youBuiltWindow.centerY = this.shapeBoardOriginalBounds.centerY;
     this.youBuiltWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoardOriginalBounds.maxX ) / 2;
-  },
+  }
 
   // @private Update the window that depicts what the user has entered using the keypad.
-  updateYouEnteredWindow: function( challenge ) {
+  updateYouEnteredWindow( challenge ) {
     assert && assert( challenge.checkSpec === 'areaEntered', 'This method should only be called for find-the-area style challenges.' );
     this.youEnteredWindow.setValueEntered( this.model.simSpecificModel.areaGuess );
     this.youEnteredWindow.setColorBasedOnAnswerCorrectness( challenge.backgroundShape.unitArea === this.model.simSpecificModel.areaGuess );
     this.youEnteredWindow.centerY = this.shapeBoardOriginalBounds.centerY;
     this.youEnteredWindow.centerX = ( this.layoutBounds.maxX + this.shapeBoardOriginalBounds.maxX ) / 2;
-  },
+  }
 
   // @private Grab a snapshot of whatever the user has built or entered
-  updateUserAnswer: function() {
+  updateUserAnswer() {
     // Save the parameters of what the user has built, if they've built anything.
     this.areaOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().area;
     this.perimeterOfUserCreatedShape = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().perimeter;
@@ -721,10 +717,10 @@ inherit( ScreenView, AreaBuilderGameView, {
 
     // Submit the user's area guess, if there is one.
     this.model.simSpecificModel.areaGuess = this.numberEntryControl.value;
-  },
+  }
 
   // @private Returns true if any shape is animating or user controlled, false if not.
-  isAnyShapeMoving: function() {
+  isAnyShapeMoving() {
     for ( let i = 0; i < this.model.simSpecificModel.movableShapes.length; i++ ) {
       if ( this.model.simSpecificModel.movableShapes.get( i ).animatingProperty.get() ||
            this.model.simSpecificModel.movableShapes.get( i ).userControlledProperty.get() ) {
@@ -732,10 +728,10 @@ inherit( ScreenView, AreaBuilderGameView, {
       }
     }
     return false;
-  },
+  }
 
   // @private, Present the challenge to the user and set things up so that they can submit their answer.
-  presentChallenge: function() {
+  presentChallenge() {
 
     const self = this;
 
@@ -859,10 +855,10 @@ inherit( ScreenView, AreaBuilderGameView, {
         }
       }
     }
-  },
+  }
 
   // @private, Utility method for hiding all of the game nodes whose visibility changes during the course of a challenge.
-  hideAllGameNodes: function() {
+  hideAllGameNodes() {
     this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
     this.setNodeVisibility( false, [
       this.startGameLevelNode,
@@ -878,32 +874,32 @@ inherit( ScreenView, AreaBuilderGameView, {
       this.shapeCarouselLayer,
       this.eraserButton
     ] );
-  },
+  }
 
   // @private
-  show: function( nodesToShow ) {
+  show( nodesToShow ) {
     nodesToShow.forEach( function( nodeToShow ) { nodeToShow.visible = true; } );
-  },
+  }
 
   // @private
-  setNodeVisibility: function( isVisible, nodes ) {
+  setNodeVisibility( isVisible, nodes ) {
     nodes.forEach( function( node ) { node.visible = isVisible; } );
-  },
+  }
 
   // @private
-  hideChallenge: function() {
+  hideChallenge() {
     this.challengeLayer.visible = false;
     this.controlLayer.visible = false;
-  },
+  }
 
-  // Show the graphic model elements for this challenge.
-  showChallengeGraphics: function() {
+  // @private Show the graphic model elements for this challenge.
+  showChallengeGraphics() {
     this.challengeLayer.visible = true;
     this.controlLayer.visible = true;
-  },
+  }
 
   // @private
-  updatedCheckButtonEnabledState: function() {
+  updatedCheckButtonEnabledState() {
     if ( this.model.currentChallengeProperty.get() ) {
       if ( this.model.currentChallengeProperty.get().checkSpec === 'areaEntered' ) {
         this.checkAnswerButton.enabled = this.numberEntryControl.keypad.valueStringProperty.value.length > 0;
@@ -912,10 +908,10 @@ inherit( ScreenView, AreaBuilderGameView, {
         this.checkAnswerButton.enabled = this.model.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.get().area > 0;
       }
     }
-  },
+  }
 
   // @private
-  showLevelResultsNode: function() {
+  showLevelResultsNode() {
     const self = this;
 
     // Set a new "level completed" node based on the results.
@@ -941,6 +937,7 @@ inherit( ScreenView, AreaBuilderGameView, {
     // Add the node.
     this.rootNode.addChild( levelCompletedNode );
   }
-} );
+}
 
+areaBuilder.register( 'AreaBuilderGameView', AreaBuilderGameView );
 export default AreaBuilderGameView;
