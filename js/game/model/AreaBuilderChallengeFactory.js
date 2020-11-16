@@ -252,7 +252,7 @@ function AreaBuilderChallengeFactory() {
   // Function for creating a 'shape kit' of the basic shapes of the specified color.
   function createBasicRectanglesShapeKit( color ) {
     const kit = [];
-    BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
+    BASIC_RECTANGLES_SHAPE_KIT.forEach( kitElement => {
       kit.push( { shape: kitElement.shape, color: color } );
     } );
     return kit;
@@ -260,7 +260,7 @@ function AreaBuilderChallengeFactory() {
 
   function createTwoToneRectangleBuildKit( color1, color2 ) {
     const kit = [];
-    BASIC_RECTANGLES_SHAPE_KIT.forEach( function( kitElement ) {
+    BASIC_RECTANGLES_SHAPE_KIT.forEach( kitElement => {
       const color1Element = {
         shape: kitElement.shape,
         color: color1
@@ -279,11 +279,11 @@ function AreaBuilderChallengeFactory() {
     const reflectedPoints = [];
     let minX = Number.POSITIVE_INFINITY;
     let maxX = Number.NEGATIVE_INFINITY;
-    perimeterPointList.forEach( function( point ) {
+    perimeterPointList.forEach( point => {
       minX = Math.min( point.x, minX );
       maxX = Math.max( point.x, maxX );
     } );
-    perimeterPointList.forEach( function( point ) {
+    perimeterPointList.forEach( point => {
       reflectedPoints.push( new Vector2( -1 * ( point.x - minX - maxX ), point.y ) );
     } );
     return reflectedPoints;
@@ -293,11 +293,11 @@ function AreaBuilderChallengeFactory() {
     const reflectedPoints = [];
     let minY = Number.POSITIVE_INFINITY;
     let maxY = Number.NEGATIVE_INFINITY;
-    perimeterPointList.forEach( function( point ) {
+    perimeterPointList.forEach( point => {
       minY = Math.min( point.y, minY );
       maxY = Math.max( point.y, maxY );
     } );
-    perimeterPointList.forEach( function( point ) {
+    perimeterPointList.forEach( point => {
       reflectedPoints.push( new Vector2( point.x, -1 * ( point.y - minY - maxY ) ) );
     } );
     return reflectedPoints;
@@ -915,19 +915,19 @@ function AreaBuilderChallengeFactory() {
    * @param numChallenges
    * @returns {Array}
    */
-  this.generateChallengeSet = function( level, numChallenges ) {
+  this.generateChallengeSet = ( level, numChallenges ) => {
     let challengeSet = [];
     let tempChallenge;
     switch( level ) {
       case 0:
-        _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );
-        _.times( 2, function() { challengeSet.push( generateUniqueChallenge( generateRectangularFindAreaChallenge ) ); } );
+        _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );
+        _.times( 2, () => { challengeSet.push( generateUniqueChallenge( generateRectangularFindAreaChallenge ) ); } );
         challengeSet.push( generateUniqueChallenge( generateLShapedFindAreaChallenge ) );
         break;
 
       case 1:
-        _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateBuildAreaAndPerimeterChallenge ) ); } );
-        _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateTwoRectangleBuildAreaAndPerimeterChallenge ) ); } );
+        _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateBuildAreaAndPerimeterChallenge ) ); } );
+        _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateTwoRectangleBuildAreaAndPerimeterChallenge ) ); } );
         break;
 
       case 2:
@@ -939,7 +939,7 @@ function AreaBuilderChallengeFactory() {
           generateUniqueChallenge( generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge ),
           generateUniqueChallenge( generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge )
         ] );
-        triangleChallenges.forEach( function( challenge ) { challengeSet.push( challenge ); } );
+        triangleChallenges.forEach( challenge => { challengeSet.push( challenge ); } );
         challengeSet.push( generateUniqueChallenge( generateLargeRectWithPieceMissingChallenge ) );
         break;
 
@@ -962,13 +962,13 @@ function AreaBuilderChallengeFactory() {
         break;
 
       case 4:
-        _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaChallenge ) ); } );
-        _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaChallenge ) ); } );
+        _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaChallenge ) ); } );
+        _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaChallenge ) ); } );
         break;
 
       case 5:
-        _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaAndPerimeterChallenge ) ); } );
-        _.times( 3, function() { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) ); } );
+        _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateEasyProportionalBuildAreaAndPerimeterChallenge ) ); } );
+        _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateHarderProportionalBuildAreaAndPerimeterChallenge ) ); } );
         break;
 
       default:
@@ -980,5 +980,4 @@ function AreaBuilderChallengeFactory() {
 }
 
 areaBuilder.register( 'AreaBuilderChallengeFactory', AreaBuilderChallengeFactory );
-
 export default AreaBuilderChallengeFactory;

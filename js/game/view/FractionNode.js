@@ -6,7 +6,6 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
@@ -14,47 +13,45 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import areaBuilder from '../../areaBuilder.js';
 
-/**
- * @param {Fraction} fraction
- * @param {Object} [options]
- * @constructor
- */
-function FractionNode( fraction, options ) {
-  Node.call( this );
-  options = merge( {
-    // default options
-    font: new PhetFont( { size: 18 } ),
-    color: 'black',
-    fractionBarLineWidth: 1,
+class FractionNode extends Node {
 
-    // this option controls the width of the fraction bar as a function of the widest of the numerator and denominator.
-    fractionBarWidthProportion: 1.1
-  }, options );
+  /**
+   * @param {Fraction} fraction
+   * @param {Object} [options]
+   */
+  constructor( fraction, options ) {
+    super();
+    options = merge( {
+      // default options
+      font: new PhetFont( { size: 18 } ),
+      color: 'black',
+      fractionBarLineWidth: 1,
 
-  assert && assert( options.fractionBarWidthProportion >= 1, 'The fraction bar must be at least the width of the larger fraction component.' );
+      // this option controls the width of the fraction bar as a function of the widest of the numerator and denominator.
+      fractionBarWidthProportion: 1.1
+    }, options );
 
-  // Create and add the pieces
-  this.numeratorNode = new Text( '0', { font: options.font, fill: options.color } );
-  this.addChild( this.numeratorNode );
-  this.denominatorNode = new Text( '0', { font: options.font, fill: options.color } );
-  this.addChild( this.denominatorNode );
-  const fractionBarWidth = options.fractionBarWidthProportion * Math.max( this.numeratorNode.width, this.denominatorNode.width );
-  this.fractionBarNode = new Line( 0, 0, fractionBarWidth, 0, {
-    stroke: options.color,
-    lineWidth: options.fractionBarLineWidth
-  } );
-  this.addChild( this.fractionBarNode );
+    assert && assert( options.fractionBarWidthProportion >= 1, 'The fraction bar must be at least the width of the larger fraction component.' );
 
-  this._fraction = fraction;
-  this.update();
-}
+    // Create and add the pieces
+    this.numeratorNode = new Text( '0', { font: options.font, fill: options.color } );
+    this.addChild( this.numeratorNode );
+    this.denominatorNode = new Text( '0', { font: options.font, fill: options.color } );
+    this.addChild( this.denominatorNode );
+    const fractionBarWidth = options.fractionBarWidthProportion * Math.max( this.numeratorNode.width, this.denominatorNode.width );
+    this.fractionBarNode = new Line( 0, 0, fractionBarWidth, 0, {
+      stroke: options.color,
+      lineWidth: options.fractionBarLineWidth
+    } );
+    this.addChild( this.fractionBarNode );
 
-areaBuilder.register( 'FractionNode', FractionNode );
+    this._fraction = fraction;
+    this.update();
+  }
 
-inherit( Node, FractionNode, {
 
   // @private
-  update: function() {
+  update() {
     this.numeratorNode.text = this._fraction.numerator.toString();
     this.denominatorNode.text = this._fraction.denominator.toString();
 
@@ -68,17 +65,17 @@ inherit( Node, FractionNode, {
     this.denominatorNode.centerX = this.fractionBarNode.centerX;
     this.fractionBarNode.centerY = this.numeratorNode.bottom;
     this.denominatorNode.top = this.fractionBarNode.bottom;
-  },
+  }
 
   set fraction( fraction ) {
     this._fraction = fraction;
     this.update();
-  },
+  }
 
   get fraction() {
     return this._fraction;
   }
+}
 
-} );
-
+areaBuilder.register( 'FractionNode', FractionNode );
 export default FractionNode;

@@ -25,7 +25,7 @@ const GRID_ICON_OPTIONS = {
  * Static object, not meant to be instantiated.
  */
 const GameIconFactory = {
-  createIcon: function( level ) {
+  createIcon( level ) {
     let color;
     let occupiedCells;
     switch( level ) {
@@ -163,5 +163,4 @@ const GameIconFactory = {
 };
 
 areaBuilder.register( 'GameIconFactory', GameIconFactory );
-
 export default GameIconFactory;

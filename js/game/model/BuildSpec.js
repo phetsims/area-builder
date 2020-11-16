@@ -7,40 +7,42 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 
-/**
- * @param {number} area - Area of the shape that the user should construct from smaller shapes
- * @param {number} [perimeter] - Perimeter of the shapes that the user should construct
- * @param {Object} [colorProportionsSpec] - An object that specifies two colors and the proportion of the first color
- * that should be present in the user's solution.
- * @constructor
- */
-function BuildSpec( area, perimeter, colorProportionsSpec ) {
-  assert && assert( typeof ( area ) === 'number' || area === AreaBuilderSharedConstants.INVALID_VALUE );
-  this.area = area;
-  if ( typeof ( perimeter ) !== 'undefined' && perimeter !== null ) {
-    assert && assert( typeof ( perimeter ) === 'number' || perimeter === AreaBuilderSharedConstants.INVALID_VALUE );
-    this.perimeter = perimeter;
-  }
-  if ( colorProportionsSpec ) {
-    assert && assert( colorProportionsSpec.color1Proportion instanceof Fraction );
-    this.proportions = {
-      color1: Color.toColor( colorProportionsSpec.color1 ),
-      color2: Color.toColor( colorProportionsSpec.color2 ),
-      color1Proportion: colorProportionsSpec.color1Proportion
-    };
-  }
-}
+class BuildSpec {
 
-areaBuilder.register( 'BuildSpec', BuildSpec );
+  /**
+   * @param {number} area - Area of the shape that the user should construct from smaller shapes
+   * @param {number} [perimeter] - Perimeter of the shapes that the user should construct
+   * @param {Object} [colorProportionsSpec] - An object that specifies two colors and the proportion of the first color
+   * that should be present in the user's solution.
+   */
+  constructor( area, perimeter, colorProportionsSpec ) {
+    assert && assert( typeof ( area ) === 'number' || area === AreaBuilderSharedConstants.INVALID_VALUE );
+    this.area = area;
+    if ( typeof ( perimeter ) !== 'undefined' && perimeter !== null ) {
+      assert && assert( typeof ( perimeter ) === 'number' || perimeter === AreaBuilderSharedConstants.INVALID_VALUE );
+      this.perimeter = perimeter;
+    }
+    if ( colorProportionsSpec ) {
+      assert && assert( colorProportionsSpec.color1Proportion instanceof Fraction );
+      this.proportions = {
+        color1: Color.toColor( colorProportionsSpec.color1 ),
+        color2: Color.toColor( colorProportionsSpec.color2 ),
+        color1Proportion: colorProportionsSpec.color1Proportion
+      };
+    }
+  }
 
-inherit( Object, BuildSpec, {
-  equals: function( that ) {
+  /**
+   * @param {BuildSpec} that
+   * @returns {boolean}
+   * @public
+   */
+  equals( that ) {
 
     if ( !( that instanceof BuildSpec ) ) { return false; }
 
@@ -72,27 +74,54 @@ inherit( Object, BuildSpec, {
              this.proportions.color2.equals( that.proportions.color2 ) &&
              this.proportions.color1Proportion.equals( that.proportions.color1Proportion ) );
   }
-}, {
 
-  // Static creator functions
-  areaOnly: function( area ) {
+
+  /**
+   * @param area
+   * @returns {BuildSpec}
+   * @public
+   */
+  static areaOnly( area ) {
     return new BuildSpec( area );
-  },
+  }
 
-  areaAndPerimeter: function( area, perimeter ) {
+  /**
+   * @param area
+   * @param perimeter
+   * @returns {BuildSpec}
+   * @public
+   */
+  static areaAndPerimeter( area, perimeter ) {
     return new BuildSpec( area, perimeter );
-  },
+  }
 
-  areaAndProportions: function( area, color1, color2, color1Proportion ) {
+  /**
+   * @param area
+   * @param color1
+   * @param color2
+   * @param color1Proportion
+   * @returns {BuildSpec}
+   * @public
+   */
+  static areaAndProportions( area, color1, color2, color1Proportion ) {
     return new BuildSpec( area, null, {
         color1: color1,
         color2: color2,
         color1Proportion: color1Proportion
       }
     );
-  },
+  }
 
-  areaPerimeterAndProportions: function( area, perimeter, color1, color2, color1Proportion ) {
+  /**
+   * @param area
+   * @param perimeter
+   * @param color1
+   * @param color2
+   * @param color1Proportion
+   * @returns {BuildSpec}
+   * @public
+   */
+  static areaPerimeterAndProportions( area, perimeter, color1, color2, color1Proportion ) {
     return new BuildSpec( area, perimeter, {
         color1: color1,
         color2: color2,
@@ -100,6 +129,7 @@ inherit( Object, BuildSpec, {
       }
     );
   }
-} );
+}
 
+areaBuilder.register( 'BuildSpec', BuildSpec );
 export default BuildSpec;

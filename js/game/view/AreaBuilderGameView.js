@@ -77,14 +77,14 @@ class AreaBuilderGameView extends ScreenView {
   constructor( gameModel ) {
     super( { layoutBounds: AreaBuilderSharedConstants.LAYOUT_BOUNDS } );
     const self = this;
-    self.model = gameModel;
+    this.model = gameModel;
 
     // Create the game audio player.
     this.gameAudioPlayer = new GameAudioPlayer();
 
     // Create a root node and send to back so that the layout bounds box can be made visible if needed.
     this.rootNode = new Node();
-    this.addChild( self.rootNode );
+    this.addChild( this.rootNode );
     this.rootNode.moveToBack();
 
     // Add layers used to control game appearance.
@@ -95,11 +95,11 @@ class AreaBuilderGameView extends ScreenView {
 
     // Add the node that allows the user to choose a game level to play.
     this.startGameLevelNode = new StartGameLevelNode(
-      function( level ) {
-        self.numberEntryControl.clear();
+      level => {
+        this.numberEntryControl.clear();
         gameModel.startLevel( level );
       },
-      function() { gameModel.reset(); },
+      () => { gameModel.reset(); },
       gameModel.timerEnabledProperty,
       [
         GameIconFactory.createIcon( 1 ),
@@ -134,7 +134,7 @@ class AreaBuilderGameView extends ScreenView {
       top: this.shapeBoard.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
       touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
       touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
-      listener: function() {
+      listener: () => {
 
         const challenge = gameModel.currentChallengeProperty.get();
         let shapeReleaseMode = 'fade';
@@ -150,7 +150,7 @@ class AreaBuilderGameView extends ScreenView {
         // If the game was showing the user incorrect feedback when they pressed this button, auto-advance to the
         // next state.
         if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_TRY_AGAIN ) {
-          self.numberEntryControl.clear();
+          this.numberEntryControl.clear();
           gameModel.tryAgain();
         }
       }
@@ -195,8 +195,8 @@ class AreaBuilderGameView extends ScreenView {
     this.controlLayer.addChild( this.scoreboard );
 
     // Control visibility of elapsed time indicator in the scoreboard.
-    this.model.timerEnabledProperty.link( function( timerEnabled ) {
-      self.scoreboard.timeVisibleProperty.set( timerEnabled );
+    this.model.timerEnabledProperty.link( timerEnabled => {
+      this.scoreboard.timeVisibleProperty.set( timerEnabled );
     } );
 
     // Add the button for returning to the level selection screen.
@@ -204,7 +204,7 @@ class AreaBuilderGameView extends ScreenView {
       content: new Text( startOverString, { font: BUTTON_FONT, maxWidth: this.controlPanel.width } ),
       touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
       touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
-      listener: function() {
+      listener: () => {
         gameModel.simSpecificModel.reset();
         gameModel.setChoosingLevelState();
       },
@@ -243,24 +243,24 @@ class AreaBuilderGameView extends ScreenView {
       maxWidth: ( this.layoutBounds.maxX - this.shapeBoardOriginalBounds.maxX ) * 0.9
     };
     this.checkAnswerButton = new TextPushButton( checkString, merge( {
-      listener: function() {
-        self.updateUserAnswer();
+      listener: () => {
+        this.updateUserAnswer();
         gameModel.checkAnswer();
       }
     }, buttonOptions ) );
     this.gameControlButtons.push( this.checkAnswerButton );
 
     this.nextButton = new TextPushButton( nextString, merge( {
-      listener: function() {
-        self.numberEntryControl.clear();
+      listener: () => {
+        this.numberEntryControl.clear();
         gameModel.nextChallenge();
       }
     }, buttonOptions ) );
     this.gameControlButtons.push( this.nextButton );
 
     this.tryAgainButton = new TextPushButton( tryAgainString, merge( {
-      listener: function() {
-        self.numberEntryControl.clear();
+      listener: () => {
+        this.numberEntryControl.clear();
         gameModel.tryAgain();
       }
     }, buttonOptions ) );
@@ -268,7 +268,7 @@ class AreaBuilderGameView extends ScreenView {
 
     // Solution button for 'find the area' style of challenge, which has one specific answer.
     this.solutionButton = new TextPushButton( solutionString, merge( {
-      listener: function() {
+      listener: () => {
         gameModel.displayCorrectAnswer();
       }
     }, buttonOptions ) );
@@ -276,8 +276,8 @@ class AreaBuilderGameView extends ScreenView {
 
     // Solution button for 'build it' style of challenge, which has many potential answers.
     this.showASolutionButton = new TextPushButton( aSolutionString, merge( {
-      listener: function() {
-        self.okayToUpdateYouBuiltWindow = false;
+      listener: () => {
+        this.okayToUpdateYouBuiltWindow = false;
         gameModel.displayCorrectAnswer();
       }
     }, buttonOptions ) );
@@ -285,10 +285,10 @@ class AreaBuilderGameView extends ScreenView {
 
     const buttonCenterX = ( this.layoutBounds.width + this.shapeBoard.right ) / 2;
     const buttonBottom = this.shapeBoard.bottom;
-    this.gameControlButtons.forEach( function( button ) {
+    this.gameControlButtons.forEach( button => {
       button.centerX = buttonCenterX;
       button.bottom = buttonBottom;
-      self.controlLayer.addChild( button );
+      this.controlLayer.addChild( button );
     } );
 
     // Add the number entry control, which is only visible on certain challenge types.
@@ -305,7 +305,7 @@ class AreaBuilderGameView extends ScreenView {
     } );
     this.challengeLayer.addChild( this.areaQuestionPrompt );
 
-    this.numberEntryControl.keypad.valueStringProperty.link( function( valueString ) {
+    this.numberEntryControl.keypad.valueStringProperty.link( valueString => {
 
       // Handle the case where the user just starts entering digits instead of pressing the "Try Again" button.  In
       // this case, we go ahead and make the state transition to the next state.
@@ -314,7 +314,7 @@ class AreaBuilderGameView extends ScreenView {
       }
 
       // Update the state of the 'Check' button when the user enters new digits.
-      self.updatedCheckButtonEnabledState();
+      this.updatedCheckButtonEnabledState();
     } );
 
     // Add the 'feedback node' that is used to visually indicate correct and incorrect answers.
@@ -328,14 +328,14 @@ class AreaBuilderGameView extends ScreenView {
     this.addChild( this.faceWithPointsNode );
 
     // Handle comings and goings of model shapes.
-    gameModel.simSpecificModel.movableShapes.addItemAddedListener( function( addedShape ) {
+    gameModel.simSpecificModel.movableShapes.addItemAddedListener( addedShape => {
 
       // Create and add the view representation for this shape.
-      const shapeNode = new ShapeNode( addedShape, self.layoutBounds );
-      self.challengeLayer.addChild( shapeNode );
+      const shapeNode = new ShapeNode( addedShape, this.layoutBounds );
+      this.challengeLayer.addChild( shapeNode );
 
       // Add a listener that handles changes to the userControlled state.
-      const userControlledListener = function( userControlled ) {
+      const userControlledListener = userControlled => {
         if ( userControlled ) {
           shapeNode.moveToFront();
 
@@ -359,12 +359,12 @@ class AreaBuilderGameView extends ScreenView {
       } );
 
       // If the initial build prompt is visible, hide it.
-      if ( self.buildPromptPanel.opacity === 1 ) {
+      if ( this.buildPromptPanel.opacity === 1 ) {
         // using a function instead, see Seasons sim, PanelNode.js for an example.
         new Animation( {
-          from: self.buildPromptPanel.opacity,
+          from: this.buildPromptPanel.opacity,
           to: 0,
-          setValue: opacity => { self.buildPromptPanel.opacity = opacity; },
+          setValue: opacity => { this.buildPromptPanel.opacity = opacity; },
           duration: 0.5,
           easing: Easing.CUBIC_IN_OUT
         } ).start();
@@ -372,36 +372,36 @@ class AreaBuilderGameView extends ScreenView {
 
       // If this is a 'built it' style challenge, and this is the first element being added to the board, add the
       // build spec to the banner so that the user can reference it as they add more shapes to the board.
-      if ( gameModel.currentChallengeProperty.get().buildSpec && self.challengePromptBanner.buildSpecProperty.value === null ) {
-        self.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallengeProperty.get().buildSpec;
+      if ( gameModel.currentChallengeProperty.get().buildSpec && this.challengePromptBanner.buildSpecProperty.value === null ) {
+        this.challengePromptBanner.buildSpecProperty.value = gameModel.currentChallengeProperty.get().buildSpec;
       }
     } );
 
-    gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function() {
+    gameModel.simSpecificModel.movableShapes.addItemRemovedListener( () => {
       // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being given
       // the opportunity to view a solution, and the user just removed a piece, check if they now have the correct
       // answer.
-      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && !self.isAnyShapeMoving() ) {
-        self.model.checkAnswer();
+      if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON && !this.isAnyShapeMoving() ) {
+        this.model.checkAnswer();
       }
     } );
 
-    gameModel.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
+    gameModel.simSpecificModel.shapePlacementBoard.areaAndPerimeterProperty.link( areaAndPerimeter => {
 
-      self.updatedCheckButtonEnabledState();
+      this.updatedCheckButtonEnabledState();
 
       // If the challenge is a 'build it' style challenge, and the game is in the state where the user is being
       // given the opportunity to view a solution, and they just changed what they had built, update the 'you built'
       // window.
       if ( gameModel.gameStateProperty.value === GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON &&
-           self.model.currentChallengeProperty.get().buildSpec &&
-           self.okayToUpdateYouBuiltWindow ) {
-        self.updateUserAnswer();
-        self.updateYouBuiltWindow( self.model.currentChallengeProperty.get() );
+           this.model.currentChallengeProperty.get().buildSpec &&
+           this.okayToUpdateYouBuiltWindow ) {
+        this.updateUserAnswer();
+        this.updateYouBuiltWindow( this.model.currentChallengeProperty.get() );
 
         // If the user has put all shapes away, check to see if they now have the correct answer.
-        if ( !self.isAnyShapeMoving() ) {
-          self.model.checkAnswer();
+        if ( !this.isAnyShapeMoving() ) {
+          this.model.checkAnswer();
         }
       }
     } );
@@ -413,7 +413,7 @@ class AreaBuilderGameView extends ScreenView {
     this.clearDimensionsControlOnNextChallenge = false; // @private
 
     // Hook up the update function for handling changes to game state.
-    gameModel.gameStateProperty.link( self.handleGameStateChange.bind( self ) );
+    gameModel.gameStateProperty.link( this.handleGameStateChange.bind( this ) );
 
     // Set up a flag to block updates of the 'You Built' window when showing the solution.  This is necessary because
     // adding the shapes to the board in order to show the solution triggers updates of this window.
@@ -733,8 +733,6 @@ class AreaBuilderGameView extends ScreenView {
   // @private, Present the challenge to the user and set things up so that they can submit their answer.
   presentChallenge() {
 
-    const self = this;
-
     if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
 
       // Clean up previous challenge.
@@ -815,11 +813,11 @@ class AreaBuilderGameView extends ScreenView {
       // Create the carousel if included as part of this challenge
       if ( challenge.userShapes !== null ) {
         const creatorNodes = [];
-        challenge.userShapes.forEach( function( userShapeSpec ) {
+        challenge.userShapes.forEach( userShapeSpec => {
           const creatorNodeOptions = {
             gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH,
-            shapeDragBounds: self.layoutBounds,
-            nonMovingAncestor: self.shapeCarouselLayer
+            shapeDragBounds: this.layoutBounds,
+            nonMovingAncestor: this.shapeCarouselLayer
           };
           if ( userShapeSpec.creationLimit ) {
             creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
@@ -827,7 +825,7 @@ class AreaBuilderGameView extends ScreenView {
           creatorNodes.push( new ShapeCreatorNode(
             userShapeSpec.shape,
             userShapeSpec.color,
-            self.model.simSpecificModel.addUserCreatedMovableShape.bind( self.model.simSpecificModel ),
+            this.model.simSpecificModel.addUserCreatedMovableShape.bind( this.model.simSpecificModel ),
             creatorNodeOptions
           ) );
         } );
@@ -859,7 +857,7 @@ class AreaBuilderGameView extends ScreenView {
 
   // @private, Utility method for hiding all of the game nodes whose visibility changes during the course of a challenge.
   hideAllGameNodes() {
-    this.gameControlButtons.forEach( function( button ) { button.visible = false; } );
+    this.gameControlButtons.forEach( button => { button.visible = false; } );
     this.setNodeVisibility( false, [
       this.startGameLevelNode,
       this.faceWithPointsNode,
@@ -878,12 +876,12 @@ class AreaBuilderGameView extends ScreenView {
 
   // @private
   show( nodesToShow ) {
-    nodesToShow.forEach( function( nodeToShow ) { nodeToShow.visible = true; } );
+    nodesToShow.forEach( nodeToShow => { nodeToShow.visible = true; } );
   }
 
   // @private
   setNodeVisibility( isVisible, nodes ) {
-    nodes.forEach( function( node ) { node.visible = isVisible; } );
+    nodes.forEach( node => { node.visible = isVisible; } );
   }
 
   // @private
@@ -912,8 +910,6 @@ class AreaBuilderGameView extends ScreenView {
 
   // @private
   showLevelResultsNode() {
-    const self = this;
-
     // Set a new "level completed" node based on the results.
     var levelCompletedNode = new LevelCompletedNode(
       this.model.levelProperty.get() + 1,
@@ -923,14 +919,14 @@ class AreaBuilderGameView extends ScreenView {
       this.model.timerEnabledProperty.get(),
       this.model.elapsedTimeProperty.get(),
       this.model.bestTimes[ this.model.levelProperty.get() ],
-      self.model.newBestTime,
-      function() {
-        self.model.gameStateProperty.set( GameState.CHOOSING_LEVEL );
-        self.rootNode.removeChild( levelCompletedNode );
+      this.model.newBestTime,
+      () => {
+        this.model.gameStateProperty.set( GameState.CHOOSING_LEVEL );
+        this.rootNode.removeChild( levelCompletedNode );
         levelCompletedNode = null;
       },
       {
-        center: self.layoutBounds.center
+        center: this.layoutBounds.center
       }
     );
 

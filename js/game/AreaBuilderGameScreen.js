@@ -23,6 +23,7 @@ import AreaBuilderGameView from './view/AreaBuilderGameView.js';
 const gameString = areaBuilderStrings.game;
 
 class AreaBuilderGameScreen extends Screen {
+
   constructor( tandem ) {
 
     const options = {
@@ -37,8 +38,8 @@ class AreaBuilderGameScreen extends Screen {
     };
 
     super(
-      function() { return new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ); },
-      function( model ) { return new AreaBuilderGameView( model ); },
+      () => new QuizGameModel( new AreaBuilderChallengeFactory(), new AreaBuilderGameModel() ),
+      model => new AreaBuilderGameView( model ),
       options
     );
   }

@@ -15,77 +15,76 @@
 
 import Property from '../../../../axon/js/Property.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import areaBuilder from '../../areaBuilder.js';
 import GameState from './GameState.js';
 
-/**
- * @param challengeFactory - Factory object that is used to create challenges, examine usage for details.
- * @param simSpecificModel - Model containing the elements of the game that are unique to this sim, used to delegate
- * delegate certain actions.  Look through code for usage details.
- * @param {Object} [options]
- * @constructor
- */
-function QuizGameModel( challengeFactory, simSpecificModel, options ) {
-  const self = this;
-  this.challengeFactory = challengeFactory; // @private
-  this.simSpecificModel = simSpecificModel; // @public
+class QuizGameModel {
 
-  options = merge( {
-    numberOfLevels: 6,
-    challengesPerSet: 6,
-    maxPointsPerChallenge: 2,
-    maxAttemptsPerChallenge: 2
-  }, options );
+  /**
+   * @param challengeFactory - Factory object that is used to create challenges, examine usage for details.
+   * @param simSpecificModel - Model containing the elements of the game that are unique to this sim, used to delegate
+   * delegate certain actions.  Look through code for usage details.
+   * @param {Object} [options]
+   */
+  constructor( challengeFactory, simSpecificModel, options ) {
+    this.challengeFactory = challengeFactory; // @private
+    this.simSpecificModel = simSpecificModel; // @public
 
-  // @public - model properties
-  this.timerEnabledProperty = new Property( false );
-  this.levelProperty = new Property( 0 );
-  this.challengeIndexProperty = new Property( 0 );
-  this.currentChallengeProperty = new Property( null );
-  this.scoreProperty = new Property( 0 );
-  this.elapsedTimeProperty = new Property( 0 );
-  this.gameStateProperty = new Property( GameState.CHOOSING_LEVEL ); // Current state of the game, see GameState for valid values.
+    options = merge( {
+      numberOfLevels: 6,
+      challengesPerSet: 6,
+      maxPointsPerChallenge: 2,
+      maxAttemptsPerChallenge: 2
+    }, options );
 
-  // other public vars
-  this.numberOfLevels = options.numberOfLevels; // @public
-  this.challengesPerSet = options.challengesPerSet; // @public
-  this.maxPointsPerChallenge = options.maxPointsPerChallenge; // @public
-  this.maxPossibleScore = options.challengesPerSet * options.maxPointsPerChallenge; // @public
-  this.maxAttemptsPerChallenge = options.maxAttemptsPerChallenge; // @private
+    // @public - model properties
+    this.timerEnabledProperty = new Property( false );
+    this.levelProperty = new Property( 0 );
+    this.challengeIndexProperty = new Property( 0 );
+    this.currentChallengeProperty = new Property( null );
+    this.scoreProperty = new Property( 0 );
+    this.elapsedTimeProperty = new Property( 0 );
+    this.gameStateProperty = new Property( GameState.CHOOSING_LEVEL ); // Current state of the game, see GameState for valid values.
 
-  // @private Wall time at which current level was started.
-  self.gameStartTime = 0;
+    // other public vars
+    this.numberOfLevels = options.numberOfLevels; // @public
+    this.challengesPerSet = options.challengesPerSet; // @public
+    this.maxPointsPerChallenge = options.maxPointsPerChallenge; // @public
+    this.maxPossibleScore = options.challengesPerSet * options.maxPointsPerChallenge; // @public
+    this.maxAttemptsPerChallenge = options.maxAttemptsPerChallenge; // @private
 
-  // Best times and scores.
-  self.bestTimes = []; // @public
-  self.bestScoreProperties = []; // @public
-  _.times( options.numberOfLevels, function() {
-    self.bestTimes.push( null );
-    self.bestScoreProperties.push( new Property( 0 ) );
-  } );
+    // @private Wall time at which current level was started.
+    this.gameStartTime = 0;
 
-  // Counter used to track number of incorrect answers.
-  this.incorrectGuessesOnCurrentChallenge = 0; // @public
+    // Best times and scores.
+    this.bestTimes = []; // @public
+    this.bestScoreProperties = []; // @public
+    _.times( options.numberOfLevels, () => {
+      this.bestTimes.push( null );
+      this.bestScoreProperties.push( new Property( 0 ) );
+    } );
 
-  // Current set of challenges, which collectively comprise a single level, on which the user is currently working.
-  self.challengeList = null;  // @private
+    // Counter used to track number of incorrect answers.
+    this.incorrectGuessesOnCurrentChallenge = 0; // @public
 
-  // Let the sim-specific model know when the challenge changes.
-  self.currentChallengeProperty.lazyLink( function( challenge ) { simSpecificModel.setChallenge( challenge ); } );
-}
+    // Current set of challenges, which collectively comprise a single level, on which the user is currently working.
+    this.challengeList = null;  // @private
 
-areaBuilder.register( 'QuizGameModel', QuizGameModel );
+    // Let the sim-specific model know when the challenge changes.
+    this.currentChallengeProperty.lazyLink( challenge => { simSpecificModel.setChallenge( challenge ); } );
+  }
 
-inherit( Object, QuizGameModel, {
   // @private
-  step: function( dt ) {
+  step( dt ) {
     this.simSpecificModel.step( dt );
-  },
+  }
 
-  // reset this model
-  reset: function() {
+  /**
+   * reset this model
+   * @public
+   */
+  reset() {
     this.timerEnabledProperty.reset();
     this.levelProperty.reset();
     this.challengeIndexProperty.reset();
@@ -93,16 +92,19 @@ inherit( Object, QuizGameModel, {
     this.scoreProperty.reset();
     this.elapsedTimeProperty.reset();
     this.gameStateProperty.reset();
-    this.bestScoreProperties.forEach( function( bestScoreProperty ) { bestScoreProperty.reset(); } );
+    this.bestScoreProperties.forEach( bestScoreProperty => { bestScoreProperty.reset(); } );
     this.bestTimes = [];
-    const self = this;
-    _.times( this.numberOfLevels, function() {
-      self.bestTimes.push( null );
+    _.times( this.numberOfLevels, () => {
+      this.bestTimes.push( null );
     } );
-  },
+  }
 
-  // starts new level
-  startLevel: function( level ) {
+  /**
+   * starts new level
+   * @param {number} level
+   * @public
+   */
+  startLevel( level ) {
     this.levelProperty.set( level );
     this.scoreProperty.reset();
     this.challengeIndexProperty.set( 0 );
@@ -123,23 +125,35 @@ inherit( Object, QuizGameModel, {
 
     // Flag set to indicate new best time, cleared each time a level is started.
     this.newBestTime = false;
-  },
+  }
 
-  setChoosingLevelState: function() {
+  /**
+   * @public
+   */
+  setChoosingLevelState() {
     this.gameStateProperty.set( GameState.CHOOSING_LEVEL );
-  },
+  }
 
-  getChallengeCurrentPointValue: function() {
+  /**
+   * @public
+   */
+  getChallengeCurrentPointValue() {
     return Math.max( this.maxPointsPerChallenge - this.incorrectGuessesOnCurrentChallenge, 0 );
-  },
+  }
 
-  // Check the user's proposed answer.
-  checkAnswer: function( answer ) {
+  /**
+   * Check the user's proposed answer.
+   * @public
+   */
+  checkAnswer( answer ) {
     this.handleProposedAnswer( this.simSpecificModel.checkAnswer( this.currentChallengeProperty.get() ) );
-  },
+  }
 
-  // @private
-  handleProposedAnswer: function( answerIsCorrect ) {
+  /**
+   * @param answerIsCorrect
+   * @private
+   */
+  handleProposedAnswer( answerIsCorrect ) {
     let pointsEarned = 0;
     if ( answerIsCorrect ) {
       // The user answered the challenge correctly.
@@ -164,17 +178,20 @@ inherit( Object, QuizGameModel, {
         this.gameStateProperty.set( GameState.SHOWING_INCORRECT_ANSWER_FEEDBACK_MOVE_ON );
       }
     }
-  },
+  }
 
   // @private
-  newGame: function() {
+  newGame() {
     this.stopGameTimer();
     this.gameStateProperty.set( GameState.CHOOSING_LEVEL );
     this.incorrectGuessesOnCurrentChallenge = 0;
-  },
+  }
 
-  // Move to the next challenge in the current challenge set.
-  nextChallenge: function() {
+  /**
+   * Move to the next challenge in the current challenge set.
+   * @public
+   */
+  nextChallenge() {
     const currentLevel = this.levelProperty.get();
     this.incorrectGuessesOnCurrentChallenge = 0;
     if ( this.challengeIndexProperty.get() + 1 < this.challengeList.length ) {
@@ -197,37 +214,43 @@ inherit( Object, QuizGameModel, {
       // Done with this game, show the results.
       this.gameStateProperty.set( GameState.SHOWING_LEVEL_RESULTS );
     }
-  },
+  }
 
-  tryAgain: function() {
+  /**
+   * @public
+   */
+  tryAgain() {
     this.simSpecificModel.tryAgain();
     this.gameStateProperty.set( GameState.PRESENTING_INTERACTIVE_CHALLENGE );
-  },
+  }
 
-  displayCorrectAnswer: function() {
+  /**
+   * @public
+   */
+  displayCorrectAnswer() {
 
     // Set the challenge to display the correct answer.
     this.simSpecificModel.displayCorrectAnswer( this.currentChallengeProperty.get() );
 
     // Update the game state.
     this.gameStateProperty.set( GameState.DISPLAYING_CORRECT_ANSWER );
-  },
+  }
 
   // @private
-  restartGameTimer: function() {
+  restartGameTimer() {
     if ( this.gameTimerId !== null ) {
       window.clearInterval( this.gameTimerId );
     }
     this.elapsedTimeProperty.set( 0 );
-    const self = this;
-    this.gameTimerId = stepTimer.setInterval( function() { self.elapsedTimeProperty.value += 1; }, 1000 );
-  },
+    this.gameTimerId = stepTimer.setInterval( () => { this.elapsedTimeProperty.value += 1; }, 1000 );
+  }
 
   // @private
-  stopGameTimer: function() {
+  stopGameTimer() {
     window.clearInterval( this.gameTimerId );
     this.gameTimerId = null;
   }
-} );
+}
 
+areaBuilder.register( 'QuizGameModel', QuizGameModel );
 export default QuizGameModel;
