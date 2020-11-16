@@ -52,7 +52,7 @@ class AreaBuilderExploreView extends ScreenView {
     this.addChild( rightExploreNode );
 
     // Control which board(s), bucket(s), and shapes are visible.
-    model.boardDisplayModeProperty.link( function( boardDisplayMode ) {
+    model.boardDisplayModeProperty.link( boardDisplayMode => {
       centerExploreNode.visible = boardDisplayMode === 'single';
       singleBoardShapesLayer.pickable = boardDisplayMode === 'single';
       leftExploreNode.visible = boardDisplayMode === 'dual';
@@ -73,7 +73,7 @@ class AreaBuilderExploreView extends ScreenView {
       radius: AreaBuilderSharedConstants.RESET_BUTTON_RADIUS,
       right: this.layoutBounds.width - AreaBuilderSharedConstants.CONTROLS_INSET,
       bottom: this.layoutBounds.height - AreaBuilderSharedConstants.CONTROLS_INSET,
-      listener: function() {
+      listener: () => {
         centerExploreNode.reset();
         leftExploreNode.reset();
         rightExploreNode.reset();

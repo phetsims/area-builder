@@ -18,6 +18,9 @@ import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.
 
 class BoardDisplayModePanel extends Panel {
 
+  /**
+   * @param boardDisplayModeProperty
+   */
   constructor( boardDisplayModeProperty ) {
 
     const singleBoardIcon = createIcon( AreaBuilderSharedConstants.ORANGISH_COLOR, 6, [
@@ -65,7 +68,7 @@ class BoardDisplayModePanel extends Panel {
 function createIcon( color, rectangleLength, rectanglePositions ) {
   const edgeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
   const content = new Node();
-  rectanglePositions.forEach( function( position ) {
+  rectanglePositions.forEach( position => {
     content.addChild( new Rectangle( 0, 0, rectangleLength, rectangleLength, 0, 0, {
       fill: color,
       stroke: edgeColor,

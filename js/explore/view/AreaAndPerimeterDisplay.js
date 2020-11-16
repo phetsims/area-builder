@@ -64,7 +64,7 @@ class AreaAndPerimeterDisplay extends AccordionBox {
     contentNode.addChild( perimeterReadout );
     const readoutsRightEdge = Math.max( perimeterCaption.right, areaCaption.right ) + 8 + tempTwoDigitString.width;
 
-    areaAndPerimeterProperty.link( function( areaAndPerimeter ) {
+    areaAndPerimeterProperty.link( areaAndPerimeter => {
       areaReadout.text = areaAndPerimeter.area;
       areaReadout.bottom = areaCaption.bottom;
       areaReadout.right = readoutsRightEdge;

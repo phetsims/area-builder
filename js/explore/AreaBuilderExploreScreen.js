@@ -21,6 +21,10 @@ import AreaBuilderExploreView from './view/AreaBuilderExploreView.js';
 const exploreString = areaBuilderStrings.explore;
 
 class AreaBuilderExploreScreen extends Screen {
+
+  /**
+   * @param {Tandem} tandem
+   */
   constructor( tandem ) {
 
     const options = {
@@ -35,8 +39,8 @@ class AreaBuilderExploreScreen extends Screen {
     };
 
     super(
-      function() { return new AreaBuilderExploreModel(); },
-      function( model ) { return new AreaBuilderExploreView( model ); },
+      () => new AreaBuilderExploreModel(),
+      model => new AreaBuilderExploreView( model ),
       options
     );
   }
