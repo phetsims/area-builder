@@ -46,5 +46,4 @@ const AreaBuilderSharedConstants = {
 };
 
 areaBuilder.register( 'AreaBuilderSharedConstants', AreaBuilderSharedConstants );
-
 export default AreaBuilderSharedConstants;

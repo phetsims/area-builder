@@ -10,7 +10,6 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
@@ -18,61 +17,61 @@ import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
 // constants
 const FADE_RATE = 2; // proportion per second
 
-/**
- * @param {Shape} shape
- * @param {Color || string} color
- * @param {Vector2} initialPosition
- * @constructor
- */
-function MovableShape( shape, color, initialPosition ) {
-  const self = this;
+class MovableShape {
 
-  // Property that indicates where in model space the upper left corner of this shape is.  In general, this should
-  // not be set directly outside of this type, and should only be manipulated through the methods defined below.
-  this.positionProperty = new Property( initialPosition );
+  /**
+   * @param {Shape} shape
+   * @param {Color || string} color
+   * @param {Vector2} initialPosition
+   */
+  constructor( shape, color, initialPosition ) {
 
-  // Flag that tracks whether the user is dragging this shape around.  Should be set externally ; generally by the a
-  // view node.
-  this.userControlledProperty = new Property( false );
+    // Property that indicates where in model space the upper left corner of this shape is.  In general, this should
+    // not be set directly outside of this type, and should only be manipulated through the methods defined below.
+    this.positionProperty = new Property( initialPosition );
 
-  // Flag that indicates whether this element is animating from one position to another ; should not be set externally.
-  this.animatingProperty = new Property( false, {
-    reentrant: true
-  } );
+    // Flag that tracks whether the user is dragging this shape around.  Should be set externally ; generally by the a
+    // view node.
+    this.userControlledProperty = new Property( false );
 
-  // Value that indicates how faded out this shape is.  This is used as part of a feature where shapes can fade
-  // out.  Once fade has started ; it doesn't stop until it is fully faded ; i.e. the value is 1.  This should not be
-  // set externally.
-  this.fadeProportionProperty = new Property( 0 );
+    // Flag that indicates whether this element is animating from one position to another ; should not be set externally.
+    this.animatingProperty = new Property( false, {
+      reentrant: true
+    } );
 
-  // A flag that indicates whether this individual shape should become invisible when it is done animating.  This
-  // is generally used in cases where it becomes part of a larger composite shape that is depicted instead.
-  this.invisibleWhenStillProperty = new Property( true );
+    // Value that indicates how faded out this shape is.  This is used as part of a feature where shapes can fade
+    // out.  Once fade has started ; it doesn't stop until it is fully faded ; i.e. the value is 1.  This should not be
+    // set externally.
+    this.fadeProportionProperty = new Property( 0 );
 
-  // Destination is used for animation, and should be set through accessor methods only.
-  this.destination = initialPosition.copy(); // @private
+    // A flag that indicates whether this individual shape should become invisible when it is done animating.  This
+    // is generally used in cases where it becomes part of a larger composite shape that is depicted instead.
+    this.invisibleWhenStillProperty = new Property( true );
 
-  // Emit an event whenever this shape returns to its original position.
-  this.returnedToOriginEmitter = new Emitter();
-  this.positionProperty.lazyLink( function( position ) {
-    if ( position.equals( initialPosition ) ) {
-      self.returnedToOriginEmitter.emit();
-    }
-  } );
+    // Destination is used for animation, and should be set through accessor methods only.
+    this.destination = initialPosition.copy(); // @private
 
-  // Non-dynamic attributes
-  this.shape = shape; // @public, read only
-  this.color = Color.toColor( color ); // @public
+    // Emit an event whenever this shape returns to its original position.
+    this.returnedToOriginEmitter = new Emitter();
+    this.positionProperty.lazyLink( position => {
+      if ( position.equals( initialPosition ) ) {
+        this.returnedToOriginEmitter.emit();
+      }
+    } );
 
-  // Internal vars
-  this.fading = false; // @private
-}
+    // Non-dynamic attributes
+    this.shape = shape; // @public, read only
+    this.color = Color.toColor( color ); // @public
 
-areaBuilder.register( 'MovableShape', MovableShape );
+    // Internal vars
+    this.fading = false; // @private
+  }
 
-inherit( Object, MovableShape, {
-
-  step: function( dt ) {
+  /**
+   * @param {number} dt
+   * @public
+   */
+  step( dt ) {
     if ( !this.userControlledProperty.get() ) {
 
       // perform any animation
@@ -98,14 +97,15 @@ inherit( Object, MovableShape, {
         }
       }
     }
-  },
+  }
 
   /**
    * Set the destination for this shape.
    * @param {Vector2} destination
    * @param {boolean} animate
+   * @public
    */
-  setDestination: function( destination, animate ) {
+  setDestination( destination, animate ) {
     this.destination = destination;
     if ( animate ) {
       this.animatingProperty.set( true );
@@ -114,20 +114,24 @@ inherit( Object, MovableShape, {
       this.animatingProperty.set( false );
       this.positionProperty.set( this.destination );
     }
-  },
+  }
 
   /**
    * Return the shape to the place where it was originally created.
    * @param {boolean} animate
+   * @public
    */
-  returnToOrigin: function( animate ) {
+  returnToOrigin( animate ) {
     this.setDestination( this.positionProperty.initialValue, animate );
-  },
+  }
 
-  fadeAway: function() {
+  /**
+   * @public
+   */
+  fadeAway() {
     this.fading = true;
     this.fadeProportionProperty.set( 0.0001 ); // this is done to make sure the shape is made unpickable as soon as fading starts
-  },
+  }
 
   /**
    * Returns a set of squares that are of the specified size and are positioned correctly such that they collectively
@@ -136,10 +140,10 @@ inherit( Object, MovableShape, {
    *
    * NOTE: This only works properly for rectangular shapes!
    *
-   * @public
    * @param squareLength
+   * @public
    */
-  decomposeIntoSquares: function( squareLength ) {
+  decomposeIntoSquares( squareLength ) {
     assert && assert( this.shape.bounds.width % squareLength === 0 && this.shape.bounds.height % squareLength === 0,
       'Error: A dimension of this movable shape is not an integer multiple of the provided dimension' );
     const shapes = [];
@@ -154,6 +158,7 @@ inherit( Object, MovableShape, {
     }
     return shapes;
   }
-} );
+}
 
+areaBuilder.register( 'MovableShape', MovableShape );
 export default MovableShape;

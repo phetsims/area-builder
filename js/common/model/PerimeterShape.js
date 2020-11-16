@@ -9,12 +9,117 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import areaBuilder from '../../areaBuilder.js';
 
 // constants
 const FLOATING_POINT_ERR_TOLERANCE = 1e-6;
+
+class PerimeterShape {
+
+  /**
+   * @param {Array<Array<Vector2>>} exteriorPerimeters An array of perimeters, each of which is a sequential array of
+   * points.
+   * @param {Array<Array<Vector2>>} interiorPerimeters An array of perimeters, each of which is a sequential array of
+   * points. Each interior perimeter must be fully contained within an exterior perimeter.
+   * @param {number} unitLength The unit length (i.e. the width or height of a unit square) of the unit sizes that
+   * this shape should be constructed from.
+   * @param {Object} [options]
+   */
+  constructor( exteriorPerimeters, interiorPerimeters, unitLength, options ) {
+    let i;
+
+    options = merge( {
+      fillColor: null,
+      edgeColor: null
+    }, options ); // Make sure options is defined.
+
+    // @public, read only
+    this.fillColor = options.fillColor;
+
+    // @public, read only
+    this.edgeColor = options.edgeColor;
+
+    // @public, read only
+    this.exteriorPerimeters = exteriorPerimeters;
+
+    // @public, read only
+    this.interiorPerimeters = interiorPerimeters;
+
+    // @private
+    this.unitLength = unitLength;
+
+    // @private A Kite shape created from the points, useful in various situations.
+    this.kiteShape = new Shape();
+    exteriorPerimeters.forEach( exteriorPerimeter => {
+      this.kiteShape.moveToPoint( exteriorPerimeter[ 0 ] );
+      for ( i = 1; i < exteriorPerimeter.length; i++ ) {
+        this.kiteShape.lineToPoint( exteriorPerimeter[ i ] );
+      }
+      this.kiteShape.lineToPoint( exteriorPerimeter[ 0 ] );
+      this.kiteShape.close();
+    } );
+
+    // Only add interior spaces if there is a legitimate external perimeter.
+    if ( !this.kiteShape.bounds.isEmpty() ) {
+      interiorPerimeters.forEach( interiorPerimeter => {
+        this.kiteShape.moveToPoint( interiorPerimeter[ 0 ] );
+        for ( i = 1; i < interiorPerimeter.length; i++ ) {
+          this.kiteShape.lineToPoint( interiorPerimeter[ i ] );
+        }
+        this.kiteShape.lineToPoint( interiorPerimeter[ 0 ] );
+        this.kiteShape.close();
+      } );
+    }
+
+    // @public, read only
+    this.unitArea = calculateUnitArea( this.kiteShape, unitLength );
+  }
+
+  /**
+   * Returns a linearly translated version of this perimeter shape.
+   * @param {number} x
+   * @param {number} y
+   * @returns {PerimeterShape}
+   * @public
+   */
+  translated( x, y ) {
+    const exteriorPerimeters = [];
+    const interiorPerimeters = [];
+    this.exteriorPerimeters.forEach( ( exteriorPerimeter, index ) => {
+      exteriorPerimeters.push( [] );
+      exteriorPerimeter.forEach( point => {
+        exteriorPerimeters[ index ].push( point.plusXY( x, y ) );
+      } );
+    } );
+    this.interiorPerimeters.forEach( ( interiorPerimeter, index ) => {
+      interiorPerimeters.push( [] );
+      interiorPerimeter.forEach( point => {
+        interiorPerimeters[ index ].push( point.plusXY( x, y ) );
+      } );
+    } );
+    return new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitLength, {
+      fillColor: this.fillColor,
+      edgeColor: this.edgeColor
+    } );
+  }
+
+  /**
+   * @returns {number}
+   * @public
+   */
+  getWidth() {
+    return this.kiteShape.bounds.width;
+  }
+
+  /**
+   * @returns {number}
+   * @public
+   */
+  getHeight() {
+    return this.kiteShape.bounds.height;
+  }
+}
 
 // Utility function to compute the unit area of a perimeter shape.
 function calculateUnitArea( shape, unitLength ) {
@@ -56,100 +161,5 @@ function calculateUnitArea( shape, unitLength ) {
   return unitArea;
 }
 
-/**
- * @param {Array<Array<Vector2>>} exteriorPerimeters An array of perimeters, each of which is a sequential array of
- * points.
- * @param {Array<Array<Vector2>>} interiorPerimeters An array of perimeters, each of which is a sequential array of
- * points. Each interior perimeter must be fully contained within an exterior perimeter.
- * @param {number} unitLength The unit length (i.e. the width or height of a unit square) of the unit sizes that
- * this shape should be constructed from.
- * @param {Object} [options]
- * @constructor
- */
-function PerimeterShape( exteriorPerimeters, interiorPerimeters, unitLength, options ) {
-  const self = this;
-  let i;
-
-  options = merge( {
-    fillColor: null,
-    edgeColor: null
-  }, options ); // Make sure options is defined.
-
-  // @public, read only
-  this.fillColor = options.fillColor;
-
-  // @public, read only
-  this.edgeColor = options.edgeColor;
-
-  // @public, read only
-  this.exteriorPerimeters = exteriorPerimeters;
-
-  // @public, read only
-  this.interiorPerimeters = interiorPerimeters;
-
-  // @private
-  this.unitLength = unitLength;
-
-  // @private A Kite shape created from the points, useful in various situations.
-  this.kiteShape = new Shape();
-  exteriorPerimeters.forEach( function( exteriorPerimeter ) {
-    self.kiteShape.moveToPoint( exteriorPerimeter[ 0 ] );
-    for ( i = 1; i < exteriorPerimeter.length; i++ ) {
-      self.kiteShape.lineToPoint( exteriorPerimeter[ i ] );
-    }
-    self.kiteShape.lineToPoint( exteriorPerimeter[ 0 ] );
-    self.kiteShape.close();
-  } );
-
-  // Only add interior spaces if there is a legitimate external perimeter.
-  if ( !self.kiteShape.bounds.isEmpty() ) {
-    interiorPerimeters.forEach( function( interiorPerimeter ) {
-      self.kiteShape.moveToPoint( interiorPerimeter[ 0 ] );
-      for ( i = 1; i < interiorPerimeter.length; i++ ) {
-        self.kiteShape.lineToPoint( interiorPerimeter[ i ] );
-      }
-      self.kiteShape.lineToPoint( interiorPerimeter[ 0 ] );
-      self.kiteShape.close();
-    } );
-  }
-
-  // @public, read only
-  this.unitArea = calculateUnitArea( this.kiteShape, unitLength );
-}
-
 areaBuilder.register( 'PerimeterShape', PerimeterShape );
-
-inherit( Object, PerimeterShape, {
-
-  // Returns a linearly translated version of this perimeter shape.
-  translated: function( x, y ) {
-    const exteriorPerimeters = [];
-    const interiorPerimeters = [];
-    this.exteriorPerimeters.forEach( function( exteriorPerimeter, index ) {
-      exteriorPerimeters.push( [] );
-      exteriorPerimeter.forEach( function( point ) {
-        exteriorPerimeters[ index ].push( point.plusXY( x, y ) );
-      } );
-    } );
-    this.interiorPerimeters.forEach( function( interiorPerimeter, index ) {
-      interiorPerimeters.push( [] );
-      interiorPerimeter.forEach( function( point ) {
-        interiorPerimeters[ index ].push( point.plusXY( x, y ) );
-      } );
-    } );
-    return new PerimeterShape( exteriorPerimeters, interiorPerimeters, this.unitLength, {
-      fillColor: this.fillColor,
-      edgeColor: this.edgeColor
-    } );
-  },
-
-  getWidth: function() {
-    return this.kiteShape.bounds.width;
-  },
-
-  getHeight: function() {
-    return this.kiteShape.bounds.height;
-  }
-} );
-
 export default PerimeterShape;

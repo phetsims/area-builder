@@ -12,7 +12,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import areaBuilder from '../../areaBuilder.js';
@@ -32,116 +31,113 @@ const MOVEMENT_VECTORS = {
 // algorithm that is used for perimeter traversal, see the function where they are used for more information.
 const SCAN_AREA_MOVEMENT_FUNCTIONS = [
   null,                                            // 0
-  function() { return MOVEMENT_VECTORS.up; },      // 1
-  function() { return MOVEMENT_VECTORS.right; },   // 2
-  function() { return MOVEMENT_VECTORS.right; },   // 3
-  function() { return MOVEMENT_VECTORS.left; },    // 4
-  function() { return MOVEMENT_VECTORS.up; },      // 5
-  function( previousStep ) { return previousStep === MOVEMENT_VECTORS.up ? MOVEMENT_VECTORS.left : MOVEMENT_VECTORS.right; },  // 6
-  function() { return MOVEMENT_VECTORS.right; },   // 7
-  function() { return MOVEMENT_VECTORS.down; },    // 8
-  function( previousStep ) { return previousStep === MOVEMENT_VECTORS.right ? MOVEMENT_VECTORS.up : MOVEMENT_VECTORS.down; },  // 9
-  function() { return MOVEMENT_VECTORS.down; },   // 10
-  function() { return MOVEMENT_VECTORS.down; },   // 11
-  function() { return MOVEMENT_VECTORS.left; },   // 12
-  function() { return MOVEMENT_VECTORS.up; },     // 13
-  function() { return MOVEMENT_VECTORS.left; },   // 14
-  null                                            // 15
+  () => MOVEMENT_VECTORS.up,      // 1
+  () => MOVEMENT_VECTORS.right,   // 2
+  () => MOVEMENT_VECTORS.right,   // 3
+  () => MOVEMENT_VECTORS.left,    // 4
+  () => MOVEMENT_VECTORS.up,      // 5
+  previousStep => previousStep === MOVEMENT_VECTORS.up ? MOVEMENT_VECTORS.left : MOVEMENT_VECTORS.right,  // 6
+  () => MOVEMENT_VECTORS.right,   // 7
+  () => MOVEMENT_VECTORS.down,    // 8
+  previousStep => previousStep === MOVEMENT_VECTORS.right ? MOVEMENT_VECTORS.up : MOVEMENT_VECTORS.down,  // 9
+  () => MOVEMENT_VECTORS.down,   // 10
+  () => MOVEMENT_VECTORS.down,   // 11
+  () => MOVEMENT_VECTORS.left,   // 12
+  () => MOVEMENT_VECTORS.up,     // 13
+  () => MOVEMENT_VECTORS.left,   // 14
+  null                           // 15
 ];
 
-/**
- * @param {Dimension2} size
- * @param {number} unitSquareLength
- * @param {Vector2} position
- * @param {string || Color} colorHandled A string or Color object, can be wildcard string ('*') for all colors
- * @param {Property<boolean>} showGridProperty
- * @param {Property<boolean>} showDimensionsProperty
- * @constructor
- */
-function ShapePlacementBoard( size, unitSquareLength, position, colorHandled, showGridProperty, showDimensionsProperty ) {
+class ShapePlacementBoard {
 
-  // The size should be an integer number of unit squares for both dimensions.
-  assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0,
-    'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
+  /**
+   * @param {Dimension2} size
+   * @param {number} unitSquareLength
+   * @param {Vector2} position
+   * @param {string || Color} colorHandled A string or Color object, can be wildcard string ('*') for all colors
+   * @param {Property<boolean>} showGridProperty
+   * @param {Property<boolean>} showDimensionsProperty
+   */
+  constructor( size, unitSquareLength, position, colorHandled, showGridProperty, showDimensionsProperty ) {
 
-  this.showGridProperty = showGridProperty;
-  this.showDimensionsProperty = showDimensionsProperty;
+    // The size should be an integer number of unit squares for both dimensions.
+    assert && assert( size.width % unitSquareLength === 0 && size.height % unitSquareLength === 0,
+      'ShapePlacementBoard dimensions must be integral numbers of unit square dimensions' );
 
-  // Set the initial fill and edge colors for the composite shape (defined in Property declarations below).
-  this.compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
-  this.compositeShapeEdgeColor = this.compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
+    this.showGridProperty = showGridProperty;
+    this.showDimensionsProperty = showDimensionsProperty;
 
-  // @public boolean Read/Write value that controls whether the placement board moves individual shapes that are
-  // added to the board such that they form a single, contiguous, composite shape, or if it just snaps them to the
-  // grid. The perimeter and area values are only updated when this is set to true.
-  this.formCompositeProperty = new Property( true );
+    // Set the initial fill and edge colors for the composite shape (defined in Property declarations below).
+    this.compositeShapeFillColor = colorHandled === '*' ? new Color( AreaBuilderSharedConstants.GREENISH_COLOR ) : Color.toColor( colorHandled );
+    this.compositeShapeEdgeColor = this.compositeShapeFillColor.colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
 
-  // @public Read-only property that indicates the area and perimeter of the composite shape.  These must be
-  // together in an object so that they can be updated simultaneously, otherwise race conditions can occur when
-  // evaluating challenges.
-  this.areaAndPerimeterProperty = new Property( {
-    area: 0, // {number||string} - number when valid, string when invalid
-    perimeter: 0  // {number||string} number when valid, string when invalid
-  } );
+    // @public boolean Read/Write value that controls whether the placement board moves individual shapes that are
+    // added to the board such that they form a single, contiguous, composite shape, or if it just snaps them to the
+    // grid. The perimeter and area values are only updated when this is set to true.
+    this.formCompositeProperty = new Property( true );
 
-  // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by all
-  // of the individual shapes placed on the board by the user.
-  this.compositeShapeProperty = new Property( new PerimeterShape( [], [], unitSquareLength, {
-    fillColor: this.compositeShapeFillColor,
-    edgeColor: this.compositeShapeEdgeColor
-  } ) );
+    // @public Read-only property that indicates the area and perimeter of the composite shape.  These must be
+    // together in an object so that they can be updated simultaneously, otherwise race conditions can occur when
+    // evaluating challenges.
+    this.areaAndPerimeterProperty = new Property( {
+      area: 0, // {number||string} - number when valid, string when invalid
+      perimeter: 0  // {number||string} number when valid, string when invalid
+    } );
 
-  // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
-  // other shapes.  The shape is positioned relative to this board, not in absolute model space.  It should be
-  // set through the method provided on this class rather than directly.
-  this.backgroundShapeProperty = new Property(
-    new PerimeterShape( [], [], unitSquareLength, { fillColor: 'black' } )
-  );
+    // @public Read-only shape defined in terms of perimeter points that describes the composite shape created by all
+    // of the individual shapes placed on the board by the user.
+    this.compositeShapeProperty = new Property( new PerimeterShape( [], [], unitSquareLength, {
+      fillColor: this.compositeShapeFillColor,
+      edgeColor: this.compositeShapeEdgeColor
+    } ) );
 
-  // @public Read/write value for controlling whether the background shape should show a grid when portrayed in the
-  // view.
-  this.showGridOnBackgroundShapeProperty = new Property( false );
+    // @public Read-only shape that can be placed on the board, generally as a template over which the user can add
+    // other shapes.  The shape is positioned relative to this board, not in absolute model space.  It should be
+    // set through the method provided on this class rather than directly.
+    this.backgroundShapeProperty = new Property(
+      new PerimeterShape( [], [], unitSquareLength, { fillColor: 'black' } )
+    );
 
-  // Observable array of the shapes that have been placed on this board.
-  this.residentShapes = createObservableArray(); // @public, read only
+    // @public Read/write value for controlling whether the background shape should show a grid when portrayed in the
+    // view.
+    this.showGridOnBackgroundShapeProperty = new Property( false );
 
-  // Non-dynamic public values.
-  this.unitSquareLength = unitSquareLength; // @public
-  this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @public
-  this.colorHandled = colorHandled === '*' ? colorHandled : Color.toColor( colorHandled ); // @public
+    // Observable array of the shapes that have been placed on this board.
+    this.residentShapes = createObservableArray(); // @public, read only
 
-  // Private variables
-  this.numRows = size.height / unitSquareLength; // @private
-  this.numColumns = size.width / unitSquareLength; // @private
-  this.incomingShapes = []; // @private, {Array<MovableShape>}, list of shapes that are animating to a spot on this board but aren't here yet
-  this.updatesSuspended = false; // @private, used to improve performance when adding a bunch of shapes at once to the board
+    // Non-dynamic public values.
+    this.unitSquareLength = unitSquareLength; // @public
+    this.bounds = new Bounds2( position.x, position.y, position.x + size.width, position.y + size.height ); // @public
+    this.colorHandled = colorHandled === '*' ? colorHandled : Color.toColor( colorHandled ); // @public
 
-  // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
-  // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
-  // positions on this board where shapes may be placed.
-  this.cells = []; //@private
-  for ( let column = 0; column < this.numColumns; column++ ) {
-    const currentRow = [];
-    for ( let row = 0; row < this.numRows; row++ ) {
-      // Add an object that defines the information internally tracked for each cell.
-      currentRow.push( {
-        column: column,
-        row: row,
-        occupiedBy: null,   // the shape occupying this cell, null if none
-        cataloged: false,   // used by group identification algorithm
-        catalogedBy: null   // used by group identification algorithm
-      } );
+    // Private variables
+    this.numRows = size.height / unitSquareLength; // @private
+    this.numColumns = size.width / unitSquareLength; // @private
+    this.incomingShapes = []; // @private, {Array<MovableShape>}, list of shapes that are animating to a spot on this board but aren't here yet
+    this.updatesSuspended = false; // @private, used to improve performance when adding a bunch of shapes at once to the board
+
+    // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
+    // and so forth, a 2D array is used to track various state information about the 'cells' that correspond to the
+    // positions on this board where shapes may be placed.
+    this.cells = []; //@private
+    for ( let column = 0; column < this.numColumns; column++ ) {
+      const currentRow = [];
+      for ( let row = 0; row < this.numRows; row++ ) {
+        // Add an object that defines the information internally tracked for each cell.
+        currentRow.push( {
+          column: column,
+          row: row,
+          occupiedBy: null,   // the shape occupying this cell, null if none
+          cataloged: false,   // used by group identification algorithm
+          catalogedBy: null   // used by group identification algorithm
+        } );
+      }
+      this.cells.push( currentRow );
     }
-    this.cells.push( currentRow );
   }
-}
-
-areaBuilder.register( 'ShapePlacementBoard', ShapePlacementBoard );
-
-inherit( Object, ShapePlacementBoard, {
 
   // @private
-  shapeOverlapsBoard: function( shape ) {
+  shapeOverlapsBoard( shape ) {
     const shapePosition = shape.positionProperty.get();
     const shapeBounds = new Bounds2(
       shapePosition.x,
@@ -150,7 +146,7 @@ inherit( Object, ShapePlacementBoard, {
       shapePosition.y + shape.shape.bounds.getHeight()
     );
     return this.bounds.intersectsBounds( shapeBounds );
-  },
+  }
 
   /**
    * Place the provide shape on this board.  Returns false if the color does not match the handled color or if the
@@ -158,13 +154,11 @@ inherit( Object, ShapePlacementBoard, {
    * @public
    * @param {MovableShape} movableShape A model shape
    */
-  placeShape: function( movableShape ) {
+  placeShape( movableShape ) {
     assert && assert(
       movableShape.userControlledProperty.get() === false,
       'Shapes can\'t be placed when still controlled by user.'
     );
-    const self = this;
-
     // Only place the shape if it is of the correct color and is positioned so that it overlaps with the board.
     if ( ( this.colorHandled !== '*' && !movableShape.color.equals( this.colorHandled ) ) || !this.shapeOverlapsBoard( movableShape ) ) {
       return false;
@@ -183,11 +177,9 @@ inherit( Object, ShapePlacementBoard, {
         movableShape.positionProperty.get(),
         surroundingPointsLevel
       );
-      surroundingPoints.sort( function( p1, p2 ) {
-        return p1.distance( movableShape.positionProperty.get() ) - p2.distance( movableShape.positionProperty.get() );
-      } );
+      surroundingPoints.sort( ( p1, p2 ) => p1.distance( movableShape.positionProperty.get() ) - p2.distance( movableShape.positionProperty.get() ) );
       for ( let pointIndex = 0; pointIndex < surroundingPoints.length && placementPosition === null; pointIndex++ ) {
-        if ( self.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
+        if ( this.isValidToPlace( movableShape, surroundingPoints[ pointIndex ] ) ) {
           placementPosition = surroundingPoints[ pointIndex ];
         }
       }
@@ -202,7 +194,7 @@ inherit( Object, ShapePlacementBoard, {
 
     // If we made it to here, placement succeeded.
     return true;
-  },
+  }
 
   /**
    * Add a shape directly to the specified cell.  This bypasses the placement process, and is generally used when
@@ -212,27 +204,26 @@ inherit( Object, ShapePlacementBoard, {
    * @param cellRow
    * @param movableShape
    */
-  addShapeDirectlyToCell: function( cellColumn, cellRow, movableShape ) {
+  addShapeDirectlyToCell( cellColumn, cellRow, movableShape ) {
 
     // Set the shape's visibility behavior based on whether a composite shape is being depicted.
     movableShape.invisibleWhenStillProperty.set( this.formCompositeProperty.get() );
 
     // Add the shape by putting it on the list of incoming shapes and setting its destination.
     this.addIncomingShape( movableShape, this.cellToModelCoords( cellColumn, cellRow, false ) );
-  },
+  }
 
   /**
    * Get the proportion of area that match the provided color.
-   *
    * @param color
+   * @public
    */
-  getProportionOfColor: function( color ) {
-    const self = this;
+  getProportionOfColor( color ) {
     const compareColor = Color.toColor( color );
     let totalArea = 0;
     let areaOfSpecifiedColor = 0;
-    this.residentShapes.forEach( function( residentShape ) {
-      const areaOfShape = residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
+    this.residentShapes.forEach( residentShape => {
+      const areaOfShape = residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( this.unitSquareLength * this.unitSquareLength );
       totalArea += areaOfShape;
       if ( compareColor.equals( residentShape.color ) ) {
         areaOfSpecifiedColor += areaOfShape;
@@ -242,10 +233,10 @@ inherit( Object, ShapePlacementBoard, {
     const proportion = new Fraction( areaOfSpecifiedColor, totalArea );
     proportion.reduce();
     return proportion;
-  },
+  }
 
   // @private, add a shape to the list of residents and make the other updates that go along with this.
-  addResidentShape: function( movableShape, releaseOrphans ) {
+  addResidentShape( movableShape, releaseOrphans ) {
 
     // Make sure that the shape is not moving
     assert && assert(
@@ -264,15 +255,15 @@ inherit( Object, ShapePlacementBoard, {
       this.releaseAnyOrphans();
     }
     this.updateAll();
-  },
+  }
 
   //@private, remove the specified shape from the shape placement board
-  removeResidentShape: function( movableShape ) {
+  removeResidentShape( movableShape ) {
     assert && assert( this.isResidentShape( movableShape ), 'Error: Attempt to remove shape that is not a resident.' );
     const self = this;
     this.residentShapes.remove( movableShape );
-    self.updateCellOccupation( movableShape, 'remove' );
-    self.updateAll();
+    this.updateCellOccupation( movableShape, 'remove' );
+    this.updateAll();
 
     if ( movableShape.userControlledProperty.get() ) {
 
@@ -287,10 +278,10 @@ inherit( Object, ShapePlacementBoard, {
         movableShape.userControlledProperty.unlink( releaseOrphansIfDroppedOfBoard );
       } );
     }
-  },
+  }
 
   // @private, add the shape to the list of incoming shapes and set up a listener to move it to resident shapes
-  addIncomingShape: function( movableShape, destination, releaseOrphans ) {
+  addIncomingShape( movableShape, destination, releaseOrphans ) {
 
     const self = this;
 
@@ -330,78 +321,77 @@ inherit( Object, ShapePlacementBoard, {
 
     // Hook up the listener.
     movableShape.animatingProperty.lazyLink( animationCompleteListener );
-  },
+  }
 
 
   // @private, tag a listener for removal
-  tagListener: function( listener ) {
+  tagListener( listener ) {
     listener.shapePlacementBoard = this;
-  },
+  }
 
   // @private, check if listener function was tagged by this instance
-  listenerTagMatches: function( listener ) {
+  listenerTagMatches( listener ) {
     return ( listener.shapePlacementBoard && listener.shapePlacementBoard === this );
-  },
+  }
 
   // TODO: This is rather ugly.  Work with SR to improve or find alternative, or to bake into Axon.  Maybe a map.
   // @private, remove all observers from a property that have been tagged by this shape placement board.
-  removeTaggedObservers: function( property ) {
-    const self = this;
+  removeTaggedObservers( property ) {
     const taggedObservers = [];
-    property.changedEmitter.listeners.forEach( function( observer ) {
-      if ( self.listenerTagMatches( observer ) ) {
+    property.changedEmitter.listeners.forEach( observer => {
+      if ( this.listenerTagMatches( observer ) ) {
         taggedObservers.push( observer );
       }
     } );
-    taggedObservers.forEach( function( taggedObserver ) {
+    taggedObservers.forEach( taggedObserver => {
       property.unlink( taggedObserver );
     } );
-  },
+  }
 
   // @private Convenience function for returning a cell or null if row or column are out of range.
-  getCell: function( column, row ) {
+  getCell( column, row ) {
     if ( column < 0 || row < 0 || column >= this.numColumns || row >= this.numRows ) {
       return null;
     }
     return this.cells[ column ][ row ];
-  },
+  }
 
   // @private Function for getting the occupant of the specified cell, does bounds checking.
-  getCellOccupant: function( column, row ) {
+  getCellOccupant( column, row ) {
     const cell = this.getCell( column, row );
     return cell ? cell.occupiedBy : null;
-  },
+  }
 
   /**
    * Set or clear the occupation status of the cells.
-   *
    * @param movableShape
    * @param operation
+   * @private
    */
-  updateCellOccupation: function( movableShape, operation ) {
+  updateCellOccupation( movableShape, operation ) {
     const xIndex = Utils.roundSymmetric( ( movableShape.destination.x - this.bounds.minX ) / this.unitSquareLength );
     const yIndex = Utils.roundSymmetric( ( movableShape.destination.y - this.bounds.minY ) / this.unitSquareLength );
+
     // Mark all cells occupied by this shape.
     for ( let row = 0; row < movableShape.shape.bounds.height / this.unitSquareLength; row++ ) {
       for ( let column = 0; column < movableShape.shape.bounds.width / this.unitSquareLength; column++ ) {
         this.cells[ xIndex + column ][ yIndex + row ].occupiedBy = operation === 'add' ? movableShape : null;
       }
     }
-  },
+  }
 
   // @private
-  updateAreaAndTotalPerimeter: function() {
+  updateAreaAndTotalPerimeter() {
     if ( this.compositeShapeProperty.get().exteriorPerimeters.length <= 1 ) {
-      const self = this;
       let totalArea = 0;
-      this.residentShapes.forEach( function( residentShape ) {
-        totalArea += residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( self.unitSquareLength * self.unitSquareLength );
+      this.residentShapes.forEach( residentShape => {
+        totalArea += residentShape.shape.bounds.width * residentShape.shape.bounds.height / ( this.unitSquareLength * this.unitSquareLength );
       } );
       let totalPerimeter = 0;
-      this.compositeShapeProperty.get().exteriorPerimeters.forEach( function( exteriorPerimeter ) {
+      this.compositeShapeProperty.get().exteriorPerimeters.forEach( exteriorPerimeter => {
         totalPerimeter += exteriorPerimeter.length;
       } );
-      this.compositeShapeProperty.get().interiorPerimeters.forEach( function( interiorPerimeter ) {
+      this.compositeShapeProperty.get().interiorPerimeters.forEach( interiorPerimeter => {
         totalPerimeter += interiorPerimeter.length;
       } );
       this.areaAndPerimeterProperty.set( {
@@ -416,7 +406,7 @@ inherit( Object, ShapePlacementBoard, {
         perimeter: AreaBuilderSharedConstants.INVALID_VALUE
       } );
     }
-  },
+  }
 
   /**
    * Convenience function for finding out whether a cell is occupied that handles out of bounds case (returns false).
@@ -424,14 +414,14 @@ inherit( Object, ShapePlacementBoard, {
    * @param column
    * @param row
    */
-  isCellOccupied: function( column, row ) {
+  isCellOccupied( column, row ) {
     if ( column >= this.numColumns || column < 0 || row >= this.numRows || row < 0 ) {
       return false;
     }
     else {
       return this.cells[ column ][ row ].occupiedBy !== null;
     }
-  },
+  }
 
   /**
    * Function that returns true if a cell is occupied or if an incoming shape is heading for it.
@@ -439,7 +429,7 @@ inherit( Object, ShapePlacementBoard, {
    * @param column
    * @param row
    */
-  isCellOccupiedNowOrSoon: function( column, row ) {
+  isCellOccupiedNowOrSoon( column, row ) {
     if ( this.isCellOccupied( column, row ) ) {
       return true;
     }
@@ -453,7 +443,7 @@ inherit( Object, ShapePlacementBoard, {
       }
     }
     return false;
-  },
+  }
 
   /**
    * Get the outer layer of grid points surrounding the given point.  The 2nd parameter indicates how many steps away
@@ -462,8 +452,7 @@ inherit( Object, ShapePlacementBoard, {
    * @param point
    * @param levelsRemoved
    */
-  getOuterSurroundingPoints: function( point, levelsRemoved ) {
-    const self = this;
+  getOuterSurroundingPoints( point, levelsRemoved ) {
     const normalizedPoints = [];
 
     // Get the closest point in cell coordinates.
@@ -485,19 +474,19 @@ inherit( Object, ShapePlacementBoard, {
     }
 
     const outerSurroundingPoints = [];
-    normalizedPoints.forEach( function( p ) { outerSurroundingPoints.push( self.cellToModelVector( p ) ); } );
+    normalizedPoints.forEach( p => { outerSurroundingPoints.push( this.cellToModelVector( p ) ); } );
     return outerSurroundingPoints;
-  },
+  }
 
   /**
    * Determine whether it is valid to place the given shape at the given position.  For placement to be valid, the
    * shape can't overlap with any other shape, and must share at least one side with an occupied space.
-   *
    * @param movableShape
    * @param position
    * @returns {boolean}
+   * @private
    */
-  isValidToPlace: function( movableShape, position ) {
+  isValidToPlace( movableShape, position ) {
     const normalizedPosition = this.modelToCellVector( position );
     const normalizedWidth = Utils.roundSymmetric( movableShape.shape.bounds.width / this.unitSquareLength );
     const normalizedHeight = Utils.roundSymmetric( movableShape.shape.bounds.height / this.unitSquareLength );
@@ -545,7 +534,7 @@ inherit( Object, ShapePlacementBoard, {
     }
 
     return false;
-  },
+  }
 
   /**
    * Release all the shapes that are currently on this board and send them to their home positions.
@@ -553,18 +542,16 @@ inherit( Object, ShapePlacementBoard, {
    * @param releaseMode - Controls what the shapes do after release, options are 'fade', 'animateHome', and
    * 'jumpHome'.  'jumpHome' is the default.
    */
-  releaseAllShapes: function( releaseMode ) {
-    const self = this;
-
+  releaseAllShapes( releaseMode ) {
     const shapesToRelease = [];
 
     // Remove all listeners added to the shapes by this placement board.
-    this.residentShapes.forEach( function( shape ) {
-      self.removeTaggedObservers( shape.userControlledProperty );
+    this.residentShapes.forEach( shape => {
+      this.removeTaggedObservers( shape.userControlledProperty );
       shapesToRelease.push( shape );
     } );
-    this.incomingShapes.forEach( function( shape ) {
-      self.removeTaggedObservers( shape.animatingProperty );
+    this.incomingShapes.forEach( shape => {
+      this.removeTaggedObservers( shape.animatingProperty );
       shapesToRelease.push( shape );
     } );
 
@@ -580,7 +567,7 @@ inherit( Object, ShapePlacementBoard, {
     }
 
     // Tell the shapes what to do after being released.
-    shapesToRelease.forEach( function( shape ) {
+    shapesToRelease.forEach( shape => {
       if ( typeof ( releaseMode ) === 'undefined' || releaseMode === 'jumpHome' ) {
         shape.returnToOrigin( false );
       }
@@ -597,15 +584,15 @@ inherit( Object, ShapePlacementBoard, {
 
     // Update board state.
     this.updateAll();
-  },
+  }
 
   // @public - check if a shape is resident on the board
-  isResidentShape: function( shape ) {
+  isResidentShape( shape ) {
     return this.residentShapes.includes( shape );
-  },
+  }
 
   // @private
-  releaseShape: function( shape ) {
+  releaseShape( shape ) {
     assert && assert( this.isResidentShape( shape ) || this.incomingShapes.contains( shape ), 'Error: An attempt was made to release a shape that is not present.' );
     if ( this.isResidentShape( shape ) ) {
       this.removeTaggedObservers( shape.userControlledProperty );
@@ -615,31 +602,31 @@ inherit( Object, ShapePlacementBoard, {
       this.removeTaggedObservers( shape.animatingProperty );
       this.incomingShapes.splice( this.incomingShapes.indexOf( shape ), 1 );
     }
-  },
+  }
 
   //@private
-  cellToModelCoords: function( column, row ) {
+  cellToModelCoords( column, row ) {
     return new Vector2( column * this.unitSquareLength + this.bounds.minX, row * this.unitSquareLength + this.bounds.minY );
-  },
+  }
 
   //@private
-  cellToModelVector: function( v ) {
+  cellToModelVector( v ) {
     return this.cellToModelCoords( v.x, v.y );
-  },
+  }
 
   //@private
-  modelToCellCoords: function( x, y ) {
+  modelToCellCoords( x, y ) {
     return new Vector2( Utils.roundSymmetric( ( x - this.bounds.minX ) / this.unitSquareLength ),
       Utils.roundSymmetric( ( y - this.bounds.minY ) / this.unitSquareLength ) );
-  },
+  }
 
   //@private
-  modelToCellVector: function( v ) {
+  modelToCellVector( v ) {
     return this.modelToCellCoords( v.x, v.y );
-  },
+  }
 
   //@private
-  createShapeFromPerimeterPoints: function( perimeterPoints ) {
+  createShapeFromPerimeterPoints( perimeterPoints ) {
     const perimeterShape = new Shape();
     perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
     for ( let i = 1; i < perimeterPoints.length; i++ ) {
@@ -647,12 +634,12 @@ inherit( Object, ShapePlacementBoard, {
     }
     perimeterShape.close(); // Shouldn't be needed, but best to be sure.
     return perimeterShape;
-  },
+  }
 
   //@private
-  createShapeFromPerimeterList: function( perimeters ) {
+  createShapeFromPerimeterList( perimeters ) {
     const perimeterShape = new Shape();
-    perimeters.forEach( function( perimeterPoints ) {
+    perimeters.forEach( perimeterPoints => {
       perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
       for ( let i = 1; i < perimeterPoints.length; i++ ) {
         perimeterShape.lineToPoint( perimeterPoints[ i ] );
@@ -660,7 +647,7 @@ inherit( Object, ShapePlacementBoard, {
       perimeterShape.close();
     } );
     return perimeterShape;
-  },
+  }
 
   /**
    * Marching squares algorithm for scanning the perimeter of a shape, see
@@ -668,7 +655,7 @@ inherit( Object, ShapePlacementBoard, {
    * information on this.
    * @private
    */
-  scanPerimeter: function( windowStart ) {
+  scanPerimeter( windowStart ) {
     const scanWindow = windowStart.copy();
     let scanComplete = false;
     const perimeterPoints = [];
@@ -706,12 +693,10 @@ inherit( Object, ShapePlacementBoard, {
       }
     }
     return perimeterPoints;
-  },
+  }
 
   // @private, Update the exterior and interior perimeters.
-  updatePerimeters: function() {
-    const self = this;
-
+  updatePerimeters() {
     // The perimeters can only be computed for a single consolidated shape.
     if ( !this.formCompositeProperty.get() || this.residentShapes.length === 0 ) {
       this.perimeter = 0;
@@ -725,11 +710,11 @@ inherit( Object, ShapePlacementBoard, {
       // Identify each outer perimeter.  There may be more than one if the user is moving a shape that was previously
       // on this board, since any orphaned shapes are not released until the move is complete.
       const contiguousCellGroups = this.identifyContiguousCellGroups();
-      contiguousCellGroups.forEach( function( cellGroup ) {
+      contiguousCellGroups.forEach( cellGroup => {
 
         // Find the top left square of this group to use as a starting point.
         let topLeftCell = null;
-        cellGroup.forEach( function( cell ) {
+        cellGroup.forEach( cell => {
           if ( topLeftCell === null || cell.row < topLeftCell.row || ( cell.row === topLeftCell.row && cell.column < topLeftCell.column ) ) {
             topLeftCell = cell;
           }
@@ -737,7 +722,7 @@ inherit( Object, ShapePlacementBoard, {
 
         // Scan the outer perimeter and add to list.
         const topLeftCellOfGroup = new Vector2( topLeftCell.column, topLeftCell.row );
-        exteriorPerimeters.push( self.scanPerimeter( topLeftCellOfGroup ) );
+        exteriorPerimeters.push( this.scanPerimeter( topLeftCellOfGroup ) );
       } );
 
       // Scan for empty spaces enclosed within the outer perimeter(s).
@@ -761,7 +746,7 @@ inherit( Object, ShapePlacementBoard, {
 
         // Locate the top left most space
         var topLeftSpace = enclosedSpaces[ 0 ];
-        enclosedSpaces.forEach( function( cell ) {
+        enclosedSpaces.forEach( cell => {
           if ( cell.y < topLeftSpace.y || ( cell.y === topLeftSpace.y && cell.x < topLeftSpace.x ) ) {
             topLeftSpace = cell;
           }
@@ -774,9 +759,9 @@ inherit( Object, ShapePlacementBoard, {
         // Identify and save all spaces not enclosed by this perimeter.
         var perimeterShape = this.createShapeFromPerimeterPoints( enclosedPerimeterPoints );
         var leftoverEmptySpaces = [];
-        enclosedSpaces.forEach( function( enclosedSpace ) {
-          const positionPoint = self.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
-          const centerPoint = positionPoint.plusXY( self.unitSquareLength / 2, self.unitSquareLength / 2 );
+        enclosedSpaces.forEach( enclosedSpace => {
+          const positionPoint = this.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
+          const centerPoint = positionPoint.plusXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
           if ( !perimeterShape.containsPoint( centerPoint ) ) {
             // This space is not contained in the perimeter that was just mapped.
             leftoverEmptySpaces.push( enclosedSpace );
@@ -797,30 +782,25 @@ inherit( Object, ShapePlacementBoard, {
         } ) );
       }
     }
-  },
+  }
 
   // @private
-  perimeterPointsEqual: function( perimeter1, perimeter2 ) {
+  perimeterPointsEqual( perimeter1, perimeter2 ) {
     assert && assert( Array.isArray( perimeter1 ) && Array.isArray( perimeter2 ), 'Invalid parameters for perimeterPointsEqual' );
     if ( perimeter1.length !== perimeter2.length ) {
       return false;
     }
-    return perimeter1.every( function( point, index ) {
-      return ( point.equals( perimeter2[ index ] ) );
-    } );
-  },
+    return perimeter1.every( ( point, index ) => point.equals( perimeter2[ index ] ) );
+  }
 
   // @private
-  perimeterListsEqual: function( perimeterList1, perimeterList2 ) {
+  perimeterListsEqual( perimeterList1, perimeterList2 ) {
     assert && assert( Array.isArray( perimeterList1 ) && Array.isArray( perimeterList2 ), 'Invalid parameters for perimeterListsEqual' );
     if ( perimeterList1.length !== perimeterList2.length ) {
       return false;
     }
-    const self = this;
-    return perimeterList1.every( function( perimeterPoints, index ) {
-      return self.perimeterPointsEqual( perimeterPoints, perimeterList2[ index ] );
-    } );
-  },
+    return perimeterList1.every( ( perimeterPoints, index ) => this.perimeterPointsEqual( perimeterPoints, perimeterList2[ index ] ) );
+  }
 
   /**
    * Identify all cells that are adjacent to the provided cell and that are currently occupied by a shape.  Only
@@ -833,31 +813,29 @@ inherit( Object, ShapePlacementBoard, {
    * @param startCell
    * @param cellGroup
    */
-  identifyAdjacentOccupiedCells: function( startCell, cellGroup ) {
+  identifyAdjacentOccupiedCells( startCell, cellGroup ) {
     assert && assert( startCell.occupiedBy !== null, 'Usage error: Unoccupied cell passed to group identification.' );
     assert && assert( !startCell.cataloged, 'Usage error: Cataloged cell passed to group identification algorithm.' );
-    const self = this;
-
     // Catalog this cell.
     cellGroup.push( startCell );
     startCell.cataloged = true;
 
     // Check occupancy of each of the four adjecent cells.
-    Object.keys( MOVEMENT_VECTORS ).forEach( function( key ) {
+    Object.keys( MOVEMENT_VECTORS ).forEach( key => {
       const movementVector = MOVEMENT_VECTORS[ key ];
-      const adjacentCell = self.getCell( startCell.column + movementVector.x, startCell.row + movementVector.y );
+      const adjacentCell = this.getCell( startCell.column + movementVector.x, startCell.row + movementVector.y );
       if ( adjacentCell !== null && adjacentCell.occupiedBy !== null && !adjacentCell.cataloged ) {
-        self.identifyAdjacentOccupiedCells( adjacentCell, cellGroup );
+        this.identifyAdjacentOccupiedCells( adjacentCell, cellGroup );
       }
     } );
-  },
+  }
 
   /**
    * Returns an array representing all contiguous groups of occupied cells.  Each group is a list of cells.
    * @private
    * @returns {Array}
    */
-  identifyContiguousCellGroups: function() {
+  identifyContiguousCellGroups() {
 
     // Make a list of positions for all occupied cells.
     let ungroupedOccupiedCells = [];
@@ -882,35 +860,35 @@ inherit( Object, ShapePlacementBoard, {
     }
 
     return contiguousCellGroups;
-  },
+  }
 
   /**
    * Release any shapes that are resident on the board but that don't share at least one edge with the largest
    * composite shape on the board.  Such shapes are referred to as 'orphans' and, when release, they are sent back to
    * the position where they were created.
+   * @private
    */
-  releaseAnyOrphans: function() {
+  releaseAnyOrphans() {
 
     // Orphans can only exist when operating in the 'formComposite' mode.
     if ( this.formCompositeProperty.get() ) {
-      const self = this;
       const contiguousCellGroups = this.identifyContiguousCellGroups();
 
       if ( contiguousCellGroups.length > 1 ) {
         // There are orphans that should be released.  Determine which ones.
         let indexOfRetainedGroup = 0;
-        contiguousCellGroups.forEach( function( group, index ) {
+        contiguousCellGroups.forEach( ( group, index ) => {
           if ( group.length > contiguousCellGroups[ indexOfRetainedGroup ].length ) {
             indexOfRetainedGroup = index;
           }
         } );
 
-        contiguousCellGroups.forEach( function( group, groupIndex ) {
+        contiguousCellGroups.forEach( ( group, groupIndex ) => {
           if ( groupIndex !== indexOfRetainedGroup ) {
-            group.forEach( function( cell ) {
+            group.forEach( cell => {
               const movableShape = cell.occupiedBy;
               if ( movableShape !== null ) { // Need to test in case a previously released shape covered multiple cells.
-                self.releaseShape( movableShape );
+                this.releaseShape( movableShape );
                 movableShape.returnToOrigin( true );
               }
             } );
@@ -918,7 +896,7 @@ inherit( Object, ShapePlacementBoard, {
         } );
       }
     }
-  },
+  }
 
   /**
    * Replace one of the composite shapes that currently resides on this board with a set of unit squares.  This is
@@ -928,33 +906,33 @@ inherit( Object, ShapePlacementBoard, {
    * @param {MovableShape} originalShape
    * @param {Array<MovableShape>} unitSquares Pieces that comprise the original shape, MUST BE CORRECTLY LOCATED
    * since this method does not relocate them to the appropriate places.
+   * @public
    */
-  replaceShapeWithUnitSquares: function( originalShape, unitSquares ) {
+  replaceShapeWithUnitSquares( originalShape, unitSquares ) {
     assert && assert( this.isResidentShape( originalShape ), 'Error: Specified shape to be replaced does not appear to be present.' );
-    const self = this;
 
     // The following add and remove operations do not use the add and remove methods in order to avoid releasing
     // orphans (which could cause undesired behavior) and attribute updates (which are unnecessary).
     this.residentShapes.remove( originalShape );
     this.updateCellOccupation( originalShape, 'remove' );
 
-    unitSquares.forEach( function( movableUnitSquare ) {
-      self.residentShapes.push( movableUnitSquare );
+    unitSquares.forEach( movableUnitSquare => {
+      this.residentShapes.push( movableUnitSquare );
 
       // Set up a listener to remove this shape when the user grabs it.
-      self.addRemovalListener( movableUnitSquare );
+      this.addRemovalListener( movableUnitSquare );
 
       // Make some state updates.
-      self.updateCellOccupation( movableUnitSquare, 'add' );
+      this.updateCellOccupation( movableUnitSquare, 'add' );
     } );
-  },
+  }
 
   /**
    * adds a listener that will remove this shape from the board when the user grabs it
    * @param {MovableShape} movableShape
    * @private
    */
-  addRemovalListener: function( movableShape ) {
+  addRemovalListener( movableShape ) {
 
     const self = this;
 
@@ -969,21 +947,21 @@ inherit( Object, ShapePlacementBoard, {
 
     this.tagListener( removalListener );
     movableShape.userControlledProperty.lazyLink( removalListener );
-  },
+  }
 
   // @public, set colors used for the composite shape shown for this board
-  setCompositeShapeColorScheme: function( fillColor, edgeColor ) {
+  setCompositeShapeColorScheme( fillColor, edgeColor ) {
     this.compositeShapeFillColor = fillColor;
     this.compositeShapeEdgeColor = edgeColor;
-  },
+  }
 
   // @private, Update perimeter points, placement positions, total area, and total perimeter.
-  updateAll: function() {
+  updateAll() {
     if ( !this.updatesSuspended ) {
       this.updatePerimeters();
       this.updateAreaAndTotalPerimeter();
     }
-  },
+  }
 
   /**
    * This method suspends updates so that a block of squares can be added without having to all the recalculations
@@ -992,9 +970,9 @@ inherit( Object, ShapePlacementBoard, {
    * shape.
    * @public
    */
-  suspendUpdatesForBlockAdd: function() {
+  suspendUpdatesForBlockAdd() {
     this.updatesSuspended = true;
-  },
+  }
 
   /**
    * Set the background shape.  The shape can optionally be centered horizontally and vertically when placed on the
@@ -1005,7 +983,7 @@ inherit( Object, ShapePlacementBoard, {
    * perimeterShape.
    * @param {boolean} centered True if the perimeterShape should be centered on the board (but still aligned with grid).
    */
-  setBackgroundShape: function( perimeterShape, centered ) {
+  setBackgroundShape( perimeterShape, centered ) {
     if ( perimeterShape === null ) {
       this.backgroundShapeProperty.reset();
     }
@@ -1023,6 +1001,7 @@ inherit( Object, ShapePlacementBoard, {
       }
     }
   }
-} );
+}
 
+areaBuilder.register( 'ShapePlacementBoard', ShapePlacementBoard );
 export default ShapePlacementBoard;

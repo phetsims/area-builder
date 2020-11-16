@@ -51,7 +51,7 @@ function createBucketIcon( options ) {
  * Static object, not meant to be instantiated.
  */
 const AreaBuilderIconFactory = {
-  createExploreScreenNavBarIcon: function() {
+  createExploreScreenNavBarIcon() {
 
     // root node
     const icon = new Node();
@@ -86,7 +86,7 @@ const AreaBuilderIconFactory = {
     } );
   },
 
-  createGameScreenNavBarIcon: function() {
+  createGameScreenNavBarIcon() {
 
     // root node
     const icon = new Node();
@@ -155,5 +155,4 @@ const AreaBuilderIconFactory = {
 };
 
 areaBuilder.register( 'AreaBuilderIconFactory', AreaBuilderIconFactory );
-
 export default AreaBuilderIconFactory;

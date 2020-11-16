@@ -15,5 +15,4 @@ const AreaBuilderQueryParameters = QueryStringMachine.getAll( {
 } );
 
 areaBuilder.register( 'AreaBuilderQueryParameters', AreaBuilderQueryParameters );
-
 export default AreaBuilderQueryParameters;

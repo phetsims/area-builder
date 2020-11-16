@@ -8,7 +8,6 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
@@ -16,58 +15,57 @@ import Color from '../../../../scenery/js/util/Color.js';
 import areaBuilder from '../../areaBuilder.js';
 import Grid from './Grid.js';
 
-/**
- * @param {number} columns
- * @param {number} rows
- * @param {number} cellLength
- * @param {string} shapeFillColor
- * @param {Array<Vector2>} occupiedCells
- * @param {Object} [options]
- * @constructor
- */
-function GridIcon( columns, rows, cellLength, shapeFillColor, occupiedCells, options ) {
+class GridIcon extends Node {
 
-  Node.call( this );
-  const self = this;
+  /**
+   * @param {number} columns
+   * @param {number} rows
+   * @param {number} cellLength
+   * @param {string} shapeFillColor
+   * @param {Array<Vector2>} occupiedCells
+   * @param {Object} [options]
+   */
+  constructor( columns, rows, cellLength, shapeFillColor, occupiedCells, options ) {
 
-  options = merge( {
-    // defaults
-    gridStroke: 'black',
-    gridLineWidth: 1,
-    backgroundStroke: null,
-    backgroundFill: 'white',
-    backgroundLineWidth: 1,
-    shapeStroke: new Color( shapeFillColor ).colorUtilsDarker( 0.2 ), // darkening factor empirically determined
-    shapeLineWidth: 1
-  }, options );
+    super();
 
-  this.addChild( new Rectangle( 0, 0, columns * cellLength, rows * cellLength, 0, 0, {
-    fill: options.backgroundFill,
-    stroke: options.backgroundStroke,
-    lineWidth: options.backgroundLineWidth
-  } ) );
+    options = merge( {
+      // defaults
+      gridStroke: 'black',
+      gridLineWidth: 1,
+      backgroundStroke: null,
+      backgroundFill: 'white',
+      backgroundLineWidth: 1,
+      shapeStroke: new Color( shapeFillColor ).colorUtilsDarker( 0.2 ), // darkening factor empirically determined
+      shapeLineWidth: 1
+    }, options );
 
-  this.addChild( new Grid( new Bounds2( 0, 0, columns * cellLength, rows * cellLength ), cellLength, {
-    stroke: options.gridStroke,
-    lineWidth: options.gridLineWidth,
-    fill: options.gridFill
-  } ) );
-
-  occupiedCells.forEach( function( occupiedCell ) {
-    self.addChild( new Rectangle( 0, 0, cellLength, cellLength, 0, 0, {
-      fill: shapeFillColor,
-      stroke: options.shapeStroke,
-      lineWidth: options.shapeLineWidth,
-      left: occupiedCell.x * cellLength,
-      top: occupiedCell.y * cellLength
+    this.addChild( new Rectangle( 0, 0, columns * cellLength, rows * cellLength, 0, 0, {
+      fill: options.backgroundFill,
+      stroke: options.backgroundStroke,
+      lineWidth: options.backgroundLineWidth
     } ) );
-  } );
 
-  // Pass options through to the parent class.
-  this.mutate( options );
+    this.addChild( new Grid( new Bounds2( 0, 0, columns * cellLength, rows * cellLength ), cellLength, {
+      stroke: options.gridStroke,
+      lineWidth: options.gridLineWidth,
+      fill: options.gridFill
+    } ) );
+
+    occupiedCells.forEach( occupiedCell => {
+      this.addChild( new Rectangle( 0, 0, cellLength, cellLength, 0, 0, {
+        fill: shapeFillColor,
+        stroke: options.shapeStroke,
+        lineWidth: options.shapeLineWidth,
+        left: occupiedCell.x * cellLength,
+        top: occupiedCell.y * cellLength
+      } ) );
+    } );
+
+    // Pass options through to the parent class.
+    this.mutate( options );
+  }
 }
 
 areaBuilder.register( 'GridIcon', GridIcon );
-
-inherit( Node, GridIcon );
 export default GridIcon;

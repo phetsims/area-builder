@@ -9,7 +9,6 @@
 
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
@@ -23,64 +22,64 @@ import Grid from './Grid.js';
 const BACKGROUND_COLOR = AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR;
 const PANEL_OPTIONS = { fill: BACKGROUND_COLOR, yMargin: 10, xMargin: 20 };
 
-/**
- * @param showGridProperty
- * @param showDimensionsProperty
- * @param {Object} [options]
- * @constructor
- */
-function AreaBuilderControlPanel( showGridProperty, showDimensionsProperty, options ) {
-  Node.call( this );
+class AreaBuilderControlPanel extends Node {
 
-  // Properties that control which elements are visible and which are hidden.  This constitutes the primary API.
-  this.gridControlVisibleProperty = new Property( true );
-  this.dimensionsControlVisibleProperty = new Property( true );
+  /**
+   * @param showGridProperty
+   * @param showDimensionsProperty
+   * @param {Object} [options]
+   */
+  constructor( showGridProperty, showDimensionsProperty, options ) {
+    super();
 
-  // Create the controls and labels
-  const gridCheckbox = new Checkbox(
-    new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ),
-    showGridProperty,
-    { spacing: 15 }
-  );
-  this.dimensionsIcon = new DimensionsIcon(); // @public so that the icon style can be set
-  const dimensionsCheckbox = new Checkbox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
+    // Properties that control which elements are visible and which are hidden.  This constitutes the primary API.
+    this.gridControlVisibleProperty = new Property( true );
+    this.dimensionsControlVisibleProperty = new Property( true );
 
-  // Create the panel.
-  const vBox = new VBox( {
-    children: [
-      gridCheckbox,
-      dimensionsCheckbox
-    ],
-    spacing: 8,
-    align: 'left'
-  } );
-  this.addChild( new Panel( vBox, PANEL_OPTIONS ) );
+    // Create the controls and labels
+    const gridCheckbox = new Checkbox(
+      new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ),
+      showGridProperty,
+      { spacing: 15 }
+    );
+    this.dimensionsIcon = new DimensionsIcon(); // @public so that the icon style can be set
+    const dimensionsCheckbox = new Checkbox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
 
-  // Add/remove the grid visibility control.
-  this.gridControlVisibleProperty.link( function( gridControlVisible ) {
-    if ( gridControlVisible && !vBox.hasChild( gridCheckbox ) ) {
-      vBox.insertChild( 0, gridCheckbox );
-    }
-    else if ( !gridControlVisible && vBox.hasChild( gridCheckbox ) ) {
-      vBox.removeChild( gridCheckbox );
-    }
-  } );
+    // Create the panel.
+    const vBox = new VBox( {
+      children: [
+        gridCheckbox,
+        dimensionsCheckbox
+      ],
+      spacing: 8,
+      align: 'left'
+    } );
+    this.addChild( new Panel( vBox, PANEL_OPTIONS ) );
 
-  // Add/remove the dimension visibility control.
-  this.dimensionsControlVisibleProperty.link( function( dimensionsControlVisible ) {
-    if ( dimensionsControlVisible && !vBox.hasChild( dimensionsCheckbox ) ) {
-      // Insert at bottom.
-      vBox.insertChild( vBox.getChildrenCount(), dimensionsCheckbox );
-    }
-    else if ( !dimensionsControlVisible && vBox.hasChild( dimensionsCheckbox ) ) {
-      vBox.removeChild( dimensionsCheckbox );
-    }
-  } );
+    // Add/remove the grid visibility control.
+    this.gridControlVisibleProperty.link( gridControlVisible => {
+      if ( gridControlVisible && !vBox.hasChild( gridCheckbox ) ) {
+        vBox.insertChild( 0, gridCheckbox );
+      }
+      else if ( !gridControlVisible && vBox.hasChild( gridCheckbox ) ) {
+        vBox.removeChild( gridCheckbox );
+      }
+    } );
 
-  this.mutate( options );
+    // Add/remove the dimension visibility control.
+    this.dimensionsControlVisibleProperty.link( dimensionsControlVisible => {
+      if ( dimensionsControlVisible && !vBox.hasChild( dimensionsCheckbox ) ) {
+        // Insert at bottom.
+        vBox.insertChild( vBox.getChildrenCount(), dimensionsCheckbox );
+      }
+      else if ( !dimensionsControlVisible && vBox.hasChild( dimensionsCheckbox ) ) {
+        vBox.removeChild( dimensionsCheckbox );
+      }
+    } );
+
+    this.mutate( options );
+  }
 }
 
 areaBuilder.register( 'AreaBuilderControlPanel', AreaBuilderControlPanel );
-
-inherit( Node, AreaBuilderControlPanel );
 export default AreaBuilderControlPanel;

@@ -8,7 +8,6 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
@@ -25,49 +24,55 @@ const HEIGHT = 2 * UNIT_LENGTH; // in screen coordinates
 const LABEL_FONT = new PhetFont( 10 );
 const DEFAULT_FILL_COLOR = AreaBuilderSharedConstants.GREENISH_COLOR;
 
-/**
- * @param {Object} [options]
- * @constructor
- */
-function DimensionsIcon( options ) {
-  Node.call( this );
+class DimensionsIcon extends Node {
 
-  // Create the background rectangle node.
-  this.singleRectNode = new Rectangle( 0, 0, WIDTH, HEIGHT, 0, 0 );
-  this.addChild( this.singleRectNode );
+  /**
+   * @param {Object} [options]
+   */
+  constructor( options ) {
+    super();
 
-  // Add the grid.
-  this.grid = new Grid( new Bounds2( 0, 0, WIDTH, HEIGHT ), UNIT_LENGTH, { stroke: '#b0b0b0', lineDash: [ 1, 2 ] } );
-  this.addChild( this.grid );
+    // Create the background rectangle node.
+    this.singleRectNode = new Rectangle( 0, 0, WIDTH, HEIGHT, 0, 0 );
+    this.addChild( this.singleRectNode );
 
-  // Initialize the color.
-  this.setColor( DEFAULT_FILL_COLOR );
+    // Add the grid.
+    this.grid = new Grid( new Bounds2( 0, 0, WIDTH, HEIGHT ), UNIT_LENGTH, { stroke: '#b0b0b0', lineDash: [ 1, 2 ] } );
+    this.addChild( this.grid );
 
-  // Label the sides.
-  this.addChild( new Text( '2', { font: LABEL_FONT, right: -2, centerY: HEIGHT / 2 } ) );
-  this.addChild( new Text( '2', { font: LABEL_FONT, left: WIDTH + 2, centerY: HEIGHT / 2 } ) );
-  this.addChild( new Text( '3', { font: LABEL_FONT, centerX: WIDTH / 2, bottom: 0 } ) );
-  this.addChild( new Text( '3', { font: LABEL_FONT, centerX: WIDTH / 2, top: HEIGHT } ) );
+    // Initialize the color.
+    this.setColor( DEFAULT_FILL_COLOR );
 
-  // Pass through any options.
-  this.mutate( options );
-}
+    // Label the sides.
+    this.addChild( new Text( '2', { font: LABEL_FONT, right: -2, centerY: HEIGHT / 2 } ) );
+    this.addChild( new Text( '2', { font: LABEL_FONT, left: WIDTH + 2, centerY: HEIGHT / 2 } ) );
+    this.addChild( new Text( '3', { font: LABEL_FONT, centerX: WIDTH / 2, bottom: 0 } ) );
+    this.addChild( new Text( '3', { font: LABEL_FONT, centerX: WIDTH / 2, top: HEIGHT } ) );
 
-areaBuilder.register( 'DimensionsIcon', DimensionsIcon );
+    // Pass through any options.
+    this.mutate( options );
+  }
 
-inherit( Node, DimensionsIcon, {
-
-  setGridVisible: function( gridVisible ) {
+  /**
+   * @param {boolean} gridVisible
+   * @public
+   */
+  setGridVisible( gridVisible ) {
     assert && assert( typeof ( gridVisible ) === 'boolean' );
     this.grid.visible = gridVisible;
-  },
+  }
 
-  setColor: function( color ) {
+  /**
+   * @param color
+   * @public
+   */
+  setColor( color ) {
     this.singleRectNode.fill = color;
     const strokeColor = Color.toColor( color ).colorUtilsDarker( AreaBuilderSharedConstants.PERIMETER_DARKEN_FACTOR );
     this.singleRectNode.stroke = strokeColor;
     this.grid.stroke = strokeColor;
   }
-} );
+}
 
+areaBuilder.register( 'DimensionsIcon', DimensionsIcon );
 export default DimensionsIcon;
