@@ -6,6 +6,7 @@
  * @author John Blanco
  */
 
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -22,7 +23,7 @@ const UNIT_SQUARE_LENGTH = AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH; // In 
 
 function AreaBuilderChallengeFactory() {
 
-  const random = phet.joist.random;
+  const random = dotRandom;
 
   // Basic shapes used in the 'creator kits'.
   const UNIT_SQUARE_SHAPE = new Shape()
