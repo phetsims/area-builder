@@ -26,7 +26,7 @@ const COMPARISON_TOLERANCE = 1E-6;
 class PerimeterShapeNode extends Node {
 
   /**
-   * @param {Property<PerimeterShape>} perimeterShapeProperty
+   * @param {Property.<PerimeterShape>} perimeterShapeProperty
    * @param {Bounds2} maxBounds
    * @param {number} unitSquareLength
    * @param {boolean} showDimensionsProperty

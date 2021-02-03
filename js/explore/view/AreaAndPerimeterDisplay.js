@@ -26,7 +26,7 @@ const MAX_TITLE_WIDTH = 190; // empirically determined, supports translation
 class AreaAndPerimeterDisplay extends AccordionBox {
 
   /**
-   * @param {Property<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
+   * @param {Property.<Object>} areaAndPerimeterProperty - An object containing values for area and perimeter
    * @param {Color} areaTextColor
    * @param {Color} perimeterTextColor
    * @param {Object} [options]

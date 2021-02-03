@@ -55,8 +55,8 @@ class ShapePlacementBoard {
    * @param {number} unitSquareLength
    * @param {Vector2} position
    * @param {string || Color} colorHandled A string or Color object, can be wildcard string ('*') for all colors
-   * @param {Property<boolean>} showGridProperty
-   * @param {Property<boolean>} showDimensionsProperty
+   * @param {Property.<boolean>} showGridProperty
+   * @param {Property.<boolean>} showDimensionsProperty
    */
   constructor( size, unitSquareLength, position, colorHandled, showGridProperty, showDimensionsProperty ) {
 
