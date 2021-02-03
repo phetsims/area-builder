@@ -18,9 +18,9 @@ const FLOATING_POINT_ERR_TOLERANCE = 1e-6;
 class PerimeterShape {
 
   /**
-   * @param {Array<Array<Vector2>>} exteriorPerimeters An array of perimeters, each of which is a sequential array of
+   * @param {Array.<Array.<Vector2>>} exteriorPerimeters An array of perimeters, each of which is a sequential array of
    * points.
-   * @param {Array<Array<Vector2>>} interiorPerimeters An array of perimeters, each of which is a sequential array of
+   * @param {Array.<Array.<Vector2>>} interiorPerimeters An array of perimeters, each of which is a sequential array of
    * points. Each interior perimeter must be fully contained within an exterior perimeter.
    * @param {number} unitLength The unit length (i.e. the width or height of a unit square) of the unit sizes that
    * this shape should be constructed from.

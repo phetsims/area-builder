@@ -17,7 +17,7 @@ class AreaBuilderGameChallenge {
    * @param {Object} toolSpec An object that specifies which tools are available to the user.  It should have three
    * boolean properties - 'gridControl', 'dimensionsControl', and 'decompositionToolControl' - that indicate whether
    * the user is allowed to control these things for this challenge.
-   * @param {Array<Object>} userShapes An array of shape specification that describe the shapes that can be created and
+   * @param {Array.<Object>} userShapes An array of shape specification that describe the shapes that can be created and
    * manipulated by the user for this challenge.  Each shape specification is an object with a 'shape' field and a
    * 'color' field.  This value can be null to signify no user shapes are present for the challenge.
    * @param {BuildSpec} buildSpec Object that specifies what the user should build, see BuildSpec.js file for details.
@@ -26,7 +26,7 @@ class AreaBuilderGameChallenge {
    * @param {string} checkSpec Specifies what should be checked when the user pressed the 'Check' button.  Valid values
    * are 'areaEntered', 'areaConstructed', 'areaAndPerimeterConstructed', 'areaAndProportionConstructed',
    * 'areaPerimeterAndProportionConstructed'.
-   * @param {Array<Object>} exampleBuildItSolution An example solution for a build problem.  It consists of a list of
+   * @param {Array.<Object>} exampleBuildItSolution An example solution for a build problem.  It consists of a list of
    * cell positions for unit squares and a color, e.g. { cellColumn: x, cellRow: y, color: 'blue' }.  This should be
    * null for challenges where no example solution needs to be shown.
    */

@@ -22,7 +22,7 @@ class GridIcon extends Node {
    * @param {number} rows
    * @param {number} cellLength
    * @param {string} shapeFillColor
-   * @param {Array<Vector2>} occupiedCells
+   * @param {Array.<Vector2>} occupiedCells
    * @param {Object} [options]
    */
   constructor( columns, rows, cellLength, shapeFillColor, occupiedCells, options ) {

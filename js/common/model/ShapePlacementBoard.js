@@ -113,7 +113,7 @@ class ShapePlacementBoard {
     // Private variables
     this.numRows = size.height / unitSquareLength; // @private
     this.numColumns = size.width / unitSquareLength; // @private
-    this.incomingShapes = []; // @private, {Array<MovableShape>}, list of shapes that are animating to a spot on this board but aren't here yet
+    this.incomingShapes = []; // @private, {Array.<MovableShape>}, list of shapes that are animating to a spot on this board but aren't here yet
     this.updatesSuspended = false; // @private, used to improve performance when adding a bunch of shapes at once to the board
 
     // For efficiency and simplicity in evaluating the interior and exterior perimeter, identifying orphaned shapes,
@@ -904,7 +904,7 @@ class ShapePlacementBoard {
    * unit squares instead.
    *
    * @param {MovableShape} originalShape
-   * @param {Array<MovableShape>} unitSquares Pieces that comprise the original shape, MUST BE CORRECTLY LOCATED
+   * @param {Array.<MovableShape>} unitSquares Pieces that comprise the original shape, MUST BE CORRECTLY LOCATED
    * since this method does not relocate them to the appropriate places.
    * @public
    */
