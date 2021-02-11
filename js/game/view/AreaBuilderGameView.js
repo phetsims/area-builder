@@ -205,6 +205,7 @@ class AreaBuilderGameView extends ScreenView {
       touchAreaXDilation: BUTTON_TOUCH_AREA_DILATION,
       touchAreaYDilation: BUTTON_TOUCH_AREA_DILATION,
       listener: () => {
+        this.interruptSubtreeInput();
         gameModel.simSpecificModel.reset();
         gameModel.setChoosingLevelState();
       },

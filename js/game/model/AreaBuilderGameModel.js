@@ -47,7 +47,7 @@ class AreaBuilderGameModel {
       this.showDimensionsProperty
     );
 
-    // @public Array where shapes that are added by the user are tracked.
+    // @public {ObservableArrayDef.<MovableShape>} - list of movable shapes that are added by the user
     this.movableShapes = createObservableArray();
 
     // @private The position from which squares that animate onto the board to show a solution should emerge.  The
@@ -79,8 +79,8 @@ class AreaBuilderGameModel {
   /**
    * Function for adding new movable shapes to this model when the user is creating them, generally by clicking on
    * some sort of creator node.
+   * @param {MovableShape} movableShape
    * @public
-   * @param movableShape
    */
   addUserCreatedMovableShape( movableShape ) {
     const self = this;
