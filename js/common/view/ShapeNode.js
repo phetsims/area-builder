@@ -60,11 +60,12 @@ class ShapeNode extends Node {
     } );
     rootNode.addChild( representation );
 
-    // Add the grid
-    representation.addChild( new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), UNIT_LENGTH, {
+    // Add the grid.
+    const grid = new Grid( representation.bounds.dilated( -BORDER_LINE_WIDTH ), UNIT_LENGTH, {
       lineDash: [ 0, 3, 1, 0 ],
       stroke: 'black'
-    } ) );
+    } );
+    representation.addChild( grid );
 
     // Move this node as the model representation moves
     movableShape.positionProperty.link( position => {
@@ -123,7 +124,9 @@ class ShapeNode extends Node {
     }
 
     movableShape.animatingProperty.link( () => {
-      updatePickability();
+      if ( !this.isDisposed ){
+        updatePickability();
+      }
     } );
 
     movableShape.fadeProportionProperty.link( fadeProportion => {
@@ -142,7 +145,7 @@ class ShapeNode extends Node {
     const dragBoundsProperty = new Property( shapeDragBounds );
 
     // Add the listener that will allow the user to drag the shape around.
-    this.addInputListener( new DragListener( {
+    const dragListener = new DragListener( {
 
       positionProperty: movableShape.positionProperty,
       dragBoundsProperty: dragBoundsProperty,
@@ -155,7 +158,24 @@ class ShapeNode extends Node {
       end: ( event, trail ) => {
         movableShape.userControlledProperty.set( false );
       }
-    } ) );
+    } );
+    this.addInputListener( dragListener );
+
+    // @private
+    this.disposeShapeNode = () => {
+      representation.dispose();
+      grid.dispose();
+      dragListener.dispose();
+    };
+  }
+
+  /**
+   * release memory references
+   * @public
+   */
+  dispose(){
+    this.disposeShapeNode();
+    super.dispose();
   }
 }
 

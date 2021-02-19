@@ -22,13 +22,13 @@ class Grid extends Path {
     const gridShape = new Shape();
 
     // Add the vertical lines
-    for ( var i = bounds.minX + spacing; i < bounds.minX + bounds.width; i += spacing ) {
+    for ( let i = bounds.minX + spacing; i < bounds.minX + bounds.width; i += spacing ) {
       gridShape.moveTo( i, bounds.minY );
       gridShape.lineTo( i, bounds.minY + bounds.height );
     }
 
     // Add the horizontal lines
-    for ( i = bounds.minY + spacing; i < bounds.minY + bounds.height; i += spacing ) {
+    for ( let i = bounds.minY + spacing; i < bounds.minY + bounds.height; i += spacing ) {
       gridShape.moveTo( bounds.minX, i );
       gridShape.lineTo( bounds.minX + bounds.width, i );
     }

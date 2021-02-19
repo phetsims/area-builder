@@ -58,6 +58,7 @@ class ShapeCreatorNode extends Node {
     if ( options.creationLimit < Number.POSITIVE_INFINITY &&
          ( shape.bounds.width !== AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ||
            shape.bounds.height !== AreaBuilderSharedConstants.UNIT_SQUARE_LENGTH ) ) {
+
       // The ability to set a creation limit ONLY works for unit squares.  The reason for this is that non-unit shapes
       // are generally decomposed into unit squares when added to the placement board, so it's hard to track when they
       // get returned to their origin.  It would be possible to do this, but the requirements of the sim at the time of
@@ -105,7 +106,7 @@ class ShapeCreatorNode extends Node {
     const dragBoundsProperty = new Property( shapeDragBounds );
 
     // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
-    this.addInputListener( new DragListener( {
+    const dragListener = new DragListener( {
 
       dragBoundsProperty: dragBoundsProperty,
       targetNode: options.nonMovingAncestor,
@@ -166,10 +167,25 @@ class ShapeCreatorNode extends Node {
         movableShape.userControlledProperty.set( false );
         movableShape = null;
       }
-    } ) );
+    } );
+    this.addInputListener( dragListener );
 
     // Pass options through to parent.
     this.mutate( options );
+
+    // @private
+    this.disposeShapeCreatorNode = () => {
+      dragListener.dispose();
+    };
+  }
+
+  /**
+   * release memory references
+   * @public
+   */
+  dispose(){
+    this.disposeShapeCreatorNode();
+    super.dispose();
   }
 }
 

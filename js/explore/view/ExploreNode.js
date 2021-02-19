@@ -147,6 +147,7 @@ class ExploreNode extends Node {
           if ( removedShape === addedShape ) {
             movableShapesLayer.removeChild( shapeNode );
             movableShapeList.removeItemRemovedListener( removalListener );
+            shapeNode.dispose();
           }
         } );
       }

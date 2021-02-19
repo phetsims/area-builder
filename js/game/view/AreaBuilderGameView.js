@@ -99,7 +99,10 @@ class AreaBuilderGameView extends ScreenView {
         this.numberEntryControl.clear();
         gameModel.startLevel( level );
       },
-      () => { gameModel.reset(); },
+      () => {
+        gameModel.reset();
+        this.activeShapeCreatorNodes.length = 0;
+      },
       gameModel.timerEnabledProperty,
       [
         GameIconFactory.createIcon( 1 ),
@@ -354,6 +357,7 @@ class AreaBuilderGameView extends ScreenView {
       gameModel.simSpecificModel.movableShapes.addItemRemovedListener( function removalListener( removedShape ) {
         if ( removedShape === addedShape ) {
           self.challengeLayer.removeChild( shapeNode );
+          shapeNode.dispose();
           addedShape.userControlledProperty.unlink( userControlledListener );
           gameModel.simSpecificModel.movableShapes.removeItemRemovedListener( removalListener );
         }
@@ -406,6 +410,9 @@ class AreaBuilderGameView extends ScreenView {
         }
       }
     } );
+
+    // @private {ShapeCreateNode[]} - Keep track of active ShapeCreatorNode instances so that they can be disposed.
+    this.activeShapeCreatorNodes = [];
 
     // Various other initialization
     this.levelCompletedNode = null; // @private
@@ -731,7 +738,10 @@ class AreaBuilderGameView extends ScreenView {
     return false;
   }
 
-  // @private, Present the challenge to the user and set things up so that they can submit their answer.
+  /**
+   * Present the challenge to the user and set things up so that they can submit their answer.
+   * @private
+   */
   presentChallenge() {
 
     if ( this.model.incorrectGuessesOnCurrentChallenge === 0 ) {
@@ -740,6 +750,13 @@ class AreaBuilderGameView extends ScreenView {
       this.model.simSpecificModel.clearShapePlacementBoard();
       this.challengePromptBanner.reset();
       this.shapeCarouselLayer.removeAllChildren();
+
+      // Dispose the ShapeCreatorNode instances, otherwise they leak memory, see
+      // https://github.com/phetsims/area-builder/issues/118.
+      this.activeShapeCreatorNodes.forEach( shapeCreatorNode => {
+        shapeCreatorNode.dispose();
+      } );
+      this.activeShapeCreatorNodes.length = 0;
 
       const challenge = this.model.currentChallengeProperty.get(); // Convenience var
 
@@ -811,9 +828,8 @@ class AreaBuilderGameView extends ScreenView {
         this.controlPanel.dimensionsIcon.setColor( AreaBuilderSharedConstants.GREENISH_COLOR );
       }
 
-      // Create the carousel if included as part of this challenge
+      // Create the carousel if included as part of this challenge.
       if ( challenge.userShapes !== null ) {
-        const creatorNodes = [];
         challenge.userShapes.forEach( userShapeSpec => {
           const creatorNodeOptions = {
             gridSpacing: AreaBuilderGameModel.UNIT_SQUARE_LENGTH,
@@ -823,16 +839,17 @@ class AreaBuilderGameView extends ScreenView {
           if ( userShapeSpec.creationLimit ) {
             creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
           }
-          creatorNodes.push( new ShapeCreatorNode(
+          this.activeShapeCreatorNodes.push( new ShapeCreatorNode(
             userShapeSpec.shape,
             userShapeSpec.color,
             this.model.simSpecificModel.addUserCreatedMovableShape.bind( this.model.simSpecificModel ),
             creatorNodeOptions
           ) );
         } );
-        if ( creatorNodes.length > ITEMS_PER_CAROUSEL_PAGE ) {
+        if ( this.activeShapeCreatorNodes.length > ITEMS_PER_CAROUSEL_PAGE ) {
+
           // Add a scrolling carousel.
-          this.shapeCarouselLayer.addChild( new Carousel( creatorNodes, {
+          this.shapeCarouselLayer.addChild( new Carousel( this.activeShapeCreatorNodes, {
             orientation: 'horizontal',
             itemsPerPage: ITEMS_PER_CAROUSEL_PAGE,
             centerX: this.shapeBoardOriginalBounds.centerX,
@@ -842,8 +859,9 @@ class AreaBuilderGameView extends ScreenView {
           } ) );
         }
         else {
+
           // Add a non-scrolling panel
-          const creatorNodeHBox = new HBox( { children: creatorNodes, spacing: 20 } );
+          const creatorNodeHBox = new HBox( { children: this.activeShapeCreatorNodes, spacing: 20 } );
           this.shapeCarouselLayer.addChild( new Panel( creatorNodeHBox, {
             centerX: this.shapeBoardOriginalBounds.centerX,
             top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,

@@ -74,22 +74,24 @@ class MovableShape {
   step( dt ) {
     if ( !this.userControlledProperty.get() ) {
 
-      // perform any animation
+      // Perform any animation.
       const currentPosition = this.positionProperty.get();
       const distanceToDestination = currentPosition.distance( this.destination );
       if ( distanceToDestination > dt * AreaBuilderSharedConstants.ANIMATION_SPEED ) {
+
         // Move a step toward the destination.
         const stepAngle = Math.atan2( this.destination.y - currentPosition.y, this.destination.x - currentPosition.x );
         const stepVector = Vector2.createPolar( AreaBuilderSharedConstants.ANIMATION_SPEED * dt, stepAngle );
         this.positionProperty.set( currentPosition.plus( stepVector ) );
       }
       else if ( this.animatingProperty.get() ) {
+
         // Less than one time step away, so just go to the destination.
         this.positionProperty.set( this.destination );
         this.animatingProperty.set( false );
       }
 
-      // perform any fading
+      // Perform any fading.
       if ( this.fading ) {
         this.fadeProportionProperty.set( Math.min( 1, this.fadeProportionProperty.get() + ( dt * FADE_RATE ) ) );
         if ( this.fadeProportionProperty.get() >= 1 ) {

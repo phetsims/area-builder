@@ -31,8 +31,6 @@ const BOARD_TO_BUCKET_Y_SPACING = 45;
 
 class AreaBuilderExploreModel {
 
-  /**
-   */
   constructor() {
 
     this.showShapeBoardGridsProperty = new Property( true ); // @public
@@ -135,6 +133,7 @@ class AreaBuilderExploreModel {
     // can be 'put back' into the bucket.
     movableShape.returnedToOriginEmitter.addListener( () => {
       if ( !movableShape.userControlledProperty.get() ) {
+
         // The shape has been returned to the bucket.
         this.movableShapes.remove( movableShape );
       }
