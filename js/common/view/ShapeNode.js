@@ -7,9 +7,10 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import MovableDragHandler from '../../../../scenery-phet/js/input/MovableDragHandler.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -137,19 +138,21 @@ class ShapeNode extends Node {
       dragBounds.maxY - movableShape.shape.bounds.height
     );
 
+    // Enclose the drag bounds in a Property so that it can be used in the drag handler.
+    const dragBoundsProperty = new Property( shapeDragBounds );
+
     // Add the listener that will allow the user to drag the shape around.
-    this.addInputListener( new MovableDragHandler( movableShape.positionProperty, {
+    this.addInputListener( new DragListener( {
 
-      dragBounds: shapeDragBounds,
-
-      // Allow moving a finger (touch) across a node to pick it up.
+      positionProperty: movableShape.positionProperty,
+      dragBoundsProperty: dragBoundsProperty,
       allowTouchSnag: true,
 
-      startDrag: ( event, trail ) => {
+      start: () => {
         movableShape.userControlledProperty.set( true );
       },
 
-      endDrag: ( event, trail ) => {
+      end: ( event, trail ) => {
         movableShape.userControlledProperty.set( false );
       }
     } ) );

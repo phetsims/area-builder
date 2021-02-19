@@ -8,11 +8,9 @@
 
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import merge from '../../../../phet-core/js/merge.js';
-import MovableDragHandler from '../../../../scenery-phet/js/input/MovableDragHandler.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -28,8 +26,8 @@ class ShapeCreatorNode extends Node {
 
   /**
    * @param {Shape} shape
-   * @param {string || Color} color
-   * @param {function} addShapeToModel - A function for adding the created shape to the model
+   * @param {string|Color} color
+   * @param {function(MovableShape)} addShapeToModel - A function for adding the created shape to the model
    * @param {Object} [options]
    */
   constructor( shape, color, addShapeToModel, options ) {
@@ -95,31 +93,27 @@ class ShapeCreatorNode extends Node {
 
     // variables used by the drag handler
     let parentScreenView = null; // needed for coordinate transforms
-    let movableShape = null;
-    const shapePositionProperty = new Vector2Property( Vector2.ZERO );
-
-    // Link the internal position property to the movable shape.
-    shapePositionProperty.link( position => {
-      if ( movableShape !== null ) {
-        movableShape.positionProperty.set( position );
-      }
-    } );
+    let movableShape;
+    let dragOffset;
 
     // Adjust the drag bounds to compensate for the shape that that the entire shape will stay in bounds.
     const shapeDragBounds = options.shapeDragBounds.copy();
     shapeDragBounds.setMaxX( shapeDragBounds.maxX - shape.bounds.width );
     shapeDragBounds.setMaxY( shapeDragBounds.maxY - shape.bounds.height );
 
-    // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
-    this.addInputListener( new MovableDragHandler( shapePositionProperty, {
+    // Enclose the drag bounds in a Property so that it can be used in the drag handler.
+    const dragBoundsProperty = new Property( shapeDragBounds );
 
-      dragBounds: shapeDragBounds,
+    // Add the listener that will allow the user to click on this and create a new shape, then position it in the model.
+    this.addInputListener( new DragListener( {
+
+      dragBoundsProperty: dragBoundsProperty,
       targetNode: options.nonMovingAncestor,
 
       // Allow moving a finger (touch) across this node to interact with it
       allowTouchSnag: true,
 
-      startDrag: event => {
+      start: event => {
         if ( !parentScreenView ) {
 
           // Find the parent screen view by moving up the scene graph.
@@ -136,9 +130,8 @@ class ShapeCreatorNode extends Node {
 
         // Determine the initial position of the new element as a function of the event position and this node's bounds.
         const upperLeftCornerGlobal = this.parentToGlobalPoint( this.leftTop );
-        const initialPositionOffset = upperLeftCornerGlobal.minus( event.pointer.point );
-        const initialPosition = parentScreenView.globalToLocalPoint( event.pointer.point.plus( initialPositionOffset ) );
-        shapePositionProperty.value = initialPosition;
+        dragOffset = upperLeftCornerGlobal.minus( event.pointer.point );
+        const initialPosition = parentScreenView.globalToLocalPoint( event.pointer.point.plus( dragOffset ) );
 
         // Create and add the new model element.
         movableShape = new MovableShape( shape, color, initialPosition );
@@ -147,12 +140,14 @@ class ShapeCreatorNode extends Node {
 
         // If the creation count is limited, adjust the value and monitor the created shape for if/when it is returned.
         if ( options.creationLimit < Number.POSITIVE_INFINITY ) {
+
           // Use an IIFE to keep a reference of the movable shape in a closure.
           ( () => {
             createdCountProperty.value++;
             const localRefToMovableShape = movableShape;
             localRefToMovableShape.returnedToOriginEmitter.addListener( function returnedToOriginListener() {
               if ( !localRefToMovableShape.userControlledProperty.get() ) {
+
                 // The shape has been returned to its origin.
                 createdCountProperty.value--;
                 localRefToMovableShape.returnedToOriginEmitter.removeListener( returnedToOriginListener );
@@ -162,7 +157,12 @@ class ShapeCreatorNode extends Node {
         }
       },
 
-      endDrag: ( event, trail ) => {
+      drag: event => {
+        assert && assert( movableShape, 'no movable shape for drag' );
+        movableShape.positionProperty.set( parentScreenView.globalToLocalPoint( event.pointer.point.plus( dragOffset ) ) );
+      },
+
+      end: () => {
         movableShape.userControlledProperty.set( false );
         movableShape = null;
       }
