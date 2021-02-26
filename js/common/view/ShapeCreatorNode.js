@@ -183,7 +183,7 @@ class ShapeCreatorNode extends Node {
    * release memory references
    * @public
    */
-  dispose(){
+  dispose() {
     this.disposeShapeCreatorNode();
     super.dispose();
   }

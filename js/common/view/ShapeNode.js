@@ -124,7 +124,7 @@ class ShapeNode extends Node {
     }
 
     movableShape.animatingProperty.link( () => {
-      if ( !this.isDisposed ){
+      if ( !this.isDisposed ) {
         updatePickability();
       }
     } );
@@ -173,7 +173,7 @@ class ShapeNode extends Node {
    * release memory references
    * @public
    */
-  dispose(){
+  dispose() {
     this.disposeShapeNode();
     super.dispose();
   }
