@@ -187,10 +187,15 @@ class AreaBuilderGameModel {
       // Add the shapes that comprise the solution.
       assert && assert( challenge.exampleBuildItSolution !== null, 'Error: Challenge does not contain an example solution.' );
       challenge.exampleBuildItSolution.forEach( shapePlacementSpec => {
-        this.addUnitSquareDirectlyToBoard( shapePlacementSpec.cellColumn, shapePlacementSpec.cellRow, shapePlacementSpec.color );
+        this.addUnitSquareDirectlyToBoard(
+          shapePlacementSpec.cellColumn,
+          shapePlacementSpec.cellRow,
+          shapePlacementSpec.color
+        );
       } );
     }
     else if ( challenge.checkSpec === 'areaEntered' ) {
+
       // For 'find the area' challenges, we turn on the grid for the background shape when displaying the answer.
       this.shapePlacementBoard.showGridOnBackgroundShape = true;
     }

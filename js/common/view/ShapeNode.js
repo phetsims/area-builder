@@ -68,9 +68,8 @@ class ShapeNode extends Node {
     representation.addChild( grid );
 
     // Move this node as the model representation moves
-    movableShape.positionProperty.link( position => {
-      this.leftTop = position;
-    } );
+    const updatePosition = position => { this.leftTop = position; };
+    movableShape.positionProperty.link( updatePosition );
 
     // Because a composite shape is often used to depict the overall shape when a shape is on the placement board, this
     // element may become invisible unless it is user controlled, animating, or fading.
@@ -88,6 +87,7 @@ class ShapeNode extends Node {
         movableShape.fadeProportionProperty ],
       ( userControlled, animating, fadeProportion ) => {
         if ( userControlled || animating ) {
+
           // The shape is either being dragged by the user or is moving to a position, so should be fully opaque.
           return 1;
         }
@@ -118,20 +118,12 @@ class ShapeNode extends Node {
 
     shadowVisibilityProperty.linkAttribute( shadow, 'visible' );
 
-    function updatePickability() {
-      // To avoid certain complications, this node should not be pickable if it is animating or fading.
+    // To avoid certain complications, this node should not be pickable if it is animating or fading.
+    const updatePickability = () => {
       self.pickable = !movableShape.animatingProperty.get() && movableShape.fadeProportionProperty.get() === 0;
-    }
-
-    movableShape.animatingProperty.link( () => {
-      if ( !this.isDisposed ) {
-        updatePickability();
-      }
-    } );
-
-    movableShape.fadeProportionProperty.link( fadeProportion => {
-      updatePickability();
-    } );
+    };
+    movableShape.animatingProperty.link( updatePickability );
+    movableShape.fadeProportionProperty.link( updatePickability );
 
     // Adjust the drag bounds to compensate for the shape that that the entire shape will stay in bounds.
     const shapeDragBounds = new Bounds2(
@@ -155,7 +147,7 @@ class ShapeNode extends Node {
         movableShape.userControlledProperty.set( true );
       },
 
-      end: ( event, trail ) => {
+      end: () => {
         movableShape.userControlledProperty.set( false );
       }
     } );
@@ -163,7 +155,14 @@ class ShapeNode extends Node {
 
     // @private
     this.disposeShapeNode = () => {
+      movableShape.positionProperty.unlink( updatePosition );
+      visibleProperty.dispose();
+      opacityProperty.dispose();
+      shadowVisibilityProperty.dispose();
+      movableShape.animatingProperty.unlink( updatePickability );
+      movableShape.fadeProportionProperty.unlink( updatePickability );
       representation.dispose();
+      shadow.dispose();
       grid.dispose();
       dragListener.dispose();
     };

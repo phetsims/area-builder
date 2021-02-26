@@ -51,6 +51,7 @@ class ShapePlacementBoardNode extends Node {
     this.addChild( shapesLayer );
     shapePlacementBoard.residentShapes.addItemAddedListener( addedShape => {
       if ( shapePlacementBoard.formCompositeProperty.get() ) {
+
         // Add a representation of the shape.
         const representation = new Path( addedShape.shape, {
           fill: addedShape.color,
@@ -62,6 +63,7 @@ class ShapePlacementBoardNode extends Node {
         shapePlacementBoard.residentShapes.addItemRemovedListener( function removalListener( removedShape ) {
           if ( removedShape === addedShape ) {
             shapesLayer.removeChild( representation );
+            representation.dispose();
             shapePlacementBoard.residentShapes.removeItemRemovedListener( removalListener );
           }
         } );
