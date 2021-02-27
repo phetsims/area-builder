@@ -670,10 +670,10 @@ class ShapePlacementBoard {
 
       // Map the scan to the one of 16 possible states.
       let marchingSquaresState = 0;
-      if ( upLeftOccupied ) { marchingSquaresState |= 1; }
-      if ( upRightOccupied ) { marchingSquaresState |= 2; }
-      if ( downLeftOccupied ) { marchingSquaresState |= 4; }
-      if ( downRightOccupied ) { marchingSquaresState |= 8; }
+      if ( upLeftOccupied ) { marchingSquaresState |= 1; } // eslint-disable-line no-bitwise
+      if ( upRightOccupied ) { marchingSquaresState |= 2; } // eslint-disable-line no-bitwise
+      if ( downLeftOccupied ) { marchingSquaresState |= 4; } // eslint-disable-line no-bitwise
+      if ( downRightOccupied ) { marchingSquaresState |= 8; } // eslint-disable-line no-bitwise
 
       assert && assert(
       marchingSquaresState !== 0 && marchingSquaresState !== 15,
