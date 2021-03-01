@@ -49,7 +49,7 @@ class PerimeterShape {
     // @private
     this.unitLength = unitLength;
 
-    // @private A Kite shape created from the points, useful in various situations.
+    // @private - a shape created from the points, useful in various situations.
     this.kiteShape = new Shape();
     exteriorPerimeters.forEach( exteriorPerimeter => {
       this.kiteShape.moveToPoint( exteriorPerimeter[ 0 ] );

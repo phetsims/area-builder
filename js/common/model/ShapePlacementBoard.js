@@ -625,7 +625,7 @@ class ShapePlacementBoard {
     return this.modelToCellCoords( v.x, v.y );
   }
 
-  //@private
+  // @private
   createShapeFromPerimeterPoints( perimeterPoints ) {
     const perimeterShape = new Shape();
     perimeterShape.moveToPoint( perimeterPoints[ 0 ] );
@@ -636,7 +636,7 @@ class ShapePlacementBoard {
     return perimeterShape;
   }
 
-  //@private
+  // @private
   createShapeFromPerimeterList( perimeters ) {
     const perimeterShape = new Shape();
     perimeters.forEach( perimeterPoints => {

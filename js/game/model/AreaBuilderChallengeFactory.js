@@ -31,49 +31,57 @@ function AreaBuilderChallengeFactory() {
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
-    .close();
+    .close()
+    .makeImmutable();
   const HORIZONTAL_DOUBLE_SQUARE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
     .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
-    .close();
+    .close()
+    .makeImmutable();
   const VERTICAL_DOUBLE_SQUARE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH * 2 )
     .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
-    .close();
+    .close()
+    .makeImmutable();
   const QUAD_SQUARE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH * 2, 0 )
     .lineTo( UNIT_SQUARE_LENGTH * 2, UNIT_SQUARE_LENGTH * 2 )
     .lineTo( 0, UNIT_SQUARE_LENGTH * 2 )
-    .close();
+    .close()
+    .makeImmutable();
   const RIGHT_BOTTOM_TRIANGLE_SHAPE = new Shape()
     .moveTo( UNIT_SQUARE_LENGTH, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
-    .close();
+    .close()
+    .makeImmutable();
   const LEFT_BOTTOM_TRIANGLE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
     .lineTo( 0, 0 )
-    .close();
+    .close()
+    .makeImmutable();
   const RIGHT_TOP_TRIANGLE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, UNIT_SQUARE_LENGTH )
     .lineTo( 0, 0 )
-    .close();
+    .close()
+    .makeImmutable();
   const LEFT_TOP_TRIANGLE_SHAPE = new Shape()
     .moveTo( 0, 0 )
     .lineTo( UNIT_SQUARE_LENGTH, 0 )
     .lineTo( 0, UNIT_SQUARE_LENGTH )
     .lineTo( 0, 0 )
-    .close();
+    .close()
+    .makeImmutable();
 
   // Shape kit with a set of basic shapes and a default color.
   const BASIC_RECTANGLES_SHAPE_KIT = [

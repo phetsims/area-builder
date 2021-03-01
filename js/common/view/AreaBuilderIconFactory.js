@@ -37,7 +37,12 @@ function createBucketIcon( options ) {
   const ellipseXRadius = NAV_BAR_ICON_SIZE.width * 0.125;
   const ellipseYRadius = ellipseXRadius * 0.3;
   const bucketDepth = ellipseXRadius * 0.75;
-  const bodyShape = new Shape().moveTo( -ellipseXRadius, 0 ).lineTo( -ellipseXRadius * 0.75, bucketDepth ).quadraticCurveTo( 0, bucketDepth + ellipseYRadius, ellipseXRadius * 0.75, bucketDepth ).lineTo( ellipseXRadius, 0 ).close();
+  const bodyShape = new Shape()
+    .moveTo( -ellipseXRadius, 0 )
+    .lineTo( -ellipseXRadius * 0.75, bucketDepth )
+    .quadraticCurveTo( 0, bucketDepth + ellipseYRadius, ellipseXRadius * 0.75, bucketDepth )
+    .lineTo( ellipseXRadius, 0 )
+    .close();
   icon.addChild( new Path( bodyShape, { fill: 'blue', stroke: 'blue', lineWidth: 0.5 } ) );
   icon.addChild( new Path( Shape.ellipse( 0, 0, ellipseXRadius, ellipseYRadius ), {
     fill: new LinearGradient( -ellipseXRadius, 0, ellipseXRadius, 0 ).addColorStop( 0, '#333333' ).addColorStop( 1, '#999999' )
