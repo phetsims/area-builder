@@ -815,7 +815,7 @@ class AreaBuilderGameView extends ScreenView {
       }
 
       // Set the state of the control panel.
-      this.controlPanel.dimensionsIcon.setGridVisible( challenge.backgroundShape ? false : true );
+      this.controlPanel.dimensionsIcon.setGridVisible( !challenge.backgroundShape );
       this.controlPanel.gridControlVisibleProperty.set( challenge.toolSpec.gridControl );
       this.controlPanel.dimensionsControlVisibleProperty.set( challenge.toolSpec.dimensionsControl );
       if ( challenge.backgroundShape ) {
