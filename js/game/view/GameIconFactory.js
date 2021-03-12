@@ -156,7 +156,7 @@ const GameIconFactory = {
         break;
 
       default:
-        throw new Error( 'Unsupported game level: ' + level );
+        throw new Error( `Unsupported game level: ${level}` );
     }
     return new GridIcon( NUM_COLUMNS, NUM_ROWS, CELL_LENGTH, color, occupiedCells, GRID_ICON_OPTIONS );
   }

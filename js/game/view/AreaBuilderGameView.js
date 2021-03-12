@@ -468,7 +468,7 @@ class AreaBuilderGameView extends ScreenView {
         break;
 
       default:
-        throw new Error( 'Unhandled game state: ' + gameState );
+        throw new Error( `Unhandled game state: ${gameState}` );
     }
   }
 
@@ -775,7 +775,7 @@ class AreaBuilderGameView extends ScreenView {
         if ( challenge.buildSpec.proportions ) {
           const areaPrompt = new Node();
           areaPrompt.addChild( areaGoalNode );
-          areaGoalNode.text = areaGoalNode.text + ',';
+          areaGoalNode.text = `${areaGoalNode.text},`;
           const colorProportionsPrompt = new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
             challenge.buildSpec.proportions.color2, challenge.buildSpec.proportions.color1Proportion, {
               font: new PhetFont( { size: 16, weight: 'bold' } ),
