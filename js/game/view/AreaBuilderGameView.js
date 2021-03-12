@@ -930,7 +930,7 @@ class AreaBuilderGameView extends ScreenView {
   // @private
   showLevelResultsNode() {
     // Set a new "level completed" node based on the results.
-    var levelCompletedNode = new LevelCompletedNode(
+    let levelCompletedNode = new LevelCompletedNode(
       this.model.levelProperty.get() + 1,
       this.model.scoreProperty.get(),
       this.model.maxPossibleScore,

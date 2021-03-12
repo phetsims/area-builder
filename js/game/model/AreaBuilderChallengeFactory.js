@@ -875,7 +875,7 @@ function AreaBuilderChallengeFactory() {
   }
 
   // Challenge history, used to make sure unique challenges are generated.
-  var challengeHistory = [];
+  let challengeHistory = [];
 
   // Use the provided generation function to create challenges until a unique one has been created.
   function generateUniqueChallenge( generationFunction ) {
@@ -944,7 +944,7 @@ function AreaBuilderChallengeFactory() {
         challengeSet.push( generateUniqueChallenge( generateOShapedFindAreaChallenge ) );
         challengeSet.push( generateUniqueChallenge( generateShapeWithDiagonalFindAreaChallenge ) );
         challengeSet = random.shuffle( challengeSet );
-        var triangleChallenges = random.shuffle( [
+        var triangleChallenges = random.shuffle( [ // eslint-disable-line no-var
           generateUniqueChallenge( generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge ),
           generateUniqueChallenge( generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge )
         ] );

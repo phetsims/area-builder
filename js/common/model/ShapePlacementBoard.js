@@ -745,7 +745,7 @@ class ShapePlacementBoard {
       while ( enclosedSpaces.length > 0 ) {
 
         // Locate the top left most space
-        var topLeftSpace = enclosedSpaces[ 0 ];
+        let topLeftSpace = enclosedSpaces[ 0 ];
         enclosedSpaces.forEach( cell => {
           if ( cell.y < topLeftSpace.y || ( cell.y === topLeftSpace.y && cell.x < topLeftSpace.x ) ) {
             topLeftSpace = cell;
@@ -757,8 +757,8 @@ class ShapePlacementBoard {
         interiorPerimeters.push( enclosedPerimeterPoints );
 
         // Identify and save all spaces not enclosed by this perimeter.
-        var perimeterShape = this.createShapeFromPerimeterPoints( enclosedPerimeterPoints );
-        var leftoverEmptySpaces = [];
+        const perimeterShape = this.createShapeFromPerimeterPoints( enclosedPerimeterPoints );
+        const leftoverEmptySpaces = [];
         enclosedSpaces.forEach( enclosedSpace => {
           const positionPoint = this.cellToModelCoords( enclosedSpace.x, enclosedSpace.y );
           const centerPoint = positionPoint.plusXY( this.unitSquareLength / 2, this.unitSquareLength / 2 );
