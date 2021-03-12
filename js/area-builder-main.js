@@ -28,7 +28,7 @@ const simOptions = {
   }
 };
 
-simLauncher.launch( function() {
+simLauncher.launch( () => {
   // create and start the sim
   new Sim( areaBuilderTitleString, [
     new AreaBuilderExploreScreen( tandem.createTandem( 'exploreScreen' ) ),
