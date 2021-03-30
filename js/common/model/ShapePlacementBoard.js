@@ -338,7 +338,7 @@ class ShapePlacementBoard {
   // @private, remove all observers from a property that have been tagged by this shape placement board.
   removeTaggedObservers( property ) {
     const taggedObservers = [];
-    property.changedEmitter.listeners.forEach( observer => {
+    property.forEachListener( observer => {
       if ( this.listenerTagMatches( observer ) ) {
         taggedObservers.push( observer );
       }
