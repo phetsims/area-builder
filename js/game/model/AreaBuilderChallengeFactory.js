@@ -927,6 +927,7 @@ function AreaBuilderChallengeFactory() {
   this.generateChallengeSet = ( level, numChallenges ) => {
     let challengeSet = [];
     let tempChallenge;
+    let triangleChallenges;
     switch( level ) {
       case 0:
         _.times( 3, () => { challengeSet.push( generateUniqueChallenge( generateBuildAreaChallenge ) ); } );
@@ -944,7 +945,7 @@ function AreaBuilderChallengeFactory() {
         challengeSet.push( generateUniqueChallenge( generateOShapedFindAreaChallenge ) );
         challengeSet.push( generateUniqueChallenge( generateShapeWithDiagonalFindAreaChallenge ) );
         challengeSet = random.shuffle( challengeSet );
-        var triangleChallenges = random.shuffle( [ // eslint-disable-line no-var
+        triangleChallenges = random.shuffle( [
           generateUniqueChallenge( generateIsoscelesRightTriangleLevelHypotenuseFindAreaChallenge ),
           generateUniqueChallenge( generateIsoscelesRightTriangleSlantedHypotenuseFindAreaChallenge )
         ] );
