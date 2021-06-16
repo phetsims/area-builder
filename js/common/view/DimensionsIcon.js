@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+[object Promise]
 
 /**
  * A Scenery node that depicts a basic shape with its dimensions labeled, intended for use in control panels.  It

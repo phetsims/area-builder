@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+[object Promise]
 
 /**
  * Model element that describes a shape in terms of 'perimeter points', both exterior and interior.  The interior

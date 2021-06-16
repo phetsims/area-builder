@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+[object Promise]
 
 /**
  * This type defines a challenge used in the Area Builder game.  It exists as a place to document the format of a

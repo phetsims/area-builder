@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+[object Promise]
 
 /**
  * A Scenery node that represents a shape that is defined by lists of perimeter points.  The perimeter points are

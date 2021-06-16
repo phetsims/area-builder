@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+[object Promise]
 
 /**
  * Panel that shows the level, the current challenge, the score, and the time if enabled.

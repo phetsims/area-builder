@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+[object Promise]
 
 /**
  * Primary model class for the 'Explore' screen of the Area Builder simulation.

@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+[object Promise]
 
 /**
  * A composite node that depicts a shape placement board, a bucket containing shapes to go on the board, an area and

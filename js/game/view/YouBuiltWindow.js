@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+[object Promise]
 
 /**
  * A Scenery node that is used to show the user what they constructed for a 'Build it' style of challenge.  It can be

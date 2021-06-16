@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+[object Promise]
 
 /**
  * Static factory for creating the number-on-a-grid icons used in the level selection screen of the Area Builder game.

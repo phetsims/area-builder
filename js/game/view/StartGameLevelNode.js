@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+[object Promise]
 
 /**
  * A node that pretty much fills the screen and that allows the user to select the game level that they wish to play.

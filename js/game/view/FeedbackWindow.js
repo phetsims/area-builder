@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+[object Promise]
 
 /**
  * Base class for a node that looks like a window and provides the user with feedback about what they have entered

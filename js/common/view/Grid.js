@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+[object Promise]
 
 /**
  * Defines a simple grid with horizontal and vertical lines, and no enclosing
