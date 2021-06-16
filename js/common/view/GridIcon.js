@@ -1,4 +1,4 @@
-[object Promise]
+// Copyright 2014-2021, University of Colorado Boulder
 
 /**
  * A Scenery node that depicts a grid with squares on it.  This is used in several places in the simulation to create

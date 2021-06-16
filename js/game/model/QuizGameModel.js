@@ -1,4 +1,4 @@
-[object Promise]
+// Copyright 2014-2021, University of Colorado Boulder
 
 /**
  * Framework for a quiz style game where the user is presented with various 'challenges' which must be answered and for

@@ -1,4 +1,4 @@
-[object Promise]
+// Copyright 2014-2021, University of Colorado Boulder
 
 /**
  * Defines a 'build specification', which is used to define what a user should build when presented with a 'build it'

@@ -1,4 +1,4 @@
-[object Promise]
+// Copyright 2014-2021, University of Colorado Boulder
 
 /**
  * An accordion box that displays the area and perimeter of shape that may change dynamically.

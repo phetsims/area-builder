@@ -1,4 +1,4 @@
-[object Promise]
+// Copyright 2014-2021, University of Colorado Boulder
 
 /**
  * The 'Explore' screen in the Area Builder simulation. Conforms to the contract specified in joist/Screen.

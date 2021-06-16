@@ -1,4 +1,4 @@
-[object Promise]
+// Copyright 2014-2021, University of Colorado Boulder
 
 /**
  * A Scenery node that can be clicked upon to create new movable shapes in the model.

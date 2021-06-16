@@ -1,4 +1,4 @@
-[object Promise]
+// Copyright 2014-2021, University of Colorado Boulder
 
 /**
  * Model of a rectangular board (like a white board or bulletin board) upon which various smaller shapes can be placed.
