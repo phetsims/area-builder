@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.21-rc.3 Thu Jun 10 2021 13:25:22 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.21 Thu Jun 17 2021 09:58:58 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "cb6737dc526441d11e3aae77828bd35ee1b1d035",
+    "sha": "875ba6a805dc2bcde8047a1dce1d6e2f006e4175",
     "branch": "1.1"
   },
   "assert": {
