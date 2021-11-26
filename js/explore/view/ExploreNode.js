@@ -15,8 +15,8 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import BucketFront from '../../../../scenery-phet/js/bucket/BucketFront.js';
 import BucketHole from '../../../../scenery-phet/js/bucket/BucketHole.js';
 import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
-import Color from '../../../../scenery/js/util/Color.js';
+import { Node } from '../../../../scenery/js/imports.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import ShapeCreatorNode from '../../common/view/ShapeCreatorNode.js';

@@ -8,7 +8,7 @@
  */
 
 import Shape from '../../../../kite/js/Shape.js';
-import Path from '../../../../scenery/js/nodes/Path.js';
+import { Path } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
 
 class Grid extends Path {

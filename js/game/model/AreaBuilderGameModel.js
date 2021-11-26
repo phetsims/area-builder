@@ -15,7 +15,7 @@ import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import Color from '../../../../scenery/js/util/Color.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import MovableShape from '../../common/model/MovableShape.js';

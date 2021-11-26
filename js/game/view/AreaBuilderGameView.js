@@ -14,10 +14,10 @@ import FaceWithPointsNode from '../../../../scenery-phet/js/FaceWithPointsNode.j
 import NumberEntryControl from '../../../../scenery-phet/js/NumberEntryControl.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import HBox from '../../../../scenery/js/nodes/HBox.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
-import VBox from '../../../../scenery/js/nodes/VBox.js';
+import { HBox } from '../../../../scenery/js/imports.js';
+import { Node } from '../../../../scenery/js/imports.js';
+import { Text } from '../../../../scenery/js/imports.js';
+import { VBox } from '../../../../scenery/js/imports.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Carousel from '../../../../sun/js/Carousel.js';

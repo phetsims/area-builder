@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-import Text from '../../../../scenery/js/nodes/Text.js';
+import { Text } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
 import areaBuilderStrings from '../../areaBuilderStrings.js';
 import FeedbackWindow from './FeedbackWindow.js';
