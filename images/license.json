@@ -1,5 +1,5 @@
 {
-  "explore-icon.png": {
+  "exploreIcon.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -7,7 +7,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by John Blanco"
   },
-  "game-icon.png": {
+  "gameIcon.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],

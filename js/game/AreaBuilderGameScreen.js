@@ -10,7 +10,7 @@ import Property from '../../../axon/js/Property.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import { Image } from '../../../scenery/js/imports.js';
-import gameIcon from '../../images/game-icon_png.js';
+import gameIcon_png from '../../images/gameIcon_png.js';
 import areaBuilder from '../areaBuilder.js';
 import areaBuilderStrings from '../areaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
@@ -29,7 +29,7 @@ class AreaBuilderGameScreen extends Screen {
     const options = {
       name: gameString,
       backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
-      homeScreenIcon: new ScreenIcon( new Image( gameIcon ), {
+      homeScreenIcon: new ScreenIcon( new Image( gameIcon_png ), {
         maxIconWidthProportion: 1,
         maxIconHeightProportion: 1
       } ),
