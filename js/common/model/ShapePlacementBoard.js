@@ -11,7 +11,7 @@ import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Shape from '../../../../kite/js/Shape.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import { Color } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';

@@ -8,7 +8,7 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Screen from '../../../../joist/js/Screen.js';
 import ScreenIcon from '../../../../joist/js/ScreenIcon.js';
-import Shape from '../../../../kite/js/Shape.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
 import FaceNode from '../../../../scenery-phet/js/FaceNode.js';
 import { HBox } from '../../../../scenery/js/imports.js';
