@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+// Copyright 2014-2022, University of Colorado Boulder
 
 /**
  * A Scenery node that consists of two fractions and two color patches, used when prompting the user to create a shape
