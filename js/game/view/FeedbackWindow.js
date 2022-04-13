@@ -67,7 +67,7 @@ class FeedbackWindow extends Panel {
    * @public
    */
   setColorBasedOnAnswerCorrectness( userAnswerIsCorrect ) {
-    this.background.fill = userAnswerIsCorrect ? CORRECT_ANSWER_BACKGROUND_COLOR : INCORRECT_ANSWER_BACKGROUND_COLOR;
+    this.setFill( userAnswerIsCorrect ? CORRECT_ANSWER_BACKGROUND_COLOR : INCORRECT_ANSWER_BACKGROUND_COLOR );
   }
 }
 
