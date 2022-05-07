@@ -9,33 +9,33 @@ import areaBuilder from './areaBuilder.js';
 
 type StringsType = {
   'area-builder': {
-    'title': string
-  },
-  'aSolutionColon': string,
-  'aSolution': string,
-  'explore': string,
-  'game': string,
-  'area': string,
-  'areaQuestion': string,
-  'perimeter': string,
-  'values': string,
-  'level': string,
+    'title': string;
+  };
+  'aSolutionColon': string;
+  'aSolution': string;
+  'explore': string;
+  'game': string;
+  'area': string;
+  'areaQuestion': string;
+  'perimeter': string;
+  'values': string;
+  'level': string;
   'pattern': {
     '0challenge': {
-      '1max': string
+      '1max': string;
     }
-  },
-  'buildIt': string,
-  'findTheArea': string,
-  'yourGoal': string,
-  'youBuilt': string,
-  'youEntered': string,
-  'areaEquals': string,
-  'perimeterEquals': string,
-  'solutionColon': string,
-  'solution': string,
-  'startOver': string,
-  'invalidValue': string
+  };
+  'buildIt': string;
+  'findTheArea': string;
+  'yourGoal': string;
+  'youBuilt': string;
+  'youEntered': string;
+  'areaEquals': string;
+  'perimeterEquals': string;
+  'solutionColon': string;
+  'solution': string;
+  'startOver': string;
+  'invalidValue': string;
 };
 
 const areaBuilderStrings = getStringModule( 'AREA_BUILDER' ) as StringsType;
