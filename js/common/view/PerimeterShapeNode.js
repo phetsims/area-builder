@@ -9,6 +9,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -200,7 +201,7 @@ class PerimeterShapeNode extends Node {
     showDimensionsProperty.linkAttribute( dimensionsLayer, 'visible' );
 
     // Control visibility of the grid.
-    Property.multilink( [ showGridProperty, perimeterDefinesViableShapeProperty ], ( showGrid, perimeterDefinesViableShape ) => {
+    Multilink.multilink( [ showGridProperty, perimeterDefinesViableShapeProperty ], ( showGrid, perimeterDefinesViableShape ) => {
       grid.visible = showGrid && perimeterDefinesViableShape;
     } );
 
