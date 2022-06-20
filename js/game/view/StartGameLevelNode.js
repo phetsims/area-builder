@@ -13,9 +13,9 @@ import merge from '../../../../phet-core/js/merge.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import TimerToggleButton from '../../../../scenery-phet/js/buttons/TimerToggleButton.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { Node, Text } from '../../../../scenery/js/imports.js';
 import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
+import ScoreDisplayStars from '../../../../vegas/js/ScoreDisplayStars.js';
 import vegasStrings from '../../../../vegas/js/vegasStrings.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
@@ -78,10 +78,10 @@ class StartGameLevelNode extends Node {
         {
           listener: createLevelStartFunction( i ),
           baseColor: options.buttonBackgroundColor,
-          scoreDisplayOptions: {
+          createScoreDisplay: scoreProperty => new ScoreDisplayStars( scoreProperty, {
             numberOfStars: options.numStarsOnButtons,
             perfectScore: options.perfectScore
-          },
+          } ),
           soundPlayerIndex: i
         }
       );
