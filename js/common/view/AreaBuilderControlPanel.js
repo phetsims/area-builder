@@ -37,13 +37,9 @@ class AreaBuilderControlPanel extends Node {
     this.dimensionsControlVisibleProperty = new Property( true );
 
     // Create the controls and labels
-    const gridCheckbox = new Checkbox(
-      new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ),
-      showGridProperty,
-      { spacing: 15 }
-    );
+    const gridCheckbox = new Checkbox( showGridProperty, new Grid( new Bounds2( 0, 0, 40, 40 ), 10, { stroke: '#b0b0b0' } ), { spacing: 15 } );
     this.dimensionsIcon = new DimensionsIcon(); // @public so that the icon style can be set
-    const dimensionsCheckbox = new Checkbox( this.dimensionsIcon, showDimensionsProperty, { spacing: 15 } );
+    const dimensionsCheckbox = new Checkbox( showDimensionsProperty, this.dimensionsIcon, { spacing: 15 } );
 
     // Create the panel.
     const vBox = new VBox( {
