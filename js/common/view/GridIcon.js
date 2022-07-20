@@ -9,9 +9,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
-import { Color } from '../../../../scenery/js/imports.js';
+import { Color, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
 import Grid from './Grid.js';
 

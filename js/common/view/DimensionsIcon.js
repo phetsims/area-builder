@@ -9,10 +9,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
-import { Color } from '../../../../scenery/js/imports.js';
+import { Color, Node, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
 import Grid from './Grid.js';

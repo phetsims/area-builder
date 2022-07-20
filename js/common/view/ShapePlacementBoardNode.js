@@ -8,9 +8,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Path } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
+import { Node, Path, Rectangle } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
 import Grid from './Grid.js';
 import PerimeterShapeNode from './PerimeterShapeNode.js';
