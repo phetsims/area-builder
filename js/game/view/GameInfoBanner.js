@@ -45,7 +45,7 @@ class GameInfoBanner extends Rectangle {
     this.areaToFindProperty = new Property( null );
 
     // Define the title.
-    const title = new Text( this.titleTextProperty.value, {
+    const title = new Text( this.titleTextProperty, {
       font: TITLE_FONT,
       fill: TEXT_FILL_COLOR,
       centerY: height / 2,
@@ -54,8 +54,7 @@ class GameInfoBanner extends Rectangle {
     this.addChild( title );
 
     // Update the title when the title text changes.
-    this.titleTextProperty.link( titleText => {
-      title.text = titleText;
+    this.titleTextProperty.link( () => {
       title.centerY = height / 2;
       if ( this.buildSpecProperty.value === null && this.areaToFindProperty.value === null ) {
         // There is no build spec are area to find, so center the title in the banner.
