@@ -13,7 +13,7 @@ import areaBuilderStrings from './areaBuilderStrings.js';
 import AreaBuilderExploreScreen from './explore/AreaBuilderExploreScreen.js';
 import AreaBuilderGameScreen from './game/AreaBuilderGameScreen.js';
 
-const areaBuilderTitleString = areaBuilderStrings[ 'area-builder' ].title;
+const areaBuilderTitleStringProperty = areaBuilderStrings[ 'area-builder' ].titleStringProperty;
 
 // constants
 const tandem = Tandem.ROOT;
@@ -30,7 +30,7 @@ const simOptions = {
 
 simLauncher.launch( () => {
   // create and start the sim
-  new Sim( areaBuilderTitleString, [
+  new Sim( areaBuilderTitleStringProperty, [
     new AreaBuilderExploreScreen( tandem.createTandem( 'exploreScreen' ) ),
     new AreaBuilderGameScreen( tandem.createTandem( 'gameScreen' ) )
   ], simOptions ).start();
