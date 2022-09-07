@@ -23,7 +23,7 @@ import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import GameAudioPlayer from '../../../../vegas/js/GameAudioPlayer.js';
 import LevelCompletedNode from '../../../../vegas/js/LevelCompletedNode.js';
-import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import areaBuilder from '../../areaBuilder.js';
 import areaBuilderStrings from '../../areaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
@@ -47,14 +47,14 @@ const areaQuestionString = areaBuilderStrings.areaQuestion;
 const aSolutionColonString = areaBuilderStrings.aSolutionColon;
 const aSolutionString = areaBuilderStrings.aSolution;
 const buildItString = areaBuilderStrings.buildIt;
-const checkString = vegasStrings.check;
+const checkString = VegasStrings.check;
 const findTheAreaString = areaBuilderStrings.findTheArea;
-const nextString = vegasStrings.next;
+const nextString = VegasStrings.next;
 const perimeterEqualsString = areaBuilderStrings.perimeterEquals;
 const solutionColonString = areaBuilderStrings.solutionColon;
 const solutionString = areaBuilderStrings.solution;
 const startOverString = areaBuilderStrings.startOver;
-const tryAgainString = vegasStrings.tryAgain;
+const tryAgainString = VegasStrings.tryAgain;
 const yourGoalString = areaBuilderStrings.yourGoal;
 
 // constants

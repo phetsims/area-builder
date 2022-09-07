@@ -16,11 +16,11 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Text } from '../../../../scenery/js/imports.js';
 import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
 import ScoreDisplayStars from '../../../../vegas/js/ScoreDisplayStars.js';
-import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 
-const chooseYourLevelString = vegasStrings.chooseYourLevel;
+const chooseYourLevelString = VegasStrings.chooseYourLevel;
 
 // constants
 const CONTROL_BUTTON_TOUCH_AREA_DILATION = 4;

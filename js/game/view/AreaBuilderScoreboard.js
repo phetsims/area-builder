@@ -12,12 +12,12 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import GameTimer from '../../../../vegas/js/GameTimer.js';
-import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import areaBuilder from '../../areaBuilder.js';
 import areaBuilderStrings from '../../areaBuilderStrings.js';
 
-const labelScorePatternString = vegasStrings.label.scorePattern;
-const labelTimeString = vegasStrings.label.time;
+const labelScorePatternString = VegasStrings.label.scorePattern;
+const labelTimeString = VegasStrings.label.time;
 const levelString = areaBuilderStrings.level;
 const pattern0Challenge1MaxString = areaBuilderStrings.pattern[ '0challenge' ][ '1max' ];
 
