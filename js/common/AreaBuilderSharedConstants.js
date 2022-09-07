@@ -8,9 +8,9 @@
 
 import Bounds2 from '../../../dot/js/Bounds2.js';
 import areaBuilder from '../areaBuilder.js';
-import areaBuilderStrings from '../areaBuilderStrings.js';
+import AreaBuilderStrings from '../AreaBuilderStrings.js';
 
-const invalidValueString = areaBuilderStrings.invalidValue;
+const invalidValueString = AreaBuilderStrings.invalidValue;
 
 const AreaBuilderSharedConstants = {
 

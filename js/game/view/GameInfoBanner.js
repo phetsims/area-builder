@@ -14,11 +14,11 @@ import { Node, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import areaBuilder from '../../areaBuilder.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
+import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 import ColorProportionsPrompt from './ColorProportionsPrompt.js';
 
-const areaEqualsString = areaBuilderStrings.areaEquals;
-const perimeterEqualsString = areaBuilderStrings.perimeterEquals;
+const areaEqualsString = AreaBuilderStrings.areaEquals;
+const perimeterEqualsString = AreaBuilderStrings.perimeterEquals;
 
 // constants
 const TEXT_FILL_COLOR = 'white';

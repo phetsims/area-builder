@@ -9,11 +9,11 @@
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import areaBuilderStrings from './areaBuilderStrings.js';
+import AreaBuilderStrings from './AreaBuilderStrings.js';
 import AreaBuilderExploreScreen from './explore/AreaBuilderExploreScreen.js';
 import AreaBuilderGameScreen from './game/AreaBuilderGameScreen.js';
 
-const areaBuilderTitleStringProperty = areaBuilderStrings[ 'area-builder' ].titleStringProperty;
+const areaBuilderTitleStringProperty = AreaBuilderStrings[ 'area-builder' ].titleStringProperty;
 
 // constants
 const tandem = Tandem.ROOT;

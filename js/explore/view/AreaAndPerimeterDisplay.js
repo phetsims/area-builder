@@ -11,11 +11,11 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Text } from '../../../../scenery/js/imports.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import areaBuilder from '../../areaBuilder.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
+import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 
-const areaString = areaBuilderStrings.area;
-const perimeterString = areaBuilderStrings.perimeter;
-const valuesString = areaBuilderStrings.values;
+const areaString = AreaBuilderStrings.area;
+const perimeterString = AreaBuilderStrings.perimeter;
+const valuesString = AreaBuilderStrings.values;
 
 // constants
 const DISPLAY_FONT = new PhetFont( 14 );

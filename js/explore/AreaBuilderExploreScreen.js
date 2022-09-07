@@ -12,13 +12,13 @@ import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import { Image } from '../../../scenery/js/imports.js';
 import exploreIcon_png from '../../images/exploreIcon_png.js';
 import areaBuilder from '../areaBuilder.js';
-import areaBuilderStrings from '../areaBuilderStrings.js';
+import AreaBuilderStrings from '../AreaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
 import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
 import AreaBuilderExploreModel from './model/AreaBuilderExploreModel.js';
 import AreaBuilderExploreView from './view/AreaBuilderExploreView.js';
 
-const exploreString = areaBuilderStrings.explore;
+const exploreString = AreaBuilderStrings.explore;
 
 class AreaBuilderExploreScreen extends Screen {
 

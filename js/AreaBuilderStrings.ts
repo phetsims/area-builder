@@ -61,8 +61,8 @@ type StringsType = {
   'invalidValueStringProperty': TReadOnlyProperty<string>;
 };
 
-const areaBuilderStrings = getStringModule( 'AREA_BUILDER' ) as StringsType;
+const AreaBuilderStrings = getStringModule( 'AREA_BUILDER' ) as StringsType;
 
-areaBuilder.register( 'areaBuilderStrings', areaBuilderStrings );
+areaBuilder.register( 'AreaBuilderStrings', AreaBuilderStrings );
 
-export default areaBuilderStrings;
+export default AreaBuilderStrings;

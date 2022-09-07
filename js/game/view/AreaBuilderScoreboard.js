@@ -14,12 +14,12 @@ import { Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import GameTimer from '../../../../vegas/js/GameTimer.js';
 import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import areaBuilder from '../../areaBuilder.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
+import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 
 const labelScorePatternString = VegasStrings.label.scorePattern;
 const labelTimeString = VegasStrings.label.time;
-const levelString = areaBuilderStrings.level;
-const pattern0Challenge1MaxString = areaBuilderStrings.pattern[ '0challenge' ][ '1max' ];
+const levelString = AreaBuilderStrings.level;
+const pattern0Challenge1MaxString = AreaBuilderStrings.pattern[ '0challenge' ][ '1max' ];
 
 class AreaBuilderScoreboard extends Node {
 

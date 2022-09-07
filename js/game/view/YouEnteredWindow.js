@@ -9,10 +9,10 @@
 
 import { Text } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
+import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 import FeedbackWindow from './FeedbackWindow.js';
 
-const youEnteredString = areaBuilderStrings.youEntered;
+const youEnteredString = AreaBuilderStrings.youEntered;
 
 // constants
 const LINE_SPACING = 5;

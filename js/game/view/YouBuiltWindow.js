@@ -11,13 +11,13 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import areaBuilder from '../../areaBuilder.js';
-import areaBuilderStrings from '../../areaBuilderStrings.js';
+import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 import ColorProportionsPrompt from './ColorProportionsPrompt.js';
 import FeedbackWindow from './FeedbackWindow.js';
 
-const areaEqualsString = areaBuilderStrings.areaEquals;
-const perimeterEqualsString = areaBuilderStrings.perimeterEquals;
-const youBuiltString = areaBuilderStrings.youBuilt;
+const areaEqualsString = AreaBuilderStrings.areaEquals;
+const perimeterEqualsString = AreaBuilderStrings.perimeterEquals;
+const youBuiltString = AreaBuilderStrings.youBuilt;
 
 // constants
 const LINE_SPACING = 5;

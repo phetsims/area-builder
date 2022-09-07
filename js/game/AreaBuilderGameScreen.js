@@ -12,7 +12,7 @@ import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import { Image } from '../../../scenery/js/imports.js';
 import gameIcon_png from '../../images/gameIcon_png.js';
 import areaBuilder from '../areaBuilder.js';
-import areaBuilderStrings from '../areaBuilderStrings.js';
+import AreaBuilderStrings from '../AreaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
 import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
 import AreaBuilderChallengeFactory from './model/AreaBuilderChallengeFactory.js';
@@ -20,7 +20,7 @@ import AreaBuilderGameModel from './model/AreaBuilderGameModel.js';
 import QuizGameModel from './model/QuizGameModel.js';
 import AreaBuilderGameView from './view/AreaBuilderGameView.js';
 
-const gameString = areaBuilderStrings.game;
+const gameString = AreaBuilderStrings.game;
 
 class AreaBuilderGameScreen extends Screen {
 
