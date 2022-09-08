@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+// Copyright 2014-2022, University of Colorado Boulder
 
 /**
  * A Scenery node that is used to show the user what they constructed for a 'Build it' style of challenge.  It can be
