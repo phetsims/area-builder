@@ -20,14 +20,12 @@ import AreaBuilderGameModel from './model/AreaBuilderGameModel.js';
 import QuizGameModel from './model/QuizGameModel.js';
 import AreaBuilderGameView from './view/AreaBuilderGameView.js';
 
-const gameString = AreaBuilderStrings.game;
-
 class AreaBuilderGameScreen extends Screen {
 
   constructor( tandem ) {
 
     const options = {
-      name: gameString,
+      name: AreaBuilderStrings.gameStringProperty,
       backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
       homeScreenIcon: new ScreenIcon( new Image( gameIcon_png ), {
         maxIconWidthProportion: 1,

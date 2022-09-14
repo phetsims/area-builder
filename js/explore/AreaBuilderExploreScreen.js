@@ -18,7 +18,6 @@ import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
 import AreaBuilderExploreModel from './model/AreaBuilderExploreModel.js';
 import AreaBuilderExploreView from './view/AreaBuilderExploreView.js';
 
-const exploreString = AreaBuilderStrings.explore;
 
 class AreaBuilderExploreScreen extends Screen {
 
@@ -28,7 +27,7 @@ class AreaBuilderExploreScreen extends Screen {
   constructor( tandem ) {
 
     const options = {
-      name: exploreString,
+      name: AreaBuilderStrings.exploreStringProperty,
       backgroundColorProperty: new Property( AreaBuilderSharedConstants.BACKGROUND_COLOR ),
       homeScreenIcon: new ScreenIcon( new Image( exploreIcon_png ), {
         maxIconWidthProportion: 1,
