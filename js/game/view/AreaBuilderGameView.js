@@ -644,11 +644,11 @@ class AreaBuilderGameView extends ScreenView {
     // Update the solution banner.
     this.solutionBanner.reset();
     if ( challenge.buildSpec ) {
-      this.solutionBanner.titleTextProperty.value = aSolutionColonString;
+      this.solutionBanner.titleStringProperty.value = aSolutionColonString;
       this.solutionBanner.buildSpecProperty.value = challenge.buildSpec;
     }
     else {
-      this.solutionBanner.titleTextProperty.value = solutionColonString;
+      this.solutionBanner.titleStringProperty.value = solutionColonString;
       this.solutionBanner.areaToFindProperty.value = challenge.backgroundShape.unitArea;
     }
     this.showChallengeGraphics();
@@ -758,7 +758,7 @@ class AreaBuilderGameView extends ScreenView {
       const challenge = this.model.currentChallengeProperty.get(); // Convenience var
 
       // Set up the challenge prompt banner, which appears above the shape placement board.
-      this.challengePromptBanner.titleTextProperty.value = challenge.buildSpec ? buildItString : findTheAreaString;
+      this.challengePromptBanner.titleStringProperty.value = challenge.buildSpec ? buildItString : findTheAreaString;
 
       // If needed, set up the goal prompt that will initially appear over the shape placement board (in the z-order).
       if ( challenge.buildSpec ) {

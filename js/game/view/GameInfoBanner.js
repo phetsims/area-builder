@@ -40,12 +40,12 @@ class GameInfoBanner extends Rectangle {
     super( 0, 0, width, height, 0, 0, { fill: backgroundColor } );
 
     // @public These properties are the main API for this class, and they control what is and isn't shown on the banner.
-    this.titleTextProperty = new Property( '' );
+    this.titleStringProperty = new Property( '' );
     this.buildSpecProperty = new Property( null );
     this.areaToFindProperty = new Property( null );
 
     // Define the title.
-    const title = new Text( this.titleTextProperty, {
+    const title = new Text( this.titleStringProperty, {
       font: TITLE_FONT,
       fill: TEXT_FILL_COLOR,
       centerY: height / 2,
@@ -54,7 +54,7 @@ class GameInfoBanner extends Rectangle {
     this.addChild( title );
 
     // Update the title when the title text changes.
-    this.titleTextProperty.link( () => {
+    this.titleStringProperty.link( () => {
       title.centerY = height / 2;
       if ( this.buildSpecProperty.value === null && this.areaToFindProperty.value === null ) {
         // There is no build spec are area to find, so center the title in the banner.
@@ -202,7 +202,7 @@ class GameInfoBanner extends Rectangle {
    * @public
    */
   reset() {
-    this.titleTextProperty.reset();
+    this.titleStringProperty.reset();
     this.buildSpecProperty.reset();
     this.areaToFindProperty.reset();
   }
