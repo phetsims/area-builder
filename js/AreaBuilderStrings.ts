@@ -5,60 +5,60 @@
  */
 /* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
+import LinkableProperty from '../../axon/js/LinkableProperty.js';
 import areaBuilder from './areaBuilder.js';
 
 type StringsType = {
   'area-builder': {
     'title': string;
-    'titleStringProperty': TReadOnlyProperty<string>;
+    'titleStringProperty': LinkableProperty<string>;
   };
   'aSolutionColon': string;
-  'aSolutionColonStringProperty': TReadOnlyProperty<string>;
+  'aSolutionColonStringProperty': LinkableProperty<string>;
   'aSolution': string;
-  'aSolutionStringProperty': TReadOnlyProperty<string>;
+  'aSolutionStringProperty': LinkableProperty<string>;
   'explore': string;
-  'exploreStringProperty': TReadOnlyProperty<string>;
+  'exploreStringProperty': LinkableProperty<string>;
   'game': string;
-  'gameStringProperty': TReadOnlyProperty<string>;
+  'gameStringProperty': LinkableProperty<string>;
   'area': string;
-  'areaStringProperty': TReadOnlyProperty<string>;
+  'areaStringProperty': LinkableProperty<string>;
   'areaQuestion': string;
-  'areaQuestionStringProperty': TReadOnlyProperty<string>;
+  'areaQuestionStringProperty': LinkableProperty<string>;
   'perimeter': string;
-  'perimeterStringProperty': TReadOnlyProperty<string>;
+  'perimeterStringProperty': LinkableProperty<string>;
   'values': string;
-  'valuesStringProperty': TReadOnlyProperty<string>;
+  'valuesStringProperty': LinkableProperty<string>;
   'level': string;
-  'levelStringProperty': TReadOnlyProperty<string>;
+  'levelStringProperty': LinkableProperty<string>;
   'pattern': {
     '0challenge': {
       '1max': string;
-      '1maxStringProperty': TReadOnlyProperty<string>;
+      '1maxStringProperty': LinkableProperty<string>;
     }
   };
   'buildIt': string;
-  'buildItStringProperty': TReadOnlyProperty<string>;
+  'buildItStringProperty': LinkableProperty<string>;
   'findTheArea': string;
-  'findTheAreaStringProperty': TReadOnlyProperty<string>;
+  'findTheAreaStringProperty': LinkableProperty<string>;
   'yourGoal': string;
-  'yourGoalStringProperty': TReadOnlyProperty<string>;
+  'yourGoalStringProperty': LinkableProperty<string>;
   'youBuilt': string;
-  'youBuiltStringProperty': TReadOnlyProperty<string>;
+  'youBuiltStringProperty': LinkableProperty<string>;
   'youEntered': string;
-  'youEnteredStringProperty': TReadOnlyProperty<string>;
+  'youEnteredStringProperty': LinkableProperty<string>;
   'areaEquals': string;
-  'areaEqualsStringProperty': TReadOnlyProperty<string>;
+  'areaEqualsStringProperty': LinkableProperty<string>;
   'perimeterEquals': string;
-  'perimeterEqualsStringProperty': TReadOnlyProperty<string>;
+  'perimeterEqualsStringProperty': LinkableProperty<string>;
   'solutionColon': string;
-  'solutionColonStringProperty': TReadOnlyProperty<string>;
+  'solutionColonStringProperty': LinkableProperty<string>;
   'solution': string;
-  'solutionStringProperty': TReadOnlyProperty<string>;
+  'solutionStringProperty': LinkableProperty<string>;
   'startOver': string;
-  'startOverStringProperty': TReadOnlyProperty<string>;
+  'startOverStringProperty': LinkableProperty<string>;
   'invalidValue': string;
-  'invalidValueStringProperty': TReadOnlyProperty<string>;
+  'invalidValueStringProperty': LinkableProperty<string>;
 };
 
 const AreaBuilderStrings = getStringModule( 'AREA_BUILDER' ) as StringsType;
