@@ -1,7 +1,7 @@
 {
   "comment": "# area-builder 1.1.22 Wed Sep 22 2021 20:19:27 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "b387990d6b4fe152c5c58d6d68fef11159c3118a",
+    "sha": "06213c69205d4a10129171cbac445c9f9b6fb697",
     "branch": "1.1"
   },
   "assert": {
@@ -25,7 +25,7 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "b9d398b45470eb357dd9297bd19c5cbc69771dbc",
+    "sha": "a91011e238daedad4fc0818dd07f03bd77795b95",
     "branch": "HEAD"
   },
   "kite": {
