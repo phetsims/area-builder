@@ -1,7 +1,7 @@
 {
   "comment": "# area-builder 1.1.22 Wed Sep 22 2021 20:19:27 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "65c0af9cbf7127f5f4358bf22144651edf2198a8",
+    "sha": "b387990d6b4fe152c5c58d6d68fef11159c3118a",
     "branch": "1.1"
   },
   "assert": {
@@ -49,7 +49,7 @@
     "branch": "HEAD"
   },
   "scenery-phet": {
-    "sha": "7def38a31b7322d5428bdb863937d941cf6d3c41",
+    "sha": "07cb49bb9c0e2ba4b0b676ca07f41c26c6803696",
     "branch": "HEAD"
   },
   "sherpa": {
