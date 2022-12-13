@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.23 Mon Dec 12 2022 15:49:53 GMT-0700 (Mountain Standard Time)",
+  "comment": "# area-builder 1.1.24-rc.1 Tue Dec 13 2022 14:26:14 GMT-0700 (Mountain Standard Time)",
   "area-builder": {
-    "sha": "0ae39d2babb57b492b9d8468a5b8f202fbf1c275",
+    "sha": "a1bd1541d7d6b1780693bed94191d0424c80ceab",
     "branch": "1.1"
   },
   "assert": {
