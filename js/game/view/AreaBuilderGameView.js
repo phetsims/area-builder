@@ -856,14 +856,15 @@ class AreaBuilderGameView extends ScreenView {
         } );
 
         // Add a scrolling carousel.
-        this.shapeCarouselLayer.addChild( new Carousel( this.activeShapeNodeCreators, {
+        this.carousel = new Carousel( this.activeShapeNodeCreators, {
           orientation: 'horizontal',
           itemsPerPage: ITEMS_PER_CAROUSEL_PAGE,
           centerX: this.shapeBoardOriginalBounds.centerX,
           top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
           fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
           hideDisabledButtons: true
-        } ) );
+        } );
+        this.shapeCarouselLayer.addChild( this.carousel );
       }
     }
   }
