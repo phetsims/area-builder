@@ -14,7 +14,7 @@ import FaceWithPointsNode from '../../../../scenery-phet/js/FaceWithPointsNode.j
 import NumberEntryControl from '../../../../scenery-phet/js/NumberEntryControl.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Carousel from '../../../../sun/js/Carousel.js';
@@ -98,7 +98,7 @@ class AreaBuilderGameView extends ScreenView {
       },
       () => {
         gameModel.reset();
-        this.activeShapeCreatorNodes.length = 0;
+        this.disposeCurrentCarousel();
       },
       gameModel.timerEnabledProperty,
       [
@@ -408,8 +408,11 @@ class AreaBuilderGameView extends ScreenView {
       }
     } );
 
-    // @private {ShapeCreateNode[]} - Keep track of active ShapeCreatorNode instances so that they can be disposed.
-    this.activeShapeCreatorNodes = [];
+    // @private {GroupItemOptions[]} - Keep track of active ShapeCreatorNode instances so that they can be disposed.
+    this.activeShapeNodeCreators = [];
+
+    // @private {Carousel|null}
+    this.carousel = null; // for disposal
 
     // Various other initialization
     this.levelCompletedNode = null; // @private
@@ -735,6 +738,18 @@ class AreaBuilderGameView extends ScreenView {
     return false;
   }
 
+
+  /**
+   * @private
+   */
+  disposeCurrentCarousel() {
+    this.activeShapeNodeCreators.length = 0;
+    if ( this.carousel ) {
+      this.carousel.dispose();
+      this.carousel = null;
+    }
+  }
+
   /**
    * Present the challenge to the user and set things up so that they can submit their answer.
    * @private
@@ -746,14 +761,8 @@ class AreaBuilderGameView extends ScreenView {
       // Clean up previous challenge.
       this.model.simSpecificModel.clearShapePlacementBoard();
       this.challengePromptBanner.reset();
-      this.shapeCarouselLayer.removeAllChildren();
 
-      // Dispose the ShapeCreatorNode instances, otherwise they leak memory, see
-      // https://github.com/phetsims/area-builder/issues/118.
-      this.activeShapeCreatorNodes.forEach( shapeCreatorNode => {
-        shapeCreatorNode.dispose();
-      } );
-      this.activeShapeCreatorNodes.length = 0;
+      this.disposeCurrentCarousel();
 
       const challenge = this.model.currentChallengeProperty.get(); // Convenience var
 
@@ -836,37 +845,25 @@ class AreaBuilderGameView extends ScreenView {
           if ( userShapeSpec.creationLimit ) {
             creatorNodeOptions.creationLimit = userShapeSpec.creationLimit;
           }
-          this.activeShapeCreatorNodes.push( new ShapeCreatorNode(
-            userShapeSpec.shape,
-            userShapeSpec.color,
-            this.model.simSpecificModel.addUserCreatedMovableShape.bind( this.model.simSpecificModel ),
-            creatorNodeOptions
-          ) );
+          this.activeShapeNodeCreators.push( {
+            createNode: () => new ShapeCreatorNode(
+              userShapeSpec.shape,
+              userShapeSpec.color,
+              this.model.simSpecificModel.addUserCreatedMovableShape.bind( this.model.simSpecificModel ),
+              creatorNodeOptions
+            )
+          } );
         } );
-        if ( this.activeShapeCreatorNodes.length > ITEMS_PER_CAROUSEL_PAGE ) {
 
-          // Add a scrolling carousel.
-          this.shapeCarouselLayer.addChild( new Carousel( this.activeShapeCreatorNodes, {
-            orientation: 'horizontal',
-            itemsPerPage: ITEMS_PER_CAROUSEL_PAGE,
-            centerX: this.shapeBoardOriginalBounds.centerX,
-            top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
-            fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-            hideDisabledButtons: true
-          } ) );
-        }
-        else {
-
-          // Add a non-scrolling panel
-          const creatorNodeHBox = new HBox( { children: this.activeShapeCreatorNodes, spacing: 20 } );
-          this.shapeCarouselLayer.addChild( new Panel( creatorNodeHBox, {
-            centerX: this.shapeBoardOriginalBounds.centerX,
-            top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
-            xMargin: 50,
-            yMargin: 15,
-            fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
-          } ) );
-        }
+        // Add a scrolling carousel.
+        this.shapeCarouselLayer.addChild( new Carousel( this.activeShapeNodeCreators, {
+          orientation: 'horizontal',
+          itemsPerPage: ITEMS_PER_CAROUSEL_PAGE,
+          centerX: this.shapeBoardOriginalBounds.centerX,
+          top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
+          fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
+          hideDisabledButtons: true
+        } ) );
       }
     }
   }
