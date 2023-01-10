@@ -861,8 +861,7 @@ class AreaBuilderGameView extends ScreenView {
           itemsPerPage: ITEMS_PER_CAROUSEL_PAGE,
           centerX: this.shapeBoardOriginalBounds.centerX,
           top: this.shapeBoardOriginalBounds.bottom + SPACE_AROUND_SHAPE_PLACEMENT_BOARD,
-          fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR,
-          hideDisabledButtons: true
+          fill: AreaBuilderSharedConstants.CONTROL_PANEL_BACKGROUND_COLOR
         } );
         this.shapeCarouselLayer.addChild( this.carousel );
       }
