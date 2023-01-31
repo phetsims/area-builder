@@ -1,7 +1,7 @@
 {
   "comment": "# area-builder 1.1.25 Wed Jan 18 2023 11:06:52 GMT-0700 (Mountain Standard Time)",
   "area-builder": {
-    "sha": "2862017f1ba7157127fe711297345e52f9a1c135",
+    "sha": "f34aae847c08095a0782f0375926afe4ea543fd9",
     "branch": "1.1"
   },
   "assert": {
@@ -37,7 +37,7 @@
     "branch": "HEAD"
   },
   "phetcommon": {
-    "sha": "a2964f159d43bded13e2a76b45b233a6c8e8a3cb",
+    "sha": "61ee34a8fe5ebca7c40bc8ffa79461843bef19a4",
     "branch": "HEAD"
   },
   "phetmarks": {
