@@ -127,7 +127,7 @@ class GameInfoBanner extends Rectangle {
       assert && assert( this.areaToFindProperty.value === null, 'Can\'t display area to find and build spec at the same time.' );
       assert && assert( buildSpec === null || buildSpec.area, 'Area must be specified in the build spec' );
       if ( buildSpec !== null ) {
-        areaPrompt.text = StringUtils.format( areaEqualsString, buildSpec.area );
+        areaPrompt.string = StringUtils.format( areaEqualsString, buildSpec.area );
         areaPrompt.visible = true;
         if ( !buildSpec.perimeter && !buildSpec.proportions ) {
           areaPrompt.font = LARGER_FONT;
@@ -137,14 +137,14 @@ class GameInfoBanner extends Rectangle {
         else {
           areaPrompt.font = SMALLER_FONT;
           if ( buildSpec.perimeter ) {
-            perimeterPrompt.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
+            perimeterPrompt.string = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
             perimeterPrompt.visible = true;
           }
           else {
             perimeterPrompt.visible = false;
           }
           if ( buildSpec.proportions ) {
-            areaPrompt.text += ',';
+            areaPrompt.string += ',';
             colorProportionPrompt.color1 = buildSpec.proportions.color1;
             colorProportionPrompt.color2 = buildSpec.proportions.color2;
             colorProportionPrompt.color1Proportion = buildSpec.proportions.color1Proportion;
@@ -175,7 +175,7 @@ class GameInfoBanner extends Rectangle {
     this.areaToFindProperty.link( areaToFind => {
       assert && assert( this.buildSpecProperty.value === null, 'Can\'t display area to find and build spec at the same time.' );
       if ( areaToFind !== null ) {
-        areaPrompt.text = StringUtils.format( areaEqualsString, areaToFind );
+        areaPrompt.string = StringUtils.format( areaEqualsString, areaToFind );
         areaPrompt.font = LARGER_FONT;
         areaPrompt.visible = true;
 

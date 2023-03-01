@@ -96,7 +96,7 @@ class YouBuiltWindow extends FeedbackWindow {
   setBuildSpec( buildSpec ) {
 
     // Set the area value, which is always shown.
-    this.areaTextNode.text = StringUtils.format( areaEqualsString, buildSpec.area );
+    this.areaTextNode.string = StringUtils.format( areaEqualsString, buildSpec.area );
 
     // If proportions have changed, update them.  They sit beneath the area in the layout so that it is clear that
     // they go together.
@@ -122,7 +122,7 @@ class YouBuiltWindow extends FeedbackWindow {
       if ( !this.contentNode.hasChild( this.perimeterTextNode ) ) {
         this.contentNode.addChild( this.perimeterTextNode );
       }
-      this.perimeterTextNode.text = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
+      this.perimeterTextNode.string = StringUtils.format( perimeterEqualsString, buildSpec.perimeter );
       this.perimeterTextNode.visible = true;
       this.perimeterTextNode.top = ( this.proportionsInfoNode ? this.proportionsInfoNode.bottom : this.areaTextNode.bottom ) + LINE_SPACING;
     }

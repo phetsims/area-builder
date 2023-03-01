@@ -162,7 +162,7 @@ class PerimeterShapeNode extends Node {
           segmentLabelsInfo.forEach( ( segmentLabelInfo, segmentIndex ) => {
             const dimensionLabel = textNodePool[ segmentIndex ];
             dimensionLabel.visible = true;
-            dimensionLabel.text = segmentLabelInfo.unitLength;
+            dimensionLabel.string = segmentLabelInfo.unitLength;
             const labelPositionOffset = new Vector2( 0, 0 );
             // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make
             // containment testing unreliable if there is an edge on the same line as the containment test.  As a

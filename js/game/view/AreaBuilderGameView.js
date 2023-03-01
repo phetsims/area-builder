@@ -781,7 +781,7 @@ class AreaBuilderGameView extends ScreenView {
         if ( challenge.buildSpec.proportions ) {
           const areaPrompt = new Node();
           areaPrompt.addChild( areaGoalNode );
-          areaGoalNode.text = `${areaGoalNode.text},`;
+          areaGoalNode.string = `${areaGoalNode.string},`;
           const colorProportionsPrompt = new ColorProportionsPrompt( challenge.buildSpec.proportions.color1,
             challenge.buildSpec.proportions.color2, challenge.buildSpec.proportions.color1Proportion, {
               font: new PhetFont( { size: 16, weight: 'bold' } ),

@@ -40,7 +40,7 @@ class YouEnteredWindow extends FeedbackWindow {
 
   // @public
   setValueEntered( valueEntered ) {
-    this.valueEnteredNode.text = valueEntered.toString();
+    this.valueEnteredNode.string = valueEntered.toString();
     this.valueEnteredNode.centerX = this.titleNode.centerX;
   }
 }

@@ -50,8 +50,8 @@ class FractionNode extends Node {
 
   // @private
   update() {
-    this.numeratorNode.text = this._fraction.numerator.toString();
-    this.denominatorNode.text = this._fraction.denominator.toString();
+    this.numeratorNode.string = this._fraction.numerator.toString();
+    this.denominatorNode.string = this._fraction.denominator.toString();
 
     // Note: The fraction bar width is not updated here because the Line type didn't support changes when this code
     // was developed and the code that used this node didn't really need it.  If this code is being used in a more

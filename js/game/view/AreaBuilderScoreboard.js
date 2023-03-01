@@ -45,19 +45,19 @@ class AreaBuilderScoreboard extends Node {
       maxWidth: options.maxWidth
     } );
     levelProperty.link( level => {
-      levelIndicator.text = StringUtils.format( levelString, level + 1 );
+      levelIndicator.string = StringUtils.format( levelString, level + 1 );
     } );
     const currentChallengeIndicator = new Text( '', { font: new PhetFont( { size: 16 } ), maxWidth: options.maxWidth } );
     problemNumberProperty.link( currentChallenge => {
-      currentChallengeIndicator.text = StringUtils.format( pattern0Challenge1MaxString, currentChallenge + 1, problemsPerLevel );
+      currentChallengeIndicator.string = StringUtils.format( pattern0Challenge1MaxString, currentChallenge + 1, problemsPerLevel );
     } );
     const scoreIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     scoreProperty.link( score => {
-      scoreIndicator.text = StringUtils.format( labelScorePatternString, score );
+      scoreIndicator.string = StringUtils.format( labelScorePatternString, score );
     } );
     const elapsedTimeIndicator = new Text( '', { font: new PhetFont( 20 ), maxWidth: options.maxWidth } );
     elapsedTimeProperty.link( elapsedTime => {
-      elapsedTimeIndicator.text = StringUtils.format( labelTimeString, GameTimer.formatTime( elapsedTime ) );
+      elapsedTimeIndicator.string = StringUtils.format( labelTimeString, GameTimer.formatTime( elapsedTime ) );
     } );
 
     // Create the panel.
