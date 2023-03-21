@@ -36,13 +36,14 @@ class MovableShape {
 
     // Flag that indicates whether this element is animating from one position to another ; should not be set externally.
     this.animatingProperty = new Property( false, {
-      reentrant: true
+      reentrant: true,
+      hasListenerOrderDependencies: true // TODO: https://github.com/phetsims/area-builder/issues/124
     } );
 
     // Value that indicates how faded out this shape is.  This is used as part of a feature where shapes can fade
     // out.  Once fade has started ; it doesn't stop until it is fully faded ; i.e. the value is 1.  This should not be
     // set externally.
-    this.fadeProportionProperty = new Property( 0 );
+    this.fadeProportionProperty = new Property( 0, { hasListenerOrderDependencies: true } ); // TODO: https://github.com/phetsims/area-builder/issues/124
 
     // A flag that indicates whether this individual shape should become invisible when it is done animating.  This
     // is generally used in cases where it becomes part of a larger composite shape that is depicted instead.
