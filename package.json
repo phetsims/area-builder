@@ -21,6 +21,10 @@
     ],
     "preload": [
       "../sherpa/lib/Tween-r12.js"
+    ],
+    "screenNameKeys": [
+      "AREA_BUILDER/explore",
+      "AREA_BUILDER/game"
     ]
   }
 }
