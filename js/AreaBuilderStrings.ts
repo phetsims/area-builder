@@ -5,60 +5,60 @@
  */
 /* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
-import LinkableProperty from '../../axon/js/LinkableProperty.js';
+import type LocalizedStringProperty from '../../chipper/js/LocalizedStringProperty.js';
 import areaBuilder from './areaBuilder.js';
 
 type StringsType = {
   'area-builder': {
     'title': string;
-    'titleStringProperty': LinkableProperty<string>;
+    'titleStringProperty': LocalizedStringProperty;
   };
   'aSolutionColon': string;
-  'aSolutionColonStringProperty': LinkableProperty<string>;
+  'aSolutionColonStringProperty': LocalizedStringProperty;
   'aSolution': string;
-  'aSolutionStringProperty': LinkableProperty<string>;
+  'aSolutionStringProperty': LocalizedStringProperty;
   'explore': string;
-  'exploreStringProperty': LinkableProperty<string>;
+  'exploreStringProperty': LocalizedStringProperty;
   'game': string;
-  'gameStringProperty': LinkableProperty<string>;
+  'gameStringProperty': LocalizedStringProperty;
   'area': string;
-  'areaStringProperty': LinkableProperty<string>;
+  'areaStringProperty': LocalizedStringProperty;
   'areaQuestion': string;
-  'areaQuestionStringProperty': LinkableProperty<string>;
+  'areaQuestionStringProperty': LocalizedStringProperty;
   'perimeter': string;
-  'perimeterStringProperty': LinkableProperty<string>;
+  'perimeterStringProperty': LocalizedStringProperty;
   'values': string;
-  'valuesStringProperty': LinkableProperty<string>;
+  'valuesStringProperty': LocalizedStringProperty;
   'level': string;
-  'levelStringProperty': LinkableProperty<string>;
+  'levelStringProperty': LocalizedStringProperty;
   'pattern': {
     '0challenge': {
       '1max': string;
-      '1maxStringProperty': LinkableProperty<string>;
+      '1maxStringProperty': LocalizedStringProperty;
     }
   };
   'buildIt': string;
-  'buildItStringProperty': LinkableProperty<string>;
+  'buildItStringProperty': LocalizedStringProperty;
   'findTheArea': string;
-  'findTheAreaStringProperty': LinkableProperty<string>;
+  'findTheAreaStringProperty': LocalizedStringProperty;
   'yourGoal': string;
-  'yourGoalStringProperty': LinkableProperty<string>;
+  'yourGoalStringProperty': LocalizedStringProperty;
   'youBuilt': string;
-  'youBuiltStringProperty': LinkableProperty<string>;
+  'youBuiltStringProperty': LocalizedStringProperty;
   'youEntered': string;
-  'youEnteredStringProperty': LinkableProperty<string>;
+  'youEnteredStringProperty': LocalizedStringProperty;
   'areaEquals': string;
-  'areaEqualsStringProperty': LinkableProperty<string>;
+  'areaEqualsStringProperty': LocalizedStringProperty;
   'perimeterEquals': string;
-  'perimeterEqualsStringProperty': LinkableProperty<string>;
+  'perimeterEqualsStringProperty': LocalizedStringProperty;
   'solutionColon': string;
-  'solutionColonStringProperty': LinkableProperty<string>;
+  'solutionColonStringProperty': LocalizedStringProperty;
   'solution': string;
-  'solutionStringProperty': LinkableProperty<string>;
+  'solutionStringProperty': LocalizedStringProperty;
   'startOver': string;
-  'startOverStringProperty': LinkableProperty<string>;
+  'startOverStringProperty': LocalizedStringProperty;
   'invalidValue': string;
-  'invalidValueStringProperty': LinkableProperty<string>;
+  'invalidValueStringProperty': LocalizedStringProperty;
 };
 
 const AreaBuilderStrings = getStringModule( 'AREA_BUILDER' ) as StringsType;
