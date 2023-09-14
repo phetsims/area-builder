@@ -164,10 +164,10 @@ class PerimeterShapeNode extends Node {
             dimensionLabel.visible = true;
             dimensionLabel.string = segmentLabelInfo.unitLength;
             const labelPositionOffset = new Vector2( 0, 0 );
-            // TODO: At the time of this writing there is an issue with Shape.containsPoint() that can make https://github.com/phetsims/tasks/issues/1129
+            //TODO https://github.com/phetsims/kite/issues/3 At the time of this writing there is an issue with Shape.containsPoint() that can make
             // containment testing unreliable if there is an edge on the same line as the containment test.  As a
             // workaround, the containment test offset is tweaked a little below.  Once this issue is fixed, the
-            // label offset itself can be used for the test.  See https://github.com/phetsims/kite/issues/3.
+            // label offset itself can be used for the test.
             let containmentTestOffset;
             if ( segmentLabelInfo.edgeAngle === 0 || segmentLabelInfo.edgeAngle === Math.PI ) {
               // Label is on horizontal edge, so use height to determine offset.

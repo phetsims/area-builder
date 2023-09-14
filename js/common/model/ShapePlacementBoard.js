@@ -334,7 +334,7 @@ class ShapePlacementBoard {
     return ( listener.shapePlacementBoard && listener.shapePlacementBoard === this );
   }
 
-  // TODO: This is rather ugly.  Work with SR to improve or find alternative, or to bake into Axon.  Maybe a map. https://github.com/phetsims/tasks/issues/1129
+  //TODO https://github.com/phetsims/area-builder/issues/127 This is rather ugly.  Work with SR to improve or find alternative, or to bake into Axon.  Maybe a map.
   // @private, remove all observers from a property that have been tagged by this shape placement board.
   removeTaggedObservers( property ) {
     const taggedObservers = [];
