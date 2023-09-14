@@ -3,7 +3,8 @@
 /**
  * A node that pretty much fills the screen and that allows the user to select the game level that they wish to play.
  *
- * TODO: This was copied from Balancing Act, used for fast proto, should be replaced with generalized version. https://github.com/phetsims/tasks/issues/1129
+ * TODO https://github.com/phetsims/area-builder/issues/127 This was copied from Balancing Act, used for fast proto,
+ * should be replaced with generalized version.
  *
  * @author John Blanco
  */
