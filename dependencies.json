@@ -1,7 +1,7 @@
 {
   "comment": "# area-builder 1.1.29 Wed May 10 2023 11:31:51 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "e78099a5f59962e1806415d1fcab2a529d1184e6",
+    "sha": "ce079af249a83d6f6f1910c1a75f1402bf511d1b",
     "branch": "1.1"
   },
   "assert": {
@@ -37,7 +37,7 @@
     "branch": "HEAD"
   },
   "phetcommon": {
-    "sha": "b0786ca1e11d328a6f83847c87c6e899b3db5e99",
+    "sha": "612b5264fce3c227e9759a2de80eec2d36b77920",
     "branch": "HEAD"
   },
   "phetmarks": {
