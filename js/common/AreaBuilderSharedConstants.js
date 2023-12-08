@@ -14,7 +14,9 @@ const invalidValueString = AreaBuilderStrings.invalidValue;
 
 const AreaBuilderSharedConstants = {
 
-  // layout bounds used throughout the simulation for laying out the screens
+  // A PhET wide decision was made to not update custom layout bounds even if they do not match the
+  // default layout bounds in ScreenView. Do not change these bounds as changes could break or disturb
+  // any phet-io instrumention. https://github.com/phetsims/phet-io/issues/1939
   LAYOUT_BOUNDS: new Bounds2( 0, 0, 768, 464 ),
 
   // colors used for the various shapes
