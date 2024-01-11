@@ -2,6 +2,8 @@
 
 /**
  * Panel that contains a switch that is used to switch between the two exploration modes.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Dimension2 from '../../../../dot/js/Dimension2.js';

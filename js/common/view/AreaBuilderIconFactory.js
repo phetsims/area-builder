@@ -3,6 +3,8 @@
 /**
  * This file contains the code used to generate the screen icons that need to be produced in code in order to look half
  * decent.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
