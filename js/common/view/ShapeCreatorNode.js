@@ -33,6 +33,9 @@ class ShapeCreatorNode extends Node {
 
     options = merge( {
 
+      // Allow input to continue after the shape creator node goes invisible.
+      interruptSubtreeOnInvisible: false,
+
       // Spacing of the grid, if any, that should be shown on the creator node.  Null indicates no grid.
       gridSpacing: null,
 
