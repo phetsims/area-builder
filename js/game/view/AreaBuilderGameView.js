@@ -416,7 +416,7 @@ class AreaBuilderGameView extends ScreenView {
 
     // Various other initialization
     this.levelCompletedNode = null; // @private
-    this.shapeCarouselLayer = new Node(); // @private
+    this.shapeCarouselLayer = new Node( { interruptSubtreeOnInvisible: false } ); // @private
     this.challengeLayer.addChild( this.shapeCarouselLayer );
     this.clearDimensionsControlOnNextChallenge = false; // @private
 
