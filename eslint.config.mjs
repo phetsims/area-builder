@@ -7,9 +7,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-// TODO: Rename import parent everywhere in these files, see https://github.com/phetsims/chipper/issues/1451
-import parent from '../chipper/eslint/sim.eslint.config.mjs';
+import simEslintConfig from '../chipper/eslint/sim.eslint.config.mjs';
 
 export default [
-  ...parent
+  ...simEslintConfig
 ];
