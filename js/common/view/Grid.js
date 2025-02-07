@@ -7,8 +7,8 @@
  * @author John Blanco
  */
 
-import { Shape } from '../../../../kite/js/imports.js';
-import { Path } from '../../../../scenery/js/imports.js';
+import Shape from '../../../../kite/js/Shape.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
 import areaBuilder from '../../areaBuilder.js';
 
 class Grid extends Path {

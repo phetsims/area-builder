@@ -9,7 +9,7 @@
 
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
 import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 import ColorProportionsPrompt from './ColorProportionsPrompt.js';
