@@ -8,11 +8,11 @@
 
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Color from '../../../../scenery/js/util/Color.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
-import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import ABSwitch from '../../../../sun/js/ABSwitch.js';
 import Panel from '../../../../sun/js/Panel.js';
 import areaBuilder from '../../areaBuilder.js';
