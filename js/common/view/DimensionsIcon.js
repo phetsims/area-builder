@@ -1,4 +1,4 @@
-// Copyright 2014-2022, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * A Scenery node that depicts a basic shape with its dimensions labeled, intended for use in control panels.  It

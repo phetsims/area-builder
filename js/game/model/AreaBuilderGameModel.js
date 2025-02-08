@@ -1,4 +1,4 @@
-// Copyright 2014-2022, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * Game model that works in conjunction with the QuizGameModel to add the elements that are specific to the Area

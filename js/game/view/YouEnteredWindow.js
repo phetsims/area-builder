@@ -1,4 +1,4 @@
-// Copyright 2014-2023, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * A Scenery node that is used to show the user what they entered for a 'Find the Area' style of challenge.  It can be
