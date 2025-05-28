@@ -1,7 +1,7 @@
 {
-  "comment": "# area-builder 1.1.35 Fri Jul 12 2024 15:31:26 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# area-builder 1.1.36-rc.1 Wed May 28 2025 17:36:27 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "2cc95680786bebb120034e273770062e9b18a1b0",
+    "sha": "c6cd196e87fb3de2e5d91c5da60029f93ccd5921",
     "branch": "1.1"
   },
   "assert": {
