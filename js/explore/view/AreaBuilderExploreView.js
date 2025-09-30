@@ -94,7 +94,6 @@ class AreaBuilderExploreView extends ScreenView {
       right: this.layoutBounds.width - AreaBuilderSharedConstants.CONTROLS_INSET,
       bottom: this.layoutBounds.height - AreaBuilderSharedConstants.CONTROLS_INSET,
       listener: () => {
-        this.interruptSubtreeInput();
         centerExploreNode.reset();
         leftExploreNode.reset();
         rightExploreNode.reset();
