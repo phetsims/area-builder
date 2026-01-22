@@ -1,4 +1,4 @@
-// Copyright 2014-2015, University of Colorado Boulder
+// Copyright 2014-2016, University of Colorado Boulder
 
 /**
  * This type defines a challenge used in the Area Builder game.  It exists as a place to document the format of a
