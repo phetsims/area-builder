@@ -33,11 +33,11 @@
     "branch": "HEAD"
   },
   "phet-core": {
-    "sha": "745d5fbb5b602abcb193ca1827997432ed0d007e",
+    "sha": "d0522742efe9ecb9734100e4763872729bb0f006",
     "branch": "HEAD"
   },
   "phetcommon": {
-    "sha": "11138775632ead474d7b1d4b55ba8e70ef06754f",
+    "sha": "28b977839fa8568902e4fc31630c4ef7331b2a22",
     "branch": "HEAD"
   },
   "phetmarks": {
