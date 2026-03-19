@@ -8,7 +8,6 @@
  */
 
 import Text from '../../../../scenery/js/nodes/Text.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 import FeedbackWindow from './FeedbackWindow.js';
 
@@ -45,5 +44,4 @@ class YouEnteredWindow extends FeedbackWindow {
   }
 }
 
-areaBuilder.register( 'YouEnteredWindow', YouEnteredWindow );
 export default YouEnteredWindow;

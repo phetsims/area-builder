@@ -6,8 +6,6 @@
  * @author John Blanco
  */
 
-import areaBuilder from '../../areaBuilder.js';
-
 const GameState = {
   CHOOSING_LEVEL: 'choosingLevel',
   PRESENTING_INTERACTIVE_CHALLENGE: 'presentingInteractiveChallenge',
@@ -20,7 +18,5 @@ const GameState = {
 
 // verify that enum is immutable, without the runtime penalty in production code
 if ( assert ) { Object.freeze( GameState ); }
-
-areaBuilder.register( 'GameState', GameState );
 
 export default GameState;

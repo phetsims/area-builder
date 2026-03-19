@@ -11,7 +11,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 
 const areaString = AreaBuilderStrings.area;
@@ -82,5 +81,4 @@ class AreaAndPerimeterDisplay extends AccordionBox {
   }
 }
 
-areaBuilder.register( 'AreaAndPerimeterDisplay', AreaAndPerimeterDisplay );
 export default AreaAndPerimeterDisplay;

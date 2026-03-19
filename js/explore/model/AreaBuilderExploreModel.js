@@ -13,7 +13,6 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Bucket from '../../../../phetcommon/js/model/Bucket.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import MovableShape from '../../common/model/MovableShape.js';
 import ShapePlacementBoard from '../../common/model/ShapePlacementBoard.js';
@@ -193,5 +192,4 @@ class AreaBuilderExploreModel {
   }
 }
 
-areaBuilder.register( 'AreaBuilderExploreModel', AreaBuilderExploreModel );
 export default AreaBuilderExploreModel;

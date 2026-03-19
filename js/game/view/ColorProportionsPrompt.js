@@ -13,7 +13,6 @@ import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import areaBuilder from '../../areaBuilder.js';
 import FractionNode from './FractionNode.js';
 
 // constants
@@ -105,5 +104,4 @@ class ColorProportionsPrompt extends Node {
   }
 }
 
-areaBuilder.register( 'ColorProportionsPrompt', ColorProportionsPrompt );
 export default ColorProportionsPrompt;

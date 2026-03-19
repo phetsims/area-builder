@@ -10,7 +10,6 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
-import areaBuilder from '../../areaBuilder.js';
 
 // constants
 const FLOATING_POINT_ERR_TOLERANCE = 1e-6;
@@ -161,5 +160,4 @@ function calculateUnitArea( shape, unitLength ) {
   return unitArea;
 }
 
-areaBuilder.register( 'PerimeterShape', PerimeterShape );
 export default PerimeterShape;

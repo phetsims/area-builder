@@ -13,7 +13,6 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
 import DimensionsIcon from './DimensionsIcon.js';
 import Grid from './Grid.js';
@@ -77,5 +76,4 @@ class AreaBuilderControlPanel extends Node {
   }
 }
 
-areaBuilder.register( 'AreaBuilderControlPanel', AreaBuilderControlPanel );
 export default AreaBuilderControlPanel;

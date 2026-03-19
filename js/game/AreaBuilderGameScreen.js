@@ -11,7 +11,6 @@ import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import gameIcon_png from '../../images/gameIcon_png.js';
-import areaBuilder from '../areaBuilder.js';
 import AreaBuilderStrings from '../AreaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../common/AreaBuilderSharedConstants.js';
 import AreaBuilderIconFactory from '../common/view/AreaBuilderIconFactory.js';
@@ -43,5 +42,4 @@ class AreaBuilderGameScreen extends Screen {
   }
 }
 
-areaBuilder.register( 'AreaBuilderGameScreen', AreaBuilderGameScreen );
 export default AreaBuilderGameScreen;

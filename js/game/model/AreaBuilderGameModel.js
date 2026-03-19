@@ -16,7 +16,6 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import MovableShape from '../../common/model/MovableShape.js';
 import ShapePlacementBoard from '../../common/model/ShapePlacementBoard.js';
@@ -333,5 +332,4 @@ AreaBuilderGameModel.SHAPE_BOARD_UNIT_WIDTH = BOARD_SIZE.width / UNIT_SQUARE_LEN
 AreaBuilderGameModel.SHAPE_BOARD_UNIT_HEIGHT = BOARD_SIZE.height / UNIT_SQUARE_LENGTH;
 AreaBuilderGameModel.UNIT_SQUARE_LENGTH = UNIT_SQUARE_LENGTH;
 
-areaBuilder.register( 'AreaBuilderGameModel', AreaBuilderGameModel );
 export default AreaBuilderGameModel;

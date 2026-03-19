@@ -17,7 +17,6 @@ import BucketHole from '../../../../scenery-phet/js/bucket/BucketHole.js';
 import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import ShapeCreatorNode from '../../common/view/ShapeCreatorNode.js';
 import ShapeNode from '../../common/view/ShapeNode.js';
@@ -162,5 +161,4 @@ class ExploreNode extends Node {
   }
 }
 
-areaBuilder.register( 'ExploreNode', ExploreNode );
 export default ExploreNode;

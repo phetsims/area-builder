@@ -7,7 +7,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import GridIcon from '../../common/view/GridIcon.js';
 
@@ -162,5 +161,4 @@ const GameIconFactory = {
   }
 };
 
-areaBuilder.register( 'GameIconFactory', GameIconFactory );
 export default GameIconFactory;

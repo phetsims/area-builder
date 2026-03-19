@@ -19,7 +19,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
 import ScoreDisplayStars from '../../../../vegas/js/ScoreDisplayStars.js';
 import VegasStrings from '../../../../vegas/js/VegasStrings.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 
 const chooseYourLevelString = VegasStrings.chooseYourLevel;
@@ -126,8 +125,6 @@ class StartGameLevelNode extends Node {
     timerToggleButton.bottom = options.size.height - options.controlsInset;
   }
 }
-
-areaBuilder.register( 'StartGameLevelNode', StartGameLevelNode );
 
 // Inherit from Node.
 export default StartGameLevelNode;

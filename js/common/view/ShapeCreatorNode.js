@@ -14,7 +14,6 @@ import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
 import MovableShape from '../model/MovableShape.js';
 import Grid from './Grid.js';
@@ -192,5 +191,4 @@ class ShapeCreatorNode extends Node {
   }
 }
 
-areaBuilder.register( 'ShapeCreatorNode', ShapeCreatorNode );
 export default ShapeCreatorNode;

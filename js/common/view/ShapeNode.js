@@ -14,7 +14,6 @@ import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
 import Grid from './Grid.js';
 
@@ -178,5 +177,4 @@ class ShapeNode extends Node {
   }
 }
 
-areaBuilder.register( 'ShapeNode', ShapeNode );
 export default ShapeNode;

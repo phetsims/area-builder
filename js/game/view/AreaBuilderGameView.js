@@ -26,7 +26,6 @@ import Easing from '../../../../twixt/js/Easing.js';
 import GameAudioPlayer from '../../../../vegas/js/GameAudioPlayer.js';
 import LevelCompletedNode from '../../../../vegas/js/LevelCompletedNode.js';
 import VegasStrings from '../../../../vegas/js/VegasStrings.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import AreaBuilderControlPanel from '../../common/view/AreaBuilderControlPanel.js';
@@ -950,5 +949,4 @@ class AreaBuilderGameView extends ScreenView {
   }
 }
 
-areaBuilder.register( 'AreaBuilderGameView', AreaBuilderGameView );
 export default AreaBuilderGameView;

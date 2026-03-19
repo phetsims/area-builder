@@ -16,7 +16,6 @@
 import Property from '../../../../axon/js/Property.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import merge from '../../../../phet-core/js/merge.js';
-import areaBuilder from '../../areaBuilder.js';
 import GameState from './GameState.js';
 
 class QuizGameModel {
@@ -252,5 +251,4 @@ class QuizGameModel {
   }
 }
 
-areaBuilder.register( 'QuizGameModel', QuizGameModel );
 export default QuizGameModel;

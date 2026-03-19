@@ -19,7 +19,6 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
 import GridIcon from './GridIcon.js';
 
@@ -161,5 +160,4 @@ const AreaBuilderIconFactory = {
   }
 };
 
-areaBuilder.register( 'AreaBuilderIconFactory', AreaBuilderIconFactory );
 export default AreaBuilderIconFactory;

@@ -14,7 +14,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../AreaBuilderSharedConstants.js';
 import PerimeterShape from './PerimeterShape.js';
 
@@ -1003,5 +1002,4 @@ class ShapePlacementBoard {
   }
 }
 
-areaBuilder.register( 'ShapePlacementBoard', ShapePlacementBoard );
 export default ShapePlacementBoard;

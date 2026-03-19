@@ -7,7 +7,6 @@
  */
 
 import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
-import areaBuilder from '../areaBuilder.js';
 
 const AreaBuilderQueryParameters = QueryStringMachine.getAll( {
 
@@ -15,5 +14,4 @@ const AreaBuilderQueryParameters = QueryStringMachine.getAll( {
   prefillBoards: { type: 'flag' }
 } );
 
-areaBuilder.register( 'AreaBuilderQueryParameters', AreaBuilderQueryParameters );
 export default AreaBuilderQueryParameters;

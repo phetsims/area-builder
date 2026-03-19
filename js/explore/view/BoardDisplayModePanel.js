@@ -15,7 +15,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import ABSwitch from '../../../../sun/js/ABSwitch.js';
 import Panel from '../../../../sun/js/Panel.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 
 class BoardDisplayModePanel extends Panel {
@@ -81,5 +80,4 @@ function createIcon( color, rectangleLength, rectanglePositions ) {
   return new Panel( content, { fill: 'white', stroke: 'black', cornerRadius: 0, backgroundPickable: true } );
 }
 
-areaBuilder.register( 'BoardDisplayModePanel', BoardDisplayModePanel );
 export default BoardDisplayModePanel;

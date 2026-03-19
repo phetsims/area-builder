@@ -7,7 +7,6 @@
  * @author John Blanco
  */
 
-import areaBuilder from '../../areaBuilder.js';
 import PerimeterShape from '../../common/model/PerimeterShape.js';
 import BuildSpec from './BuildSpec.js';
 
@@ -217,5 +216,4 @@ class AreaBuilderGameChallenge {
   }
 }
 
-areaBuilder.register( 'AreaBuilderGameChallenge', AreaBuilderGameChallenge );
 export default AreaBuilderGameChallenge;

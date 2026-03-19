@@ -15,7 +15,6 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import GameTimer from '../../../../vegas/js/GameTimer.js';
 import VegasStrings from '../../../../vegas/js/VegasStrings.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderStrings from '../../AreaBuilderStrings.js';
 
 const labelScorePatternString = VegasStrings.label.scorePattern;
@@ -89,5 +88,4 @@ class AreaBuilderScoreboard extends Node {
   }
 }
 
-areaBuilder.register( 'AreaBuilderScoreboard', AreaBuilderScoreboard );
 export default AreaBuilderScoreboard;

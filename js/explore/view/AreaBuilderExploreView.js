@@ -9,7 +9,6 @@
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import areaBuilder from '../../areaBuilder.js';
 import AreaBuilderQueryParameters from '../../common/AreaBuilderQueryParameters.js';
 import AreaBuilderSharedConstants from '../../common/AreaBuilderSharedConstants.js';
 import AreaBuilderControlPanel from '../../common/view/AreaBuilderControlPanel.js';
@@ -118,5 +117,4 @@ class AreaBuilderExploreView extends ScreenView {
   }
 }
 
-areaBuilder.register( 'AreaBuilderExploreView', AreaBuilderExploreView );
 export default AreaBuilderExploreView;

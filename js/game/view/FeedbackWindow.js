@@ -13,7 +13,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Panel from '../../../../sun/js/Panel.js';
-import areaBuilder from '../../areaBuilder.js';
 
 // constants
 const X_MARGIN = 8;
@@ -75,5 +74,4 @@ class FeedbackWindow extends Panel {
 FeedbackWindow.X_MARGIN = X_MARGIN; // Must be visible to subtypes so that max width can be calculated and, if necessary, scaled.
 FeedbackWindow.NORMAL_TEXT_FONT = NORMAL_TEXT_FONT; // Font used in this window for text that is not the title.
 
-areaBuilder.register( 'FeedbackWindow', FeedbackWindow );
 export default FeedbackWindow;

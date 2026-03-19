@@ -7,7 +7,6 @@
  */
 
 import Bounds2 from '../../../dot/js/Bounds2.js';
-import areaBuilder from '../areaBuilder.js';
 import AreaBuilderStrings from '../AreaBuilderStrings.js';
 
 const invalidValueString = AreaBuilderStrings.invalidValue;
@@ -47,5 +46,4 @@ const AreaBuilderSharedConstants = {
   INVALID_VALUE: invalidValueString
 };
 
-areaBuilder.register( 'AreaBuilderSharedConstants', AreaBuilderSharedConstants );
 export default AreaBuilderSharedConstants;
