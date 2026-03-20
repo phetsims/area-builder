@@ -1,7 +1,7 @@
 {
   "comment": "# area-builder 1.1.36 Tue Jun 10 2025 10:23:32 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "8437c72d2d7bc66012a608cfb8bbe9e7b74d0644",
+    "sha": "ed82c5b48acd8d1579c4906ebc9ab09e75c2dbf6",
     "branch": "1.1"
   },
   "assert": {
@@ -13,7 +13,7 @@
     "branch": "HEAD"
   },
   "brand": {
-    "sha": "e9502fc84423ab41ee01615a2492642da20dc08b",
+    "sha": "6923bfa9aff6aec9863eb9dd899aea0c26d2bfc8",
     "branch": "HEAD"
   },
   "chipper": {
