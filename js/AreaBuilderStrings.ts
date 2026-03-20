@@ -66,4 +66,6 @@ type StringsType = {
 
 const AreaBuilderStrings = getStringModule( 'AREA_BUILDER' ) as StringsType;
 
+areaBuilder.register( 'AreaBuilderStrings', AreaBuilderStrings );
+
 export default AreaBuilderStrings;
