@@ -1,7 +1,7 @@
 {
   "comment": "# area-builder 1.1.37-rc.1 Fri Mar 20 2026 10:46:55 GMT-0600 (Mountain Daylight Time)",
   "area-builder": {
-    "sha": "e7d295927425569c77143a74867f96df36a5c514",
+    "sha": "dc6a0b367bbe65f9c336a16b318df8e0fb549ff8",
     "branch": "1.1"
   },
   "assert": {
@@ -25,7 +25,7 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "62e008288ed1b15da073cbbeaf073918db2c8e08",
+    "sha": "24adca5875900db74a4e47dfb41d08f123b44087",
     "branch": "HEAD"
   },
   "kite": {
